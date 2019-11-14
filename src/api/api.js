@@ -9,7 +9,7 @@ const UrlMap = [
   {
     description: "医生登录",
     method: "doctorLogin",
-    url: "/nir/doctor/login",
+    url: "/nir/som/doctor/login",
     type: "POST"
   },
   {

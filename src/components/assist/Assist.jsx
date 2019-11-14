@@ -6,7 +6,7 @@ class Assist extends Component {
   }
   render() { 
     return (  
-      <div>Assist</div>
+      <div className="main-content">Assist</div>
     );
   }
 }

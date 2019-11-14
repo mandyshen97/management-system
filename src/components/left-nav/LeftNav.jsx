@@ -33,9 +33,7 @@ class LeftNav extends Component {
             key={item.path}
             onClick={() => this.handleChangeColor(item.path)}
             className={
-              this.state.currentPath === item.path
-                ? "ant-menu-item-selected"
-                : null
+              this.state.currentPath === item.path ? "blueColor" : null
             }
           >
             <Link to={item.path}>
@@ -48,6 +46,7 @@ class LeftNav extends Component {
         return (
           <SubMenu
             key={item.path}
+            onClick={() => this.handleChangeColor(item.path)}
             title={
               <span>
                 <Icon type={item.icon} />
@@ -75,11 +74,15 @@ class LeftNav extends Component {
   render() {
     return (
       <div className="left-nav">
-        <Link to="/" className="left-nav-header">
+        <Link
+          to="/home"
+          className="left-nav-header"
+          onClick={() => this.handleChangeColor("/home")}
+        >
           <img src={logo} alt="logo" />
           <h1>失眠辅助</h1>
         </Link>
-        <Menu mode="inline" theme="dark">
+        <Menu mode="inline" theme="dark" selectable={false}>
           {this.getMenuNodes_map(menuList)}
         </Menu>
       </div>

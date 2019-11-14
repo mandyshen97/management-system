@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
-import { Redirect } from 'react-router-dom'
-import { Form, Icon, Input, Button, message, Checkbox } from 'antd'
+import { Redirect, Link } from 'react-router-dom'
+import { Form, Icon, Input, Button, Message, Checkbox } from 'antd'
 import './login.less'
 import logo from '../../assets/images/logo.jpg'
 import memoryUtils from '../../utils/memoryUtils'
+import API from '../../api/api'
 
 class Login extends Component {
   handleSubmit = e => {
@@ -11,7 +12,14 @@ class Login extends Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
-        this.props.history.push('/')
+        let param = {
+          username: values.username,
+          password: values.password
+        }
+        API.doctorLogin({param}).then(res=>{
+          console.log(res)
+          this.props.history.push('/')
+        })
       }
     });
   };
@@ -62,12 +70,12 @@ class Login extends Component {
                 })(
                   <Checkbox className="login-form-check">记住我</Checkbox>
                 )}
-                <a className="login-form-forgot" href="">忘记密码</a>
+                <Link className="login-form-forgot" to='/login'>忘记密码</Link>
                 <Button type="primary" block htmlType="submit" className="login-form-button">
                   登录
                 </Button>
                 <span style={{color: 'white', marginRight: '5px'}}>或</span>
-                <a href="">现在注册!</a>
+                <Link to='/register'>现在注册!</Link>
               </Form.Item>
             </Form>
           </div>
