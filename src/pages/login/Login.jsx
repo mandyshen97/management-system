@@ -16,10 +16,10 @@ class Login extends Component {
           username: values.username,
           password: values.password
         };
-        API.doctorLogin({ param })
+        API.doctorLogin(param)
           .then(res => {
             console.log(res);
-            if (res.code !== 200) {
+            if (res.code !== '200') {
               Message.error("登录失败，用户名或密码错误！");
             } else {
               Message.success("登录成功！");

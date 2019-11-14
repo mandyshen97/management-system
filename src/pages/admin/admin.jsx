@@ -6,8 +6,6 @@ import LeftNav from './../../components/left-nav/LeftNav';
 import Header from '../../components/header/Header'
 import Introduction from '../../components/introduction/Introduction';
 import Home from './../../components/home/Home';
-import LabelDataList from './../../components/collection/label-data-list/LabelDataList';
-import DataCollection from './../../components/collection/data-collection/DataCollection';
 import Assist from './../../components/assist/Assist';
 import './admin.less'
 import InformationManagement from '../../components/userManagement/UserInformationManagement';
@@ -63,8 +61,8 @@ class Admin extends Component {
               <Route path='/home'  component={Home} />
               <Route path='/informationManagement'  component={InformationManagement} />
               <Route path='/introduction' component={Introduction} />
-              <Route path='/labelInformationManagement' component={LabelInformationManagement} />
               <Route path='/assist' component={Assist} />
+              <Route path='/labelInformationManagement' component={LabelInformationManagement} />
             </Switch>
           </Content>
         </Layout>

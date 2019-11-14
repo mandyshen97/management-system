@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Link, withRouter } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Menu, Icon } from "antd";
 import menuList from "../../config/menuConfig";
 import logo from "../../assets/images/logo.jpg";

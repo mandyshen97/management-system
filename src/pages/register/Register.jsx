@@ -1,9 +1,8 @@
 import React, { Component } from "react";
-import { Redirect, Link } from "react-router-dom";
-import { Form, Icon, Input, Button, Message, Checkbox } from "antd";
+import { Link } from "react-router-dom";
+import { Form, Icon, Input, Button, Message } from "antd";
 import "../login/login.less";
 import logo from "../../assets/images/logo.jpg";
-import memoryUtils from "../../utils/memoryUtils";
 import API from "../../api/api";
 
 class Register extends Component {
@@ -16,9 +15,9 @@ class Register extends Component {
           username: values.username,
           password: values.password
         };
-        API.doctorRegister({ param })
+        API.doctorRegister(param)
           .then(res => {
-            if (res.code !== 200) {
+            if (res.code !== '200') {
               Message.error("注册失败！");
             } else {
               Message.success("注册成功！");

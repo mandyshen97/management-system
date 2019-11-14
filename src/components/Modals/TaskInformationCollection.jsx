@@ -59,26 +59,26 @@ class TaskInformationCollection extends Component {
         }
       }
     };
-    const WCSTTask = {
-      应答总数: "ta",
-      正确应答数: "cr",
-      正确应答百分比: "pcr",
-      错误应答数: "te",
-      错误应答数百分比: "pe",
-      持续性应答数: "pr",
-      持续性应答数百分比: "ppr",
-      持续性错误数: "pse",
-      持续性错误的百分数: "ppe",
-      非持续性错误: "npe",
-      非持续性错误百分比: "pnpe",
-      概念化水平应答数: "clr",
-      概念化水平百分数: "pclr",
-      完成分类数: "cc",
-      完成第一个分类所需应答数: "tcfc",
-      不能维持完整分类: "fm",
-      学习到学会: "l2l",
-      用时: "useTime"
-    };
+    // const WCSTTask = {
+    //   应答总数: "ta",
+    //   正确应答数: "cr",
+    //   正确应答百分比: "pcr",
+    //   错误应答数: "te",
+    //   错误应答数百分比: "pe",
+    //   持续性应答数: "pr",
+    //   持续性应答数百分比: "ppr",
+    //   持续性错误数: "pse",
+    //   持续性错误的百分数: "ppe",
+    //   非持续性错误: "npe",
+    //   非持续性错误百分比: "pnpe",
+    //   概念化水平应答数: "clr",
+    //   概念化水平百分数: "pclr",
+    //   完成分类数: "cc",
+    //   完成第一个分类所需应答数: "tcfc",
+    //   不能维持完整分类: "fm",
+    //   学习到学会: "l2l",
+    //   用时: "useTime"
+    // };
 
     const { currentRecord } = this.props;
     const task = currentRecord.task;

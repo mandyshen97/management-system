@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from "react";
 import "./label-information-management.less";
-import { Line, Bar } from "echarts-for-react";
+// import { Line, Bar } from "echarts-for-react";
 import { getAge, formatDate } from "../../utils/dateUtils";
 import {
   Row,
@@ -181,7 +181,7 @@ class LabelInformationManagement extends Component {
     console.log(record)
     // 删除患者WCST任务
     if(record.type===0){
-      API.removeWCSTTask({id: record.medId}).then(res=>{
+      API.removeWCSTTask({id: record.task.id}).then(res=>{
         console.log(res)
         Message.success('WCST任务删除成功！')
         API.InquirePatientTaskList({}).then(res => {
@@ -230,7 +230,6 @@ class LabelInformationManagement extends Component {
             />
           )}
         </Form.Item>
-
         <Form.Item>
           {getFieldDecorator(
             "doctorId",
