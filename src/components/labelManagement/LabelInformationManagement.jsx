@@ -15,7 +15,8 @@ import {
   Tag,
   Divider,
   Tooltip,
-  Select
+  Select,
+  Message
 } from "antd";
 import moment from "moment";
 import API from "../../api/api";
@@ -176,6 +177,29 @@ class LabelInformationManagement extends Component {
     }
   };
 
+  deleteTask = (record) => {
+    console.log(record)
+    // 删除患者WCST任务
+    if(record.type===0){
+      API.removeWCSTTask({id: record.medId}).then(res=>{
+        console.log(res)
+        Message.success('WCST任务删除成功！')
+        API.InquirePatientTaskList({}).then(res => {
+          this.getTableDate(res);
+        });
+      })
+    }else if(record.type===1){
+      // 删除近红外数据（睡眠测试整晚）
+      API.removeNirTask({id: record.medId}).then(res=>{
+        console.log(res)
+        Message.success('近红外任务删除成功！')
+        API.InquirePatientTaskList({}).then(res => {
+          this.getTableDate(res);
+        });
+      })
+    }
+  };
+
   //查询表单
   renderSearch() {
     const { form } = this.props;
@@ -183,7 +207,10 @@ class LabelInformationManagement extends Component {
     return (
       <Form layout="inline" onSubmit={this.handleSearchSubmit}>
         <Form.Item>
-          {getFieldDecorator("patientID", {})(
+          {getFieldDecorator(
+            "patientID",
+            {}
+          )(
             <Input
               style={{ width: 200 }}
               prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />}
@@ -192,7 +219,10 @@ class LabelInformationManagement extends Component {
           )}
         </Form.Item>
         <Form.Item>
-          {getFieldDecorator("patientName", {})(
+          {getFieldDecorator(
+            "patientName",
+            {}
+          )(
             <Input
               style={{ width: 200 }}
               prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />}
@@ -202,7 +232,10 @@ class LabelInformationManagement extends Component {
         </Form.Item>
 
         <Form.Item>
-          {getFieldDecorator("doctorId", {})(
+          {getFieldDecorator(
+            "doctorId",
+            {}
+          )(
             <Select
               allowClear={true}
               showSearch
@@ -223,7 +256,10 @@ class LabelInformationManagement extends Component {
           )}
         </Form.Item>
         <Form.Item>
-          {getFieldDecorator("diseaseType", {})(
+          {getFieldDecorator(
+            "diseaseType",
+            {}
+          )(
             <Select
               allowClear={true}
               showSearch
@@ -244,7 +280,10 @@ class LabelInformationManagement extends Component {
           )}
         </Form.Item>
         <Form.Item>
-          {getFieldDecorator("date", {})(
+          {getFieldDecorator(
+            "date",
+            {}
+          )(
             <RangePicker
               style={{ width: 200 }}
               placeholder={["开始日期", "结束日期"]}
@@ -285,7 +324,10 @@ class LabelInformationManagement extends Component {
       dataIndex: "gender",
       width: "7%",
       render: text => {
-        const gender = [{ label: 0, value: "女" }, { label: 1, value: "男" }];
+        const gender = [
+          { label: 0, value: "女" },
+          { label: 1, value: "男" }
+        ];
         const item = gender.find(v => v.label === text);
         if (item) {
           return <Tag color="red">{item.value}</Tag>;
@@ -375,6 +417,16 @@ class LabelInformationManagement extends Component {
                 </Tooltip>
               </Fragment>
             )}
+            <Divider type="vertical" />
+            <Tooltip title="删除此条任务">
+              <span
+                onClick={() => this.deleteTask(record)}
+                style={{ cursor: "pointer" }}
+              >
+                <Icon type="delete" />
+                <span style={{ marginLeft: "5px" }}>删除</span>
+              </span>
+            </Tooltip>
           </Fragment>
         );
       }

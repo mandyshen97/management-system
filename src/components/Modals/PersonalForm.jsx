@@ -24,12 +24,9 @@ class PersonalForm extends Component {
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (err) return;
       if (!err) {
-        console.log(values);
-        console.log(formatDate(values.birthday));
-
         let param = {
           medId: values.medId,
-          doctorId: values.docId,
+          doctorId: values.doctorId,
           name: values.name,
           gender: values.gender,
           birthday:
