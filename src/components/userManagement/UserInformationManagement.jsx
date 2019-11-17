@@ -481,6 +481,7 @@ class InformationManagement extends Component {
             currentRecord={this.state.currentRecord}
             doctorList={this.state.doctorList}
             getTableDate={this.getTableDate}
+            diseaseList={this.state.diseaseList}
           />
         )}
         {/* 临床信息采集弹框 */}

@@ -28,6 +28,9 @@ class Header extends Component {
   getWeather = async () => {
     // todo
     // 调用接口请求异步获取数据
+    fetch('https://www.tianqiapi.com/api/?version=v6&cityid=101210101&appid=[81135576]&appsecret=[17HDf3Q1]').then(res=>{
+      console.log(res)
+    })
     // const {dayPictureUrl, weather} = await reqWeather('北京')
     // // 更新状态
     // this.setState({dayPictureUrl, weather})
@@ -39,11 +42,11 @@ class Header extends Component {
     let title
     menuList.forEach(item => {
       // 如果当前item对象的key与path一样,item的title就是需要显示的title
-      if (item.key === path) {
+      if (item.path === path) {
         title = item.title
       } else if (item.children) {
         // 如果当前item有子项，在所有子item中查找匹配的
-        const cItem = item.children.find(cItem => path.indexOf(cItem.key) === 0)
+        const cItem = item.children.find(cItem => path.indexOf(cItem.path) === 0)
         if (cItem) {
           // 如果存在说明匹配成功
           title = cItem.title

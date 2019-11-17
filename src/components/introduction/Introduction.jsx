@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import ReactEcharts from 'echarts-for-react'
+// import ReactEcharts from 'echarts-for-react'
 import { Card } from 'antd';
 import './introduction.less'
 

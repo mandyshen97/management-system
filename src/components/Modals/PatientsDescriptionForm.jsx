@@ -5,15 +5,6 @@
 import React, { Component } from "react";
 import { Form, Modal, Divider, Descriptions } from "antd";
 
-const WCSTItem = [
-  { label: "短期性失眠", value: 1 },
-  { label: "慢性失眠", value: 2 },
-  { label: "混合型", value: 3 },
-  { label: "正常", value: 0 }
-];
-
-const gender = [{ label: 0, value: "女" }, { label: 1, value: "男" }];
-
 class PatientsDescriptionForm extends Component {
   state = {};
 

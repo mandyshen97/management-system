@@ -1,15 +1,10 @@
 import React, { Component } from "react";
-import { Modal, Form, Input, Select, Button, Message } from "antd";
+import { Modal, Form, Input, Select, Button, Message, DatePicker } from "antd";
 import API from "../../api/api";
+import moment from "moment";
+import { formatDate } from "../../utils/dateUtils";
 
 const { Option } = Select;
-const ADHDItem = [
-  { label: "单纯性失眠", value: 1 },
-  { label: "伴过度觉醒", value: 2 },
-  { label: "伴焦虑", value: 3 },
-  { label: "伴抑郁", value: 4 },
-  { label: "正常", value: 0 }
-];
 class UpdatePersonalForm extends Component {
   constructor(props) {
     super(props);
@@ -23,40 +18,38 @@ class UpdatePersonalForm extends Component {
     //验证
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (err) return;
-      const { currentRecord } = this.props;
       if (!err) {
+        const { currentRecord } = this.props;
         let doctorId;
-        if (typeof values.doctor === "int") {
+        if (typeof values.doctor === "number") {
           doctorId = values.doctor;
         } else {
-          this.props.doctorList.map((item, index) => {
+          this.props.doctorList.map(item => {
             doctorId = values.doctor === item.name ? item.id : undefined;
           });
         }
         let param = {
+          id: currentRecord.id,
           medId: currentRecord.medId,
           doctorId: doctorId,
           name: values.name,
           gender: values.gender,
-          birthday: currentRecord.birthday,
+          birthday: formatDate(values.birthday),
           weight: values.weight,
           height: values.height,
           disease: values.disease,
-          chiCom: currentRecord.chiCom,
-          drugHis: currentRecord.drugHis
+          chiCom: values.chiCom,
+          drugHis: values.drugHis
         };
-        API.patientRegister(param).then(res => {
+        API.updatePatientInformation(param).then(res => {
           Message.success("更新信息成功！");
-        }).then(resolve=>{
           API.getPatientList({}).then(res => {
             this.props.getTableDate(res);
           });
-        })
-        this.props.handleModalVisible(false, 'updatePersonalInfo')
+        });
+        this.props.handleModalVisible(false, "updatePersonalInfo");
       }
     });
-
-    //todo
   };
 
   // 个人信息采集的表单
@@ -85,8 +78,6 @@ class UpdatePersonalForm extends Component {
       }
     };
     const { currentRecord } = this.props;
-    console.log(currentRecord);
-
     return (
       <Form {...formItemLayout} onSubmit={this.handlePersonInfoSubmit}>
         <Form.Item label="患者姓名">
@@ -111,9 +102,9 @@ class UpdatePersonalForm extends Component {
           )}
         </Form.Item>
         <Form.Item label="患者年龄">
-          {getFieldDecorator("age", {
-            initialValue: currentRecord.age
-          })(<Input />)}
+          {getFieldDecorator("birthday", {
+            initialValue: moment(currentRecord.birthday)
+          })(<DatePicker />)}
         </Form.Item>
         <Form.Item label="患者体重(kg)">
           {getFieldDecorator("weight", {
@@ -130,13 +121,23 @@ class UpdatePersonalForm extends Component {
             initialValue: currentRecord.disease
           })(
             <Select placeholder="请选择患者患病类型">
-              {ADHDItem.map((item, index) => (
-                <Option key={index} value={item.value}>
-                  {item.label}
+              {this.props.diseaseList.map((item, index) => (
+                <Option key={index} value={item.id}>
+                  {item.name}
                 </Option>
               ))}
             </Select>
           )}
+        </Form.Item>
+        <Form.Item label="主诉">
+          {getFieldDecorator("chiCom", {
+            initialValue: currentRecord.chiCom
+          })(<Input />)}
+        </Form.Item>
+        <Form.Item label="用药史">
+          {getFieldDecorator("drugHis", {
+            initialValue: currentRecord.drugHis
+          })(<Input />)}
         </Form.Item>
         <Form.Item label="主治医生">
           {getFieldDecorator("doctor", {
@@ -170,7 +171,7 @@ class UpdatePersonalForm extends Component {
   };
 
   render() {
-    console.log(this.props.doctorList);
+    console.log(this.props.diseaseList)
     const { currentRecord } = this.props;
     const title = `更新个人信息——${currentRecord.medId}_${currentRecord.name}`;
     return (

@@ -9,7 +9,7 @@ const UrlMap = [
   {
     description: "医生登录",
     method: "doctorLogin",
-    url: "/nir/doctor/login",
+    url: "/nir/som/doctor/login",
     type: "POST"
   },
   {
@@ -32,6 +32,12 @@ const UrlMap = [
     type: "POST"
   },
   {
+    description: "更新患者个人信息",
+    method: "updatePatientInformation",
+    url: "/nir/som/patient/update",
+    type: "POST"
+  },
+  {
     description: "获取患者列表",
     method: "getPatientList",
     url: "/nir/som/patient/getList",
@@ -51,8 +57,8 @@ const UrlMap = [
   },
   {
     description: "删除患者wcst任务",
-    method: "removeWCST",
-    url: "/nir/patient/wcst/remove",
+    method: "removeWCSTTask",
+    url: "/nir/som/patient/wcst/remove",
     type: "POST"
   },
   {
@@ -69,8 +75,8 @@ const UrlMap = [
   },
   {
     description: "删除患者近红外测试数据",
-    method: "removePatientData",
-    url: "/nir/patient/data/remove",
+    method: "removeNirTask",
+    url: "/nir/som/patient/nirTest/remove",
     type: "POST"
   },
   {

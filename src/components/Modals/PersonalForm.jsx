@@ -4,13 +4,6 @@ import API from "../../api/api";
 import { formatDate } from "../../utils/dateUtils";
 
 const { Option } = Select;
-const ADHDItem = [
-  { label: "单纯性失眠", value: 1 },
-  { label: "伴过度觉醒", value: 2 },
-  { label: "伴焦虑", value: 3 },
-  { label: "伴抑郁", value: 4 },
-  { label: "正常", value: 0 }
-];
 class PersonalForm extends Component {
   constructor(props) {
     super(props);
@@ -24,12 +17,9 @@ class PersonalForm extends Component {
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (err) return;
       if (!err) {
-        console.log(values);
-        console.log(formatDate(values.birthday));
-
         let param = {
           medId: values.medId,
-          doctorId: values.docId,
+          doctorId: values.doctorId,
           name: values.name,
           gender: values.gender,
           birthday:
