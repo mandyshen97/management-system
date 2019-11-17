@@ -64,7 +64,6 @@ class PatientsDescriptionForm extends Component {
   }
 
   render() {
-    console.log(this.props);
     const { currentRecord } = this.props;
     const title = `患者信息展示——${currentRecord.medId}_${currentRecord.name}`;
     return (

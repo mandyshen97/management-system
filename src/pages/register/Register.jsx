@@ -17,7 +17,7 @@ class Register extends Component {
         };
         API.doctorRegister(param)
           .then(res => {
-            if (res.code !== '200') {
+            if (res.code !== "200") {
               Message.error("注册失败！");
             } else {
               Message.success("注册成功！");
@@ -25,7 +25,7 @@ class Register extends Component {
             }
           })
           .catch(err => {
-            Message.warning("注册失败！");
+            Message.warning(err + "注册失败！");
           });
       }
     });

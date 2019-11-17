@@ -2,18 +2,18 @@
  * 任务基本信息填写弹框
  */
 import React, { Component } from "react";
-import moment from "moment";
 import { Link } from "react-router-dom";
 import API from "../../api/api";
+import { formatDate } from "../../utils/dateUtils";
 import {
   Form,
   Modal,
   Row,
+  Input,
   Typography,
   Select,
   Divider,
   DatePicker,
-  TimePicker,
   Button,
   Message
 } from "antd";
@@ -23,14 +23,22 @@ class MissionInfoForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      missionFormData: {
-        testTime: undefined, //测试时间
-        testType: undefined, //测试类型，一共两类：WCST或者整晚
-        medicine: undefined, //测试前服用的药物
-        timeAfterMed: undefined, //吃完药之后多久进行测试
-        otherInter: undefined //非药物干预
-      }
+      medcineList: [],
+      nonMedicineLIst: []
     };
+  }
+
+  componentDidMount() {
+    API.getMedicineList({}).then(res => {
+      this.setState({
+        medcineList: res.data
+      });
+    });
+    API.getNonMedicineList({}).then(res => {
+      this.setState({
+        nonMedicineLIst: res.data
+      });
+    });
   }
 
   handleMissionSubmit = e => {
@@ -38,38 +46,42 @@ class MissionInfoForm extends Component {
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (err) return;
       if (!err) {
-        console.log(values); // {testTime: undefined, testType: undefined, medicine: undefined, timeAfterMed: undefined, otherInter: undefined}
         const { currentRecord } = this.props;
-        console.log(currentRecord);
-        //age: 25
-        //birthday: "1994-10-11T00:00:00.000+0800"
-        //chiCom: "失眠 嗜睡"
-        //disease: "单纯性失眠"
-        //doctorName: "毛主任"
-        //drugHis: "无"
-        //gender: 1
-        //height: 171
-        //id: 1
-        //key: 0
-        //medId: "000001"
-        //name: "邵洋"
-        //weight: 64
         let param = {
           patientId: currentRecord.medId,
-          time: values.testTime,
-          intType: values.otherInter,
+          time: values.testTime ? formatDate(values.testTime) : undefined, // 测试时间
+          nonMedArray: values.monMed
+            ? values.nonMed.map(item => Number(item))
+            : [], // 非药物干预id数组
+          medArray: values.medicine
+            ? values.medicine.map(item => Number(item))
+            : [], // 药品id数组
+          medInt: Number(values.timeAfterMed), // 干预药物间隔
+          l2l: values.l2l
         };
-        API.addWCST(param).then(res => {
-          console.log(res)
-          Message.success('添加任务成功！')
-        });
+        if (values.testType === "0") {
+          API.addWCST(param).then(res => {
+            if (res.code === "200") {
+              Message.success("添加任务成功！");
+            } else {
+              Message.error("添加任务失败！");
+            }
+          });
+        } else if (values.testType === "1") {
+          API.addNirData(param).then(res => {
+            if (res.code === "200") {
+              Message.success("添加任务成功！");
+            } else {
+              Message.error("添加任务失败！");
+            }
+          });
+        }
       }
       this.props.handleModalVisible(false, "missionBasicInfo");
     });
   };
 
   renderForm = () => {
-    const { missionFormData } = this.state;
     const { getFieldDecorator } = this.props.form;
     const formItemLayout = {
       labelCol: {
@@ -93,19 +105,6 @@ class MissionInfoForm extends Component {
         }
       }
     };
-    const medicine = [
-      "SSRI",
-      "SNRI",
-      "NaSSA",
-      "TCA",
-      "SARI",
-      "BZ",
-      "PAM",
-      "Li",
-      "SDA",
-      "DPA",
-      "无"
-    ];
     return (
       <Form {...formItemLayout} onSubmit={this.handleMissionSubmit}>
         <Row justify="start" type="flex">
@@ -113,18 +112,13 @@ class MissionInfoForm extends Component {
         </Row>
         <Divider />
         <Form.Item label="测试时间">
-          {getFieldDecorator("testTime", {
-            initialValue: missionFormData.testTime
-          })(<DatePicker style={{ width: 200 }} />)}
-          <TimePicker
-            style={{ width: 200 }}
-            defaultOpenValue={moment("00:00:00", "HH:mm:ss")}
-          />
+          {getFieldDecorator(
+            "testTime",
+            {}
+          )(<DatePicker style={{ width: 200 }} />)}
         </Form.Item>
         <Form.Item label="选择测试类型">
-          {getFieldDecorator("testType", {
-            initialValue: missionFormData.testType
-          })(
+          {getFieldDecorator("testType", { rules: [{ required: true }] })(
             <Select
               showSearch
               style={{ width: 200 }}
@@ -141,9 +135,10 @@ class MissionInfoForm extends Component {
           )}
         </Form.Item>
         <Form.Item label="测试前服用药物">
-          {getFieldDecorator("medicine", {
-            initialValue: missionFormData.medicine
-          })(
+          {getFieldDecorator(
+            "medicine",
+            {}
+          )(
             <Select
               showSearch
               style={{ width: 200 }}
@@ -151,36 +146,44 @@ class MissionInfoForm extends Component {
               placeholder="选择药物"
               initialValue={["SSRI", "SNRI"]}
             >
-              {medicine.map((item, index) => (
-                <Option key={index}>{item}</Option>
+              {this.state.medcineList.map((item, index) => (
+                <Option key={index} value={item.id}>
+                  {item.name}
+                </Option>
               ))}
             </Select>
           )}
         </Form.Item>
         <Form.Item label="服药后多久进行测试(h)">
-          {getFieldDecorator("timeAfterMed", {
-            initialValue: missionFormData.timeAfterMed
-          })(
-            <TimePicker
-              style={{ width: 200 }}
-              initialValue={moment("1", "hh")}
-              format={"hh"}
-            />
-          )}
+          {getFieldDecorator(
+            "timeAfterMed",
+            {}
+          )(<Input style={{ width: 200 }} placeholder="服药后的时间间隔" />)}
+        </Form.Item>
+        <Form.Item label="开始学习到学会(h)">
+          {getFieldDecorator(
+            "l2l",
+            {}
+          )(<Input style={{ width: 200 }} placeholder="开始学习到学会" />)}
         </Form.Item>
         <Form.Item label="其他干预方式">
-          {getFieldDecorator("otherInter", {
-            initialValue: missionFormData.otherInter
-          })(
+          {getFieldDecorator(
+            "nonMed",
+            {}
+          )(
             <Select
               mode="multiple"
               style={{ width: 200 }}
               placeholder="选择其他干预方式"
               initislValue={["SSRI", "SNRI"]}
             >
-              <Option value="0">rTMs</Option>
-              <Option value="1">CBT-I</Option>
-              <Option value="2">无</Option>
+              {this.state.nonMedicineLIst.map((item, index) => {
+                return (
+                  <Option key={index} value={item.id}>
+                    {item.name}
+                  </Option>
+                );
+              })}
             </Select>
           )}
         </Form.Item>

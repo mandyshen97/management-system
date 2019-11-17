@@ -21,11 +21,23 @@ class UpdatePersonalForm extends Component {
       if (!err) {
         const { currentRecord } = this.props;
         let doctorId;
+        let disId;
         if (typeof values.doctor === "number") {
           doctorId = values.doctor;
         } else {
           this.props.doctorList.map(item => {
-            doctorId = values.doctor === item.name ? item.id : undefined;
+            if (values.doctor === item.name) {
+              return (doctorId = item.id);
+            }
+          });
+        }
+        if (typeof values.disease === "number") {
+          disId = values.disease;
+        } else {
+          this.props.diseaseList.map(item => {
+            if (values.disease === item.name) {
+              return (disId = item.id);
+            }
           });
         }
         let param = {
@@ -37,15 +49,19 @@ class UpdatePersonalForm extends Component {
           birthday: formatDate(values.birthday),
           weight: values.weight,
           height: values.height,
-          disease: values.disease,
+          disease: disId,
           chiCom: values.chiCom,
           drugHis: values.drugHis
         };
         API.updatePatientInformation(param).then(res => {
-          Message.success("更新信息成功！");
-          API.getPatientList({}).then(res => {
-            this.props.getTableDate(res);
-          });
+          if (res.code === "200") {
+            Message.success("更新信息成功！");
+            API.getPatientList({}).then(res => {
+              this.props.getTableDate(res);
+            });
+          } else {
+            Message.error("更新信息失败！");
+          }
         });
         this.props.handleModalVisible(false, "updatePersonalInfo");
       }
@@ -171,7 +187,6 @@ class UpdatePersonalForm extends Component {
   };
 
   render() {
-    console.log(this.props.diseaseList)
     const { currentRecord } = this.props;
     const title = `更新个人信息——${currentRecord.medId}_${currentRecord.name}`;
     return (

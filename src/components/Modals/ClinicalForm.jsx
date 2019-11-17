@@ -182,7 +182,6 @@ class ClinicalForm extends Component {
     );
   };
   render() {
-    console.log(this.props)
     const title = `临床信息采集——${this.props.currentRecord.medId}_${this.props.currentRecord.name}`;
     return (
       <Modal

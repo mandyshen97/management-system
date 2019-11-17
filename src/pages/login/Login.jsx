@@ -18,8 +18,7 @@ class Login extends Component {
         };
         API.doctorLogin(param)
           .then(res => {
-            console.log(res);
-            if (res.code !== '200') {
+            if (res.code !== "200") {
               Message.error("登录失败，用户名或密码错误！");
             } else {
               Message.success("登录成功！");
@@ -27,7 +26,7 @@ class Login extends Component {
             }
           })
           .catch(err => {
-            Message.error("登录失败！请重试！");
+            Message.error(err + "登录失败！请重试！");
           });
       }
     });

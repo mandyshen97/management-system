@@ -29,7 +29,7 @@ class Header extends Component {
     // todo
     // 调用接口请求异步获取数据
     fetch('https://www.tianqiapi.com/api/?version=v6&cityid=101210101&appid=[81135576]&appsecret=[17HDf3Q1]').then(res=>{
-      console.log(res)
+      console.log(res.json())
     })
     // const {dayPictureUrl, weather} = await reqWeather('北京')
     // // 更新状态

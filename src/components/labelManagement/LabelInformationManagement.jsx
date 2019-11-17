@@ -178,25 +178,30 @@ class LabelInformationManagement extends Component {
   };
 
   deleteTask = (record) => {
-    console.log(record)
     // 删除患者WCST任务
     if(record.type===0){
       API.removeWCSTTask({id: record.task.id}).then(res=>{
-        console.log(res)
-        Message.success('WCST任务删除成功！')
-        API.InquirePatientTaskList({}).then(res => {
-          this.getTableDate(res);
-        });
-      })
+        if(res.code==='200'){
+          Message.success('WCST任务删除成功！')
+          API.InquirePatientTaskList({}).then(res => {
+            this.getTableDate(res);
+          });
+        }
+      }).catch(
+        Message.error('删除失败！')
+      )
     }else if(record.type===1){
       // 删除近红外数据（睡眠测试整晚）
       API.removeNirTask({id: record.medId}).then(res=>{
-        console.log(res)
-        Message.success('近红外任务删除成功！')
-        API.InquirePatientTaskList({}).then(res => {
-          this.getTableDate(res);
-        });
-      })
+        if(res.code==='200'){
+          Message.success('近红外任务删除成功！')
+          API.InquirePatientTaskList({}).then(res => {
+            this.getTableDate(res);
+          });
+        }
+      }).catch(
+        Message.error('删除失败！')
+      )
     }
   };
 

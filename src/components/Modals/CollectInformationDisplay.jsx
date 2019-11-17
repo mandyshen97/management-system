@@ -23,10 +23,6 @@ class CollectInformationDisplay extends Component {
       学习到学会: "l2l",
       用时: "useTime"
     };
-    // let keys = Object.keys(WCSTTask)
-    // console.log(keys);
-    // let value = WCSTTask['不能维持完整分类']
-    // console.log(value)
 
     const { currentRecord } = this.props;
     const patientInfo = currentRecord.patient;
@@ -113,7 +109,6 @@ class CollectInformationDisplay extends Component {
   }
 
   render() {
-    console.log(this.props);
     const { currentRecord } = this.props;
     const title = `采集信息展示——${currentRecord.medId}_${currentRecord.name}`;
     return (

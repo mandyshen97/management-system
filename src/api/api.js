@@ -1,96 +1,120 @@
 const BaseUrl = "http://10.13.81.186:8080";
 const UrlMap = [
   {
-    description: "医生注册",
+    description: "1.医生注册",
     method: "doctorRegister",
     url: "/nir/som/doctor/register",
     type: "POST"
   },
   {
-    description: "医生登录",
+    description: "2.医生登录",
     method: "doctorLogin",
     url: "/nir/som/doctor/login",
     type: "POST"
   },
   {
-    description: "获取医生列表",
+    description: "3.获取医生列表",
     method: "getDoctorList",
     url: "/nir/som/doctor/getList",
     type: "GET"
   },
   {
-    description: "获取疾病列表",
-    method: "getDiseaseList",
-    url: "/nir/som/disease",
-    type: "GET"
-  },
-
-  {
-    description: "患者注册",
+    description: "4.患者注册",
     method: "patientRegister",
     url: "/nir/som/patient/register",
     type: "POST"
   },
   {
-    description: "更新患者个人信息",
+    description: "5.更新患者个人信息",
     method: "updatePatientInformation",
     url: "/nir/som/patient/update",
     type: "POST"
   },
   {
-    description: "获取患者列表",
+    description: "6.获取患者列表",
     method: "getPatientList",
     url: "/nir/som/patient/getList",
     type: "POST"
   },
   {
-    description: "添加患者wcst任务",
+    description: "7.添加患者wcst任务",
     method: "addWCST",
     url: "/nir/som/patient/wcst/add",
     type: "POST"
   },
   {
-    description: "更新患者wcst任务",
+    description: "8.更新患者wcst任务",
     method: "updateWCST",
     url: "/nir/som/patient/wcst/update",
     type: "POST"
   },
   {
-    description: "删除患者wcst任务",
+    description: "9.删除患者wcst任务",
     method: "removeWCSTTask",
     url: "/nir/som/patient/wcst/remove",
     type: "POST"
   },
   {
-    description: "添加患者近红外测试数据",
-    method: "addPatientData",
-    url: "/nir/patient/data/add",
+    description: "10.添加患者近红外测试数据",
+    method: "addNirData",
+    url: "/nir/som/patient/nirTest/add",
     type: "POST"
   },
   {
-    description: "更新患者近红外测试数据",
-    method: "updatePatientData",
-    url: "/nir/patient/data/update",
+    description: "11.更新患者近红外测试数据",
+    method: "updateNirData",
+    url: "/nir/som/patient/nirTest/update",
     type: "POST"
   },
   {
-    description: "删除患者近红外测试数据",
+    description: "12.删除患者近红外测试数据",
     method: "removeNirTask",
     url: "/nir/som/patient/nirTest/remove",
     type: "POST"
   },
   {
-    description: "查询患者任务/测试列表",
+    description: "13.查询患者任务/测试列表",
     method: "InquirePatientTaskList",
     url: "/nir/som/patient/getTaskList",
     type: "POST"
   },
   {
-    description: "查询患者量表",
+    description: "14.查询患者量表",
     method: "inquirePatientScale",
-    url: "/nir/patient/scale",
+    url: "/nir/som/patient/scale",
     type: "POST"
-  }
+  },
+  {
+    description: "15.获取药品列表",
+    method: "getMedicineList",
+    url: "/nir/som/medicine",
+    type: "GET"
+  },
+  {
+    description: "16.非药物治疗列表",
+    method: "getNonMedicineList",
+    url: "/nir/som/nonMedicine",
+    type: "GET"
+  },
+  {
+    description: "17.获取疾病列表",
+    method: "getDiseaseList",
+    url: "/nir/som/disease",
+    type: "GET"
+  },
+
+  
+
+ 
+  
+ 
+  
+  
+  
+  
+
+  
+  
 ];
 const API = {};
 UrlMap.forEach(item => {

@@ -50,8 +50,8 @@ class InformationManagement extends Component {
     // 获取医生列表
     API.getDoctorList({}).then(res => {
       let newDoctorList = [];
-      res.data.map((item, index) => {
-        newDoctorList.push(item);
+      res.data.map((item) => {
+        return newDoctorList.push(item);
       });
       this.setState({
         doctorList: newDoctorList
@@ -78,7 +78,6 @@ class InformationManagement extends Component {
       patientTableDataItem.age = getAge(item.birthday);
       patientTableDataItem.disease = item.disease;
       patientTableDataItem.doctorName = item.doctorName;
-      // patientTableData.push(patientTableDataItem);
       Object.assign(item, patientTableDataItem);
       item.key = index;
       patientTableData.push(item);
