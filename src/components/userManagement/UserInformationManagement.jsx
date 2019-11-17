@@ -17,6 +17,7 @@ import ClinicalForm from "../Modals/ClinicalForm";
 import MissionInfoForm from "../Modals/MissionInfoForm";
 import PatientsDescriptionForm from "../Modals/PatientsDescriptionForm";
 import UpdatePersonalForm from "../Modals/UpdatePersonalForm";
+import ScaleForm from "../Modals/ScaleForm";
 import "./user-information-management.less";
 import API from "../../api/api";
 
@@ -27,9 +28,9 @@ class InformationManagement extends Component {
     super(props);
     this.state = {
       newPatientModalVisible: false, // 新建患者
-      patientScaleModalVisible: false, // 患者量表信息展示
       clinicalModalVisible: false, // 患者临床信息填写
       missionModalVisible: false, // 新建近红外信息
+      scaleModalVisible: false, // 量表信息查看
       PatientsDescriptionModalVisible: false, //患者基本信息展示
       UpdatePersonalFormVisible: false, // 更新患者个人信息弹框是否显示
       edit: false,
@@ -132,6 +133,13 @@ class InformationManagement extends Component {
       this.setState({
         edit: true,
         clinicalModalVisible: flag,
+        currentRecord: record
+      });
+    }
+    if (msg === "scaleInfo") {
+      this.setState({
+        edit: true,
+        scaleModalVisible: flag,
         currentRecord: record
       });
     }
@@ -256,6 +264,12 @@ class InformationManagement extends Component {
       this.setState({
         edit: false,
         clinicalModalVisible: flag
+      });
+    }
+    if (msg === "scaleInfo") {
+      this.setState({
+        edit: false,
+        scaleModalVisible: flag
       });
     }
     if (msg === "missionBasicInfo") {
@@ -398,7 +412,7 @@ class InformationManagement extends Component {
             <Divider type="vertical" />
             <Tooltip title="查看量表信息">
               <span
-                onClick={() => this.handleClick(true, record, "clinicalInfo")}
+                onClick={() => this.handleClick(true, record, "scaleInfo")}
               >
                 <Icon type="copy" style={{ justifyContent: "center" }} />
                 <span
@@ -473,6 +487,14 @@ class InformationManagement extends Component {
         {this.state.clinicalModalVisible && (
           <ClinicalForm
             modalVisible={this.state.clinicalModalVisible}
+            handleModalVisible={this.handleModalVisible}
+            currentRecord={this.state.currentRecord}
+          />
+        )}
+        {/* 查看量表弹框 */}
+        {this.state.scaleModalVisible && (
+          <ScaleForm
+            modalVisible={this.state.scaleModalVisible}
             handleModalVisible={this.handleModalVisible}
             currentRecord={this.state.currentRecord}
           />
