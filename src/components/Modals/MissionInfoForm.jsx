@@ -48,9 +48,9 @@ class MissionInfoForm extends Component {
       if (!err) {
         const { currentRecord } = this.props;
         let param = {
-          patientId: currentRecord.medId,
+          patientId: currentRecord.id,
           time: values.testTime ? formatDate(values.testTime) : undefined, // 测试时间
-          nonMedArray: values.monMed
+          nonMedArray: values.nonMed
             ? values.nonMed.map(item => Number(item))
             : [], // 非药物干预id数组
           medArray: values.medicine
