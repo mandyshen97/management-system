@@ -452,6 +452,7 @@ class InformationManagement extends Component {
   ];
 
   render() {
+    console.log(this.props)
     return (
       <div className="main-content">
         {this.renderSearch()}
@@ -505,6 +506,7 @@ class InformationManagement extends Component {
             modalVisible={this.state.missionModalVisible}
             handleModalVisible={this.handleModalVisible}
             currentRecord={this.state.currentRecord}
+            history={this.props.history}
           />
         )}
         {/* 患者信息展示弹框 */}

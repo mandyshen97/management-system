@@ -24,7 +24,7 @@ class MissionInfoForm extends Component {
     super(props);
     this.state = {
       medcineList: [],
-      nonMedicineLIst: []
+      nonMedicineList: []
     };
   }
 
@@ -36,13 +36,15 @@ class MissionInfoForm extends Component {
     });
     API.getNonMedicineList({}).then(res => {
       this.setState({
-        nonMedicineLIst: res.data
+        nonMedicineList: res.data
       });
     });
   }
 
   handleMissionSubmit = e => {
-    e.preventDefault();
+    if (e) {
+      e.preventDefault();
+    }
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (err) return;
       if (!err) {
@@ -79,6 +81,12 @@ class MissionInfoForm extends Component {
       }
       this.props.handleModalVisible(false, "missionBasicInfo");
     });
+  };
+
+  handleViewClick = () => {
+    this.handleMissionSubmit();
+    console.log(this.props.history)
+    this.props.history.push("/labelInformationManagement");
   };
 
   renderForm = () => {
@@ -177,7 +185,7 @@ class MissionInfoForm extends Component {
               placeholder="选择其他干预方式"
               initislValue={["SSRI", "SNRI"]}
             >
-              {this.state.nonMedicineLIst.map((item, index) => {
+              {this.state.nonMedicineList.map((item, index) => {
                 return (
                   <Option key={index} value={item.id}>
                     {item.name}
@@ -191,11 +199,13 @@ class MissionInfoForm extends Component {
           <Button type="primary" htmlType="submit">
             添加任务
           </Button>
-          <Link to="/labelInformationManagement">
-            <Button htmlType="submit" style={{ marginLeft: "20px" }}>
-              查看任务
-            </Button>
-          </Link>
+          <Button
+            htmlType="submit"
+            onClick={this.handleViewClick}
+            style={{ marginLeft: "20px" }}
+          >
+            查看任务
+          </Button>
         </Form.Item>
       </Form>
     );

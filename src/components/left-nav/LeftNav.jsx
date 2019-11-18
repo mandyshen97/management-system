@@ -61,17 +61,26 @@ class LeftNav extends Component {
     });
   };
 
+  UNSAFE_componentWillMount() {
+    debugger;
+    this.setState({
+      currentPath: this.props.path
+    });
+  }
+
   /*
   在第一次render()之前执行一次
   为第一个render()准备数据(必须同步的)
    */
   componentDidMount() {
+    debugger;
     this.setState({
       currentPath: this.props.path
     });
   }
 
   render() {
+    debugger;
     return (
       <div className="left-nav">
         <Link

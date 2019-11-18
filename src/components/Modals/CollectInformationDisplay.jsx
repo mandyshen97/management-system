@@ -1,7 +1,27 @@
 import React, { Component, Fragment } from "react";
 import { Form, Modal, Divider, Descriptions, Button } from "antd";
+import API from "../../api/api";
 
 class CollectInformationDisplay extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      medcineList: [],
+      nonMedicineList: []
+    };
+  }
+  componentDidMount() {
+    API.getMedicineList({}).then(res => {
+      this.setState({
+        medcineList: res.data
+      });
+    });
+    API.getNonMedicineList({}).then(res => {
+      this.setState({
+        nonMedicineList: res.data
+      });
+    });
+  }
   renderDescription() {
     const WCSTTask = {
       应答总数: "ta",
@@ -25,8 +45,31 @@ class CollectInformationDisplay extends Component {
     };
 
     const { currentRecord } = this.props;
+    console.log(currentRecord);
     const patientInfo = currentRecord.patient;
+    console.log(patientInfo);
     const task = currentRecord.task;
+    console.log(this.state);
+    let medicine = "";
+    let nonMedicine = "";
+    if (task.medArray.length > 0) {
+      task.medArray.map((item, index) => {
+        this.state.medcineList.map(listItem => {
+          if (item === listItem.id) {
+            medicine += `${listItem.name}  `;
+          }
+        });
+      });
+    }
+    if (task.nonMedArray.length > 0) {
+      task.nonMedArray.map((item, index) => {
+        this.state.nonMedicineList.map(listItem => {
+          if (item === listItem.id) {
+            nonMedicine += `${listItem.name}  `;
+          }
+        });
+      });
+    }
 
     return (
       <div>
@@ -53,13 +96,13 @@ class CollectInformationDisplay extends Component {
             {patientInfo.height}
           </Descriptions.Item>
           <Descriptions.Item label="测试前服用药物">
-            {patientInfo.medicine ? "patientInfo.medicine" : "无数据"}
+            {task.medArray.length > 0 ? medicine : "未服用药物"}
           </Descriptions.Item>
           <Descriptions.Item label="服药后多久进行测试">
-            {patientInfo.timeAfterMed ? "patientInfo.timeAfterMed" : "无数据"}
+            {task.medInt ? task.medInt : "无数据"}
           </Descriptions.Item>
           <Descriptions.Item label="非药物干预">
-            {patientInfo.otherInter ? patientInfo.otherInter : "无数据"}
+            {task.nonMedArray.length > 0 ? nonMedicine : "无干预"}
           </Descriptions.Item>
           <Descriptions.Item label="测试近红外时间">
             {currentRecord.testTime}
