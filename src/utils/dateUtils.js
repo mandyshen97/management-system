@@ -28,10 +28,12 @@ export function formatDate(time) {
 /*根据出生日期算出年龄*/
 export function getAge(strBirthday) {
   var returnAge;
-  var strBirthdayArr = strBirthday.split("-");
-  var birthYear = strBirthdayArr[0];
-  var birthMonth = strBirthdayArr[1];
-  var birthDay = strBirthdayArr[2];
+  if(strBirthday){
+    var strBirthdayArr = strBirthday.split("-");
+    var birthYear = strBirthdayArr[0];
+    var birthMonth = strBirthdayArr[1];
+    var birthDay = strBirthdayArr[2];
+  }
 
   let d = new Date();
   var nowYear = JSON.stringify(d.getFullYear());

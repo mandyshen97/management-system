@@ -182,7 +182,6 @@ class LabelInformationManagement extends Component {
     if (record.type === 0) {
       API.removeWCSTTask({ id: record.task.id })
         .then(res => {
-          debugger;
           if (res.code === "200") {
             Message.success("WCST任务删除成功！");
             API.InquirePatientTaskList({}).then(res => {
