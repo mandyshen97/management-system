@@ -4,8 +4,8 @@ import { Form, Icon, Input, Button, Message, Checkbox } from "antd";
 import "./login.less";
 import logo from "../../assets/images/logo.jpg";
 import memoryUtils from "../../utils/memoryUtils";
-import API from "../../api/api";
-
+//import API from "../../api/api";
+import API from "../../api/algorithm"
 class Login extends Component {
   handleSubmit = e => {
     e.preventDefault();
@@ -16,7 +16,7 @@ class Login extends Component {
           username: values.username,
           password: values.password
         };
-        API.doctorLogin(param)
+        API.login(param)
           .then(res => {
             console.log(res);
             if (res.code !== '200') {

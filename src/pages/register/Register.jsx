@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 import { Form, Icon, Input, Button, Message } from "antd";
 import "../login/login.less";
 import logo from "../../assets/images/logo.jpg";
-import API from "../../api/api";
-
+//import API from "../../api/api";
+import API from "../../api/algorithm"
 class Register extends Component {
   handleSubmit = e => {
     e.preventDefault();
@@ -15,8 +15,9 @@ class Register extends Component {
           username: values.username,
           password: values.password
         };
-        API.doctorRegister(param)
+        API.register(param)
           .then(res => {
+            console.log(res);
             if (res.code !== '200') {
               Message.error("注册失败！");
             } else {

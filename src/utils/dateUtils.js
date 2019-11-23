@@ -27,6 +27,9 @@ export function formatDate(time) {
 
 /*根据出生日期算出年龄*/
 export function getAge(strBirthday) {
+  if (strBirthday===null){
+    return -1
+  }
   var returnAge;
   var strBirthdayArr = strBirthday.split("-");
   var birthYear = strBirthdayArr[0];

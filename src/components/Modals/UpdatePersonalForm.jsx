@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Modal, Form, Input, Select, Button, Message, DatePicker } from "antd";
-import API from "../../api/api";
+//import API from "../../api/api";
+import API from "../../api/algorithm"
 import moment from "moment";
 import { formatDate } from "../../utils/dateUtils";
 
@@ -41,7 +42,7 @@ class UpdatePersonalForm extends Component {
           chiCom: values.chiCom,
           drugHis: values.drugHis
         };
-        API.updatePatientInformation(param).then(res => {
+        API.updatePatient(param).then(res => {
           Message.success("更新信息成功！");
           API.getPatientList({}).then(res => {
             this.props.getTableDate(res);

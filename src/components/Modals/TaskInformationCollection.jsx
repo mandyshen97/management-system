@@ -3,7 +3,8 @@
  */
 import React, { Component } from "react";
 import { Form, Input, Button, Modal, Row, Typography, Divider } from "antd";
-import API from "../../api/api";
+//import API from "../../api/api";
+import API from "../../api/algorithm"
 
 const { Title } = Typography;
 
@@ -22,10 +23,10 @@ class TaskInformationCollection extends Component {
         time: task.time
       };
       Object.assign(param, values);
-      API.updateWCST(param).then(res => {
+      API.updateWcstTask(param).then(res => {
         console.log(res);
       }).then(resolve=>{
-        API.InquirePatientTaskList({}).then(res => {
+        API.getTaskList({}).then(res => {
           this.props.getTableDate(res);
         });
       })

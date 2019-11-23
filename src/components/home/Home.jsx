@@ -1,18 +1,31 @@
 import React, { Component } from 'react';
 import ReactEcharts from 'echarts-for-react'
 import { Card } from 'antd'
+import API from "../../api/algorithm"
 class Home extends Component {
   constructor(props) {
     super(props);
+    API.getDiseaseTotal({}).then(res => {
+      this.setState({
+        labelData: [
+          {value:res.data.d1,name:"单纯性失眠"},
+          {value:res.data.d2, name:"伴过度觉醒"},
+          {value:res.data.d3, name: "伴焦虑"},
+          {value:res.data.d4,name:"伴抑郁"},
+          {value:res.data.noDiagnose,name:"未诊断"}
+        ]
+      });
+    });
+
     this.state = {  
-      labelData: [1,2,3,4]
+      labelData: []
     }
   }
   getOption = (data) => {
     return {
       title: {
-        text: '标注现状统计',
-        subtext: '纯属虚构',
+        text: '患者失眠类型分布图',
+       // subtext: '纯属虚构',
         x: 'center'
       },
       tooltip: {
@@ -22,11 +35,11 @@ class Home extends Component {
       legend: {
         orient: 'vertical',
         left: 'left',
-        data: ['正常患者', '多动症患者', '未标注数据']
+        data: ['单纯性失眠', '伴过度觉醒', '伴焦虑','伴抑郁','未诊断']
       },
       series: [
         {
-          name: '访问来源',
+          name: '失眠类别分布',
           type: 'pie',
           radius: '55%',
           center: ['50%', '60%'],

@@ -6,9 +6,11 @@ import './introduction.less'
 // 从后台获取
 // todo
 const labelData = [
-  { value: 335, name: '正常患者' },
-  { value: 310, name: '多动症患者' },
-  { value: 234, name: '未标注数据' },
+  { value: 335, name: '单纯性失眠' },
+  { value: 310, name: '伴过度觉醒' },
+  { value: 234, name: '伴焦虑' },
+  { value: 123, name: '伴抑郁'},
+  { value: 65, name:'未诊断'}
 ]
 class Introduction extends Component {
   constructor(props) {

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Modal, Form, Input, Select, Button, Message, DatePicker } from "antd";
-import API from "../../api/api";
+//import API from "../../api/api";
+import API from "../../api/algorithm"
 import { formatDate } from "../../utils/dateUtils";
 
 const { Option } = Select;
@@ -18,8 +19,10 @@ class PersonalForm extends Component {
       if (err) return;
       if (!err) {
         let param = {
+          //med_id: values.medId,
           medId: values.medId,
-          doctorId: values.doctorId,
+          //doctor_id: values.doctorId,
+          doctorId: values.doctorId, 
           name: values.name,
           gender: values.gender,
           birthday:
@@ -29,12 +32,17 @@ class PersonalForm extends Component {
           weight: values.weight,
           height: values.height,
           disease: values.disType,
+          //chi_com: values.chiCom,
           chiCom: values.chiCom,
-          drugHis: values.drugHis
+          //drug_his: values.drugHis,
+          drugHis: values.drugHis,
         };
-        API.patientRegister(param).then(res => {
+        API.addNewPatient(param).then(res => {
+        //API.patientRegister(param).then(res => {
+          console.log(param)
           Message.success('新建患者个人信息成功！')
           API.getPatientList({}).then(res => {
+            console.log(res)
             this.props.getTableDate(res);
           });
         });

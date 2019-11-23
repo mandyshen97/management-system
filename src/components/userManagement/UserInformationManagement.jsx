@@ -77,6 +77,7 @@ class InformationManagement extends Component {
       patientTableDataItem.medId = item.medId;
       patientTableDataItem.gender = item.gender;
       patientTableDataItem.age = getAge(item.birthday);
+      // patientTableDataItem.age = item.birthday;
       patientTableDataItem.disease = item.disease;
       patientTableDataItem.doctorName = item.doctorName;
       // patientTableData.push(patientTableDataItem);

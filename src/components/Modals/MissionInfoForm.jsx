@@ -4,7 +4,8 @@
 import React, { Component } from "react";
 import moment from "moment";
 import { Link } from "react-router-dom";
-import API from "../../api/api";
+//import API from "../../api/api";
+import API from "../../api/algorithm"
 import {
   Form,
   Modal,
@@ -54,16 +55,35 @@ class MissionInfoForm extends Component {
         //medId: "000001"
         //name: "邵洋"
         //weight: 64
+        if (values.testType==0){
         let param = {
-          patientId: currentRecord.medId,
+          patientId: currentRecord.id,
           time: values.testTime,
-          intType: values.otherInter,
-        };
-        API.addWCST(param).then(res => {
+          medicine: values.medicine,
+          timeAfterMed: values.timeAfterMed,
+          nonMedicineId: values.otherInter,
+          };
+        console.log(param)
+        API.addWcstTask(param).then(res => {
           console.log(res)
-          Message.success('添加任务成功！')
+          Message.success('添加wxst任务成功！')
         });
-      }
+        }
+        else{
+          let param = {
+            patientId: currentRecord.id,
+            time: values.testTime,
+            medicine: values.medicine,
+            timeAfterMed: values.timeAfterMed,
+            nonMedicineId: values.otherInter,
+            };
+          console.log(param)
+          API.addTask(param).then(res => {
+            console.log(res)
+            Message.success('添加整晚任务成功！')
+          });
+          }
+        }
       this.props.handleModalVisible(false, "missionBasicInfo");
     });
   };
