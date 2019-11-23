@@ -19,8 +19,8 @@ import PatientsDescriptionForm from "../Modals/PatientsDescriptionForm";
 import UpdatePersonalForm from "../Modals/UpdatePersonalForm";
 import ScaleForm from "../Modals/ScaleForm";
 import "./user-information-management.less";
-import API from "../../api/api";
-
+//import API from "../../api/api";
+import API from "../../api/algorithm"
 const { Option } = Select;
 
 class InformationManagement extends Component {

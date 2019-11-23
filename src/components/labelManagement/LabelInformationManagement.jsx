@@ -2,6 +2,7 @@ import React, { Component, Fragment } from "react";
 import "./label-information-management.less";
 // import { Line, Bar } from "echarts-for-react";
 import { getAge, formatDate } from "../../utils/dateUtils";
+import ReactEcharts from 'echarts-for-react'
 import {
   Row,
   DatePicker,
@@ -19,7 +20,7 @@ import {
   Message
 } from "antd";
 import moment from "moment";
-import API from "../../api/api";
+import API from "../../api/algorithm";
 import CollectInformationDisplay from "../Modals/CollectInformationDisplay";
 import DataAssociationForm from "../Modals/DataAssociationForm";
 import TaskInformationCollection from "../Modals/TaskInformationCollection";
@@ -47,13 +48,33 @@ class LabelInformationManagement extends Component {
       currentRecord: undefined,
       tableData: [],
       doctorList: [], // 医生数据
-      diseaseList: [] // 疾病列表
+      diseaseList: [], // 疾病列表
+      barData: []
     };
   }
 
   componentDidMount() {
+    // 获取标注统计结果
+    API.getTaskTotal({}).then(res=>{
+      var items = [];
+      var date = "";
+      var strDay = "";
+      for (var i=0;i<30;i++){
+        strDay = (i+1).toString()
+        if (strDay.length===1){
+            strDay = "0"+strDay;
+        }
+       date = "2019-11-" + strDay;
+       items.push({时间:date,wcst任务:res.data.wcst[strDay],整晚任务:res.data.nir[strDay]})
+      }
+      console.log(res.data)
+      this.setState({
+        barData:items
+      });
+      
+    });
     // 获取患者任务列表
-    API.InquirePatientTaskList({}).then(res => {
+    API.getTaskList({}).then(res => {
       this.getTableDate(res);
     });
 
@@ -75,6 +96,31 @@ class LabelInformationManagement extends Component {
       });
     });
   }
+
+  // 设置柱状图格式
+  getBarOption = (data) => {
+    return{
+    title: {
+      "text": "本月任务标注数量柱状图"
+    },
+    legend: {},
+    tooltip: {},
+    dataset: {
+        dimensions: ['时间', 'wcst任务', '整晚任务'],
+        source: this.state.barData
+    },
+    xAxis: {type: 'category'},
+    yAxis: {},
+    // Declare several bar series, each will be mapped
+    // to a column of dataset.source by default.
+    series: [
+        {type: 'bar'},
+        {type: 'bar'},
+    ]
+   } 
+  };
+
+
   // 处理表格数据
   getTableDate = res => {
     let newTableData = [];
@@ -112,7 +158,7 @@ class LabelInformationManagement extends Component {
           param.startTime = formatDate(values.date[0]);
           param.endTime = formatDate(values.date[1]);
         }
-        API.InquirePatientTaskList(param).then(res => {
+        API.getTaskList(param).then(res => {
           this.getTableDate(res);
         });
       }
@@ -121,7 +167,7 @@ class LabelInformationManagement extends Component {
   //重置查询条件
   handleReset = () => {
     this.props.form.resetFields();
-    API.InquirePatientTaskList({}).then(res => {
+    API.getTaskList({}).then(res => {
       this.getTableDate(res);
     });
     this.setState({
@@ -181,23 +227,41 @@ class LabelInformationManagement extends Component {
     console.log(record)
     // 删除患者WCST任务
     if(record.type===0){
-      API.removeWCSTTask({id: record.task.id}).then(res=>{
+      API.removeWcstTask({id: record.task.id}).then(res=>{
         console.log(res)
         Message.success('WCST任务删除成功！')
-        API.InquirePatientTaskList({}).then(res => {
+        API.getTaskList({}).then(res => {
           this.getTableDate(res);
         });
       })
     }else if(record.type===1){
       // 删除近红外数据（睡眠测试整晚）
-      API.removeNirTask({id: record.medId}).then(res=>{
+      API.removeTask({id: record.task.id}).then(res=>{
         console.log(res)
         Message.success('近红外任务删除成功！')
-        API.InquirePatientTaskList({}).then(res => {
+        API.getTaskList({}).then(res => {
           this.getTableDate(res);
         });
       })
     }
+    API.getTaskTotal({}).then(res=>{
+      var items = [];
+      var date = "";
+      var strDay = "";
+      for (var i=0;i<30;i++){
+        strDay = (i+1).toString()
+        if (strDay.length===1){
+            strDay = "0"+strDay;
+        }
+       date = "2019-11-" + strDay;
+       items.push({时间:date,wcst任务:res.data.wcst[strDay],整晚任务:res.data.nir[strDay]})
+      }
+      console.log("++++++++=")
+      console.log(res.data)
+      this.setState({
+        barData:items
+      });
+    });
   };
 
   //查询表单
@@ -442,7 +506,7 @@ class LabelInformationManagement extends Component {
               key="1"
               style={{ textAlign: "left" }}
             >
-              {/* <Bar seriesLayoutBy={'column'}   /> */}
+              <ReactEcharts option={this.getBarOption(this.state.barData)}></ReactEcharts>
             </TabPane>
             <TabPane
               tab={<Icon type="pie-chart" />}

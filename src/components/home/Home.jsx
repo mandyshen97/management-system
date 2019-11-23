@@ -17,8 +17,28 @@ class Home extends Component {
       });
     });
 
+    API.getTaskTotal({}).then(res=>{
+      var items = [];
+      var date = "";
+      var strDay = "";
+      for (var i=0;i<31;i++){
+        strDay = (i+1).toString()
+        if (strDay.length===1){
+            strDay = "0"+strDay;
+        }
+       date = "2019-11-" + strDay;
+       items.push({时间:date,wcst任务:res.data.wcst[strDay],整晚任务:res.data.nir[strDay]})
+      }
+      console.log(res.data)
+      this.setState({
+        barData:items
+      });
+      
+    });
+
     this.state = {  
-      labelData: []
+      labelData: [],
+      barData:[]
     }
   }
   getOption = (data) => {
@@ -55,6 +75,30 @@ class Home extends Component {
       ]
     }
   }
+
+  getBarOption = (data) => {
+    return{
+    title: {
+      "text": "本月任务标注数量柱状图"
+    },
+    legend: {},
+    tooltip: {},
+    dataset: {
+        dimensions: ['时间', 'wcst任务', '整晚任务'],
+        source: this.state.barData
+    },
+    xAxis: {type: 'category'},
+    yAxis: {},
+    // Declare several bar series, each will be mapped
+    // to a column of dataset.source by default.
+    series: [
+        {type: 'bar'},
+        {type: 'bar'},
+    ]
+   } 
+  };
+
+  
   render() { 
     return (  
       <div className='main-content'>
@@ -65,7 +109,7 @@ class Home extends Component {
           疾病分类分布图（饼图）
         </Card>
         <Card>
-          本月标注统计（柱状图）
+          <ReactEcharts option={this.getBarOption(this.state.barData)}></ReactEcharts>
         </Card>
       </div>
     );

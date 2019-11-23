@@ -24,6 +24,8 @@ class TaskInformationCollection extends Component {
       };
       Object.assign(param, values);
       API.updateWcstTask(param).then(res => {
+        console.log("++++++====")
+        console.log(param)
         console.log(res);
       }).then(resolve=>{
         API.getTaskList({}).then(res => {

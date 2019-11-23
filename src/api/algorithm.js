@@ -70,7 +70,7 @@ const UrlMap = [
     {
         description: "删除整晚任务",
         method: "removeTask",
-        url: "removeTask",
+        url: "/removeTask",
         type: "POST"
     },
     {
@@ -104,9 +104,15 @@ const UrlMap = [
         type: "GET"
     },
     {
-        description: "获取疾病分类",
+        description: "获取疾病类别分布",
         method: "getDiseaseTotal",
         url: "/statistic/getDiseaseTotal",
+        type: "GET"
+    },
+    {
+        description: "获取本月标注任务分布",
+        method: "getTaskTotal",
+        url: "/statistic/getTaskTotal",
         type: "GET"
     }
 

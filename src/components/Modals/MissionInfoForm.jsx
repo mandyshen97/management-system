@@ -65,8 +65,9 @@ class MissionInfoForm extends Component {
           };
         console.log(param)
         API.addWcstTask(param).then(res => {
+          console.log("+++++++++=")
           console.log(res)
-          Message.success('添加wxst任务成功！')
+          Message.success('添加wcst任务成功！')
         });
         }
         else{
