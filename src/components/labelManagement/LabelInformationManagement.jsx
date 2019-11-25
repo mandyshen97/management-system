@@ -152,12 +152,12 @@ class LabelInformationManagement extends Component {
           medId: values.patientID ? values.patientID : undefined,
           name: values.patientName ? values.patientName : undefined,
           doctorId: values.doctorId ? values.doctorId : undefined,
-          disId: values.diseaseType ? values.diseaseType : undefined
+          disease: values.diseaseType ? values.diseaseType : undefined
         };
         if (values.date) {
           param.startTime = formatDate(values.date[0]);
           param.endTime = formatDate(values.date[1]);
-        }
+        } 
         API.getTaskList(param).then(res => {
           this.getTableDate(res);
         });
@@ -256,8 +256,7 @@ class LabelInformationManagement extends Component {
        date = "2019-11-" + strDay;
        items.push({时间:date,wcst任务:res.data.wcst[strDay],整晚任务:res.data.nir[strDay]})
       }
-      console.log("++++++++=")
-      console.log(res.data)
+   
       this.setState({
         barData:items
       });

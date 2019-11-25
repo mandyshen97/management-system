@@ -18,6 +18,7 @@ import {
   Button,
   Message
 } from "antd";
+import { connect } from "tls";
 const { Option } = Select;
 const { Title } = Typography;
 class MissionInfoForm extends Component {
@@ -30,8 +31,28 @@ class MissionInfoForm extends Component {
         medicine: undefined, //测试前服用的药物
         timeAfterMed: undefined, //吃完药之后多久进行测试
         otherInter: undefined //非药物干预
-      }
+      },
+      medicineList: [],
+      hourList: [],
+      
     };
+    for (let i = 0; i < 24; i++) {
+      this.state.hourList.push(<Option key={i}>{i.toString()}</Option>);
+    }
+  }
+
+  componentDidMount(){
+    API.getMedicineList({}).then(res=>{
+      let newMedicineList = ["无"];
+      res.data.map((item, index) => {
+        newMedicineList.push(item.name);
+      });
+      this.setState({
+       medicineList: newMedicineList
+        }
+        )
+      }
+    )
   }
 
   handleMissionSubmit = e => {
@@ -63,10 +84,9 @@ class MissionInfoForm extends Component {
           timeAfterMed: values.timeAfterMed,
           nonMedicineId: values.otherInter,
           };
-        console.log(param)
+        console.log("++++++")
+        console.log(param)  
         API.addWcstTask(param).then(res => {
-          console.log("+++++++++=")
-          console.log(res)
           Message.success('添加wcst任务成功！')
         });
         }
@@ -114,19 +134,8 @@ class MissionInfoForm extends Component {
         }
       }
     };
-    const medicine = [
-      "SSRI",
-      "SNRI",
-      "NaSSA",
-      "TCA",
-      "SARI",
-      "BZ",
-      "PAM",
-      "Li",
-      "SDA",
-      "DPA",
-      "无"
-    ];
+    
+    
     return (
       <Form {...formItemLayout} onSubmit={this.handleMissionSubmit}>
         <Row justify="start" type="flex">
@@ -172,21 +181,31 @@ class MissionInfoForm extends Component {
               placeholder="选择药物"
               initialValue={["SSRI", "SNRI"]}
             >
-              {medicine.map((item, index) => (
+              {this.state.medicineList.map((item, index) => (
                 <Option key={index}>{item}</Option>
               ))}
             </Select>
+            
+     
           )}
         </Form.Item>
         <Form.Item label="服药后多久进行测试(h)">
           {getFieldDecorator("timeAfterMed", {
             initialValue: missionFormData.timeAfterMed
           })(
-            <TimePicker
+            // <TimePicker
+            //   style={{ width: 200 }}
+            //   initialValue={moment("1", "hh")}
+            //   format={"hh"}
+            // />
+            <Select
+              showSearch
               style={{ width: 200 }}
-              initialValue={moment("1", "hh")}
-              format={"hh"}
-            />
+              placeholder="选择时间（小时）"
+              >
+              {this.state.hourList}
+            </Select>
+
           )}
         </Form.Item>
         <Form.Item label="其他干预方式">
@@ -199,9 +218,9 @@ class MissionInfoForm extends Component {
               placeholder="选择其他干预方式"
               initislValue={["SSRI", "SNRI"]}
             >
-              <Option value="0">rTMs</Option>
-              <Option value="1">CBT-I</Option>
-              <Option value="2">无</Option>
+              <Option value="0">无</Option>
+              <Option value="1">rTMs</Option>
+              <Option value="2">CBT-I</Option>
             </Select>
           )}
         </Form.Item>

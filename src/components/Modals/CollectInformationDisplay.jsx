@@ -1,7 +1,28 @@
 import React, { Component, Fragment } from "react";
 import { Form, Modal, Divider, Descriptions, Button } from "antd";
-
+import API from "../../api/algorithm"
 class CollectInformationDisplay extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+    medicineList:[]
+    }
+  }
+
+  componentDidMount(){
+    API.getMedicineList({}).then(res=>{
+      let newMedicineList = ["无"];
+      res.data.map((item, index) => {
+        newMedicineList.push(item.name);
+      });
+      this.setState({
+       medicineList: newMedicineList
+        }
+        )
+      }
+    )
+  }
+
   renderDescription() {
     const WCSTTask = {
       应答总数: "ta",
@@ -32,17 +53,28 @@ class CollectInformationDisplay extends Component {
     const patientInfo = currentRecord.patient;
     const task = currentRecord.task;
 
+    const medId = [];
+    if(task.medicineId && task.medicineId.indexOf("-")){
+      console.log("------")
+      //medId = task.medicineId.split("-")    
+    }
+    
+    console.log("++++++++==")
+    console.log(medId)
     return (
       <div>
         <Descriptions title="患者信息">
           <Descriptions.Item label="患者姓名">
             {currentRecord.name}
           </Descriptions.Item>
-          <Descriptions.Item label="患者标注">
+          <Descriptions.Item label="任务类型">
             {currentRecord.testType}
           </Descriptions.Item>
           <Descriptions.Item label="患者编号">
             {currentRecord.medId}
+          </Descriptions.Item>
+          <Descriptions.Item label="患者失眠类型">
+            {patientInfo.disease}
           </Descriptions.Item>
           <Descriptions.Item label="患者性别">
             {currentRecord.gender === 1 ? "男" : "女"}
@@ -57,16 +89,16 @@ class CollectInformationDisplay extends Component {
             {patientInfo.height}
           </Descriptions.Item>
           <Descriptions.Item label="测试前服用药物">
-            {patientInfo.medicine ? "patientInfo.medicine" : "无数据"}
+            {task.medicineId}
           </Descriptions.Item>
           <Descriptions.Item label="服药后多久进行测试">
-            {patientInfo.timeAfterMed ? "patientInfo.timeAfterMed" : "无数据"}
+            {task.medInt}
           </Descriptions.Item>
           <Descriptions.Item label="非药物干预">
-            {patientInfo.otherInter ? patientInfo.otherInter : "无数据"}
+            {task.nonMedicineId}
           </Descriptions.Item>
           <Descriptions.Item label="测试近红外时间">
-            {currentRecord.testTime}
+            {task.time}
           </Descriptions.Item>
         </Descriptions>
         <Divider />

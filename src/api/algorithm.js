@@ -87,7 +87,7 @@ const UrlMap = [
     },
     {
         description: "获取药物列表",
-        method: "getDoctorList",
+        method: "getMedicineList",
         url: "/getMedicineList",
         type: "GET"
     },
