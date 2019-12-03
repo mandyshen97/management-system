@@ -201,7 +201,6 @@ class TaskInformationCollection extends Component {
   }
 
   render() {
-    console.log(this.props);
     const { currentRecord, modalVisible, handleModalVisible } = this.props;
     const title =
       "任务信息采集——" + currentRecord.medId + "_" + currentRecord.name;

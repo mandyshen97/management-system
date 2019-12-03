@@ -452,7 +452,6 @@ class InformationManagement extends Component {
   ];
 
   render() {
-    console.log(this.props)
     return (
       <div className="main-content">
         {this.renderSearch()}

@@ -261,7 +261,6 @@ class ScaleForm extends Component {
     );
   };
   render() {
-    console.log(this.props)
     const title = `量表展示——${this.props.currentRecord.medId}_${this.props.currentRecord.name}`;
     return (
       <Modal

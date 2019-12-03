@@ -32,7 +32,6 @@ class Header extends Component {
       "https://www.tianqiapi.com/api/?version=v6&cityid=101210101&appid=[81135576]&appsecret=[17HDf3Q1]"
     ).then(res => {
       res.json().then(result => {
-        console.log(result);
         this.setState({
           weather: result.wea,
           dayPictureUrl: require(`./banana/${result.wea_img}.png`)

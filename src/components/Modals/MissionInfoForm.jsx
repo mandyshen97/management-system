@@ -2,9 +2,12 @@
  * 任务基本信息填写弹框
  */
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
 import API from "../../api/api";
+import moment from "moment";
 import { formatDate } from "../../utils/dateUtils";
+import locale from "antd/es/date-picker/locale/zh_CN";
+import "moment/locale/zh-cn";
+
 import {
   Form,
   Modal,
@@ -14,15 +17,18 @@ import {
   Select,
   Divider,
   DatePicker,
+  TimePicker,
   Button,
   Message
 } from "antd";
 const { Option } = Select;
 const { Title } = Typography;
+moment.locale("zh-cn");
 class MissionInfoForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      mode: "date",
       medcineList: [],
       nonMedicineList: []
     };
@@ -51,14 +57,16 @@ class MissionInfoForm extends Component {
         const { currentRecord } = this.props;
         let param = {
           patientId: currentRecord.id,
-          time: values.testTime ? formatDate(values.testTime) : undefined, // 测试时间
+          time: values.testDate
+            ? moment(values.testDate).format("YYYY-MM-DDTHH:mm:ss")
+            : undefined, // 测试时间
           nonMedArray: values.nonMed
             ? values.nonMed.map(item => Number(item))
             : [], // 非药物干预id数组
           medArray: values.medicine
             ? values.medicine.map(item => Number(item))
             : [], // 药品id数组
-          medInt: Number(values.timeAfterMed), // 干预药物间隔
+          medInt: Number(values.timeAfterMed) // 干预药物间隔
           // l2l: values.l2l
         };
         if (values.testType === "0") {
@@ -85,8 +93,17 @@ class MissionInfoForm extends Component {
 
   handleViewClick = () => {
     this.handleMissionSubmit();
-    console.log(this.props.history)
+    // console.log(this.props.history);
     this.props.history.push("/labelInformationManagement");
+  };
+  handleOpenChange = open => {
+    if (open) {
+      this.setState({ mode: "date" });
+    }
+  };
+
+  handlePanelChange = (value, mode) => {
+    this.setState({ mode });
   };
 
   renderForm = () => {
@@ -121,9 +138,23 @@ class MissionInfoForm extends Component {
         <Divider />
         <Form.Item label="测试时间">
           {getFieldDecorator(
+            "testDate",
+            {}
+          )(
+            // <DatePicker showTime={true} style={{ width: 200 }} />
+            <DatePicker
+              locale={locale}
+              placeholder="选择测试时间"
+              mode={this.state.mode}
+              showTime
+              onOpenChange={this.handleOpenChange}
+              onPanelChange={this.handlePanelChange}
+            />
+          )}
+          {/* {getFieldDecorator(
             "testTime",
             {}
-          )(<DatePicker style={{ width: 200 }} />)}
+          )(<TimePicker style={{ width: 200 }} defaultOpenValue={moment("00:00:00", "HH:mm:ss")} />)} */}
         </Form.Item>
         <Form.Item label="选择测试类型">
           {getFieldDecorator("testType", { rules: [{ required: true }] })(

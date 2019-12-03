@@ -45,11 +45,11 @@ class CollectInformationDisplay extends Component {
     };
 
     const { currentRecord } = this.props;
-    console.log(currentRecord);
+    // console.log(currentRecord);
     const patientInfo = currentRecord.patient;
-    console.log(patientInfo);
+    // console.log(patientInfo);
     const task = currentRecord.task;
-    console.log(this.state);
+    // console.log(this.state);
     let medicine = "";
     let nonMedicine = "";
     if (task.medArray.length > 0) {

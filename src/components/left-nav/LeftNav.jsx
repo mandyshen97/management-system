@@ -26,7 +26,6 @@ class LeftNav extends Component {
    * 使用 map() + 递归
    */
   getMenuNodes_map = menuList => {
-    console.log(this.state.currentPath)
     return menuList.map(item => {
       if (!item.children) {
         return (
