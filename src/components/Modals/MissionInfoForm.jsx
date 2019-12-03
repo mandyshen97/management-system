@@ -59,7 +59,7 @@ class MissionInfoForm extends Component {
             ? values.medicine.map(item => Number(item))
             : [], // 药品id数组
           medInt: Number(values.timeAfterMed), // 干预药物间隔
-          l2l: values.l2l
+          // l2l: values.l2l
         };
         if (values.testType === "0") {
           API.addWCST(param).then(res => {
@@ -168,12 +168,12 @@ class MissionInfoForm extends Component {
             {}
           )(<Input style={{ width: 200 }} placeholder="服药后的时间间隔" />)}
         </Form.Item>
-        <Form.Item label="开始学习到学会(h)">
+        {/* <Form.Item label="开始学习到学会(h)">
           {getFieldDecorator(
             "l2l",
             {}
           )(<Input style={{ width: 200 }} placeholder="开始学习到学会" />)}
-        </Form.Item>
+        </Form.Item> */}
         <Form.Item label="其他干预方式">
           {getFieldDecorator(
             "nonMed",

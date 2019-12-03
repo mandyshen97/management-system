@@ -117,7 +117,7 @@ class UpdatePersonalForm extends Component {
             </Select>
           )}
         </Form.Item>
-        <Form.Item label="患者年龄">
+        <Form.Item label="患者出生日期">
           {getFieldDecorator("birthday", {
             initialValue: moment(currentRecord.birthday)
           })(<DatePicker />)}
