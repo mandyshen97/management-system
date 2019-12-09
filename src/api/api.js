@@ -102,19 +102,18 @@ const UrlMap = [
     url: "/nir/som/disease",
     type: "GET"
   },
-
-  
-
- 
-  
- 
-  
-  
-  
-  
-
-  
-  
+  {
+    description: "18.获取疾病统计",
+    method: "getDiseaseTotal",
+    url: "/nir/som/statistic/getDiseaseTotal",
+    type: "GET"
+  },
+  {
+    description: "19.获取任务统计",
+    method: "getTaskTotal",
+    url: "/nir/som/statistic/getTaskTotal",
+    type: "GET"
+  }
 ];
 const API = {};
 UrlMap.forEach(item => {
@@ -134,8 +133,10 @@ UrlMap.forEach(item => {
     if (item.type !== "POST") {
       // 如果不是POST请求，则将参数拼接在url中，以?连接。
       // 将请求参数对象拼接成查询字符串：data={a:1,b:2,c:3} ===> a=1&b=2&c=3
-      let body = Object.keys(data).map(key => key + "=" + data[key]).join("&");
-      if(body !== ''){
+      let body = Object.keys(data)
+        .map(key => key + "=" + data[key])
+        .join("&");
+      if (body !== "") {
         url = `${url}?${body}`;
       }
     } else {
