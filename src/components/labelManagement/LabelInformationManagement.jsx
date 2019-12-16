@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from "react";
 import "./label-information-management.less";
+import { Link } from "react-router-dom";
 // import { Line, Bar } from "echarts-for-react";
 import { getAge, formatDate } from "../../utils/dateUtils";
 import {
@@ -207,6 +208,24 @@ class LabelInformationManagement extends Component {
           Message.error("删除失败！");
         });
     }
+  };
+
+  handlePrintClick = record => {
+    console.log(record);
+    /**
+     * {age: 27
+disease: "伴过度觉醒"
+doctorName: "毛主任"
+gender: 1
+key: 0
+medId: "000113"
+name: "沈从文2"
+patient: {id: 87, medId: "000113", doctorName: "毛主任", name: "沈从文2", gender: 1, …}
+task: {id: 87, patientId: 87, time: "2019-12-03T15:33:50.000+0800", nonMedArray: Array(1), medArray: Array(2), …}
+testTime: "2019-12-03T15:33:50.000+0800"
+testType: "WCST"
+type: 0}
+     */
   };
 
   //查询表单
@@ -435,6 +454,16 @@ class LabelInformationManagement extends Component {
                 <span style={{ marginLeft: "5px" }}>删除</span>
               </span>
             </Tooltip>
+            <Divider type="vertical" />
+            <Link to={`/print`} target='_blank'>
+              <Button
+                // onClick={() => this.handlePrintClick(record)}
+                type="primary"
+                size="small"
+              >
+                打印
+              </Button>
+            </Link>
           </Fragment>
         );
       }

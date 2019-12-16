@@ -22,7 +22,7 @@ class Login extends Component {
               Message.error("登录失败，用户名或密码错误！");
             } else {
               Message.success("登录成功！");
-              this.props.history.push("/");
+              this.props.history.push("/admin");
             }
           })
           .catch(err => {

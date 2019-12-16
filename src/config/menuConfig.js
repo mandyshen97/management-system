@@ -1,22 +1,22 @@
 const menuList = [
   {
     title: '首页',
-    path: '/home',
+    path: '/admin/home',
     icon: 'home'
   },
   {
     title: '采集流程介绍',
-    path: '/introduction',
+    path: '/admin/introduction',
     icon: 'project'
   },
   {
     title: '患者信息管理',
-    path: '/informationManagement',
+    path: '/admin/informationManagement',
     icon: 'user'
   },
   {
     title: '标注信息管理',
-    path: '/labelInformationManagement',
+    path: '/admin/labelInformationManagement',
     icon: 'form'
   },
   // {
@@ -43,7 +43,7 @@ const menuList = [
   // },
   {
     title: '智能诊断辅助',
-    path: '/assist',
+    path: '/admin/assist',
     icon: 'bulb',
   },
   // {

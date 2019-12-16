@@ -57,12 +57,12 @@ class Admin extends Component {
           </Breadcrumb>
           <Content>
             <Switch>
-              <Redirect from='/' exact to='/home' />
-              <Route path='/home'  component={Home} />
-              <Route path='/informationManagement'  component={InformationManagement} />
-              <Route path='/introduction' component={Introduction} />
-              <Route path='/assist' component={Assist} />
-              <Route path='/labelInformationManagement' component={LabelInformationManagement} />
+              <Redirect from='/admin' exact to='/admin/home' />
+              <Route path='/admin/home'  component={Home} />
+              <Route path='/admin/informationManagement'  component={InformationManagement} />
+              <Route path='/admin/introduction' component={Introduction} />
+              <Route path='/admin/assist' component={Assist} />
+              <Route path='/admin/labelInformationManagement' component={LabelInformationManagement} />
             </Switch>
           </Content>
         </Layout>

@@ -11,7 +11,7 @@ class LeftNav extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentPath: undefined
+      currentPath: '/admin/home'
     };
   }
 
@@ -88,9 +88,9 @@ class LeftNav extends Component {
     return (
       <div className="left-nav">
         <Link
-          to="/home"
+          to="/admin/home"
           className="left-nav-header"
-          onClick={() => this.handleChangeColor("/home")}
+          onClick={() => this.handleChangeColor("/admin/home")}
         >
           <img src={logo} alt="logo" />
           <h1>失眠辅助</h1>
