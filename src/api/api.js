@@ -113,6 +113,12 @@ const UrlMap = [
     method: "getTaskTotal",
     url: "/nir/som/statistic/getTaskTotal",
     type: "GET"
+  },
+  {
+    description: "20",
+    method: "getBloodOxygenData",
+    url: "/nir/som/patient/getBloodOxygenData",
+    type: "GET"
   }
 ];
 const API = {};

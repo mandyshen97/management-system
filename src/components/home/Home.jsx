@@ -181,15 +181,9 @@ class Home extends Component {
       ]
     };
   };
-  handleClick=()=>{
-    // let newStr=document.getElementsByClassName('main-content').innerHtml
-
-    window.print()
-  }
   render() {
     return (
       <div className="main-content">
-        <button onClick={this.handleClick}>打印</button>
         <Card>
           <ReactEcharts option={this.getOptionClassification()}></ReactEcharts>
         </Card>
@@ -200,5 +194,7 @@ class Home extends Component {
     );
   }
 }
+
+// dataPath: "/home/ncq/gg-20191115165243.bin"
 
 export default Home;

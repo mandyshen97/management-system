@@ -20,7 +20,7 @@ class App extends Component {
           <Route path="/login" component={Login}></Route>
           <Route path="/register" component={Register}></Route>
           <Route path="/admin" component={Admin}></Route>
-          <Route path="/print" component={Print}></Route>
+          <Route path="/print/:id" component={Print}></Route>
           <Route exact path="/">
             <Redirect to="/login" />
           </Route>

@@ -455,7 +455,7 @@ type: 0}
               </span>
             </Tooltip>
             <Divider type="vertical" />
-            <Link to={`/print`} target='_blank'>
+            <Link to={`/print/${record.medId}`} target='_blank'>
               <Button
                 // onClick={() => this.handlePrintClick(record)}
                 type="primary"
