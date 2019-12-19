@@ -9,6 +9,7 @@
     "echarts": "^4.4.0",
     "echarts-for-react": "^2.0.15-beta.1",
     "html2canvas": "^1.0.0-rc.5",
+    "jspdf": "^1.5.3",
     "less": "^3.10.3",
     "less-loader": "^5.0.0",
     "moment": "^2.24.0",

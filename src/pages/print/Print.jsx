@@ -68,7 +68,7 @@ class Print extends Component {
           fourChannelsData.map((item, index) => {
             if (item) {
               let timeList = [];
-              let frameNumList = [];
+              // let frameNumList = [];
               let toiList = [];
               let dtHbList = [];
               let thiList = [];
@@ -76,7 +76,7 @@ class Print extends Component {
               let dhbO2List = [];
               item.map((itemList, i) => {
                 timeList.push(itemList.time);
-                frameNumList.push(itemList.frameNum);
+                // frameNumList.push(itemList.frameNum);
                 toiList.push(itemList.toi);
                 dtHbList.push(itemList.dtHb);
                 thiList.push(itemList.thi);
@@ -86,7 +86,7 @@ class Print extends Component {
               channel[index] = Object.assign(
                 {},
                 { timeList: timeList },
-                { frameNumList: frameNumList },
+                // { frameNumList: frameNumList },
                 { toiList: toiList },
                 { dtHbList: dtHbList },
                 { thiList: thiList },
@@ -144,7 +144,7 @@ class Print extends Component {
         trigger: "axis"
       },
       legend: {
-        data: ["frameNum", "toi", "dtHb", "thi", "dhb", "dhbO2"]
+        data: ["toi", "dtHb", "thi", "dhb", "dhbO2"]
       },
       grid: {
         left: "3%",
@@ -166,12 +166,12 @@ class Print extends Component {
         type: "value"
       },
       series: [
-        {
-          name: "frameNum",
-          type: "line",
-          stack: "总量",
-          data: this.state.channelOne.frameNumList
-        },
+        // {
+        //   name: "frameNum",
+        //   type: "line",
+        //   stack: "总量",
+        //   data: this.state.channelOne.frameNumList
+        // },
         {
           name: "toi",
           type: "line",
@@ -214,7 +214,7 @@ class Print extends Component {
         trigger: "axis"
       },
       legend: {
-        data: ["frameNum", "toi", "dtHb", "thi", "dhb", "dhbO2"]
+        data: [ "toi", "dtHb", "thi", "dhb", "dhbO2"]
       },
       grid: {
         left: "6%",
@@ -237,12 +237,12 @@ class Print extends Component {
         type: "value"
       },
       series: [
-        {
-          name: "frameNum",
-          type: "line",
-          stack: "总量",
-          data: this.state.channelTwo.frameNumList
-        },
+        // {
+        //   name: "frameNum",
+        //   type: "line",
+        //   stack: "总量",
+        //   data: this.state.channelTwo.frameNumList
+        // },
         {
           name: "toi",
           type: "line",
@@ -285,7 +285,7 @@ class Print extends Component {
         trigger: "axis"
       },
       legend: {
-        data: ["frameNum", "toi", "dtHb", "thi", "dhb", "dhbO2"]
+        data: [ "toi", "dtHb", "thi", "dhb", "dhbO2"]
       },
       grid: {
         left: "3%",
@@ -307,12 +307,12 @@ class Print extends Component {
         type: "value"
       },
       series: [
-        {
-          name: "frameNum",
-          type: "line",
-          stack: "总量",
-          data: this.state.channelThree.frameNumList
-        },
+        // {
+        //   name: "frameNum",
+        //   type: "line",
+        //   stack: "总量",
+        //   data: this.state.channelThree.frameNumList
+        // },
         {
           name: "toi",
           type: "line",
@@ -355,7 +355,7 @@ class Print extends Component {
         trigger: "axis"
       },
       legend: {
-        data: ["frameNum", "toi", "dtHb", "thi", "dhb", "dhbO2"]
+        data: ["toi", "dtHb", "thi", "dhb", "dhbO2"]
       },
       grid: {
         left: "3%",
@@ -377,12 +377,12 @@ class Print extends Component {
         type: "value"
       },
       series: [
-        {
-          name: "frameNum",
-          type: "line",
-          stack: "总量",
-          data: this.state.channelFour.frameNumList
-        },
+        // {
+        //   name: "frameNum",
+        //   type: "line",
+        //   stack: "总量",
+        //   data: this.state.channelFour.frameNumList
+        // },
         {
           name: "toi",
           type: "line",
@@ -467,7 +467,8 @@ class Print extends Component {
       <div
         style={{
           margin: "30px",
-          position: "relative"
+          position: "relative",
+          overflow:'auto'
         }}
       >
         <Button
