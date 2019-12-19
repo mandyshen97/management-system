@@ -1,6 +1,8 @@
 import React, { Component, Fragment } from "react";
 import { Descriptions, Button, Card, Message, Empty } from "antd";
 import ReactEcharts from "echarts-for-react";
+import html2canvas from "html2canvas";
+// import jsPDF from 'jspdf';
 import API from "../../api/api";
 class Print extends Component {
   constructor(props) {
@@ -119,8 +121,18 @@ class Print extends Component {
       });
     });
   };
-
+  // https://www.jianshu.com/p/956a0bab5152
   handlePrintClick = () => {
+    // html2canvas(document.body).then(function(canvas){
+    //   // 返回图片url
+    //   let pageData = canvas.toDataURL('image/jpeg', 1.0)
+    //   // 方向默认竖直，尺寸points，格式a4
+    //   let pdf = new jsPDF('','pt','a4')
+    //   pdf.addImage(pageData, 'JPEG', 0, 0, 595.28, 592.28/canvas.width * canvas.height)
+    //   pdf.sava('content.pdf')
+    // })
+
+
     window.print();
   };
   getOptionChannelOne = () => {
@@ -208,7 +220,7 @@ class Print extends Component {
         left: "6%",
         right: "6%",
         bottom: "3%",
-        weight: '90%',
+        weight: "90%",
         containLabel: true
       },
       toolbox: {
@@ -455,7 +467,7 @@ class Print extends Component {
       <div
         style={{
           margin: "30px",
-          position: "relative",
+          position: "relative"
         }}
       >
         <Button
