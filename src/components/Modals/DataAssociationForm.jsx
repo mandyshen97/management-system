@@ -36,7 +36,7 @@ class DataAssociationForm extends Component {
         }
       }
     };
-    const initial = `${this.props.currentRecord.medId}_${this.props.currentRecord.name}_path1`;
+    const initial =this.props.currentRecord===0? `${this.props.currentRecord.task.id}_W`:`${this.props.currentRecord.task.id}_S`;
 
     return (
       <Form {...formItemLayout} onSubmit={this.handleFormSubmit}>

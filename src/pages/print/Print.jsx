@@ -2,7 +2,8 @@ import React, { Component, Fragment } from "react";
 import { Descriptions, Button, Card, Message, Empty } from "antd";
 import ReactEcharts from "echarts-for-react";
 import html2canvas from "html2canvas";
-// import jsPDF from 'jspdf';
+import jsPDF from "jspdf";
+import "./print.less";
 import API from "../../api/api";
 class Print extends Component {
   constructor(props) {
@@ -13,18 +14,6 @@ class Print extends Component {
       patientData: undefined,
       taskData: undefined,
       testType: undefined,
-      // curveData: undefined,
-      // channelOneTime: [],
-      // channelOneFrameNum: [],
-      // channelOneToi: [],
-      // channelOnedtHb: [],
-      // channelOneThi: [],
-      // channelOneDhb: [],
-      // channelOnedhbO2: [],
-      // channelTwoTime: [],
-      // channelThreeTime: [],
-      // channelFourTime: [],
-      // channelOneData: {},
       channelOne: {},
       channelTwo: {},
       channelThree: {},
@@ -123,18 +112,73 @@ class Print extends Component {
   };
   // https://www.jianshu.com/p/956a0bab5152
   handlePrintClick = () => {
-    // html2canvas(document.body).then(function(canvas){
-    //   // 返回图片url
-    //   let pageData = canvas.toDataURL('image/jpeg', 1.0)
-    //   // 方向默认竖直，尺寸points，格式a4
-    //   let pdf = new jsPDF('','pt','a4')
-    //   pdf.addImage(pageData, 'JPEG', 0, 0, 595.28, 592.28/canvas.width * canvas.height)
-    //   pdf.sava('content.pdf')
+    // var targetDom = document.getElementById('content');
+    // var copyDom = targetDom.cloneNode(true);
+
+    html2canvas(document.body).then(canvas => {
+      debugger;
+      var contentWidth = canvas.width;
+      var contentHeight = canvas.height;
+
+      //一页pdf显示html页面生成的canvas高度;
+      var pageHeight = (contentWidth / 595.28) * 841.89;
+      //未生成pdf的html页面高度
+      var leftHeight = contentHeight;
+      //pdf页面偏移
+      var position = 0;
+      //a4纸的尺寸[595.28,841.89]，html页面生成的canvas在pdf中图片的宽高
+      var imgWidth = 555.28;
+      var imgHeight = (555.28 / contentWidth) * contentHeight;
+
+      var pageData = canvas.toDataURL("image/jpeg", 1.0);
+
+      var pdf = new jsPDF("", "pt", "a4");
+      //有两个高度需要区分，一个是html页面的实际高度，和生成pdf的页面高度(841.89)
+      //当内容未超过pdf一页显示的范围，无需分页
+      if (leftHeight < pageHeight) {
+        pdf.addImage(pageData, "JPEG", 20, 0, imgWidth, imgHeight);
+      } else {
+        while (leftHeight > 0) {
+          pdf.addImage(pageData, "JPEG", 20, position, imgWidth, imgHeight);
+          leftHeight -= pageHeight;
+          position -= 841.89;
+          //避免添加空白页
+          if (leftHeight > 0) {
+            pdf.addPage();
+          }
+        }
+      }
+
+      pdf.save("content.pdf");
+    });
+
+    // html2canvas(document.body, {
+    //   onrendered:function(canvas) {
+    //     document.body.appendChild(canvas)
+    //   }
     // })
-
-
-    window.print();
+    // html2canvas(document.body).then(canvas => {
+    //   document.body.appendChild(canvas)
+    // });
+    // window.print();
   };
+
+  // debugger
+  // html2canvas(document.body, {
+  //   onrendered: function(canvas) {
+
+  //   }
+  // });
+
+  // html2canvas(document.body).then(function(canvas){
+  //   // 返回图片url
+  //   let pageData = canvas.toDataURL('image/jpeg', 1.0)
+  //   debugger
+  //   // 方向默认竖直，尺寸points，格式a4
+  //   let pdf = new jsPDF('','pt','a4')
+  //   pdf.addImage(pageData, 'JPEG', 0, 0, 595.28, 592.28/canvas.width * canvas.height)
+  //   pdf.save('content.pdf')
+  // })
   getOptionChannelOne = () => {
     return {
       // title: {
@@ -214,11 +258,11 @@ class Print extends Component {
         trigger: "axis"
       },
       legend: {
-        data: [ "toi", "dtHb", "thi", "dhb", "dhbO2"]
+        data: ["toi", "dtHb", "thi", "dhb", "dhbO2"]
       },
       grid: {
         left: "6%",
-        right: "6%",
+        right: "10%",
         bottom: "3%",
         weight: "90%",
         containLabel: true
@@ -285,7 +329,7 @@ class Print extends Component {
         trigger: "axis"
       },
       legend: {
-        data: [ "toi", "dtHb", "thi", "dhb", "dhbO2"]
+        data: ["toi", "dtHb", "thi", "dhb", "dhbO2"]
       },
       grid: {
         left: "3%",
@@ -465,10 +509,12 @@ class Print extends Component {
     }
     return (
       <div
+        id="content"
         style={{
           margin: "30px",
-          position: "relative",
-          overflow:'auto'
+          position: "absolute",
+          overflow: "auto",
+          width: "calc(100% - 30px)"
         }}
       >
         <Button
@@ -566,7 +612,10 @@ class Print extends Component {
               通道2
             </h2>
             {Object.keys(this.state.channelTwo).length > 0 && (
-              <ReactEcharts option={this.getOptionChannelTwo()}></ReactEcharts>
+              <ReactEcharts
+                option={this.getOptionChannelTwo()}
+                lazyUpdate={true}
+              ></ReactEcharts>
             )}
             {Object.keys(this.state.channelTwo).length === 0 && <Empty />}
           </Card>
