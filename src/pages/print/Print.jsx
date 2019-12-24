@@ -57,7 +57,6 @@ class Print extends Component {
           fourChannelsData.map((item, index) => {
             if (item) {
               let timeList = [];
-              // let frameNumList = [];
               let toiList = [];
               let dtHbList = [];
               let thiList = [];
@@ -65,7 +64,6 @@ class Print extends Component {
               let dhbO2List = [];
               item.map((itemList, i) => {
                 timeList.push(itemList.time);
-                // frameNumList.push(itemList.frameNum);
                 toiList.push(itemList.toi);
                 dtHbList.push(itemList.dtHb);
                 thiList.push(itemList.thi);
@@ -75,7 +73,6 @@ class Print extends Component {
               channel[index] = Object.assign(
                 {},
                 { timeList: timeList },
-                // { frameNumList: frameNumList },
                 { toiList: toiList },
                 { dtHbList: dtHbList },
                 { thiList: thiList },
@@ -110,13 +107,9 @@ class Print extends Component {
       });
     });
   };
-  // https://www.jianshu.com/p/956a0bab5152
-  handlePrintClick = () => {
-    // var targetDom = document.getElementById('content');
-    // var copyDom = targetDom.cloneNode(true);
 
-    html2canvas(document.body).then(canvas => {
-      debugger;
+  handlePrintClick = () => {
+    html2canvas(this.refs.pdf, { scale: 2 }).then(canvas => {
       var contentWidth = canvas.width;
       var contentHeight = canvas.height;
 
@@ -136,7 +129,7 @@ class Print extends Component {
       //有两个高度需要区分，一个是html页面的实际高度，和生成pdf的页面高度(841.89)
       //当内容未超过pdf一页显示的范围，无需分页
       if (leftHeight < pageHeight) {
-        pdf.addImage(pageData, "JPEG", 20, 0, imgWidth, imgHeight);
+        pdf.addImage(pageData, "JPEG", 20, 20, imgWidth, imgHeight);
       } else {
         while (leftHeight > 0) {
           pdf.addImage(pageData, "JPEG", 20, position, imgWidth, imgHeight);
@@ -148,42 +141,17 @@ class Print extends Component {
           }
         }
       }
-
-      pdf.save("content.pdf");
+      pdf.save(
+        `${this.state.patientData.name}_${this.state.patientData.medId}.pdf`
+      );
     });
-
-    // html2canvas(document.body, {
-    //   onrendered:function(canvas) {
-    //     document.body.appendChild(canvas)
-    //   }
-    // })
-    // html2canvas(document.body).then(canvas => {
-    //   document.body.appendChild(canvas)
-    // });
-    // window.print();
   };
 
-  // debugger
-  // html2canvas(document.body, {
-  //   onrendered: function(canvas) {
-
-  //   }
-  // });
-
-  // html2canvas(document.body).then(function(canvas){
-  //   // 返回图片url
-  //   let pageData = canvas.toDataURL('image/jpeg', 1.0)
-  //   debugger
-  //   // 方向默认竖直，尺寸points，格式a4
-  //   let pdf = new jsPDF('','pt','a4')
-  //   pdf.addImage(pageData, 'JPEG', 0, 0, 595.28, 592.28/canvas.width * canvas.height)
-  //   pdf.save('content.pdf')
-  // })
   getOptionChannelOne = () => {
     return {
-      // title: {
-      //   text: "通道1"
-      // },
+      title: {
+        text: "通道1"
+      },
       tooltip: {
         trigger: "axis"
       },
@@ -191,7 +159,7 @@ class Print extends Component {
         data: ["toi", "dtHb", "thi", "dhb", "dhbO2"]
       },
       grid: {
-        left: "3%",
+        left: "4%",
         right: "4%",
         bottom: "3%",
         containLabel: true
@@ -210,12 +178,6 @@ class Print extends Component {
         type: "value"
       },
       series: [
-        // {
-        //   name: "frameNum",
-        //   type: "line",
-        //   stack: "总量",
-        //   data: this.state.channelOne.frameNumList
-        // },
         {
           name: "toi",
           type: "line",
@@ -251,9 +213,9 @@ class Print extends Component {
   };
   getOptionChannelTwo = () => {
     return {
-      // title: {
-      //   text: "通道2"
-      // },
+      title: {
+        text: "通道2"
+      },
       tooltip: {
         trigger: "axis"
       },
@@ -261,10 +223,9 @@ class Print extends Component {
         data: ["toi", "dtHb", "thi", "dhb", "dhbO2"]
       },
       grid: {
-        left: "6%",
-        right: "10%",
+        left: "4%",
+        right: "4%",
         bottom: "3%",
-        weight: "90%",
         containLabel: true
       },
       toolbox: {
@@ -281,12 +242,6 @@ class Print extends Component {
         type: "value"
       },
       series: [
-        // {
-        //   name: "frameNum",
-        //   type: "line",
-        //   stack: "总量",
-        //   data: this.state.channelTwo.frameNumList
-        // },
         {
           name: "toi",
           type: "line",
@@ -322,9 +277,9 @@ class Print extends Component {
   };
   getOptionChannelThree = () => {
     return {
-      // title: {
-      //   text: "通道3"
-      // },
+      title: {
+        text: "通道3"
+      },
       tooltip: {
         trigger: "axis"
       },
@@ -332,7 +287,7 @@ class Print extends Component {
         data: ["toi", "dtHb", "thi", "dhb", "dhbO2"]
       },
       grid: {
-        left: "3%",
+        left: "4%",
         right: "4%",
         bottom: "3%",
         containLabel: true
@@ -351,12 +306,6 @@ class Print extends Component {
         type: "value"
       },
       series: [
-        // {
-        //   name: "frameNum",
-        //   type: "line",
-        //   stack: "总量",
-        //   data: this.state.channelThree.frameNumList
-        // },
         {
           name: "toi",
           type: "line",
@@ -392,9 +341,9 @@ class Print extends Component {
   };
   getOptionChannelFour = () => {
     return {
-      // title: {
-      //   text: "通道4"
-      // },
+      title: {
+        text: "通道4"
+      },
       tooltip: {
         trigger: "axis"
       },
@@ -402,7 +351,7 @@ class Print extends Component {
         data: ["toi", "dtHb", "thi", "dhb", "dhbO2"]
       },
       grid: {
-        left: "3%",
+        left: "4%",
         right: "4%",
         bottom: "3%",
         containLabel: true
@@ -421,12 +370,6 @@ class Print extends Component {
         type: "value"
       },
       series: [
-        // {
-        //   name: "frameNum",
-        //   type: "line",
-        //   stack: "总量",
-        //   data: this.state.channelFour.frameNumList
-        // },
         {
           name: "toi",
           type: "line",
@@ -507,14 +450,16 @@ class Print extends Component {
         });
       }
     }
+    const title = this.state.patientData
+      ? `${this.state.patientData.name}_${this.state.patientData.medId}`
+      : "";
     return (
       <div
-        id="content"
         style={{
-          margin: "30px",
-          position: "absolute",
+          margin: "10px 50px",
+          position: "relative",
           overflow: "auto",
-          width: "calc(100% - 30px)"
+          width: "calc(100% - 100px)"
         }}
       >
         <Button
@@ -524,138 +469,141 @@ class Print extends Component {
         >
           点击打印此页面信息
         </Button>
-        <div>
-          {patientData !== undefined &&
-            taskData !== undefined &&
-            testType !== undefined && (
-              <Descriptions bordered title="患者信息">
-                <Descriptions.Item label="患者姓名">
-                  {patientData.name}
-                </Descriptions.Item>
-                <Descriptions.Item label="患者标注">
-                  {testType}
-                </Descriptions.Item>
-                <Descriptions.Item label="患者编号">
-                  {patientData.medId}
-                </Descriptions.Item>
-                <Descriptions.Item label="患者性别">
-                  {patientData.gender === 1 ? "男" : "女"}
-                </Descriptions.Item>
-                <Descriptions.Item label="患者年龄">
-                  {patientData.age}
-                </Descriptions.Item>
-                <Descriptions.Item label="患者体重(kg)">
-                  {patientData.weight}
-                </Descriptions.Item>
-                <Descriptions.Item label="患者身高(cm)">
-                  {patientData.height}
-                </Descriptions.Item>
-                <Descriptions.Item label="测试前服用药物">
-                  {taskData.medArray.length > 0 ? medicine : "未服用药物"}
-                </Descriptions.Item>
-                <Descriptions.Item label="服药后多久进行测试">
-                  {taskData.medInt ? taskData.medInt : "无数据"}
-                </Descriptions.Item>
-                <Descriptions.Item label="非药物干预">
-                  {taskData.nonMedArray.length > 0 ? nonMedicine : "无干预"}
-                </Descriptions.Item>
-                <Descriptions.Item label="测试近红外时间">
-                  {taskData.time}
-                </Descriptions.Item>
-              </Descriptions>
+        <div ref="pdf" style={{ padding: "16px" }}>
+          <h1 style={{ width: "260px", margin: "auto" }}>{title}</h1>
+          <div>
+            {patientData !== undefined &&
+              taskData !== undefined &&
+              testType !== undefined && (
+                <Descriptions bordered title="患者信息">
+                  <Descriptions.Item label="患者姓名">
+                    {patientData.name}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="患者标注">
+                    {testType}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="患者编号">
+                    {patientData.medId}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="患者性别">
+                    {patientData.gender === 1 ? "男" : "女"}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="患者年龄">
+                    {patientData.age}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="患者体重(kg)">
+                    {patientData.weight}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="患者身高(cm)">
+                    {patientData.height}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="测试前服用药物">
+                    {taskData.medArray.length > 0 ? medicine : "未服用药物"}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="服药后多久进行测试">
+                    {taskData.medInt ? taskData.medInt : "无数据"}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="非药物干预">
+                    {taskData.nonMedArray.length > 0 ? nonMedicine : "无干预"}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="测试近红外时间">
+                    {taskData.time}
+                  </Descriptions.Item>
+                </Descriptions>
+              )}
+          </div>
+          <div>
+            {testType === 0 && (
+              <Fragment>
+                <Descriptions
+                  bordered
+                  title="任务测试得分"
+                  style={{ marginTop: "20px" }}
+                >
+                  {Object.keys(WCSTTask).map((item, index) => {
+                    let k = WCSTTask[item];
+                    return (
+                      <Descriptions.Item key={index} label={item}>
+                        {taskData[k]}
+                      </Descriptions.Item>
+                    );
+                  })}
+                </Descriptions>
+              </Fragment>
             )}
-        </div>
-        <div>
-          {testType === 0 && (
-            <Fragment>
-              <Descriptions
-                bordered
-                title="任务测试得分"
-                style={{ marginTop: "20px" }}
+          </div>
+          <div className="curve" style={{ marginTop: "24px" }}>
+            <Card>
+              <h2
+                style={{
+                  color: "gray",
+                  borderBottom: "2px solid #e8e8e8"
+                }}
               >
-                {Object.keys(WCSTTask).map((item, index) => {
-                  let k = WCSTTask[item];
-                  return (
-                    <Descriptions.Item key={index} label={item}>
-                      {taskData[k]}
-                    </Descriptions.Item>
-                  );
-                })}
-              </Descriptions>
-            </Fragment>
-          )}
+                通道1数据折线图
+              </h2>
+              {Object.keys(this.state.channelOne).length > 0 && (
+                <ReactEcharts
+                  option={this.getOptionChannelOne()}
+                ></ReactEcharts>
+              )}
+              {Object.keys(this.state.channelOne).length === 0 && <Empty />}
+            </Card>
+            <Card>
+              <h2
+                style={{
+                  color: "gray",
+                  borderBottom: "2px solid #e8e8e8"
+                }}
+              >
+                通道2数据折线图
+              </h2>
+              {Object.keys(this.state.channelTwo).length > 0 && (
+                <ReactEcharts
+                  option={this.getOptionChannelTwo()}
+                  lazyUpdate={true}
+                ></ReactEcharts>
+              )}
+              {Object.keys(this.state.channelTwo).length === 0 && <Empty />}
+            </Card>
+            <Card>
+              <h2
+                style={{
+                  color: "gray",
+                  borderBottom: "2px solid #e8e8e8"
+                }}
+              >
+                通道3数据折线图
+              </h2>
+              {Object.keys(this.state.channelThree).length > 0 && (
+                <ReactEcharts
+                  option={this.getOptionChannelThree()}
+                ></ReactEcharts>
+              )}
+              {Object.keys(this.state.channelThree).length === 0 && <Empty />}
+            </Card>
+            <Card>
+              <h2
+                style={{
+                  color: "gray",
+                  borderBottom: "2px solid #e8e8e8"
+                }}
+              >
+                通道4数据折线图
+              </h2>
+              {Object.keys(this.state.channelFour).length > 0 && (
+                <ReactEcharts
+                  option={this.getOptionChannelFour()}
+                ></ReactEcharts>
+              )}
+              {Object.keys(this.state.channelFour).length === 0 && <Empty />}
+            </Card>
+          </div>
+          <h2 style={{ marginTop: "24px", fontWeight: "bold" }}>
+            医生诊断意见：
+          </h2>
+          <p>诊断意见内容</p>
         </div>
-        <div className="curve" style={{ marginTop: "24px" }}>
-          <Card>
-            <h2
-              style={{
-                fontSize: "18px",
-                color: "rgba(0,0,0,0.85)",
-                fontWeight: "bold"
-              }}
-            >
-              通道1
-            </h2>
-            {Object.keys(this.state.channelOne).length > 0 && (
-              <ReactEcharts option={this.getOptionChannelOne()}></ReactEcharts>
-            )}
-            {Object.keys(this.state.channelOne).length === 0 && <Empty />}
-          </Card>
-          <Card>
-            <h2
-              style={{
-                fontSize: "18px",
-                color: "rgba(0,0,0,0.85)",
-                fontWeight: "bold"
-              }}
-            >
-              通道2
-            </h2>
-            {Object.keys(this.state.channelTwo).length > 0 && (
-              <ReactEcharts
-                option={this.getOptionChannelTwo()}
-                lazyUpdate={true}
-              ></ReactEcharts>
-            )}
-            {Object.keys(this.state.channelTwo).length === 0 && <Empty />}
-          </Card>
-          <Card>
-            <h2
-              style={{
-                fontSize: "18px",
-                color: "rgba(0,0,0,0.85)",
-                fontWeight: "bold"
-              }}
-            >
-              通道3
-            </h2>
-            {Object.keys(this.state.channelThree).length > 0 && (
-              <ReactEcharts
-                option={this.getOptionChannelThree()}
-              ></ReactEcharts>
-            )}
-            {Object.keys(this.state.channelThree).length === 0 && <Empty />}
-          </Card>
-          <Card>
-            <h2
-              style={{
-                fontSize: "18px",
-                color: "rgba(0,0,0,0.85)",
-                fontWeight: "bold"
-              }}
-            >
-              通道4
-            </h2>
-            {Object.keys(this.state.channelFour).length > 0 && (
-              <ReactEcharts option={this.getOptionChannelFour()}></ReactEcharts>
-            )}
-            {Object.keys(this.state.channelFour).length === 0 && <Empty />}
-          </Card>
-        </div>
-        <h2 style={{ marginTop: "24px", fontWeight: "bold" }}>
-          医生诊断意见：
-        </h2>
-        <p>诊断意见内容</p>
       </div>
     );
   }
