@@ -2,9 +2,9 @@ import React, { Component } from "react";
 import { Button, Form, Input, Modal } from "antd";
 
 class DataAssociationForm extends Component {
-  constructor(props){
-    super(props)
-    this.state={}
+  constructor(props) {
+    super(props);
+    this.state = {};
   }
 
   handleFormSubmit = () => {
@@ -36,7 +36,10 @@ class DataAssociationForm extends Component {
         }
       }
     };
-    const initial =this.props.currentRecord===0? `${this.props.currentRecord.task.id}_W`:`${this.props.currentRecord.task.id}_S`;
+    const initial =
+      this.props.currentRecord.type === 0
+        ? `${this.props.currentRecord.task.id}_W`
+        : `${this.props.currentRecord.task.id}_S`;
 
     return (
       <Form {...formItemLayout} onSubmit={this.handleFormSubmit}>
