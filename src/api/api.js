@@ -1,124 +1,172 @@
-const BaseUrl = "http://10.13.81.186:8080";
+// const BaseUrl = "http://10.13.81.186:8080";
 const UrlMap = [
   {
     description: "1.医生注册",
     method: "doctorRegister",
-    url: "/nir/som/doctor/register",
+    url: "http://10.13.81.186:8080/nir/som/doctor/register",
     type: "POST"
   },
   {
     description: "2.医生登录",
     method: "doctorLogin",
-    url: "/nir/som/doctor/login",
+    url: "http://10.13.81.186:8080/nir/som/doctor/login",
     type: "POST"
   },
   {
     description: "3.获取医生列表",
     method: "getDoctorList",
-    url: "/nir/som/doctor/getList",
+    url: "http://10.13.81.186:8080/nir/som/doctor/getList",
     type: "GET"
   },
   {
     description: "4.患者注册",
     method: "patientRegister",
-    url: "/nir/som/patient/register",
+    url: "http://10.13.81.186:8080/nir/som/patient/register",
     type: "POST"
   },
   {
     description: "5.更新患者个人信息",
     method: "updatePatientInformation",
-    url: "/nir/som/patient/update",
+    url: "http://10.13.81.186:8080/nir/som/patient/update",
     type: "POST"
   },
   {
     description: "6.获取患者列表",
     method: "getPatientList",
-    url: "/nir/som/patient/getList",
+    url: "http://10.13.81.186:8080/nir/som/patient/getList",
     type: "POST"
   },
   {
     description: "7.添加患者wcst任务",
     method: "addWCST",
-    url: "/nir/som/patient/wcst/add",
+    url: "http://10.13.81.186:8080/nir/som/patient/wcst/add",
     type: "POST"
   },
   {
     description: "8.更新患者wcst任务",
     method: "updateWCST",
-    url: "/nir/som/patient/wcst/update",
+    url: "http://10.13.81.186:8080/nir/som/patient/wcst/update",
     type: "POST"
   },
   {
     description: "9.删除患者wcst任务",
     method: "removeWCSTTask",
-    url: "/nir/som/patient/wcst/remove",
+    url: "http://10.13.81.186:8080/nir/som/patient/wcst/remove",
     type: "POST"
   },
   {
     description: "10.添加患者近红外测试数据",
     method: "addNirData",
-    url: "/nir/som/patient/nirTest/add",
+    url: "http://10.13.81.186:8080/nir/som/patient/nirTest/add",
     type: "POST"
   },
   {
     description: "11.更新患者近红外测试数据",
     method: "updateNirData",
-    url: "/nir/som/patient/nirTest/update",
+    url: "http://10.13.81.186:8080/nir/som/patient/nirTest/update",
     type: "POST"
   },
   {
     description: "12.删除患者近红外测试数据",
     method: "removeNirTask",
-    url: "/nir/som/patient/nirTest/remove",
+    url: "http://10.13.81.186:8080/nir/som/patient/nirTest/remove",
     type: "POST"
   },
   {
     description: "13.查询患者任务/测试列表",
     method: "InquirePatientTaskList",
-    url: "/nir/som/patient/getTaskList",
+    url: "http://10.13.81.186:8080/nir/som/patient/getTaskList",
     type: "POST"
   },
   {
     description: "14.查询患者量表",
     method: "inquirePatientScale",
-    url: "/nir/som/patient/scale",
+    url: "http://10.13.81.186:8080/nir/som/patient/scale",
     type: "POST"
   },
   {
     description: "15.获取药品列表",
     method: "getMedicineList",
-    url: "/nir/som/medicine",
+    url: "http://10.13.81.186:8080/nir/som/medicine",
     type: "GET"
   },
   {
     description: "16.非药物治疗列表",
     method: "getNonMedicineList",
-    url: "/nir/som/nonMedicine",
+    url: "http://10.13.81.186:8080/nir/som/nonMedicine",
     type: "GET"
   },
   {
     description: "17.获取疾病列表",
     method: "getDiseaseList",
-    url: "/nir/som/disease",
+    url: "http://10.13.81.186:8080/nir/som/disease",
     type: "GET"
   },
   {
     description: "18.获取疾病统计",
     method: "getDiseaseTotal",
-    url: "/nir/som/statistic/getDiseaseTotal",
+    url: "http://10.13.81.186:8080/nir/som/statistic/getDiseaseTotal",
     type: "GET"
   },
   {
     description: "19.获取任务统计",
     method: "getTaskTotal",
-    url: "/nir/som/statistic/getTaskTotal",
+    url: "http://10.13.81.186:8080/nir/som/statistic/getTaskTotal",
     type: "GET"
   },
   {
     description: "20",
     method: "getBloodOxygenData",
-    url: "/nir/som/patient/getBloodOxygenData",
+    url: "http://10.13.81.186:8080/nir/som/patient/getBloodOxygenData",
     type: "GET"
+  },
+  {
+    description: "21、获取病历列表",
+    method: "getRecordList",
+    url: "http://10.13.81.186:8081/record/get",
+    type: "POST"
+  },
+  {
+    description: "22、获取病种id列表",
+    method: "getDisease",
+    url: "http://10.13.81.186:8081/disease/all",
+    type: "POST"
+  },
+  {
+    description: "23、删除电子病历记录",
+    method: "removeRecord",
+    url: "http://10.13.81.186:8081/record/remove",
+    type: "POST"
+  },
+  {
+    description: "24、获取相似电子病历",
+    method: "getSimRecord",
+    url: "http://10.13.81.186:8081/record/getRecWithSim",
+    type: "POST"
+  },
+  {
+    description: "25、python后端获取分析结果",
+    method: "getAnalyseResult",
+    url: "http://10.13.81.189:5000/analyse",
+    type: "POST"
+  },
+  {
+    description: "26、处理分析结果，即更新数据库",
+    method: "handleAnalyseResult",
+    url: "http://10.13.81.186:8081/record/update",
+    type: "POST"
+  },
+  {
+    description: "27、获取医生列表",
+    method: "getDoctors",
+    url: "http://10.13.81.186:8081/user/doctors",
+    type: "POST"
+  },
+  {
+    description: "28、添加病历列表",
+    method: "uploadRecord",
+    url: "http://10.13.81.186:8081/record/add",
+    type: "POST",
   }
 ];
 const API = {};
@@ -128,7 +176,7 @@ UrlMap.forEach(item => {
   }
   API[item.method] = function(data) {
     // data是请求参数
-    let url = BaseUrl + item.url;
+    let url = item.url;
     let option = {
       method: item.type, // 请求方式
       mode: "cors",
@@ -136,6 +184,16 @@ UrlMap.forEach(item => {
         "Content-Type": "application/json"
       }
     };
+    // 如果是添加数据记录，则改变option
+    if(url=="http://10.13.81.186:8081/record/add"){
+      option = {
+        method: item.type, // 请求方式
+        mode: "cors",
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      };
+    }
     if (item.type !== "POST") {
       // 如果不是POST请求，则将参数拼接在url中，以?连接。
       // 将请求参数对象拼接成查询字符串：data={a:1,b:2,c:3} ===> a=1&b=2&c=3

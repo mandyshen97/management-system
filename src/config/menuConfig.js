@@ -46,12 +46,16 @@ const menuList = [
     path: '/admin/assist',
     icon: 'bulb',
   },
-  // {
-  //   title: '个人中心',
-  //   path: '/person',
-  //   icon: 'user'
-  // },
-
+  {
+    title: '电子病历查询',
+    path: '/admin/recordQuery',
+    icon: 'file'
+  },
+  {
+    title: '电子病历上传',
+    path: '/admin/recordUpload',
+    icon: 'upload'
+  },
 
 ]
 export default menuList

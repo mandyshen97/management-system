@@ -7,6 +7,9 @@ import Header from '../../components/header/Header'
 import Introduction from '../../components/introduction/Introduction';
 import Home from './../../components/home/Home';
 import Assist from './../../components/assist/Assist';
+import RecordQuery from './../../components/recordQuery/RecordQuery';
+import TextAnalysis from './../../components/recordQuery/TextAnalysis';
+import RecordUpload from './../../components/recordUpload/RecordUpload';
 import './admin.less'
 import InformationManagement from '../../components/userManagement/UserInformationManagement';
 import LabelInformationManagement from './../../components/labelManagement/LabelInformationManagement';
@@ -63,6 +66,9 @@ class Admin extends Component {
               <Route path='/admin/introduction' component={Introduction} />
               <Route path='/admin/assist' component={Assist} />
               <Route path='/admin/labelInformationManagement' component={LabelInformationManagement} />
+              <Route path='/admin/recordQuery' component={RecordQuery} />
+              <Route path='/admin/textAnalysis/:id' component={TextAnalysis} />
+              <Route path='/admin/recordUpload' component={RecordUpload} />
             </Switch>
           </Content>
         </Layout>

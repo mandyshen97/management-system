@@ -1,17 +1,6 @@
 import React, { Component, Fragment } from "react";
 import { getAge } from "../../utils/dateUtils";
-import {
-  Input,
-  Icon,
-  Button,
-  Select,
-  Table,
-  Form,
-  Row,
-  Divider,
-  Tooltip,
-  Tag
-} from "antd";
+import {Input,Icon,Button,Select,Table,Form,Row,Divider,Tooltip,Tag} from "antd";
 import PersonalForm from "../Modals/PersonalForm";
 import ClinicalForm from "../Modals/ClinicalForm";
 import MissionInfoForm from "../Modals/MissionInfoForm";

@@ -25,11 +25,11 @@ class Header extends Component {
     }, 1000);
   };
 
-  getWeather = async () => {
+  getWeather =  () => {
     // todo
     // 调用接口请求异步获取数据
     fetch(
-      "https://www.tianqiapi.com/api/?version=v6&cityid=101210101&appid=[81135576]&appsecret=[17HDf3Q1]"
+      "https://www.tianqiapi.com/api/?version=v6&cityid=101210101&appid=81135576&appsecret=17HDf3Q1"
     ).then(res => {
       res.json().then(result => {
         this.setState({
