@@ -3,6 +3,9 @@ import './record-query.less';
 import { Input, Icon, Button, Select, Table, Form, Row, Divider, Tooltip, Page, DatePicker, Message, Drawer, Col, Modal } from "antd";
 import API from "../../api/api";
 import { Link } from 'react-router-dom';
+
+const { Option } = Select;
+
 class RecordQuery extends Component {
   constructor(props) {
     super(props);
@@ -27,27 +30,32 @@ class RecordQuery extends Component {
       scaleColumns: [
         {
           title: '时间',
-          width: 110,
+          width: 120,
           dataIndex: 'testTime'
         },
         {
           title: '入睡得分',
+          width: 110,
           dataIndex: 'sleepScore'
         },
         {
           title: '入睡时长',
+          width: 110,
           dataIndex: 'fallSleepTime'
         },
         {
           title: '睡眠时长',
+          width: 110,
           dataIndex: 'sleepTime'
         },
         {
           title: '睡眠效率',
+          width: 110,
           dataIndex: 'sleepEffiency'
         },
         {
           title: '睡眠障碍',
+          width: 110,
           dataIndex: 'sleepDisorder'
         },
         {
@@ -131,7 +139,7 @@ class RecordQuery extends Component {
         {
           title: '年龄',
           dataIndex: 'birthday',
-          width: 50,
+          width: 40,
           render: birthday => {
             return this.calculateAge(birthday)
           }
@@ -139,7 +147,7 @@ class RecordQuery extends Component {
         {
           title: '就诊时间',
           dataIndex: 'createAt',
-          width: 80,
+          width: 70,
           // render: (h, params) => {
           //     return h('div', this.formatDate(params.row.createAt));
           // }
@@ -148,7 +156,7 @@ class RecordQuery extends Component {
           title: '病人主诉',
           dataIndex: 'chfCmp',
           ellipsis: true,
-          width: 70,
+          width: 150,
           tooltip: true,
         },
         {
@@ -162,7 +170,7 @@ class RecordQuery extends Component {
         },
         {
           title: '操作',
-          width: 230,
+          width: 190,
           key: 'action',
           align: 'center',
           render: (text, record, index) => {
@@ -172,15 +180,15 @@ class RecordQuery extends Component {
                   onClick={() => this.show(record)
                   }>查看详情
                     </Button>
-                <Button type="primary" size="small" style={{ marginRight: '5px', backgroundColor: 'green' }}
+                <Button type="primary" size="small" style={{ marginRight: '5px', backgroundColor: 'green', borderColor: 'green' }}
                   onClick={() => this.detectionData(record.patientId)
                   }>检测数据
                     </Button>
                 <Link to={`/admin/textAnalysis/${record.id}`}>
-                  <Button type="primary" size="small" style={{ marginRight: '5px', backgroundColor: '#EAC100' }}
+                  <Button type="primary" size="small" style={{ marginRight: '5px', backgroundColor: '#EAC100', borderColor: '#EAC100'  }}
                   >文本分析
                 </Button></Link>
-                <Button type="primary" size="small" style={{ marginRight: '5px', backgroundColor: 'red' }}
+                <Button type="primary" size="small" style={{ marginRight: '5px', backgroundColor: 'red', borderColor: 'red' }}
                   onClick={() => this.remove(index)
                   }>删除
                     </Button>
@@ -194,7 +202,8 @@ class RecordQuery extends Component {
         startDate: null,
         endDate: null,
         doctorId: null,
-        word: null
+        word: null,
+        diseaseId: null
       },
       doctorList: []
     };
@@ -324,7 +333,8 @@ class RecordQuery extends Component {
           recordId: values.recordId,
           startDate: values.startDate,
           endDate: values.endDate,
-          doctorId: null,
+          // doctorId: null,
+          diseaseId:values.diseaseId,
           word: values.word,
           pageNo: this.state.pageNum,
           pageSize: this.state.pageSize,
@@ -389,9 +399,9 @@ class RecordQuery extends Component {
           <span className="input-text">病历id</span>
           {getFieldDecorator("recordId", {})(
             <Input
-              style={{ width: 130, marginRight: 15 }}
+              style={{ width: 100, marginRight: 15 }}
               // prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />}
-              placeholder="请输入查询id"
+              placeholder="病历id"
             />
           )}
         </Form.Item>
@@ -411,6 +421,28 @@ class RecordQuery extends Component {
               style={{ width: 130, marginRight: 5 }}
               placeholder="就诊结束时间"
             />
+          )}
+        </Form.Item>
+        <Form.Item>
+          <span className="input-text">病种</span>
+          {getFieldDecorator("diseaseId", {})(
+            <Select
+            allowClear={true}
+            showSearch
+            style={{ width: 120 }}
+            placeholder="请选择病种"
+            filterOption={(input, option) =>
+              option.props.children
+                .toLowerCase()
+                .indexOf(input.toLowerCase()) >= 0
+            }
+          >
+            {this.state.diseaseList.map((item, index) => (
+              <Option value={item.id} key={index}>
+                {item.disease}
+              </Option>
+            ))}
+          </Select>
           )}
         </Form.Item>
         <Form.Item>
@@ -521,7 +553,7 @@ class RecordQuery extends Component {
         <Drawer
           title="测量量表数据"
           placement="right"
-          width="900"
+          width="1000"
           closable={false}
           onClose={this.onClose}
           visible={this.state.tableSwitch}>

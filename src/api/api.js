@@ -9,7 +9,7 @@ const UrlMap = [
   {
     description: "2.医生登录",
     method: "doctorLogin",
-    url: "http://10.13.81.186:8080/nir/som/doctor/login",
+    url: "http://10.13.81.186:8081/user/login",
     type: "POST"
   },
   {
@@ -130,7 +130,7 @@ const UrlMap = [
     description: "22、获取病种id列表",
     method: "getDisease",
     url: "http://10.13.81.186:8081/disease/all",
-    type: "POST"
+    type: "GET"
   },
   {
     description: "23、删除电子病历记录",
@@ -197,11 +197,13 @@ UrlMap.forEach(item => {
     if (item.type !== "POST") {
       // 如果不是POST请求，则将参数拼接在url中，以?连接。
       // 将请求参数对象拼接成查询字符串：data={a:1,b:2,c:3} ===> a=1&b=2&c=3
-      let body = Object.keys(data)
-        .map(key => key + "=" + data[key])
-        .join("&");
-      if (body !== "") {
-        url = `${url}?${body}`;
+        if (data != null) {
+          let body = Object.keys(data)
+          .map(key => key + "=" + data[key])
+          .join("&");
+        if (body !== "") {
+          url = `${url}?${body}`;
+        }
       }
     } else {
       option.body = JSON.stringify(data); // 如果是POST请求，则将请求参数对象拼接好的字符串放在请求体中。
