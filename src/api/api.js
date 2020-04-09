@@ -182,7 +182,8 @@ UrlMap.forEach(item => {
       mode: "cors",
       headers: {
         "Content-Type": "application/json"
-      }
+      },
+      credentials: "include"
     };
     // 如果是添加数据记录，则改变option
     if(url=="http://10.13.81.186:8081/record/add"){
@@ -191,7 +192,8 @@ UrlMap.forEach(item => {
         mode: "cors",
         headers: {
           'Content-Type': 'multipart/form-data'
-        }
+        },
+        credentials: "include"
       };
     }
     if (item.type !== "POST") {
