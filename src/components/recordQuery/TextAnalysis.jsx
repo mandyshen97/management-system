@@ -9,13 +9,28 @@ class TextAnalysis extends Component {
             medRecord: {},
             simMedRecord: {},
             diseaseList: [],
+            helpSwitch: false,
         }
     }
 
     //   处理下载按钮
     handleDownload() {
-        Message.success("敬请期待");
+        // Message.success("敬请期待");
+        this.callDownload(this.props.match.params.id)
     }
+    callDownload(recor_id) {
+        window.location.href = 'http://10.13.81.186:8081/record/download?id=' + recor_id
+    }
+    medicineHelp() {
+        this.setState({
+            helpSwitch: true
+        })
+    }
+    helpConfirm = () => {
+        this.setState({
+          helpSwitch: false
+        })
+      }
     // 处理开始分析按钮
     handleAnalyse(record) {
         let text = record.chfCmp + '。' + record.hisPreIll + "。" + record.prvMedHis;
@@ -141,9 +156,9 @@ class TextAnalysis extends Component {
 
     //   页面渲染前执行函数
     componentDidMount() {
-        console.log(1)
+        // console.log(1)
         let id = this.props.match.params.id
-        console.log(id)
+        // console.log(id)
         this.getMedRecord(id)
         this.getDiseaseList()
     }
@@ -161,20 +176,23 @@ class TextAnalysis extends Component {
                     <Col span={4}>
                         <strong>主治医生:</strong><span style={{ marginLeft: 15 }}>{this.state.medRecord.doctorName}</span>
                     </Col>
-                    <Col span={4}>
+                    <Col span={3}>
                         <strong>性别:</strong><span style={{ marginLeft: 15 }}>{this.state.medRecord.gender == 1 ? "男" : "女"}</span>
                     </Col>
-                    <Col span={4}>
-                        <strong>年龄:</strong><span style={{ marginLeft: 15 }}>{this.getAge(this.state.medRecord.birthday)}</span>
+                    <Col span={3}>
+                        <strong>年龄:</strong><span style={{ marginLeft: 15 }}>"{this.getAge(this.state.medRecord.birthday)}"</span>
                     </Col>
-                    <Col span={4}>
+                    <Col span={3}>
                         <strong>病种:</strong><span style={{ marginLeft: 15 }}>{this.getDisease(this.state.medRecord.analysisStatus, this.state.medRecord.diagnosticResult)}</span>
                     </Col>
                     <Col span={2}>
                         <Button type="primary" onClick={() => this.handleAnalyse(this.state.medRecord)}>开始分析</Button>
                     </Col>
                     <Col span={2}>
-                        <Button type="primary" style={{ backgroundColor: 'green' }} onClick={() => this.handleDownload()}>病历下载</Button>
+                        <Button type="primary" style={{ backgroundColor: 'green', borderColor: 'green' }} onClick={() => this.handleDownload()}>病历下载</Button>
+                    </Col>
+                    <Col span={2}>
+                        <Button type="primary" style={{ backgroundColor: 'red',borderColor: 'red'  }} onClick={() => this.medicineHelp()}>用药帮助</Button>
                     </Col>
                 </Row>
 
@@ -244,6 +262,25 @@ class TextAnalysis extends Component {
                         <strong>治疗建议：</strong><div className='setformat'>{this.state.medRecord.treAdv} </div>
                     </Col>
                 </Row>
+                <Modal
+                    visible={this.state.helpSwitch}
+                    title="基于相似电子病历的用药帮助"
+                    onOk={this.helpConfirm}
+                    onCancel={this.helpConfirm}>
+                    <p>
+                        <span style={{color: 'rgba(0, 0, 0, 0.85)', fontSize: '16px', fontWeight: '500'}}>推荐处方用药：</span>
+                        <br/>
+                        <span style={{color:'red', margin: '2px 8px 2px 10px'}}>柴胡(1.00)</span>
+                        <span style={{color:'red', margin: '2px 8px'}}>当归(0.90)</span>
+                        <span style={{color:'red', margin: '2px 8px'}}>白芍(0.85)</span>
+                        <span style={{color:'red', margin: '2px 8px'}}>白术(0.74)</span>
+                        <span style={{color:'red', margin: '2px 8px'}}>茯苓(0.70)</span>
+                        <span style={{color:'red', margin: '2px 8px'}}>郁金(0.65)</span>
+                        <br/>
+                        <span style={{margin: '2px 8px 2px 10px'}}>香附(0.55)</span>
+                        <span style={{margin: '2px 8px'}}>八月札(0.40)</span>
+                    </p>
+                </Modal>
             </div>)
     }
 }

@@ -167,6 +167,12 @@ const UrlMap = [
     method: "uploadRecord",
     url: "http://10.13.81.186:8081/record/add",
     type: "POST",
+  },
+  {
+    description: "29、电子病历下载",
+    method: "downloadRecord",
+    url: "http://10.13.81.186:8081/record/download",
+    type: "GET",
   }
 ];
 const API = {};

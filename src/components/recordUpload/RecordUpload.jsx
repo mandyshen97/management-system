@@ -172,6 +172,7 @@ class RecordUpload extends Component {
           )}
           <span style={{ marginRight: 25 }}>/kg</span>
         </Form.Item>
+        <br/>
         <Form.Item label="医生姓名">
           {getFieldDecorator("doctorId", {})(
             <Select style={{ width: 200, marginRight: 25 }} placeholder="请选择" >
@@ -195,48 +196,49 @@ class RecordUpload extends Component {
             </Radio.Group>
           )}
         </Form.Item>
-        <Form.Item label="主述" style={{ marginLeft: 27 }}>
+        <Form.Item label="主诉" style={{ marginLeft: 27 }}>
           {getFieldDecorator("chfCmp", {})(
-            <TextArea style={{ width: 870 }} autoSize={{ minRows: 5, maxRows: 10 }}
+            <TextArea style={{ width: 870 }} autoSize={{ minRows: 2, maxRows: 10 }}
               placeholder="请输入..." />
           )}
         </Form.Item>
-        <Form.Item label="现病史" style={{ marginLeft: 15 }}>
+        <Form.Item label="病史" style={{ marginLeft: 27 }}>
           {getFieldDecorator("hisPreIll", {})(
-            <TextArea style={{ width: 870 }} autoSize={{ minRows: 5, maxRows: 10 }}
+            <TextArea style={{ width: 870 }} autoSize={{ minRows: 2, maxRows: 10 }}
               placeholder="请输入..." />
           )}
         </Form.Item>
-        <Form.Item label="治疗史" style={{ marginLeft: 15 }}>
+        <Form.Item label="实验检查" style={{ marginLeft: 0 }}>
           {getFieldDecorator("hisTre", {})(
-            <TextArea style={{ width: 870 }} autoSize={{ minRows: 5, maxRows: 10 }}
+            <TextArea style={{ width: 870 }} autoSize={{ minRows: 3, maxRows: 10 }}
               placeholder="请输入..." />
           )}
         </Form.Item>
-        <Form.Item label="既往史" style={{ marginLeft: 15 }}>
+        <Form.Item label="诊断" style={{ marginLeft: 27 }}>
           {getFieldDecorator("prvMedHis", {})(
-            <TextArea style={{ width: 870 }} autoSize={{ minRows: 5, maxRows: 10 }}
+            <TextArea style={{ width: 870 }} autoSize={{ minRows: 1, maxRows: 10 }}
               placeholder="请输入..." />
           )}
         </Form.Item>
-        <Form.Item label="个人史" style={{ marginLeft: 15 }}>
+        <Form.Item label="病机证型" style={{ marginLeft: 0 }}>
           {getFieldDecorator("perHis", {})(
-            <TextArea style={{ width: 870 }} autoSize={{ minRows: 5, maxRows: 10 }}
+            <TextArea style={{ width: 870 }} autoSize={{ minRows: 3, maxRows: 10 }}
               placeholder="请输入..." />
           )}
         </Form.Item>
-        <Form.Item label="家族史" style={{ marginLeft: 15 }}>
+        <Form.Item label="治法" style={{ marginLeft: 27 }}>
           {getFieldDecorator("famHis", {})(
-            <TextArea style={{ width: 870 }} autoSize={{ minRows: 5, maxRows: 10 }}
+            <TextArea style={{ width: 870 }} autoSize={{ minRows: 2, maxRows: 10 }}
               placeholder="请输入..." />
           )}
         </Form.Item>
-        <Form.Item label="治疗意见" >
+        <Form.Item label="处方" style={{ marginLeft: 27 }}>
           {getFieldDecorator("treAdv", {})(
-            <TextArea style={{ width: 870 }} autoSize={{ minRows: 5, maxRows: 10 }}
+            <TextArea style={{ width: 870 }} autoSize={{ minRows: 2, maxRows: 10 }}
               placeholder="请输入..." />
           )}
         </Form.Item>
+        <br/>
         <Form.Item label="上传资料" >
           {getFieldDecorator("files", {})(
             <Upload multiple={true}>

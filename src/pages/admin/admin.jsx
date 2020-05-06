@@ -10,6 +10,10 @@ import Assist from './../../components/assist/Assist';
 import RecordQuery from './../../components/recordQuery/RecordQuery';
 import TextAnalysis from './../../components/recordQuery/TextAnalysis';
 import RecordUpload from './../../components/recordUpload/RecordUpload';
+import Infrared from '../../components/recovery/Infrared';
+import Tongue from '../../c../../components/recovery/Tongue'
+import Pulse from '../../components/recovery/Pulse';
+
 import './admin.less'
 import InformationManagement from '../../components/userManagement/UserInformationManagement';
 import LabelInformationManagement from './../../components/labelManagement/LabelInformationManagement';
@@ -69,6 +73,9 @@ class Admin extends Component {
               <Route path='/admin/recordQuery' component={RecordQuery} />
               <Route path='/admin/textAnalysis/:id' component={TextAnalysis} />
               <Route path='/admin/recordUpload' component={RecordUpload} />
+              <Route path='/admin/recovery/infrared' component={Infrared} />
+              <Route path='/admin/recovery/tongue' component={Tongue} />
+              <Route path='/admin/recovery/pulse' component={Pulse} />
             </Switch>
           </Content>
         </Layout>

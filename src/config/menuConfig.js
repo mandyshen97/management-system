@@ -56,6 +56,28 @@ const menuList = [
     path: '/admin/recordUpload',
     icon: 'upload'
   },
+  {
+    title: '康复评估',
+    path: '/admin/recovery',
+    icon: 'switcher',
+    children: [
+      {
+        title: '红外热成像图',
+        path: '/admin/recovery/infrared',
+        icon: 'image'
+      },
+      {
+        title: '舌象图谱',
+        path: '/admin/recovery/tongue',
+        // icon: 'fileJpg'
+      },
+      {
+        title: '脉象数据',
+        path: '/admin/recovery/pulse',
+        // icon: 'line'
+      }
+    ]
+  },
 
 ]
 export default menuList

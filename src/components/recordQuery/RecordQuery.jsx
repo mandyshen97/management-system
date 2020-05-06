@@ -1,10 +1,11 @@
 import React, { Component, Fragment } from 'react';
 import './record-query.less';
-import { Input, Icon, Button, Select, Table, Form, Row, Divider, Tooltip, Page, DatePicker, Message, Drawer, Col, Modal } from "antd";
+import { Input, Icon, Button, Select, Table, Form, Row, Divider, Tooltip, Page, DatePicker, Message, Drawer, Col, Modal, Popconfirm } from "antd";
 import API from "../../api/api";
 import { Link } from 'react-router-dom';
 
 const { Option } = Select;
+const { TextArea } = Input;
 
 class RecordQuery extends Component {
   constructor(props) {
@@ -13,7 +14,9 @@ class RecordQuery extends Component {
       patientInfo: {},
       drawerSwitch: false,
       modalSwitch: false,
+      helpSwitch: false,
       tableSwitch: false,
+      updateSwitch: false,
       chosenIndex: 0,
       pStyle: {
         fontSize: '16px',
@@ -176,7 +179,7 @@ class RecordQuery extends Component {
           render: (text, record, index) => {
             return (
               <div>
-                <Button type="primary" size="small" style={{ marginRight: '5px' }}
+                <Button type="primary" size="small" style={{ marginRight: '5px' }}q
                   onClick={() => this.show(record)
                   }>查看详情
                     </Button>
@@ -229,10 +232,22 @@ class RecordQuery extends Component {
     })
   }
 
+  showHelp() {
+    this.setState({
+      helpSwitch: true
+    })
+  }
+
+  showUpdate() {
+      this.setState({
+        updateSwitch: true
+      })
+  }
+
   // 查看详情按钮实现
   show(record) {
     let newPatientInfo = {};
-    console.log(record)
+    // console.log(record)
     Object.keys(record).map(item => {
       newPatientInfo[item] = record[item] === null ? '暂无' : record[item];
     })
@@ -249,6 +264,23 @@ class RecordQuery extends Component {
       tableSwitch: true
     })
 
+  }
+
+  helpConfirm = () => {
+    this.setState({
+      helpSwitch: false
+    })
+  }
+
+  updateConfirm = () => {
+    this.setState({
+      updateSwitch: false
+    })
+  }
+  updateCancel = () => {
+    this.setState({
+      updateSwitch: false
+    })
   }
 
   // 删除确认
@@ -323,6 +355,10 @@ class RecordQuery extends Component {
       }).catch(function (error) {
         console.log(error);
       });
+  }
+
+  scaleAnalyse = () => {
+
   }
 
   // 获取病历列表
@@ -457,7 +493,7 @@ class RecordQuery extends Component {
         <Form.Item>
           <Button type="primary" onClick={this.fetchData}>
             查询
-        </Button>
+          </Button>
         </Form.Item>
       </Form>
     )
@@ -465,6 +501,8 @@ class RecordQuery extends Component {
 
   // 渲染的页面
   render() {
+    const { form } = this.props;
+    const { getFieldDecorator } = form;
     return (
       <div className="main-content">
         {this.renderSearch()}
@@ -547,6 +585,21 @@ class RecordQuery extends Component {
                 <strong>治疗建议：</strong><div className='setformat'>{this.state.patientInfo.treAdv} </div>
               </Col>
             </Row>
+            <Row>
+              <Col>
+                <strong>处方：</strong><div className='setformat'>{"柴胡12g，当归12g，白芍15g，白术10g，茯苓10g，郁金10g，香附10g，八月札30g，甘草4g，沙苑子15g，青皮10g。 肝痛甚加川楝宇、玄胡索；肝郁化火加丹皮、山栀"} </div>
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <Button type="primary" onClick={() => this.showHelp()}>
+                  用药帮助
+                </Button>
+                <Button type="primary" style={{ margin: '0 8px', backgroundColor: 'green', borderColor: 'green' }} onClick={() => this.showUpdate()}>
+                  更新病历
+                </Button>
+              </Col>
+            </Row>
           </div>
         </Drawer>
 
@@ -583,7 +636,7 @@ class RecordQuery extends Component {
                 <strong>病种：</strong><span style={{ marginLeft: 37 }}>伴焦虑</span>
               </Col>
               <Col span={6}>
-                <Button type="primary" onClick="registerSwitch = true">开始分析</Button>
+                <Button type="primary" onClick={() => this.scaleAnalyse()}>开始分析</Button>
               </Col>
             </Row>
             <Table
@@ -598,6 +651,102 @@ class RecordQuery extends Component {
           onOk={this.confirm}
           onCancel={this.cancel}>
           <p>本次删除操作不可逆 确认删除本条数据？</p>
+        </Modal>
+        <Modal
+          visible={this.state.helpSwitch}
+          title="基于专家用药模型的用药帮助"
+          onOk={this.helpConfirm}
+          onCancel={this.helpConfirm}>
+          <p>是否加入与甘草关联的<span style={{color: 'red'}}>太子参(0.84)</span>?
+            <br/>
+          是否加入与白术关联的<span style={{color: 'red'}}>麦冬(0.72)</span>?
+          </p>
+        </Modal>
+        <Modal
+          visible={this.state.updateSwitch}
+          width={550}
+          title="更新电子病历"
+          onOk={this.updateConfirm}
+          onCancel={this.updateCancel}>
+            <Form layout="inline">
+          <Form.Item label="姓名" style={{ marginLeft: 27 }}>
+              <p style={{ width: 50 }}>{this.state.patientInfo.name}</p>
+          </Form.Item>
+    
+          <Form.Item label="主治医生">
+          <p style={{ width: 50 }}>{this.state.patientInfo.doctorName}</p>
+          </Form.Item>
+          <Form.Item label="生日">
+          <p style={{ width: 50 }}> {this.calculateAge(this.state.patientInfo.birthday)}</p>
+          </Form.Item>
+          <Form.Item label="性别">
+          <p style={{ width: 50 }}>{this.state.patientInfo.gender == 1 ? "男" : "女"}</p>
+          </Form.Item>
+          <Form.Item label="主诉" style={{ marginLeft: 27 }}>
+            {getFieldDecorator("chfCmp", {
+              initialValue: this.state.patientInfo.chfCmp
+            })(
+              <TextArea style={{ width: 400 }} autoSize={{ minRows: 2, maxRows: 3 }}/>
+            )}
+          </Form.Item>
+          <Form.Item label="病史" style={{ marginLeft: 27 }}>
+            {getFieldDecorator("hisPreIll", {
+              initialValue: this.state.patientInfo.hisPreIll
+            })(
+              <TextArea style={{ width: 400 }} autoSize={{ minRows: 2, maxRows: 3 }}/>
+            )}
+          </Form.Item>
+          <Form.Item label="实验检查" style={{ marginLeft: 0 }}>
+            {getFieldDecorator("hisTre", {
+              initialValue: "暂无"
+            })(
+              <TextArea style={{ width: 400 }} autoSize={{ minRows: 1, maxRows: 3 }}/>
+            )}
+          </Form.Item>
+          <Form.Item label="诊断" style={{ marginLeft: 27 }}>
+            {getFieldDecorator("prvMedHis", {
+              initialValue : this.getDisease(this.state.patientInfo.disease),
+            })(
+              <TextArea style={{ width: 400 }} autoSize={{ minRows: 1, maxRows: 3 }} />
+            )}
+          </Form.Item>
+          <Form.Item label="病机证型" style={{ marginLeft: 0 }}>
+            {getFieldDecorator("perHis", {})(
+              <TextArea style={{ width: 400 }} autoSize={{ minRows: 1, maxRows: 3 }}
+              defaultValue = "暂无" />
+            )}
+          </Form.Item>
+          <Form.Item label="治法" style={{ marginLeft: 27 }}>
+            {getFieldDecorator("perHis", {
+              initialValue: "暂无"
+            })(
+              <TextArea style={{ width: 400 }} autoSize={{ minRows: 1, maxRows: 10 }}/>
+            )}
+          </Form.Item>
+          <Form.Item label="推荐处方">
+            <p style={{width: 400, margin: '0px 0px 0px'}}>
+                <span style={{color:'red', margin: '0px 2px'}}>柴胡(1.00)</span>
+                <span style={{color:'red', margin: '0px 2px'}}>当归(0.90)</span>
+                <span style={{color:'red', margin: '0px 2px'}}>白芍(0.85)</span>
+                <span style={{color:'red', margin: '0px 2px'}}>太子参(0.84)</span>
+                <span style={{color:'red', margin: '0px 2px'}}>白术(0.74)</span>
+                <span style={{color:'red', margin: '0px 2px'}}>麦冬(0.72)</span>
+                <span style={{color:'red', margin: '0px 2px'}}>茯苓(0.70)</span>
+                <span style={{color:'red', margin: '0px 2px'}}>郁金(0.65)</span>
+                <br/>
+                <span style={{margin: '0px 2px 2px 2px'}}>香附(0.55)</span>
+                <span style={{margin: '0px 2px'}}>八月札(0.40)</span>
+            </p>
+          </Form.Item>
+          <Form.Item label="处方" style={{ marginLeft: 27}}>
+            {getFieldDecorator("treAdv", {
+              initialValue: "柴胡12g，当归12g，白芍15g，白术10g，茯苓10g，郁金10g，香附10g，八月札30g，甘草4g，沙苑子15g，青皮10g。 肝痛甚加川楝宇、玄胡索；肝郁化火加丹皮、山栀"
+            })(
+              <TextArea style={{ width: 400 }} autoSize={{ minRows: 2, maxRows: 10 }}/>
+            )}
+          </Form.Item>          
+        </Form>
+          
         </Modal>
       </div>
     );
