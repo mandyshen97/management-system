@@ -254,6 +254,30 @@ class TextAnalysis extends Component {
                     <Col span={10}>{this.state.medRecord.famHis}</Col>
                     <Col span={10} style={{ marginLeft: 15 }}>{this.state.simMedRecord.famHis}</Col>
                 </Row>
+                <br />
+                <Row justify="space-between">
+                    <Col span={2}>
+                        <div className="m-box">中医证型</div>
+                    </Col>
+                    <Col span={10}>{this.state.medRecord.tcmType}</Col>
+                    <Col span={10} style={{ marginLeft: 15 }}>{this.state.simMedRecord.tcmType}</Col>
+                </Row>
+                <br />
+                <Row justify="space-between">
+                    <Col span={2}>
+                        <div className="m-box">病人体征</div>
+                    </Col>
+                    <Col span={10}>{this.state.medRecord.patientSigns}</Col>
+                    <Col span={10} style={{ marginLeft: 15 }}>{this.state.simMedRecord.patientSigns}</Col>
+                </Row>
+                <br />
+                <Row justify="space-between">
+                    <Col span={2}>
+                        <div className="m-box">处方</div>
+                    </Col>
+                    <Col span={10}>{this.state.medRecord.prescription}</Col>
+                    <Col span={10} style={{ marginLeft: 15 }}>{this.state.simMedRecord.prescription}</Col>
+                </Row>
                 <Divider />
                 <b>治疗建议</b>
                 <Divider />

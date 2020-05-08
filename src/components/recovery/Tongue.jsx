@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { Input, Icon, Button, Table, Form, Row, img, Divider, Page, DatePicker, Message, Col, Modal, Popconfirm } from "antd";
-
+import './tongue.less';
 class Tongue extends Component {
     constructor(props) {
         super(props);

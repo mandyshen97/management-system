@@ -587,7 +587,17 @@ class RecordQuery extends Component {
             </Row>
             <Row>
               <Col>
-                <strong>处方：</strong><div className='setformat'>{"柴胡12g，当归12g，白芍15g，白术10g，茯苓10g，郁金10g，香附10g，八月札30g，甘草4g，沙苑子15g，青皮10g。 肝痛甚加川楝宇、玄胡索；肝郁化火加丹皮、山栀"} </div>
+                <strong>中医证型：</strong><div className='setformat'>{this.state.patientInfo.tcmType} </div>
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <strong>病人体征：</strong><div className='setformat'>{this.state.patientInfo.patientSigns} </div>
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <strong>处方：</strong><div className='setformat'>{this.state.patientInfo.prescription}</div>
               </Col>
             </Row>
             <Row>

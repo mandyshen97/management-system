@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { Drawer, Input, Icon, Button, Table, Form, Row, img, Divider, Page, DatePicker, Message, Col, Modal, Popconfirm } from "antd";
-
+import './infrared.less';
 class Infrared extends Component {
     constructor(props) {
         super(props);
