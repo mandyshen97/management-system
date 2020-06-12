@@ -168,10 +168,10 @@ class TextAnalysis extends Component {
         return (
             <div className="main-content">
                 <b>基本信息</b>
-                <Divider />
+                <Divider className="divide" />
                 <Row justify="space-between">
                     <Col span={4}>
-                        <strong>姓名:</strong><span style={{ marginLeft: 15 }}>{this.state.medRecord.name}</span>
+                        <strong>姓名:</strong><span style={{ marginLeft: 15, padding: 8}}>{this.state.medRecord.name}</span>
                     </Col>
                     <Col span={4}>
                         <strong>主治医生:</strong><span style={{ marginLeft: 15 }}>{this.state.medRecord.doctorName}</span>
@@ -180,7 +180,7 @@ class TextAnalysis extends Component {
                         <strong>性别:</strong><span style={{ marginLeft: 15 }}>{this.state.medRecord.gender == 1 ? "男" : "女"}</span>
                     </Col>
                     <Col span={3}>
-                        <strong>年龄:</strong><span style={{ marginLeft: 15 }}>"{this.getAge(this.state.medRecord.birthday)}"</span>
+                        <strong>年龄:</strong><span style={{ marginLeft: 15 }}>{this.getAge(this.state.medRecord.birthday)}</span>
                     </Col>
                     <Col span={3}>
                         <strong>病种:</strong><span style={{ marginLeft: 15 }}>{this.getDisease(this.state.medRecord.analysisStatus, this.state.medRecord.diagnosticResult)}</span>
@@ -196,7 +196,7 @@ class TextAnalysis extends Component {
                     </Col>
                 </Row>
 
-                <Divider />
+                <Divider className="divide"/>
                 <b>病历对比</b>
                 <Divider />
                 <Row justify="space-between">

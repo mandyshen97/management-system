@@ -202,33 +202,39 @@ class RecordUpload extends Component {
               placeholder="请输入..." />
           )}
         </Form.Item>
-        <Form.Item label="病史" style={{ marginLeft: 27 }}>
+        <Form.Item label="既往史" style={{ marginLeft: 15 }}>
           {getFieldDecorator("hisPreIll", {})(
             <TextArea style={{ width: 870 }} autoSize={{ minRows: 2, maxRows: 10 }}
               placeholder="请输入..." />
           )}
         </Form.Item>
-        <Form.Item label="实验检查" style={{ marginLeft: 0 }}>
+        <Form.Item label="现病史" style={{ marginLeft: 15 }}>
           {getFieldDecorator("hisTre", {})(
             <TextArea style={{ width: 870 }} autoSize={{ minRows: 3, maxRows: 10 }}
               placeholder="请输入..." />
           )}
         </Form.Item>
-        <Form.Item label="诊断" style={{ marginLeft: 27 }}>
-          {getFieldDecorator("prvMedHis", {})(
-            <TextArea style={{ width: 870 }} autoSize={{ minRows: 1, maxRows: 10 }}
-              placeholder="请输入..." />
-          )}
-        </Form.Item>
-        <Form.Item label="病机证型" style={{ marginLeft: 0 }}>
+        <Form.Item label="病人体征" style={{ marginLeft: 0 }}>
           {getFieldDecorator("perHis", {})(
             <TextArea style={{ width: 870 }} autoSize={{ minRows: 3, maxRows: 10 }}
               placeholder="请输入..." />
           )}
         </Form.Item>
-        <Form.Item label="治法" style={{ marginLeft: 27 }}>
+        <Form.Item label="中医证型" style={{ marginLeft: 0 }}>
+          {getFieldDecorator("perHis", {})(
+            <TextArea style={{ width: 870 }} autoSize={{ minRows: 3, maxRows: 10 }}
+              placeholder="请输入..." />
+          )}
+        </Form.Item>
+        {/* <Form.Item label="治疗建议" style={{ marginLeft: 27 }}>
           {getFieldDecorator("famHis", {})(
             <TextArea style={{ width: 870 }} autoSize={{ minRows: 2, maxRows: 10 }}
+              placeholder="请输入..." />
+          )}
+        </Form.Item> */}
+        <Form.Item label="诊断" style={{ marginLeft: 27 }}>
+          {getFieldDecorator("prvMedHis", {})(
+            <TextArea style={{ width: 870 }} autoSize={{ minRows: 1, maxRows: 10 }}
               placeholder="请输入..." />
           )}
         </Form.Item>

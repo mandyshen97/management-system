@@ -189,7 +189,7 @@ class Login extends Component {
           <div className="login-left">
             <div className="login-left-container">
               <img src={logo} alt="logo" />
-              <h1>失眠症辅助诊断平台</h1>
+              <h1>医学数据的管理和辅助诊疗系统</h1>
             </div>
           </div>
           <div className="login-right">
@@ -257,7 +257,7 @@ class Login extends Component {
             </Form>
           </div>
         </div>
-        <div className="footer">——————— 失眠症辅助诊断平台 —————————</div>
+        <div className="footer">——————— ZJU@2020 —————————</div>
       </div>
     );
   }

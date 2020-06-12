@@ -123,14 +123,14 @@ class RecordQuery extends Component {
           width: 50
         },
         {
-          title: '用户名',
+          title: '患者姓名',
           dataIndex: 'name',
           width: 50
         },
         {
           title: '性别',
           dataIndex: 'gender',
-          width: 50,
+          width: 30,
           render: gender => {
             return gender === 1 ? '男' : '女'
             // return h(
@@ -150,7 +150,7 @@ class RecordQuery extends Component {
         {
           title: '就诊时间',
           dataIndex: 'createAt',
-          width: 70,
+          width: 50,
           // render: (h, params) => {
           //     return h('div', this.formatDate(params.row.createAt));
           // }
@@ -165,7 +165,7 @@ class RecordQuery extends Component {
         {
           title: '诊断结果',
           dataIndex: 'disease',
-          width: 70,
+          width: 50,
           render: disease => {
             // let disease = params.row.disease;
             return this.getDisease(disease)
@@ -173,7 +173,7 @@ class RecordQuery extends Component {
         },
         {
           title: '操作',
-          width: 190,
+          width: 150,
           key: 'action',
           align: 'center',
           render: (text, record, index) => {
@@ -582,17 +582,17 @@ class RecordQuery extends Component {
             </Row>
             <Row>
               <Col>
-                <strong>治疗建议：</strong><div className='setformat'>{this.state.patientInfo.treAdv} </div>
-              </Col>
-            </Row>
-            <Row>
-              <Col>
                 <strong>中医证型：</strong><div className='setformat'>{this.state.patientInfo.tcmType} </div>
               </Col>
             </Row>
             <Row>
               <Col>
                 <strong>病人体征：</strong><div className='setformat'>{this.state.patientInfo.patientSigns} </div>
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <strong>病种：</strong><div className='setformat'>{this.getDisease(this.state.patientInfo.disease)} </div>
               </Col>
             </Row>
             <Row>
@@ -686,7 +686,7 @@ class RecordQuery extends Component {
           <Form.Item label="主治医生">
           <p style={{ width: 50 }}>{this.state.patientInfo.doctorName}</p>
           </Form.Item>
-          <Form.Item label="生日">
+          <Form.Item label="年龄">
           <p style={{ width: 50 }}> {this.calculateAge(this.state.patientInfo.birthday)}</p>
           </Form.Item>
           <Form.Item label="性别">
@@ -699,16 +699,23 @@ class RecordQuery extends Component {
               <TextArea style={{ width: 400 }} autoSize={{ minRows: 2, maxRows: 3 }}/>
             )}
           </Form.Item>
-          <Form.Item label="病史" style={{ marginLeft: 27 }}>
+          <Form.Item label="现病史" style={{ marginLeft: 13 }}>
             {getFieldDecorator("hisPreIll", {
               initialValue: this.state.patientInfo.hisPreIll
             })(
               <TextArea style={{ width: 400 }} autoSize={{ minRows: 2, maxRows: 3 }}/>
             )}
           </Form.Item>
-          <Form.Item label="实验检查" style={{ marginLeft: 0 }}>
-            {getFieldDecorator("hisTre", {
-              initialValue: "暂无"
+          <Form.Item label="病人体征" style={{ marginLeft: 0 }}>
+            {getFieldDecorator("patientSigns", {
+              initialValue: this.state.patientInfo.patientSigns
+            })(
+              <TextArea style={{ width: 400 }} autoSize={{ minRows: 1, maxRows: 3 }}/>
+            )}
+          </Form.Item>
+          <Form.Item label="中医证型" style={{ marginLeft: 0 }}>
+            {getFieldDecorator("tcmType", {
+              initialValue: this.state.patientInfo.tcmType
             })(
               <TextArea style={{ width: 400 }} autoSize={{ minRows: 1, maxRows: 3 }}/>
             )}
@@ -720,19 +727,13 @@ class RecordQuery extends Component {
               <TextArea style={{ width: 400 }} autoSize={{ minRows: 1, maxRows: 3 }} />
             )}
           </Form.Item>
-          <Form.Item label="病机证型" style={{ marginLeft: 0 }}>
-            {getFieldDecorator("perHis", {})(
-              <TextArea style={{ width: 400 }} autoSize={{ minRows: 1, maxRows: 3 }}
-              defaultValue = "暂无" />
-            )}
-          </Form.Item>
-          <Form.Item label="治法" style={{ marginLeft: 27 }}>
+          {/* <Form.Item label="治法" style={{ marginLeft: 27 }}>
             {getFieldDecorator("perHis", {
               initialValue: "暂无"
             })(
               <TextArea style={{ width: 400 }} autoSize={{ minRows: 1, maxRows: 10 }}/>
             )}
-          </Form.Item>
+          </Form.Item> */}
           <Form.Item label="推荐处方">
             <p style={{width: 400, margin: '0px 0px 0px'}}>
                 <span style={{color:'red', margin: '0px 2px'}}>柴胡(1.00)</span>
@@ -749,8 +750,8 @@ class RecordQuery extends Component {
             </p>
           </Form.Item>
           <Form.Item label="处方" style={{ marginLeft: 27}}>
-            {getFieldDecorator("treAdv", {
-              initialValue: "柴胡12g，当归12g，白芍15g，白术10g，茯苓10g，郁金10g，香附10g，八月札30g，甘草4g，沙苑子15g，青皮10g。 肝痛甚加川楝宇、玄胡索；肝郁化火加丹皮、山栀"
+            {getFieldDecorator("prescription", {
+              initialValue: this.state.patientInfo.prescription
             })(
               <TextArea style={{ width: 400 }} autoSize={{ minRows: 2, maxRows: 10 }}/>
             )}
