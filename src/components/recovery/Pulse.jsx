@@ -64,7 +64,7 @@ class Pulse extends Component {
                   width: 70
                 },
                 {
-                    title: '患病概率',
+                    title: '健康得分',
                     dataIndex: 'diseaseProb',
                     key: 'diseaseProb',
                     width: 60
@@ -102,7 +102,7 @@ class Pulse extends Component {
                 "HPI": "患者缘于10年余前体检发现乙肝，于3年余前口服“阿德福韦酯胶囊”抗病毒治疗，间断口服“肝爽颗粒”，未定期复查肝功能，乙肝病毒定量，腹部彩超。半月前感腹胀，在当地医院给予输液治疗(具体不详)，疗效差，今日为求进一步诊治来我院，门诊行甲胎蛋白示171ng/ml，肝脏MRI示:1.肝硬化，脾大，肝周少量积液；2.肝内弥漫性病变(左叶为主)，符合肝癌表现。3.门脉左支显示不清楚，内异常信号，考虑门脉癌栓形成。遂以“1.乙肝肝硬化；2.肝占位”收入我科，自发病以来，精神状态欠佳，饮食正常，睡眠状况正常，大小便正常，体力下降，体重无变化。",
                 "PH": "平素身体一般，患者10年前查体发现乙肝标志物阳性，肝功能正常，未予治疗及定期复查，否认高血压、心脏病史，否认糖尿病、脑血管疾病病史，否认外伤、输血、献血史，否认食物、药物过敏史，预防接种史不详。",
                 "disease": "肝癌",
-                "diseaseProb": "80%"
+                "diseaseProb": "40"
               },
               {
                 "key": "2",
@@ -114,7 +114,7 @@ class Pulse extends Component {
                 "HPI": "发病后腹痛迅速累及全腹。无外伤病史。",
                 "PH": "既往有发现乙肝病史10多年。",
                 "disease": "肝癌",
-                "diseaseProb": "80%"
+                "diseaseProb": "50"
               },
               {
                 "key": "3",
@@ -126,7 +126,7 @@ class Pulse extends Component {
                 "HPI": "入院前9d患者无明显诱因出现血糖升高。当地医院腹部彩色多普勒超声检查：肝脏实性占位性病变。CT平扫：肝右叶见大小约6.2cm×5.6cm稍低密度影，边缘欠清晰。以“肝脏占位性病变，2型糖尿病”收治入院。",
                 "PH": "该患者无长期酗酒史，无胰腺炎病史。",
                 "disease": "肝癌",
-                "diseaseProb": "90%"
+                "diseaseProb": "30"
               },
             ]
         };
@@ -137,6 +137,49 @@ class Pulse extends Component {
         drawerSwitch: true,
       })
     }
+    showModal= () => {
+      this.setState({
+        visible: true,
+      });
+    }
+    handleOk= () => {
+      this.setState({
+        visible: false,
+      });
+    }
+    handleCancel= () => {
+      this.setState({
+        visible: false,
+      });
+    }
+    getOption1 = ()=>{
+      let option = {
+          title: {  //标题
+              // text: '折线图一',
+              x: 'center',
+              textStyle: { //字体颜色
+                  color: '#ccc'
+              }
+          },
+          tooltip:{ //提示框组件
+              trigger: 'axis'
+          },
+          xAxis: { //X轴坐标值
+              data: ['1','2','3','4','5','6','7', '8', '9', '10', '11','12','13']
+          },
+          yAxis: {
+              type: 'value' //数值轴，适用于连续数据
+          },
+          series : [
+              {
+                  name:'健康得分', //坐标点名称
+                  type:'line', //线类型
+                  data:[35, 40, 50, 53, 58, 65, 75, 80, 82, 85, 90, 96, 100] //坐标点数据
+              }
+          ]
+      }
+      return option;
+  }
     // 抽屉等组件关闭
     onClose = () => {
       this.setState({
@@ -212,7 +255,16 @@ class Pulse extends Component {
                         查询
                     </Button>
                     </Form.Item>
+                    <Form.Item>
+                    <Button type="primary" onClick={this.showModal}>
+                        康复趋势图
+                    </Button>
+                    </Form.Item>
                 </Form>
+                <Modal title="康复趋势图" visible={this.state.visible}
+                onOk={this.handleOk} onCancel={this.handleCancel}>
+                <strong>健康得分：</strong><div className='setformat'><ReactEcharts option={this.getOption1()} theme="ThemeStyle" /></div>
+              </Modal>
                 <Table
                     bordered
                     pagination={{

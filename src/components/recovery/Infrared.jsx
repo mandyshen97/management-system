@@ -1,12 +1,14 @@
 import React, { Component, Fragment } from 'react';
 import { Drawer, Input, Icon, Button, Table, Form, Row, img, Divider, Page, DatePicker, Message, Col, Modal, Popconfirm } from "antd";
 import './infrared.less';
+import ReactEcharts from "echarts-for-react";
 class Infrared extends Component {
     constructor(props) {
         super(props);
         this.state = {
             pageNum: 1,
             totalNum: 3,
+            visible:false,
             drawerSwitch: false,
             tableColumns: [
                 {
@@ -58,7 +60,7 @@ class Infrared extends Component {
                   width: 70
                 },
                 {
-                    title: '患病概率',
+                    title: '健康得分',
                     dataIndex: 'diseaseProb',
                     key: 'diseaseProb',
                     width: 70
@@ -95,7 +97,7 @@ class Infrared extends Component {
                     "treatment": "完善相关检查，无化疗禁忌，给予TC方案化疗，具体:环磷酰胺0.6g/m2.1.0g.d1静点，多西他赛75mg/m2.120mgd1静点，21天为一周期，化疗同时给予护胃、防过敏及对症支持治疗。",
                     "diagnosis": "乳腺癌保乳术后化疗后",
                     "disease": "乳腺癌",
-                    "diseaseProb": "90%"
+                    "diseaseProb": "40"
                 },
                 {
                     "key": "2",
@@ -106,7 +108,7 @@ class Infrared extends Component {
                     "treatment": "患者入院后完善相关辅助检查，排除化疗禁忌症，继续给予第2周期AC方案全身化疗:表柔比星60mgd1＋环磷酰胺0．8gd1，出现1度胃肠道反应，2度骨髓抑制，给予帕洛诺司琼止吐、瑞白升血后，好转出院。",
                     "diagnosis": "右乳浸润性小叶癌术后pT1N0M0I期",
                     "disease": "乳腺癌",
-                    "diseaseProb": "100%"
+                    "diseaseProb": "50"
                 },
                 {
                     "key": "3",
@@ -128,6 +130,49 @@ class Infrared extends Component {
             drawerSwitch: true,
           })
     }
+    showModal= () => {
+      this.setState({
+        visible: true,
+      });
+    }
+    handleOk= () => {
+      this.setState({
+        visible: false,
+      });
+    }
+    handleCancel= () => {
+      this.setState({
+        visible: false,
+      });
+    }
+    getOption = ()=>{
+      let option = {
+          title: {  //标题
+              // text: '折线图一',
+              x: 'center',
+              textStyle: { //字体颜色
+                  color: '#ccc'
+              }
+          },
+          tooltip:{ //提示框组件
+              trigger: 'axis'
+          },
+          xAxis: { //X轴坐标值
+              data: ['1','2','3','4','5','6','7', '8', '9', '10', '11','12','13']
+          },
+          yAxis: {
+              type: 'value' //数值轴，适用于连续数据
+          },
+          series : [
+              {
+                  name:'健康得分', //坐标点名称
+                  type:'line', //线类型
+                  data:[35, 40, 50, 53, 58, 65, 75, 80, 82, 85, 90, 96, 100] //坐标点数据
+              }
+          ]
+      }
+      return option;
+  }
     // 抽屉等组件关闭
     onClose = () => {
         this.setState({
@@ -173,7 +218,16 @@ class Infrared extends Component {
                         查询
                     </Button>
                     </Form.Item>
+                    <Form.Item>
+                    <Button type="primary" onClick={this.showModal}>
+                        康复趋势图
+                    </Button>
+                    </Form.Item>
                 </Form>
+                <Modal title="康复趋势图" visible={this.state.visible}
+                onOk={this.handleOk} onCancel={this.handleCancel}>
+                <strong>健康得分：</strong><div className='setformat'><ReactEcharts option={this.getOption()} theme="ThemeStyle" /></div>
+              </Modal>
                 <Table
                     bordered
                     pagination={{

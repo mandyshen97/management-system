@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { Input, Icon, Button, Table, Form, Row, img, Divider, Page, DatePicker, Message, Col, Modal, Popconfirm } from "antd";
 import './tongue.less';
+import ReactEcharts from "echarts-for-react";
 class Tongue extends Component {
     constructor(props) {
         super(props);
@@ -65,7 +66,7 @@ class Tongue extends Component {
                   width: 100
                 },
                 {
-                    title: '患病概率',
+                    title: '健康得分',
                     dataIndex: 'diseaseProb',
                     key: 'diseaseProb',
                     width: 70
@@ -103,7 +104,7 @@ class Tongue extends Component {
                   "HPI": "患者3个月来长久站立后觉腰痛，休息后缓解，无关节红肿及发热等不适。1个月来腰痛加重，伴左腹股沟部位疼痛及左下肢隐痛不适，脸色渐苍白，无自觉头晕、心慌及气短等不适，未经特殊处理。半个月来无诱因午后发热，体温可达38．0℃以上，不伴寒战，夜间出汗较多，晨起可自行退热，时感心慌，无咳嗽、咳痰，无腹痛、腹泻，无便血、黑便，无尿急、尿痛、尿频、血尿及酱油色尿。因腰痛日渐加重，发热不退，需卧床休息，偶服布洛芬止痛。在当地医院发现重度贫血，怀疑“骨髓瘤”转入我院。发病以来无消瘦，大便0～2次／d，黄色成形便，小便正常。",
                   "PH": "既往体健，无烟酒嗜好。父母体健，家族史无特殊。",
                   "disease": "胃癌",
-                  "diseaseProb": "70%"
+                  "diseaseProb": "50"
                 },
                 {
                     "key": "2",
@@ -115,7 +116,7 @@ class Tongue extends Component {
                     "HPI": "患者3年前无明显诱因出现上腹部疼痛，部位固定，空腹及夜间疼痛明显，每次发作半小时左右，就诊于外院，行胃镜示：十二指肠球部溃疡，门诊予抑酸治疗（具体药物不详），服药后症状得到控制。此后3年间患者自诉上腹痛反复发作，伴反酸、烧心、恶心、腹胀，每次均自行口服奥美拉唑肠溶胶囊后症状稍有缓解。1周钱患者因上述症状再发加重且口服奥美拉唑肠溶胶囊未见明显缓解，再次就诊于外院，胃镜示：慢性胃炎，Barrett食管，十二指肠球部溃疡。现为求中西医结合治疗，于我院就诊。",
                     "PH": "否认冠心病、高血压、糖尿病病史。否认脑血管病病史，否认肺结核、肝炎病史，否认输血、外伤史、手术史。",
                     "disease": "胃癌",
-                    "diseaseProb": "30%"
+                    "diseaseProb": "70"
                 },
                 {
                     "key": "3",
@@ -127,7 +128,7 @@ class Tongue extends Component {
                     "HPI": "患者24天前在外院行“胃癌根治术”，术后3天开始少量饮水，饮水后出现上腹部饱胀感，偶有恶心，未呕吐，行上消化道造影检查提示：“胃潴留”，诊断：“手术后胃排空障碍”，给予禁饮食、胃肠减压、静脉营养支持治疗。患者术后15天出院回家，继续胃肠减压、肠内营养及输液治疗。目前患者仍有上腹部饱胀不适，胃管每日引出黄绿色液体约500ml，每日进肠内营养粉约200-400ml。昨日患者出现恶性呕吐2次，为淡黄色液体，略有反酸烧心，无畏寒发热，无胸闷憋气及呼吸困难，今来我院就诊，门诊医师以“手术后胃排空障碍”收住院。患者近日精神差，睡眠差，肛门排气正常，口服乳酸果糖后每日排除少量黄色稀便，小便正常。近日体重下降8千克",
                     "PH": "24天前在外院行“胃癌根治术”。患有“痛风”病史8年，常服用“尼美舒利”。否认高血压、心脏病、糖尿病等慢性病病史。无肝炎、结核等传染病及其密切接触史。否认输血史。有“头孢咪唑”过敏史。预防接种随当地。",
                     "disease": "胃癌",
-                    "diseaseProb": "90%"
+                    "diseaseProb": "50"
                 },
                 {
                     "key": "4",
@@ -148,6 +149,49 @@ class Tongue extends Component {
     show(record) {
         
     }
+    handleOk= () => {
+      this.setState({
+        visible: false,
+      });
+    }
+    handleCancel= () => {
+      this.setState({
+        visible: false,
+      });
+    }
+    showModal= () => {
+      this.setState({
+        visible: true,
+      });
+    }
+    getOption = ()=>{
+      let option = {
+          title: {  //标题
+              // text: '折线图一',
+              x: 'center',
+              textStyle: { //字体颜色
+                  color: '#ccc'
+              }
+          },
+          tooltip:{ //提示框组件
+              trigger: 'axis'
+          },
+          xAxis: { //X轴坐标值
+              data: ['1','2','3','4','5','6','7', '8', '9', '10', '11','12','13']
+          },
+          yAxis: {
+              type: 'value' //数值轴，适用于连续数据
+          },
+          series : [
+              {
+                  name:'健康得分', //坐标点名称
+                  type:'line', //线类型
+                  data:[35, 40, 50, 53, 58, 65, 75, 80, 82, 85, 90, 96, 100] //坐标点数据
+              }
+          ]
+      }
+      return option;
+  }
       // 分页页数改变触发函数
     pageChange = (page) => {
         this.setState({
@@ -195,7 +239,16 @@ class Tongue extends Component {
                         查询
                     </Button>
                     </Form.Item>
+                    <Form.Item>
+                    <Button type="primary" onClick={this.showModal}>
+                        康复趋势图
+                    </Button>
+                    </Form.Item>
                 </Form>
+                <Modal title="康复趋势图" visible={this.state.visible}
+                onOk={this.handleOk} onCancel={this.handleCancel}>
+                <strong>健康得分：</strong><div className='setformat'><ReactEcharts option={this.getOption()} theme="ThemeStyle" /></div>
+              </Modal>
                 <Table
                     bordered
                     pagination={{
