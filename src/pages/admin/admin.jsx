@@ -13,6 +13,7 @@ import RecordUpload from './../../components/recordUpload/RecordUpload';
 import Infrared from '../../components/recovery/Infrared';
 import Tongue from '../../c../../components/recovery/Tongue'
 import Pulse from '../../components/recovery/Pulse';
+import TextRecord from '../../components/recovery/TextRecord'
 
 import './admin.less'
 import InformationManagement from '../../components/userManagement/UserInformationManagement';
@@ -76,6 +77,7 @@ class Admin extends Component {
               <Route path='/admin/recovery/infrared' component={Infrared} />
               <Route path='/admin/recovery/tongue' component={Tongue} />
               <Route path='/admin/recovery/pulse' component={Pulse} />
+              <Route path='/admin/recovery/textRecord' component={TextRecord} />
             </Switch>
           </Content>
         </Layout>

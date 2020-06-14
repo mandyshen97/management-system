@@ -1,13 +1,14 @@
 import React, { Component, Fragment } from 'react';
-import './record-query.less';
+import './text-record.less';
 import { Input, Icon, Button, Select, Table, Form, Row, Divider, Tooltip, Page, DatePicker, Message, Drawer, Col, Modal, Popconfirm } from "antd";
 import API from "../../api/api";
+import ReactEcharts from "echarts-for-react";
 import { Link } from 'react-router-dom';
 
 const { Option } = Select;
 const { TextArea } = Input;
 
-class RecordQuery extends Component {
+class TextRecord extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -18,6 +19,45 @@ class RecordQuery extends Component {
       tableSwitch: false,
       updateSwitch: false,
       chosenIndex: 0,
+      dataSource : [
+        {
+          key: '1',
+          count: '1',
+          healthScore: 40,
+          medicine: '甘草，芦根，麸炒枳壳，姜半夏，当归，太子参，桑寄生，青皮，陈皮，苦杏仁，金荞麦，山药',
+        },
+        {
+          key: '2',
+          count: '2',
+          healthScore: 50,
+          medicine: '甘草，芦根，麸炒枳壳，姜半夏，当归，太子参，桑寄生，青皮，陈皮，苦杏仁，金荞麦，山药',
+        },
+        {
+          key: '3',
+          count: '3',
+          healthScore: 60,
+          medicine: '甘草，芦根，麸炒枳壳，姜半夏，当归，太子参，桑寄生，青皮，陈皮，苦杏仁，金荞麦，山药',
+        },
+      ],
+      columns : [
+        {
+          title: '就诊次数',
+          dataIndex: 'count',
+          key: 'count',
+          width:100
+        },
+        {
+          title: '健康得分',
+          dataIndex: 'healthScore',
+          key: 'healthScore',
+          width:100
+        },
+        {
+          title: '用药处方',
+          dataIndex: 'medicine',
+          key: 'medicine',
+        },
+      ],
       pStyle: {
         fontSize: '16px',
         color: 'rgba(0,0,0,0.85)',
@@ -123,29 +163,9 @@ class RecordQuery extends Component {
           width: 50
         },
         {
-          title: '患者姓名',
+          title: '姓名',
           dataIndex: 'name',
           width: 50
-        },
-        {
-          title: '性别',
-          dataIndex: 'gender',
-          width: 30,
-          render: gender => {
-            return gender === 1 ? '男' : '女'
-            // return h(
-            //     'div',
-            //     params.row.gender === 1 ? '男' : '女'
-            // )
-          }
-        },
-        {
-          title: '年龄',
-          dataIndex: 'birthday',
-          width: 40,
-          render: birthday => {
-            return this.calculateAge(birthday)
-          }
         },
         {
           title: '就诊时间',
@@ -163,13 +183,34 @@ class RecordQuery extends Component {
           tooltip: true,
         },
         {
+            title: '现病史',
+            dataIndex: 'hisPreIll',
+            ellipsis: true,
+            width: 150,
+            tooltip: true,
+        },
+        {
+            title: '既往史',
+            dataIndex: 'prvMedHis',
+            ellipsis: true,
+            width: 150,
+            tooltip: true,
+        },
+        {
           title: '诊断结果',
           dataIndex: 'disease',
           width: 50,
           render: disease => {
             // let disease = params.row.disease;
             return this.getDisease(disease)
-          }
+            }
+        },
+        {
+            title: '健康得分',
+            dataIndex: 'healthScore',
+            ellipsis: true,
+            width: 150,
+            tooltip: true,
         },
         {
           title: '操作',
@@ -184,16 +225,8 @@ class RecordQuery extends Component {
                   }>查看详情
                     </Button>
                 <Button type="primary" size="small" style={{ marginRight: '5px', backgroundColor: 'green', borderColor: 'green' }}
-                  onClick={() => this.detectionData(record.patientId)
-                  }>检测数据
-                    </Button>
-                <Link to={`/admin/textAnalysis/${record.id}`}>
-                  <Button type="primary" size="small" style={{ marginRight: '5px', backgroundColor: '#EAC100', borderColor: '#EAC100'  }}
-                  >文本分析
-                </Button></Link>
-                <Button type="primary" size="small" style={{ marginRight: '5px', backgroundColor: 'red', borderColor: 'red' }}
-                  onClick={() => this.remove(index)
-                  }>删除
+                  onClick={() => this.show(record)
+                  }>智能分析
                     </Button>
               </div>
             );
@@ -219,6 +252,49 @@ class RecordQuery extends Component {
       tableSwitch: false
     })
   }
+  handleOk= () => {
+    this.setState({
+      visible: false,
+    });
+  }
+  handleCancel= () => {
+    this.setState({
+      visible: false,
+    });
+  }
+  showModal= () => {
+    this.setState({
+      visible: true,
+    });
+  }
+  getOption = ()=>{
+    let option = {
+        title: {  //标题
+            // text: '折线图一',
+            x: 'center',
+            textStyle: { //字体颜色
+                color: '#ccc'
+            }
+        },
+        tooltip:{ //提示框组件
+            trigger: 'axis'
+        },
+        xAxis: { //X轴坐标值
+            data: ['1','2','3','4','5','6','7', '8', '9', '10', '11','12','13']
+        },
+        yAxis: {
+            type: 'value' //数值轴，适用于连续数据
+        },
+        series : [
+            {
+                name:'健康得分', //坐标点名称
+                type:'line', //线类型
+                data:[35, 40, 50, 53, 58, 65, 75, 80, 82, 85, 90, 96, 100] //坐标点数据
+            }
+        ]
+    }
+    return option;
+}
   // textAnalysis(id) {
   //   console.log(id)
   //   this.props.history.push('/admin/textAnanlysis');
@@ -430,6 +506,7 @@ class RecordQuery extends Component {
     const { form } = this.props;
     const { getFieldDecorator } = form;
     return (
+      <div>
       <Form layout="inline" >
         <Form.Item>
           <span className="input-text">病历id</span>
@@ -460,42 +537,21 @@ class RecordQuery extends Component {
           )}
         </Form.Item>
         <Form.Item>
-          <span className="input-text">病种</span>
-          {getFieldDecorator("diseaseId", {})(
-            <Select
-            allowClear={true}
-            showSearch
-            style={{ width: 120 }}
-            placeholder="请选择病种"
-            filterOption={(input, option) =>
-              option.props.children
-                .toLowerCase()
-                .indexOf(input.toLowerCase()) >= 0
-            }
-          >
-            {this.state.diseaseList.map((item, index) => (
-              <Option value={item.id} key={index}>
-                {item.disease}
-              </Option>
-            ))}
-          </Select>
-          )}
-        </Form.Item>
-        <Form.Item>
-          <span className="input-text">检索字段</span>
-          {getFieldDecorator("word", {})(
-            <Input
-              style={{ width: 130, marginRight: 5 }}
-              placeholder="请输入关键词"
-            />
-          )}
-        </Form.Item>
-        <Form.Item>
           <Button type="primary" onClick={this.fetchData}>
             查询
           </Button>
         </Form.Item>
+        <Form.Item>
+        <Button type="primary" onClick={this.showModal}>
+            康复趋势图
+        </Button>
+        </Form.Item>
       </Form>
+      <Modal title="康复趋势图" visible={this.state.visible}
+      onOk={this.handleOk} onCancel={this.handleCancel}>
+      <strong>健康得分：</strong><div className='setformat'><ReactEcharts option={this.getOption()} theme="ThemeStyle" /></div>
+      <Table dataSource={this.state.dataSource} columns={this.state.columns} />;
+    </Modal></div>
     )
   }
 
@@ -598,16 +654,6 @@ class RecordQuery extends Component {
             <Row>
               <Col>
                 <strong>处方：</strong><div className='setformat'>{this.state.patientInfo.prescription}</div>
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <Button type="primary" onClick={() => this.showHelp()}>
-                  用药帮助
-                </Button>
-                <Button type="primary" style={{ margin: '0 8px', backgroundColor: 'green', borderColor: 'green' }} onClick={() => this.showUpdate()}>
-                  更新病历
-                </Button>
               </Col>
             </Row>
           </div>
@@ -779,4 +825,4 @@ class RecordQuery extends Component {
   }
 }
 
-export default Form.create()(RecordQuery);
+export default Form.create()(TextRecord);

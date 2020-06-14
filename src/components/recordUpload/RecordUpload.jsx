@@ -105,6 +105,7 @@ class RecordUpload extends Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         let param = {
+          recordId:values.recordId,
           doctorId: values.doctorId,
           name: values.name,
           gender: values.gender,
@@ -143,7 +144,16 @@ class RecordUpload extends Component {
     const options = this.state.doctorList.map(d => <Option key={d.value}>{d.label}</Option>);
     return (
       <Form layout="inline">
-        <Form.Item label="姓名" style={{ marginLeft: 27 }}>
+        <Form.Item label="病历id" style={{ marginLeft: 15 }}>
+          {getFieldDecorator("recordId", {})(
+            <Input
+              style={{ width: 200, marginRight: 25 }}
+              // prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />}
+              placeholder="请输入病历id"
+            />
+          )}
+        </Form.Item>
+        <Form.Item label="姓名" >
           {getFieldDecorator("name", {})(
             <Input
               style={{ width: 200, marginRight: 25 }}
@@ -183,17 +193,26 @@ class RecordUpload extends Component {
         <Form.Item label="生日">
           {getFieldDecorator("birthday", {})(
             <DatePicker
-              style={{ width: 200, marginRight: 73 }}
+              style={{ width: 200, marginRight: 25 }}
               placeholder="请选择生日"
             />
           )}
         </Form.Item>
-        <Form.Item label="性别">
+        <Form.Item label="性别" >
           {getFieldDecorator("gender", {})(
             <Radio.Group>
               <Radio value={1}>男</Radio>
               <Radio value={0}>女</Radio>
             </Radio.Group>
+          )}
+        </Form.Item>
+        <Form.Item label="健康得分" style={{ marginLeft: 135 }}>
+          {getFieldDecorator("healthScore", {})(
+            <Input
+              style={{ width: 200, marginRight: 25 }}
+              // prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />}
+              placeholder="请输入健康得分"
+            />
           )}
         </Form.Item>
         <Form.Item label="主诉" style={{ marginLeft: 27 }}>

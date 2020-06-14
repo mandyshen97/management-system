@@ -75,7 +75,12 @@ const menuList = [
         title: '脉象数据',
         path: '/admin/recovery/pulse',
         // icon: 'line'
-      }
+      },
+      {
+        title: '病历文本数据',
+        path: '/admin/recovery/textRecord',
+        // icon: 'line'
+      },
     ]
   },
 

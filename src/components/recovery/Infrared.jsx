@@ -10,6 +10,45 @@ class Infrared extends Component {
             totalNum: 3,
             visible:false,
             drawerSwitch: false,
+            dataSource : [
+              {
+                key: '1',
+                count: '1',
+                healthScore: 40,
+                medicine: '甘草，芦根，麸炒枳壳，姜半夏，当归，太子参，桑寄生，青皮，陈皮，苦杏仁，金荞麦，山药',
+              },
+              {
+                key: '2',
+                count: '2',
+                healthScore: 50,
+                medicine: '甘草，芦根，麸炒枳壳，姜半夏，当归，太子参，桑寄生，青皮，陈皮，苦杏仁，金荞麦，山药',
+              },
+              {
+                key: '3',
+                count: '3',
+                healthScore: 60,
+                medicine: '甘草，芦根，麸炒枳壳，姜半夏，当归，太子参，桑寄生，青皮，陈皮，苦杏仁，金荞麦，山药',
+              },
+            ],
+            columns : [
+              {
+                title: '就诊次数',
+                dataIndex: 'count',
+                key: 'count',
+                width:100
+              },
+              {
+                title: '健康得分',
+                dataIndex: 'healthScore',
+                key: 'healthScore',
+                width:100
+              },
+              {
+                title: '用药处方',
+                dataIndex: 'medicine',
+                key: 'medicine',
+              },
+            ],
             tableColumns: [
                 {
                   title: '病历id',
@@ -158,7 +197,7 @@ class Infrared extends Component {
               trigger: 'axis'
           },
           xAxis: { //X轴坐标值
-              data: ['1','2','3','4','5','6','7', '8', '9', '10', '11','12','13']
+              data: ['1','2','3']
           },
           yAxis: {
               type: 'value' //数值轴，适用于连续数据
@@ -167,7 +206,7 @@ class Infrared extends Component {
               {
                   name:'健康得分', //坐标点名称
                   type:'line', //线类型
-                  data:[35, 40, 50, 53, 58, 65, 75, 80, 82, 85, 90, 96, 100] //坐标点数据
+                  data:[40, 45, 70] //坐标点数据
               }
           ]
       }
@@ -227,6 +266,7 @@ class Infrared extends Component {
                 <Modal title="康复趋势图" visible={this.state.visible}
                 onOk={this.handleOk} onCancel={this.handleCancel}>
                 <strong>健康得分：</strong><div className='setformat'><ReactEcharts option={this.getOption()} theme="ThemeStyle" /></div>
+                <Table dataSource={this.state.dataSource} columns={this.state.columns} />;
               </Modal>
                 <Table
                     bordered
@@ -306,13 +346,6 @@ class Infrared extends Component {
                     </Row>
                     <Row>
                       <Col>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col>
-                        <Button type="primary" style={{backgroundColor: 'green', borderColor: 'green' }} onClick={() => this.showUpdate()}>
-                          更新病历
-                        </Button>
                       </Col>
                     </Row>
                   </div>
