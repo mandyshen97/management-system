@@ -11,19 +11,19 @@ class Pulse extends Component {
                 key: '1',
                 count: '1',
                 healthScore: 40,
-                medicine: '甘草，芦根，麸炒枳壳，姜半夏，当归，太子参，桑寄生，青皮，陈皮，苦杏仁，金荞麦，山药',
+                medicine: '黄芩，黄连，瓜，杏仁，干姜，党参',
               },
               {
                 key: '2',
                 count: '2',
-                healthScore: 50,
-                medicine: '甘草，芦根，麸炒枳壳，姜半夏，当归，太子参，桑寄生，青皮，陈皮，苦杏仁，金荞麦，山药',
+                healthScore: 52,
+                medicine: '麻黄，杏仁，甘草，石膏，桔梗，寸冬',
               },
               {
                 key: '3',
                 count: '3',
-                healthScore: 60,
-                medicine: '甘草，芦根，麸炒枳壳，姜半夏，当归，太子参，桑寄生，青皮，陈皮，苦杏仁，金荞麦，山药',
+                healthScore: 71,
+                medicine: '白蔻仁、藿香、茵陈、滑石、通草、菖蒲、黄芩、连翘、浙贝、射干、薄荷、桔梗、杏仁、前胡',
               },
             ],
             columns : [
@@ -153,7 +153,7 @@ class Pulse extends Component {
                 "HPI": "发病后腹痛迅速累及全腹。无外伤病史。",
                 "PH": "既往有发现乙肝病史10多年。",
                 "disease": "肝癌",
-                "diseaseProb": "50"
+                "diseaseProb": "52"
               },
               {
                 "key": "3",
@@ -165,7 +165,7 @@ class Pulse extends Component {
                 "HPI": "入院前9d患者无明显诱因出现血糖升高。当地医院腹部彩色多普勒超声检查：肝脏实性占位性病变。CT平扫：肝右叶见大小约6.2cm×5.6cm稍低密度影，边缘欠清晰。以“肝脏占位性病变，2型糖尿病”收治入院。",
                 "PH": "该患者无长期酗酒史，无胰腺炎病史。",
                 "disease": "肝癌",
-                "diseaseProb": "30"
+                "diseaseProb": "71"
               },
             ]
         };
@@ -213,7 +213,7 @@ class Pulse extends Component {
               {
                   name:'健康得分', //坐标点名称
                   type:'line', //线类型
-                  data:[35, 40, 50, 53, 58, 65, 75, 80, 82, 85, 90, 96, 100] //坐标点数据
+                  data:[40, 52, 71] //坐标点数据
               }
           ]
       }
@@ -301,8 +301,8 @@ class Pulse extends Component {
                     </Form.Item>
                 </Form>
                 <Modal title="康复趋势图" visible={this.state.visible}
-                onOk={this.handleOk} onCancel={this.handleCancel}>
-                <strong>健康得分：</strong><div className='setformat'><ReactEcharts option={this.getOption1()} theme="ThemeStyle" /></div>
+                onOk={this.handleOk} onCancel={this.handleCancel} width="600px">
+                <strong>健康得分：</strong><div><ReactEcharts option={this.getOption1()} theme="ThemeStyle" /></div>
                 <Table dataSource={this.state.dataSource} columns={this.state.columns} />;
               </Modal>
                 <Table

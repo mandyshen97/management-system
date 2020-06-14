@@ -734,20 +734,12 @@ class RecordQuery extends Component {
               <TextArea style={{ width: 400 }} autoSize={{ minRows: 1, maxRows: 10 }}/>
             )}
           </Form.Item> */}
-          <Form.Item label="上次处方">
-            <p style={{width: 400, margin: '0px 0px 0px'}}>
-                <span style={{color:'red', margin: '0px 2px'}}>柴胡(1.00)</span>
-                <span style={{color:'red', margin: '0px 2px'}}>当归(0.90)</span>
-                <span style={{color:'red', margin: '0px 2px'}}>白芍(0.85)</span>
-                <span style={{color:'red', margin: '0px 2px'}}>太子参(0.84)</span>
-                <span style={{color:'red', margin: '0px 2px'}}>白术(0.74)</span>
-                <span style={{color:'red', margin: '0px 2px'}}>麦冬(0.72)</span>
-                <span style={{color:'red', margin: '0px 2px'}}>茯苓(0.70)</span>
-                <span style={{color:'red', margin: '0px 2px'}}>郁金(0.65)</span>
-                <br/>
-                <span style={{margin: '0px 2px 2px 2px'}}>香附(0.55)</span>
-                <span style={{margin: '0px 2px'}}>八月札(0.40)</span>
-            </p>
+          <Form.Item label="上次处方" style={{ marginLeft: 0}}>
+            
+          <span>柴胡，当归，芦根，麸炒枳壳，姜半夏，当归，太子参，桑寄生，</span>
+          <br/>
+          <span>麦冬,茯苓,郁金</span>
+          
           </Form.Item>
           <Form.Item label="推荐处方">
             <p style={{width: 400, margin: '0px 0px 0px'}}>

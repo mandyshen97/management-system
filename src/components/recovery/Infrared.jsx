@@ -14,20 +14,20 @@ class Infrared extends Component {
               {
                 key: '1',
                 count: '1',
-                healthScore: 40,
+                healthScore: 45,
                 medicine: '甘草，芦根，麸炒枳壳，姜半夏，当归，太子参，桑寄生，青皮，陈皮，苦杏仁，金荞麦，山药',
               },
               {
                 key: '2',
                 count: '2',
-                healthScore: 50,
-                medicine: '甘草，芦根，麸炒枳壳，姜半夏，当归，太子参，桑寄生，青皮，陈皮，苦杏仁，金荞麦，山药',
+                healthScore: 47,
+                medicine: '金银花，连翘，芦根，桔梗，荆芥，紫菀，百部，白术，甘草，陈皮',
               },
               {
                 key: '3',
                 count: '3',
-                healthScore: 60,
-                medicine: '甘草，芦根，麸炒枳壳，姜半夏，当归，太子参，桑寄生，青皮，陈皮，苦杏仁，金荞麦，山药',
+                healthScore: 58,
+                medicine: '青黛，蛤蚧，白芥子，苏子，莱菔子，麻黄，杏仁，僵蚕，陈皮，半夏，茯苓，甘草',
               },
             ],
             columns : [
@@ -136,7 +136,7 @@ class Infrared extends Component {
                     "treatment": "完善相关检查，无化疗禁忌，给予TC方案化疗，具体:环磷酰胺0.6g/m2.1.0g.d1静点，多西他赛75mg/m2.120mgd1静点，21天为一周期，化疗同时给予护胃、防过敏及对症支持治疗。",
                     "diagnosis": "乳腺癌保乳术后化疗后",
                     "disease": "乳腺癌",
-                    "diseaseProb": "40"
+                    "diseaseProb": "45"
                 },
                 {
                     "key": "2",
@@ -147,7 +147,7 @@ class Infrared extends Component {
                     "treatment": "患者入院后完善相关辅助检查，排除化疗禁忌症，继续给予第2周期AC方案全身化疗:表柔比星60mgd1＋环磷酰胺0．8gd1，出现1度胃肠道反应，2度骨髓抑制，给予帕洛诺司琼止吐、瑞白升血后，好转出院。",
                     "diagnosis": "右乳浸润性小叶癌术后pT1N0M0I期",
                     "disease": "乳腺癌",
-                    "diseaseProb": "50"
+                    "diseaseProb": "47"
                 },
                 {
                     "key": "3",
@@ -158,7 +158,7 @@ class Infrared extends Component {
                     "treatment": "患者入院后完善相关辅助检查，例如胸部CT、肿瘤标志物、腹部B超+乳腺+腋窝淋巴结彩超、骨扫描，提示病情稳定，疗效评价为SD，给予中药抗肿瘤、免疫增强治疗，好转出院。",
                     "diagnosis": "乳腺癌根治切除术后化疗后(pT2N3M0，IIIC期)",
                     "disease": "乳腺癌",
-                    "diseaseProb": "尚未分析"
+                    "diseaseProb": "58"
                 },
             ]
         };
@@ -206,7 +206,7 @@ class Infrared extends Component {
               {
                   name:'健康得分', //坐标点名称
                   type:'line', //线类型
-                  data:[40, 45, 70] //坐标点数据
+                  data:[45, 47, 58] //坐标点数据
               }
           ]
       }
@@ -264,8 +264,8 @@ class Infrared extends Component {
                     </Form.Item>
                 </Form>
                 <Modal title="康复趋势图" visible={this.state.visible}
-                onOk={this.handleOk} onCancel={this.handleCancel}>
-                <strong>健康得分：</strong><div className='setformat'><ReactEcharts option={this.getOption()} theme="ThemeStyle" /></div>
+                onOk={this.handleOk} onCancel={this.handleCancel} width='600px'>
+                <strong>健康得分：</strong><div><ReactEcharts option={this.getOption()} theme="ThemeStyle" /></div>
                 <Table dataSource={this.state.dataSource} columns={this.state.columns} />;
               </Modal>
                 <Table
