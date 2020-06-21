@@ -81,6 +81,11 @@ const menuList = [
         path: '/admin/recovery/textRecord',
         // icon: 'line'
       },
+      {
+        title: '用药帮助',
+        path: '/admin/recovery/Medicine',
+        // icon: 'line'
+      },
     ]
   },
 

@@ -3,7 +3,6 @@ import { Input, Button, Table, Form, DatePicker, List, Card } from "antd";
 import { Tabs } from "antd"
 import './text-record.less';
 import ReactEcharts from "echarts-for-react";
-import InfiniteScroll from 'react-infinite-scroller';
 
 const TabPane = Tabs.TabPane;
 class TextRecord extends Component {
