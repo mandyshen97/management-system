@@ -144,12 +144,12 @@ class RecordUpload extends Component {
     const options = this.state.doctorList.map(d => <Option key={d.value}>{d.label}</Option>);
     return (
       <Form layout="inline">
-        <Form.Item label="病历id" style={{ marginLeft: 15 }}>
+        <Form.Item label="病人id" style={{ marginLeft: 15 }}>
           {getFieldDecorator("recordId", {})(
             <Input
               style={{ width: 200, marginRight: 25 }}
               // prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />}
-              placeholder="请输入病历id"
+              placeholder="请输入病人id"
             />
           )}
         </Form.Item>
@@ -175,7 +175,7 @@ class RecordUpload extends Component {
         <Form.Item label="体重">
           {getFieldDecorator("weight", {})(
             <Input
-              style={{ width: 200, marginRight: 25 }}
+              style={{ width: 160, marginRight: 25 }}
               // prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />}
               placeholder="请输入体重"
             />
@@ -209,7 +209,7 @@ class RecordUpload extends Component {
         <Form.Item label="健康得分" style={{ marginLeft: 135 }}>
           {getFieldDecorator("healthScore", {})(
             <Input
-              style={{ width: 200, marginRight: 25 }}
+              style={{ width: 210, marginRight: 25 }}
               // prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />}
               placeholder="请输入健康得分"
             />
@@ -217,31 +217,31 @@ class RecordUpload extends Component {
         </Form.Item>
         <Form.Item label="主诉" style={{ marginLeft: 27 }}>
           {getFieldDecorator("chfCmp", {})(
-            <TextArea style={{ width: 870 }} autoSize={{ minRows: 2, maxRows: 10 }}
+            <TextArea style={{ width: 1100 }} autoSize={{ minRows: 2, maxRows: 10 }}
               placeholder="请输入..." />
           )}
         </Form.Item>
         <Form.Item label="既往史" style={{ marginLeft: 15 }}>
           {getFieldDecorator("hisPreIll", {})(
-            <TextArea style={{ width: 870 }} autoSize={{ minRows: 2, maxRows: 10 }}
+            <TextArea style={{ width: 1100 }} autoSize={{ minRows: 2, maxRows: 10 }}
               placeholder="请输入..." />
           )}
         </Form.Item>
         <Form.Item label="现病史" style={{ marginLeft: 15 }}>
           {getFieldDecorator("hisTre", {})(
-            <TextArea style={{ width: 870 }} autoSize={{ minRows: 3, maxRows: 10 }}
+            <TextArea style={{ width: 1100 }} autoSize={{ minRows: 3, maxRows: 10 }}
               placeholder="请输入..." />
           )}
         </Form.Item>
         <Form.Item label="病人体征" style={{ marginLeft: 0 }}>
           {getFieldDecorator("perHis", {})(
-            <TextArea style={{ width: 870 }} autoSize={{ minRows: 3, maxRows: 10 }}
+            <TextArea style={{ width: 1100 }} autoSize={{ minRows: 3, maxRows: 10 }}
               placeholder="请输入..." />
           )}
         </Form.Item>
         <Form.Item label="中医证型" style={{ marginLeft: 0 }}>
           {getFieldDecorator("perHis", {})(
-            <TextArea style={{ width: 870 }} autoSize={{ minRows: 3, maxRows: 10 }}
+            <TextArea style={{ width: 1100 }} autoSize={{ minRows: 3, maxRows: 10 }}
               placeholder="请输入..." />
           )}
         </Form.Item>
@@ -253,13 +253,13 @@ class RecordUpload extends Component {
         </Form.Item> */}
         <Form.Item label="诊断" style={{ marginLeft: 27 }}>
           {getFieldDecorator("prvMedHis", {})(
-            <TextArea style={{ width: 870 }} autoSize={{ minRows: 1, maxRows: 10 }}
+            <TextArea style={{ width: 1100 }} autoSize={{ minRows: 1, maxRows: 10 }}
               placeholder="请输入..." />
           )}
         </Form.Item>
         <Form.Item label="处方" style={{ marginLeft: 27 }}>
           {getFieldDecorator("treAdv", {})(
-            <TextArea style={{ width: 870 }} autoSize={{ minRows: 2, maxRows: 10 }}
+            <TextArea style={{ width: 1100 }} autoSize={{ minRows: 2, maxRows: 10 }}
               placeholder="请输入..." />
           )}
         </Form.Item>

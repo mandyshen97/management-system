@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Input, Icon, Button, Table, Form, Row, img, Divider, Page, DatePicker, Message, Col, Modal, Popconfirm } from "antd";
+import { Input, Drawer, Button, Table, Form, Row, img, Divider, Page, DatePicker, Message, Col, Modal, Popconfirm } from "antd";
 import './tongue.less';
 import ReactEcharts from "echarts-for-react";
 class Tongue extends Component {
@@ -8,6 +8,7 @@ class Tongue extends Component {
         this.state = {
             pageNum: 1,
             totalNum: 4,
+            drawerSwitch: false,
             dataSource : [
               {
                 key: '1',
@@ -192,7 +193,9 @@ class Tongue extends Component {
     }
 
     show(record) {
-        
+      this.setState({
+        drawerSwitch: true,
+      })
     }
     handleOk= () => {
       this.setState({
@@ -244,6 +247,12 @@ class Tongue extends Component {
         })
         this.fetchData()
     }
+    // 抽屉等组件关闭
+    onClose = () => {
+      this.setState({
+      drawerSwitch: false,
+      })
+    }
 
     render() {
         const { form } = this.props;
@@ -286,11 +295,11 @@ class Tongue extends Component {
                     </Form.Item>
                     <Form.Item>
                     <Button type="primary" onClick={this.showModal}>
-                        康复趋势图
+                        康复评估
                     </Button>
                     </Form.Item>
                 </Form>
-                <Modal title="康复趋势图" visible={this.state.visible}
+                <Modal title="康复评估图" visible={this.state.visible}
                 onOk={this.handleOk} onCancel={this.handleCancel} width="600px">
                 <strong>健康得分：</strong><div><ReactEcharts option={this.getOption()} theme="ThemeStyle" /></div>
                 <Table dataSource={this.state.dataSource} columns={this.state.columns} />;
@@ -303,6 +312,71 @@ class Tongue extends Component {
                     columns={this.state.tableColumns}
                     dataSource={this.state.patientData}
                     ></Table>
+              <Drawer
+                  title="患者病历"
+                  placement="right"
+                  width="700"
+                  closable={false}
+                  onClose={this.onClose}
+                  visible={this.state.drawerSwitch}>
+                  <div className="demo-drawer-profile">
+                    <Row>
+                      <Col span={12}>
+                        <strong>患者姓名:</strong><span style={{ marginLeft: 20 }}>匿名</span>
+                      </Col>
+                      <Col span={12}>
+                        <strong>主治医生:</strong><span style={{ marginLeft: 45 }}>陶建军</span>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col span={12}>
+                        <strong>性别:</strong><span style={{ marginLeft: 50 }}>男</span>
+                      </Col>
+                      <Col span={12}>
+                        <strong>生日:</strong><span style={{ marginLeft: 72 }}>1962-09-14</span>
+                      </Col>
+                    </Row>
+
+                    <Row>
+                      <Col span={12}>
+                        <strong>身高(cm):</strong><span style={{ marginLeft: 20 }}>175 </span>
+                      </Col>
+                      <Col span={12}>
+                        <strong>体重(kg)：</strong><span style={{ marginLeft: 37 }}>80 </span>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col>
+                        <strong>主诉：</strong><div className='setformat'>因“腰痛3个月，面色苍白1个月，发热2周”入院。</div>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col>
+                        <strong>现病史：</strong><div className='setformat'>患者3个月来长久站立后觉腰痛，休息后缓解，无关节红肿及发热等不适。1个月来腰痛加重，伴左腹股沟部位疼痛及左下肢隐痛不适，脸色渐苍白，无自觉头晕、心慌及气短等不适，未经特殊处理。半个月来无诱因午后发热，体温可达38．0℃以上，不伴寒战，夜间出汗较多，晨起可自行退热，时感心慌，无咳嗽、咳痰，无腹痛、腹泻，无便血、黑便，无尿急、尿痛、尿频、血尿及酱油色尿。因腰痛日渐加重，发热不退，需卧床休息，偶服布洛芬止痛。在当地医院发现重度贫血，怀疑“骨髓瘤”转入我院。发病以来无消瘦，大便0～2次／d，黄色成形便，小便正常。</div>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col>
+                        <strong>既往史：</strong><div className='setformat'>既往体健，无烟酒嗜好。父母体健，家族史无特殊。</div>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col>
+                        <strong>检查图像：</strong><div className='setformat'><img src={"http://10.13.81.189:8001/tongue2.jpg"} width="300px" alt=""/></div>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col>
+                        <strong>辅助检查：</strong><div className='setformat'>T37．8℃，P90次／min，R20次／min，BP130／70mmHg(1mmHg=0．133kPa)。发育正常，神志清楚。皮肤苍白。左侧腹股沟饱满，可触及数个黄豆大小淋巴结，边界不清楚，无触痛。结膜苍白，巩膜不黄，咽无充血，扁桃体不大。颈无抵抗，气管居中，甲状腺不大，胸骨下段压痛。双肺叩诊清音，呼吸音清晰，未闻及干湿性啰音。心界不大，心率90次／min，律齐，未闻及杂音。腹软，无压痛及反跳痛，肝脾肋下未及，无移动性浊音，肠鸣音正常。脊柱无弯曲，活动不受限，椎体无压痛，下肢无水肿，生理反射存在，未引出病理反射。</div>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col>
+                        <strong>诊断：</strong><div className='setformat'>胃癌</div>
+                      </Col>
+                    </Row>
+                  </div>
+                </Drawer>
             </div>
         )
     }

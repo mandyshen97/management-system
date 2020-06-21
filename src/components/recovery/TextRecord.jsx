@@ -13,35 +13,44 @@ class TextRecord extends Component {
             dataSource : [
               {
                 key: '1',
-                count: '1',
+                cureDate: '2018-10-23',
                 healthScore: 55,
-                medicine: '旋覆花，全瓜蒌，碧桃干，老鹳草，五味子，生甘草，黄芪，仙灵脾，巴戟天，苁蓉',
+                symptom: "咳嗽、咳痰带血、发热",
+                medicine: '旋覆花，全瓜蒌，碧桃干，老鹳草，五味子，甘草，黄芪，仙灵脾，巴戟天，苁蓉',
               },
               {
                 key: '2',
-                count: '2',
+                cureDate: '2019-03-04',
                 healthScore: 65,
+                symptom: "憋喘、咳嗽、咳痰",
                 medicine: '甘草，干姜，乌梅，黑附子，细辛，炒苍术，秦艽，百部，黄芪，制黄精，百合，黄柏炭，制鳖甲，红花，灵磁石，野丹参',
               },
               {
                 key: '3',
-                count: '3',
+                cureDate: '2020-02-15',
                 healthScore: 82,
-                medicine: '诃子肉、生晒参片、炙甘草、砂仁、黄柏',
+                symptom: "发热，咳嗽，咳痰不出",
+                medicine: '百合，甘草，生晒参片，炙甘草，砂仁，黄柏',
               },
             ],
             columns : [
               {
-                title: '就诊次数',
-                dataIndex: 'count',
-                key: 'count',
-                width:100
+                title: '就诊时间',
+                dataIndex: 'cureDate',
+                key: 'cureDate',
+                width: 120
               },
               {
                 title: '健康得分',
                 dataIndex: 'healthScore',
                 key: 'healthScore',
-                width:100
+                width: 100
+              },
+              {
+                title: '症状',
+                dataIndex: 'symptom',
+                key: 'symptom',
+                width: 200
               },
               {
                 title: '用药处方',
@@ -66,7 +75,7 @@ class TextRecord extends Component {
                   title: '就诊时间',
                   dataIndex: 'createAt',
                   key: 'createdAt',
-                  width: 100,
+                  width: 90,
                 },
                 {
                     title: '主诉',
@@ -127,21 +136,21 @@ class TextRecord extends Component {
             patientData: [
                 {
                     "key": "1",
-                    "id": 24,
+                    "id": 124,
                     "name": "匿名",
                     "createAt": "2018-10-23",
                     "chfCmp": "咳嗽、咳痰伴憋喘1月余",
                     "hisPreIll": "1月前患者无明显诱因出现咳嗽，阵发性，夜间重，咳痰，量多，憋喘呈阵发性，无明显胸痛，无咽痛、无发热、无肌肉关节疼痛，无畏寒、寒战，无鼻塞流涕，无恶心呕吐，无腹痛腹泻等，于齐鲁医院就诊，诊断为“慢性支气管炎急性发作”，给予“舒利迭、莫西沙星、顺尔宁”口服治疗，效果一般，症状未见明显减轻，患者仍有咳嗽、咳痰憋喘症状，5天前患者于我院门诊就诊，行胸部CT示“右肺炎症、肺气肿、肺大泡、胸膜肥厚，双肺钙化灶。”表现，今日为进一步诊治，收入我院。",
-                    "prvMedHis": "否认“高血压、冠心病、糖尿病”病史。否认肝炎、结核等传染病史。否认外伤史及手术史。无输血史。否认药物食物过敏史。预防接种史不详。",
+                    "prvMedHis": "否认“高血压、糖尿病”病史。否认肝炎、结核等传染病史。否认外伤史及手术史。无输血史。否认药物食物过敏史。预防接种史不详。",
                     "disease": "肺癌",
                     "diseaseProb": "55"
                 },
                 {
                     "key": "2",
-                    "id": 234,
+                    "id": 251,
                     "name": "匿名",
                     "createAt": "2019-03-04",
-                    "chfCmp": "咳嗽3周。",
+                    "chfCmp": "咳嗽数年。",
                     "hisPreIll": "缘患者于3周前无明显诱因起出现咳嗽，咯黄白色痰，无咯血，无发热，无气促，间胸闷心悸，胃纳差，曾以肺结核在我院门诊就诊，给予中药调理，咳痰明显好转，但仍有咳嗽，稍气促，无心慌胸闷，今日来我院门诊就诊，为进一步诊治收入我科。入院症见：神志清，精神一般，咳嗽，咳少量白痰，不易咳出，无发热，无恶寒，口干口苦，无明显气促，无鼻塞流涕，无咽痛，间有胸闷心悸，无头晕头痛，睡眠欠佳，胃纳差，无尿频尿急尿痛，二便调。",
                     "prvMedHis": "既往有'先天性心脏病'病史，长期服用阿司匹林，地高辛；否认高血压、糖尿病等内科病史；否认肝炎、结核等传染病病史；否认重大外伤史。",
                     "disease": "肺癌",
@@ -149,12 +158,12 @@ class TextRecord extends Component {
                 },
                 {
                     "key": "3",
-                    "id": 532,
+                    "id": 459,
                     "name": "匿名",
                     "createAt": "2020-02-15",
                     "chfCmp": "寒闭肺气咳嗽肋痛",
                     "hisPreIll": "2年前来所求诊，以手按右肋部，疼痛难忍，呻吟不已。发热、咳嗽、气粗，夜不安寐，面目黧黑。脉弦紧，舌苔白腻。脉症合参，此系风寒外束，痰饮内伏，郁久酿热所致。",
-                    "prvMedHis": "暂无",
+                    "prvMedHis": "患者2月前受凉后出现发热，最高40.0℃，伴有恶寒，咳嗽气短，活动后校门气短，当时在我院查胸部CT示左下肺软组织密度，转徐州四院进一步诊疗，结合痰培养考虑慢性感染阻塞性肺不张，遂去上海长海医院行\"肺泡灌洗\"，发热好转，憋喘减轻出院；返家仍时感活动后憋喘，咳嗽痰粘稠不易咳出，近期在当地查血生化示肝功能升高（未见报告单），今为中西医治疗特来我院。发病以来患者神清精神可，咳嗽，咳吐白粘痰，无寒战汗出，无呕血咯血，无恶心呕吐，无腹痛腹泻，无肢体抽搐，进食睡眠可。",
                     "disease": "肺癌",
                     "diseaseProb": "82"
                 },
@@ -195,7 +204,7 @@ class TextRecord extends Component {
               trigger: 'axis'
           },
           xAxis: { //X轴坐标值
-              data: ['1','2','3']
+              data: ['2018-10-23','2019-03-04','2020-02-15']
           },
           yAxis: {
               type: 'value' //数值轴，适用于连续数据
@@ -217,8 +226,8 @@ class TextRecord extends Component {
         })
     }
     render() {
-        const { form } = this.props;
-        const { getFieldDecorator } = form;
+        const { form } = this.props
+        const { getFieldDecorator } = form
         return (
             <div className="main-content">
                 <Form layout="inline" >
@@ -257,14 +266,16 @@ class TextRecord extends Component {
                     </Form.Item>
                     <Form.Item>
                     <Button type="primary" onClick={this.showModal}>
-                        康复趋势图
+                        康复评估
                     </Button>
                     </Form.Item>
                 </Form>
-                <Modal title="康复趋势图" visible={this.state.visible}
-                onOk={this.handleOk} onCancel={this.handleCancel} width="600px">
-                <strong>健康得分：</strong><div ><ReactEcharts option={this.getOption()} theme="ThemeStyle" /></div>
-                <Table dataSource={this.state.dataSource} columns={this.state.columns} />;
+                <Modal title="康复评估图" visible={this.state.visible}
+                onOk={this.handleOk} onCancel={this.handleCancel} width="800px">
+                <strong>健康得分曲线：</strong>
+                <ReactEcharts option={this.getOption()} theme="ThemeStyle" />
+                <strong>用药详情：</strong>
+                <Table dataSource={this.state.dataSource} columns={this.state.columns} />
               </Modal>
                 <Table
                     bordered

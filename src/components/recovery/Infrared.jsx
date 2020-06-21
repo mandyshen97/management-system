@@ -129,7 +129,7 @@ class Infrared extends Component {
             patientData: [
                 {
                     "key": "1",
-                    "id": 21,
+                    "id": 121,
                     "name": "匿名",
                     "createAt": "2019-01-24",
                     "imagePath": "http://10.13.81.189:8001/ruxian1.png",
@@ -259,11 +259,11 @@ class Infrared extends Component {
                     </Form.Item>
                     <Form.Item>
                     <Button type="primary" onClick={this.showModal}>
-                        康复趋势图
+                        康复评估
                     </Button>
                     </Form.Item>
                 </Form>
-                <Modal title="康复趋势图" visible={this.state.visible}
+                <Modal title="康复评估图" visible={this.state.visible}
                 onOk={this.handleOk} onCancel={this.handleCancel} width='600px'>
                 <strong>健康得分：</strong><div><ReactEcharts option={this.getOption()} theme="ThemeStyle" /></div>
                 <Table dataSource={this.state.dataSource} columns={this.state.columns} />;
@@ -279,7 +279,7 @@ class Infrared extends Component {
                 <Drawer
                   title="患者病历"
                   placement="right"
-                  width="640"
+                  width="700"
                   closable={false}
                   onClose={this.onClose}
                   visible={this.state.drawerSwitch}>

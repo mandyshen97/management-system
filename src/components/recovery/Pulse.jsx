@@ -296,11 +296,11 @@ class Pulse extends Component {
                     </Form.Item>
                     <Form.Item>
                     <Button type="primary" onClick={this.showModal}>
-                        康复趋势图
+                        康复评估
                     </Button>
                     </Form.Item>
                 </Form>
-                <Modal title="康复趋势图" visible={this.state.visible}
+                <Modal title="康复评估图" visible={this.state.visible}
                 onOk={this.handleOk} onCancel={this.handleCancel} width="600px">
                 <strong>健康得分：</strong><div><ReactEcharts option={this.getOption1()} theme="ThemeStyle" /></div>
                 <Table dataSource={this.state.dataSource} columns={this.state.columns} />;
