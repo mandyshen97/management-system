@@ -1,7 +1,8 @@
 import React, { Component, Fragment } from 'react';
-import { Input, Drawer, Button, Table, Form, Row, img, Divider, Page, DatePicker, Message, Col, Modal, Popconfirm } from "antd";
+import { Input, Drawer, Button, Table, Form, Row,  Tabs, Divider, Page, DatePicker, Message, Col, Modal, Popconfirm } from "antd";
 import './tongue.less';
 import ReactEcharts from "echarts-for-react";
+const { TabPane } = Tabs;
 class Tongue extends Component {
     constructor(props) {
         super(props);
@@ -255,11 +256,11 @@ class Tongue extends Component {
     }
 
     render() {
-        const { form } = this.props;
-        const { getFieldDecorator } = form;
+        // const { form } = this.props;
+        // const { getFieldDecorator } = form;
         return (
             <div className="main-content">
-                <Form layout="inline" >
+                {/* <Form layout="inline" >
                     <Form.Item>
                     <span className="input-text">患者id</span>
                     {getFieldDecorator("patientId", {})(
@@ -303,8 +304,19 @@ class Tongue extends Component {
                 onOk={this.handleOk} onCancel={this.handleCancel} width="600px">
                 <strong>健康得分：</strong><div><ReactEcharts option={this.getOption()} theme="ThemeStyle" /></div>
                 <Table dataSource={this.state.dataSource} columns={this.state.columns} />;
-              </Modal>
-                <Table
+              </Modal> */}
+              <Tabs defaultActiveKey="1">
+                    <TabPane tab="红外热成像图变化" key="1">
+                        scasfa
+                    </TabPane>
+                    <TabPane tab="舌象图谱变化" key="2">
+                        fsafsaf
+                    </TabPane>
+                    <TabPane tab="脉象数据变化" key="3">
+                        afsafaf
+                    </TabPane>
+                </Tabs>
+                {/* <Table
                     bordered
                     pagination={{
                         pageSize: 50,
@@ -376,7 +388,7 @@ class Tongue extends Component {
                       </Col>
                     </Row>
                   </div>
-                </Drawer>
+                </Drawer> */}
             </div>
         )
     }
