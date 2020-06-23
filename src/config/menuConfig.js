@@ -61,26 +61,26 @@ const menuList = [
     path: '/admin/recovery',
     icon: 'switcher',
     children: [
-      {
-        title: '红外热成像图',
-        path: '/admin/recovery/infrared',
-        icon: 'image'
-      },
-      {
-        title: '舌象图谱',
-        path: '/admin/recovery/tongue',
-        // icon: 'fileJpg'
-      },
-      {
-        title: '脉象数据',
-        path: '/admin/recovery/pulse',
-        // icon: 'line'
-      },
-      {
-        title: '病历文本数据',
-        path: '/admin/recovery/textRecord',
-        // icon: 'line'
-      },
+      // {
+      //   title: '红外热成像图',
+      //   path: '/admin/recovery/infrared',
+      //   icon: 'image'
+      // },
+      // {
+      //   title: '舌象图谱',
+      //   path: '/admin/recovery/tongue',
+      //   // icon: 'fileJpg'
+      // },
+      // {
+      //   title: '脉象数据',
+      //   path: '/admin/recovery/pulse',
+      //   // icon: 'line'
+      // },
+      // {
+      //   title: '病历文本数据',
+      //   path: '/admin/recovery/textRecord',
+      //   // icon: 'line'
+      // },
       {
         title: '用药帮助',
         path: '/admin/recovery/Medicine',

@@ -239,7 +239,7 @@ class TextAnalysis extends Component {
                     <Col span={10} style={{ marginLeft: 15 }}>{this.state.simMedRecord.prvMedHis}</Col>
                 </Row>
                 <br />
-                <Row justify="space-between">
+                {/* <Row justify="space-between">
                     <Col span={2}>
                         <div className="m-box">个人史</div>
                     </Col>
@@ -254,7 +254,7 @@ class TextAnalysis extends Component {
                     <Col span={10}>{this.state.medRecord.famHis}</Col>
                     <Col span={10} style={{ marginLeft: 15 }}>{this.state.simMedRecord.famHis}</Col>
                 </Row>
-                <br />
+                <br /> */}
                 <Row justify="space-between">
                     <Col span={2}>
                         <div className="m-box">中医证型</div>
@@ -273,7 +273,14 @@ class TextAnalysis extends Component {
                 <br />
                 <Row justify="space-between">
                     <Col span={2}>
-                        <div className="m-box">处方</div>
+                        <div className="m-box">西医主药</div>
+                    </Col>
+                    <Col span={10}><p>威猛，卡铂</p></Col>
+                    <Col span={10} style={{ marginLeft: 15 }}><p>长春花碱</p></Col>
+                </Row>
+                <Row justify="space-between">
+                    <Col span={2}>
+                        <div className="m-box">中医辅药</div>
                     </Col>
                     <Col span={10}>{this.state.medRecord.prescription}</Col>
                     <Col span={10} style={{ marginLeft: 15 }}>{this.state.simMedRecord.prescription}</Col>

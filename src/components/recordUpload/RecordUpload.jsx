@@ -9,6 +9,7 @@ class RecordUpload extends Component {
     super(props);
     this.state = {
       doctorList: [],
+      diseaseList: [],
       visible: false,
       fileList: [],
       loadingStatus: false,
@@ -71,6 +72,7 @@ class RecordUpload extends Component {
   }
   componentDidMount() {
     this.getDoctors();
+    this.getDiseases();
     // console.log(this.state.doctorList)
   }
   // 获取医生列表，并将form表单中doctor选择框赋值
@@ -90,6 +92,28 @@ class RecordUpload extends Component {
           })
           this.setState({
             doctorList: newDoctorList
+          })
+        }
+      }).catch((err) => {
+        console.log(err)
+      })
+  }
+  getDiseases = () => {
+    API.getDisease().
+      then((response) => {
+        let _code = response.code,
+          _data = response.data;
+        if (_code === "200") {
+          let newDiseaseList = []
+          _data.forEach(item => {
+            newDiseaseList.push({
+              "value": item.id,
+              "label": item.disease
+            })
+
+          })
+          this.setState({
+            diseaseList: newDiseaseList
           })
         }
       }).catch((err) => {
@@ -142,6 +166,7 @@ class RecordUpload extends Component {
     const { form } = this.props;
     const { getFieldDecorator } = form;
     const options = this.state.doctorList.map(d => <Option key={d.value}>{d.label}</Option>);
+    const disOptions = this.state.diseaseList.map(d => <Option key={d.value}>{d.label}</Option>);
     return (
       <Form layout="inline">
         <Form.Item label="病人id" style={{ marginLeft: 15 }}>
@@ -206,18 +231,28 @@ class RecordUpload extends Component {
             </Radio.Group>
           )}
         </Form.Item>
-        <Form.Item label="健康得分" style={{ marginLeft: 135 }}>
-          {getFieldDecorator("healthScore", {})(
-            <Input
-              style={{ width: 210, marginRight: 25 }}
-              // prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />}
-              placeholder="请输入健康得分"
-            />
+        <Form.Item label="诊断" style={{ marginLeft: 165 }}>
+          {getFieldDecorator("diagnosis", {})(
+            <Select style={{ width: 200, marginRight: 25 }} placeholder="请选择" >
+            {disOptions}
+          </Select>
           )}
         </Form.Item>
         <Form.Item label="主诉" style={{ marginLeft: 27 }}>
           {getFieldDecorator("chfCmp", {})(
-            <TextArea style={{ width: 1100 }} autoSize={{ minRows: 2, maxRows: 10 }}
+            <TextArea style={{ width: 350, height: 32, marginRight: 25 }} autoSize={{ minRows: 1, maxRows: 10 }}
+              placeholder="请输入..." />
+          )}
+        </Form.Item>
+        <Form.Item label="症状" style={{ marginLeft: 0 }}>
+          {getFieldDecorator("perHis", {})(
+            <TextArea style={{ width: 350, height: 32, marginRight: 25 }} autoSize={{ minRows: 1, maxRows: 10 }}
+              placeholder="请输入..." />
+          )}
+        </Form.Item>
+        <Form.Item label="中医证型" style={{ marginLeft: 0 }}>
+          {getFieldDecorator("perHis", {})(
+            <TextArea style={{ width: 200, height: 32 }} autoSize={{ minRows: 1, maxRows: 10 }}
               placeholder="请输入..." />
           )}
         </Form.Item>
@@ -233,50 +268,102 @@ class RecordUpload extends Component {
               placeholder="请输入..." />
           )}
         </Form.Item>
-        <Form.Item label="病人体征" style={{ marginLeft: 0 }}>
-          {getFieldDecorator("perHis", {})(
-            <TextArea style={{ width: 1100 }} autoSize={{ minRows: 3, maxRows: 10 }}
+        
+        <Form.Item label="血液检查" style={{ marginLeft: 0 }}>
+          {getFieldDecorator("bloodTest", {})(
+            <TextArea style={{ width: 600 }} autoSize={{ minRows: 2, maxRows: 10 }}
               placeholder="请输入..." />
           )}
         </Form.Item>
-        <Form.Item label="中医证型" style={{ marginLeft: 0 }}>
-          {getFieldDecorator("perHis", {})(
-            <TextArea style={{ width: 1100 }} autoSize={{ minRows: 3, maxRows: 10 }}
-              placeholder="请输入..." />
-          )}
-        </Form.Item>
-        {/* <Form.Item label="治疗建议" style={{ marginLeft: 27 }}>
-          {getFieldDecorator("famHis", {})(
-            <TextArea style={{ width: 870 }} autoSize={{ minRows: 2, maxRows: 10 }}
-              placeholder="请输入..." />
-          )}
-        </Form.Item> */}
-        <Form.Item label="诊断" style={{ marginLeft: 27 }}>
-          {getFieldDecorator("prvMedHis", {})(
-            <TextArea style={{ width: 1100 }} autoSize={{ minRows: 1, maxRows: 10 }}
-              placeholder="请输入..." />
-          )}
-        </Form.Item>
-        <Form.Item label="处方" style={{ marginLeft: 27 }}>
-          {getFieldDecorator("treAdv", {})(
-            <TextArea style={{ width: 1100 }} autoSize={{ minRows: 2, maxRows: 10 }}
+        <Form.Item label="检查异常" style={{ marginLeft: 25 }}>
+          {getFieldDecorator("bloodException", {})(
+            <TextArea style={{ width: 400 }} autoSize={{ minRows: 2, maxRows: 10 }}
               placeholder="请输入..." />
           )}
         </Form.Item>
         <br/>
-        <Form.Item label="上传资料" >
-          {getFieldDecorator("files", {})(
+        <Form.Item label="红外热像" >
+          {getFieldDecorator("infraFiles", {})(
             <Upload multiple={true}>
               <Button type="primary" icon="upload">选择要上传文件的文件</Button>
             </Upload>
           )}
         </Form.Item>
+        <Form.Item label="描述" style={{ marginLeft: 0 }}>
+          {getFieldDecorator("infraDesc", {})(
+            <TextArea style={{ width: 400, height: 32 }} autoSize={{ minRows: 1, maxRows: 10 }}
+              placeholder="请输入..." />
+          )}
+        </Form.Item>
+        <Form.Item label="异常">
+          {getFieldDecorator("infraException", {})(
+            <TextArea style={{ width: 400, height: 32 }} autoSize={{ minRows: 1, maxRows: 10 }}
+              placeholder="请输入..." />
+          )}
+        </Form.Item>
         <br />
+
+        <Form.Item label="舌象图谱" >
+          {getFieldDecorator("infraFiles", {})(
+            <Upload multiple={true}>
+              <Button type="primary" icon="upload">选择要上传文件的文件</Button>
+            </Upload>
+          )}
+        </Form.Item>
+        <Form.Item label="描述" style={{ marginLeft: 0 }}>
+          {getFieldDecorator("tongueDesc", {})(
+            <TextArea style={{ width: 400, height: 32 }} autoSize={{ minRows: 1, maxRows: 10 }}
+              placeholder="请输入..." />
+          )}
+        </Form.Item>
+        <Form.Item label="异常">
+          {getFieldDecorator("tongueException", {})(
+            <TextArea style={{ width: 400, height: 32 }} autoSize={{ minRows: 1, maxRows: 10 }}
+              placeholder="请输入..." />
+          )}
+        </Form.Item>
+        <br />
+
+        <Form.Item label="脉象数据" >
+          {getFieldDecorator("pulseFiles", {})(
+            <Upload multiple={true}>
+              <Button type="primary" icon="upload">选择要上传文件的文件</Button>
+            </Upload>
+          )}
+        </Form.Item>
+        <Form.Item label="描述" style={{ marginLeft: 0 }}>
+          {getFieldDecorator("pulseDesc", {})(
+            <TextArea style={{ width: 400, height: 32 }} autoSize={{ minRows: 1, maxRows: 10 }}
+              placeholder="请输入..." />
+          )}
+        </Form.Item>
+        <Form.Item label="异常">
+          {getFieldDecorator("pulseException", {})(
+            <TextArea style={{ width: 400, height: 32 }} autoSize={{ minRows: 1, maxRows: 10 }}
+              placeholder="请输入..." />
+          )}
+        </Form.Item>
+        <br />
+        <Form.Item label="西医主药" style={{ marginLeft: 0 }}>
+          {getFieldDecorator("mainMedicine", {})(
+              <Select style={{ width: 400, marginRight: 20 }} placeholder="请选择" mode="multiple">
+                {options}
+              </Select>
+            )}
+        </Form.Item>
+        <Form.Item label="中医辅药">
+          {getFieldDecorator("auxMedicine", {})(
+              <Select style={{ width: 600, marginRight: 25 }} placeholder="请选择" mode="multiple">
+                {options}
+              </Select>
+            )}
+        </Form.Item>
+        <br/>
         <Form.Item>
           <Button type="primary" onClick={this.handleSubmit} style={{ marginLeft: 70 }}>
             提交
           </Button>
-          <Button type="primary" onClick={this.handleReset} style={{ marginLeft: 10, backgroundColor: 'green' }}>
+          <Button type="primary" onClick={this.handleReset} style={{ marginLeft: 10, backgroundColor: 'green', borderColor: 'green' }}>
             重置
           </Button>
         </Form.Item>
