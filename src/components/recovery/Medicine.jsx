@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Button, Table, Form, Tabs, DatePicker, Modal, Select, TreeSelect} from "antd";
+import { Input, Button, Table, Form, Tabs, DatePicker, Modal, Select, TreeSelect } from "antd";
 import ReactEcharts from "echarts-for-react";
 
 const { SHOW_PARENT } = TreeSelect;
@@ -13,6 +13,99 @@ class Medicine extends Component {
         this.state = {
             visible: false,
             value: undefined,
+            mainMedColumn: [
+                {
+                    title: '名称',
+                    dataIndex: 'name',
+                    key: 'name',
+                    width: 70,
+                    align: "center"
+                },
+                {
+                    title: '药理作用',
+                    dataIndex: 'medUse',
+                    key: 'medUse',
+                    width: 70,
+                    align: "center"
+                },
+                {
+                    title: '副作用',
+                    dataIndex: 'badEffect',
+                    key: 'badEffect',
+                    width: 70,
+                    align: "center"
+                }
+            ],
+            mainMedData: [
+                {
+                    'key': '1',
+                    'name': '环磷酰胺',
+                    'medUse': '作为抗肿瘤药，用于恶性淋巴瘤、多发性骨髓瘤、乳腺癌、小细胞肺癌、卵巢癌、神经母细胞瘤、视网膜母细胞瘤、尤因肉瘤、软组织肉瘤以及急性白血病和慢性淋巴细胞白血病等',
+                    'badEffect': '环磷酰胺可杀伤精子，但为可逆性。超高剂量时（>120mg/kg）可引起心肌损伤及肾毒性'
+                },
+                {
+                    'key': '2',
+                    'name': '异环磷酰胺',
+                    'medUse': '用于抗肿瘤：白血病，精原细胞睾丸癌，肺癌，非何杰金氏淋巴瘤，宫颈癌，卵巢癌及复发性、难治性实体瘤。',
+                    'badEffect': '骨髓抑制较严重，大多数病例均有恶心、呕吐及脱发等症状'
+                },
+            ],
+            secondaryMedColumn: [
+                {
+                    title: '名称',
+                    dataIndex: 'name',
+                    key: 'name',
+                    width: 70,
+                    align: "center"
+                },
+                {
+                    title: '功效',
+                    dataIndex: 'medUse',
+                    key: 'medUse',
+                    width: 70,
+                    align: "center"
+                },
+                {
+                    title: '毒性',
+                    dataIndex: 'toxicity',
+                    key: 'toxicity',
+                    width: 70,
+                    align: "center"
+                }
+            ],
+            secondaryMedData: [
+                {
+                    'key': '1',
+                    'name': '旋覆花',
+                    'medUse': '降气化痰用于咳喘痰多及痰饮蓄结，胸膈痞满等',
+                    'toxicity': '有绒毛，易刺激咽喉作痒而致呛咳呕吐'
+                },
+                {
+                    'key': '2',
+                    'name': '全瓜蒌',
+                    'medUse': '主治乳痈溃烂，日久不愈，乳腺癌，肿块坚硬疼痛等',
+                    'toxicity': '暂无',
+                },
+                {
+                    'key': '3',
+                    'name': '碧桃干',
+                    'medUse': '敛汗涩精，活血止血，止痛。用于盗汗，遗精，心腹痛，吐血，妊娠下血',
+                    'toxicity': '肠胃不好不宜食用',
+                },
+                {
+                    'key': '4',
+                    'name': '老鹤草',
+                    'medUse': '对福氏痢疾杆菌、大肠杆菌、金黄葡萄球菌、绿脓杆菌均有较强的抑制作用',
+                    'toxicity': '胃肠道反应(表现为恶心、呕吐、腹泻等)，中枢神经系统反应(表现为头晕、耳鸣、听力下降)，心血管系统反应(如心律失常)等',
+                },
+                {
+                    'key': '5',
+                    'name': '五味子',
+                    'medUse': '有敛肺止咳、滋补涩精、止泻止汗之效',
+                    'toxicity': '用量不当会出现打嗝、反酸、胃痛、胃部烧灼感、肠鸣、乏力、困倦等不良反应'
+                },
+
+            ],
             options: [
                 {
                     value: 'tlk',
@@ -358,8 +451,8 @@ class Medicine extends Component {
                 {
                     name: '数值', //坐标点名称
                     type: 'line', //线类型
-                    data: [100, 90, 150, 300, 500, 1000, 900, 450, 500, 400, 152, 
-                        110, 87, 150, 310, 487, 1020, 910, 437, 501, 430, 150, 
+                    data: [100, 90, 150, 300, 500, 1000, 900, 450, 500, 400, 152,
+                        110, 87, 150, 310, 487, 1020, 910, 437, 501, 430, 150,
                         105, 80, 157, 310, 506, 989, 906, 460, 505, 389, 150] //坐标点数据
                 }
             ]
@@ -412,8 +505,8 @@ class Medicine extends Component {
                 {
                     name: '数值', //坐标点名称
                     type: 'line', //线类型
-                    data: [70, 90, 120, 200, 400, 600, 800, 680, 450, 600, 520, 
-                        310, 165, 150, 340, 285, 850, 900, 740, 430, 501, 100, 
+                    data: [70, 90, 120, 200, 400, 600, 800, 680, 450, 600, 520,
+                        310, 165, 150, 340, 285, 850, 900, 740, 430, 501, 100,
                         75, 125, 170, 310, 500, 900, 909, 840, 540, 390, 250] //坐标点数据
                 }
             ]
@@ -428,7 +521,7 @@ class Medicine extends Component {
         console.log(`selected ${value}`);
     }
     search() {
-        
+
     }
     render() {
         const { form } = this.props;
@@ -477,6 +570,9 @@ class Medicine extends Component {
                     columns={this.state.dataColumns}
                     dataSource={this.state.data}>
                 </Table>
+                <br />
+                <hr />
+                <br />
                 <Tabs defaultActiveKey="1">
                     <TabPane tab="红外热成像图变化" key="1">
                         <Table
@@ -486,7 +582,7 @@ class Medicine extends Component {
                             columns={this.state.infraredColumns}
                             dataSource={this.state.infraredData}>
                         </Table>
-                        <strong style={{fontSize: "18px"}}>结论：左右肺瓣对称，肺部炎症减少，有好转趋势</strong>
+                        <strong style={{ fontSize: "18px" }}>结论：左右肺瓣对称，肺部炎症减少，有好转趋势</strong>
                     </TabPane>
                     <TabPane tab="舌象图谱变化" key="2">
                         <Table
@@ -496,7 +592,7 @@ class Medicine extends Component {
                             columns={this.state.tongueColumns}
                             dataSource={this.state.tongueData}>
                         </Table>
-                        <strong style={{fontSize: "18px"}}>结论：舌色红润，视为健康</strong>
+                        <strong style={{ fontSize: "18px" }}>结论：舌色红润，视为健康</strong>
                     </TabPane>
                     <TabPane tab="脉象数据变化" key="3">
                         <Table
@@ -506,10 +602,21 @@ class Medicine extends Component {
                             columns={this.state.pulseColumns}
                             dataSource={this.state.pulseData}>
                         </Table>
-                        <strong style={{fontSize: "18px"}}>结论：脉象逐渐稳定，规律，起落明显</strong>
+                        <strong style={{ fontSize: "18px" }}>结论：脉象逐渐稳定，规律，起落明显</strong>
                     </TabPane>
                 </Tabs>
-                <br/>
+                <br />
+                <hr />
+                <br />
+                <div style={{ fontSize: "20px" }}>
+                    <span><strong>患者ID：</strong>256</span>
+                    <span style={{ marginLeft: "70px" }}><strong>性别：</strong>男</span>
+                    <span style={{ marginLeft: "70px" }}><strong>身高：</strong>174cm</span>
+                    <span style={{ marginLeft: "70px" }}><strong>体重：</strong>72kg</span>
+                    <span style={{ marginLeft: "70px" }}><strong>过敏史：</strong>否认药物过敏史</span>
+                    <span style={{ marginLeft: "70px" }}><strong>初始就诊时间：</strong>2018-08-02</span>
+                </div>
+                <br />
                 <Table
                     bordered
                     pagination={false}
@@ -545,39 +652,70 @@ class Medicine extends Component {
                         }} />
                 </Table>
                 <Modal title="用药帮助" visible={this.state.visible}
-                    onOk={this.handleOk} onCancel={this.handleCancel} width="600px">
-                    <strong style={{ fontSize: "20px" }}>基于专家用药模型的用药检查</strong>
-                    <br/>
-                    <br/>
-                    <Select
-                        mode="multiple"
-                        style={{ width: '100%' }}
-                        placeholder="请选择"
-                        defaultValue={[]}
-                        onChange={this.handleChange}
-                    > 
-                        {this.state.selectMedicine}
-                    </Select>
-                    {/* <p>
+                    onOk={this.handleOk} onCancel={this.handleCancel} width="1000px">
+                    <div style={{ display: 'flex' }}>
+                        <div style={{ width: '500px' }}>
+                            <div style={{ fontSize: '20px' }}>
+                                <span><strong style={{ marginRight: '100px' }}>患者ID:</strong>256</span>
+                            </div>
+                            <div style={{ fontSize: '20px' }}>
+                                <strong>现有主药概述:</strong>
+                                <Table
+                                    bordered
+                                    pagination={false}
+                                    scroll={{ y: true, y: 300 }}
+                                    columns={this.state.mainMedColumn}
+                                    dataSource={this.state.mainMedData}
+                                ></Table>
+                            </div>
+                            <div style={{ fontSize: '20px' }}>
+                                <strong>现有辅药概述:</strong>
+                                <Table
+                                    bordered
+                                    pagination={false}
+                                    scroll={{ y: true, y: 300 }}
+                                    columns={this.state.secondaryMedColumn}
+                                    dataSource={this.state.secondaryMedData}
+                                ></Table>
+                            </div>
+                        </div>
+                        <div style={{ marginLeft: '60px' }}>
+                            <strong style={{ fontSize: "20px" }}>基于专家用药模型的用药检查</strong>
+                            <br />
+                            <br />
+                            <Select
+                                mode="multiple"
+                                style={{ width: '100%' }}
+                                placeholder="请选择"
+                                defaultValue={[]}
+                                onChange={this.handleChange}
+                            >
+                                {this.state.selectMedicine}
+                            </Select>
+                            {/* <p>
                         <br />
                         是否加入与甘草关联的<span style={{ color: 'red' }}>太子参(0.84)</span>?
                         <br />
                         是否加入与白术关联的<span style={{ color: 'red' }}>麦冬(0.72)</span>?
                         </p>
                     <br /> */}
-                    <strong style={{ fontSize: "20px" }}>基于相似电子病历的处方推荐</strong>
-                    <br/>
-                    <br/>
-                    <Select
-                        mode="multiple"
-                        style={{ width: '100%' }}
-                        placeholder="请选择"
-                        defaultValue={[]}
-                        onChange={this.handleChange}
-                    > 
-                        {this.state.selectPrescription}
-                    </Select>
-                        {/* <br />
+                            <br/>
+                            <br/>
+                            <hr/>
+                            <br/>
+                            <strong style={{ fontSize: "20px" }}>基于相似电子病历的处方推荐</strong>
+                            <br />
+                            <br />
+                            <Select
+                                mode="multiple"
+                                style={{ width: '100%' }}
+                                placeholder="请选择"
+                                defaultValue={[]}
+                                onChange={this.handleChange}
+                            >
+                                {this.state.selectPrescription}
+                            </Select>
+                            {/* <br />
                         <span style={{ color: 'red', margin: '2px 8px 2px 0px' }}>柴胡(1.00)</span>
                         <span style={{ color: 'red', margin: '2px 8px' }}>当归(0.90)</span>
                         <span style={{ color: 'red', margin: '2px 8px' }}>白芍(0.85)</span>
@@ -587,35 +725,44 @@ class Medicine extends Component {
                         <br />
                         <span style={{ margin: '2px 8px 2px 0px' }}>香附(0.55)</span>
                         <span style={{ margin: '2px 8px' }}>八月札(0.40)</span> */}
-                    <strong style={{ fontSize: "20px" }}>基于决策树的医生自选药物</strong>
-                    <br />
-                    <br />
-                    <TreeSelect
-                        showSearch
-                        style={{ width: '100%' }}
-                        value={this.state.value}
-                        dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                        placeholder="请选择"
-                        allowClear
-                        multiple
-                        treeDefaultExpandAll
-                        onChange={this.onChange}
-                    >
-                     <TreeNode value="CTX" title="酰胺">
-                        <TreeNode value="liver" title="护肝">
-                            <TreeNode value="sweetGrass" title="六味乌灵片" />
-                            <TreeNode value="goldSilverFlower" title="金银花" />
-                        </TreeNode>
-                        <TreeNode value="stomach" title="护胃">
-                            <TreeNode value="chaihu" title="柴胡" />
-                        </TreeNode>
-                     </TreeNode>
-                     <TreeNode value="IFO" title="异环磷酰胺">
-                        <TreeNode value="spleen" title="护脾">
-                            <TreeNode value="baishao" title="白芍" />
-                        </TreeNode>
-                     </TreeNode>   
-                    </TreeSelect>
+                            <br/>
+                            <br/>
+                            <hr style={{width:'400px'}}/>
+                            <br/>
+                            <strong style={{ fontSize: "20px" }}>基于决策树的医生自选药物</strong>
+                            <br />
+                            <br />
+                            <TreeSelect
+                                showSearch
+                                style={{ width: '100%' }}
+                                value={this.state.value}
+                                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                                placeholder="请选择"
+                                allowClear
+                                multiple
+                                treeDefaultExpandAll
+                                onChange={this.onChange}
+                            >
+                                <TreeNode value="CTX" title="酰胺">
+                                    <TreeNode value="liver" title="护肝">
+                                        <TreeNode value="sweetGrass" title="六味乌灵片" />
+                                        <TreeNode value="goldSilverFlower" title="金银花" />
+                                    </TreeNode>
+                                    <TreeNode value="stomach" title="护胃">
+                                        <TreeNode value="chaihu" title="柴胡" />
+                                    </TreeNode>
+                                </TreeNode>
+                                <TreeNode value="IFO" title="异环磷酰胺">
+                                    <TreeNode value="spleen" title="护脾">
+                                        <TreeNode value="baishao" title="白芍" />
+                                    </TreeNode>
+                                    <TreeNode value="spleen" title="护肾">
+                                        <TreeNode value="baishao" title="猪苓" />
+                                    </TreeNode>
+                                </TreeNode>
+                            </TreeSelect>
+                        </div>
+                    </div>
                 </Modal>
             </div>
         )
