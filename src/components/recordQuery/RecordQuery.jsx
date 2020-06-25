@@ -132,7 +132,7 @@ class RecordQuery extends Component {
         <Option key={"沉香"}>{"沉香"}</Option>,
     ],
     selectMainMedicine: [
-        <Option key={"酰胺"}>{"酰胺"}</Option>,
+        <Option key={"环磷酰胺"}>{"环磷酰胺"}</Option>,
         <Option key={"阿霉素"}>{"阿霉素"}</Option>,
         <Option key={"依托泊甙"}>{"依托泊甙"}</Option>,
     ]

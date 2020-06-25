@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Input, Button, Table, Form, Tabs, DatePicker, Modal, Select, TreeSelect } from "antd";
+import { Input, Button, Table, Form, Tabs, DatePicker, Modal, Select, TreeSelect, Row, Col} from "antd";
 import ReactEcharts from "echarts-for-react";
-
+import "./Medicine.less"
 const { SHOW_PARENT } = TreeSelect;
 const { TabPane } = Tabs;
 const { Column, ColumnGroup } = Table;
@@ -18,8 +18,9 @@ class Medicine extends Component {
                     title: '名称',
                     dataIndex: 'name',
                     key: 'name',
-                    width: 70,
-                    align: "center"
+                    width: 50,
+                    align: "center",
+                    className: "column-medicine-name"
                 },
                 {
                     title: '药理作用',
@@ -29,7 +30,7 @@ class Medicine extends Component {
                     align: "center"
                 },
                 {
-                    title: '副作用',
+                    title: '用药效果',
                     dataIndex: 'badEffect',
                     key: 'badEffect',
                     width: 70,
@@ -40,7 +41,7 @@ class Medicine extends Component {
                 {
                     'key': '1',
                     'name': '环磷酰胺',
-                    'medUse': '作为抗肿瘤药，用于恶性淋巴瘤、多发性骨髓瘤、乳腺癌、小细胞肺癌、卵巢癌、神经母细胞瘤、视网膜母细胞瘤、尤因肉瘤、软组织肉瘤以及急性白血病和慢性淋巴细胞白血病等',
+                    'medUse': '作为抗肿瘤药，用于恶性淋巴瘤、多发性骨髓瘤、乳腺癌、小细胞肺癌、卵巢癌以及急性白血病和慢性淋巴细胞白血病等',
                     'badEffect': '环磷酰胺可杀伤精子，但为可逆性。超高剂量时（>120mg/kg）可引起心肌损伤及肾毒性'
                 },
                 {
@@ -55,8 +56,9 @@ class Medicine extends Component {
                     title: '名称',
                     dataIndex: 'name',
                     key: 'name',
-                    width: 70,
-                    align: "center"
+                    width: 40,
+                    align: "center",
+                    className: "column-medicine-name"
                 },
                 {
                     title: '功效',
@@ -165,10 +167,10 @@ class Medicine extends Component {
                     "key": "1",
                     "date": "2018-08-02",
                     "iniSymptoms": "反复咯血",
-                    "mainMedcine": "酰胺，异环磷酰胺",
+                    "mainMedcine": "环磷酰胺，异环磷酰胺",
                     "auxMedicine": "旋覆花，全瓜蒌，碧桃干，老鹳草，五味子，甘草，黄芪，仙灵脾，巴戟天，苁蓉",
                     "effect": "咳嗽、咳痰带血、发热",
-                    "abnDetection": "红细胞计数偏低，血红蛋白浓度偏低",
+                    "bloodDetection": "红细胞计数偏低，血红蛋白浓度偏低，癌胚抗原CEA偏高",
                     "infraredDetection": "肺部出现炎症",
                     "tongueDetection": "舌苔白厚，腻",
                     "pulseDetection": "端直而长，挺然指下，如按琴弦。",
@@ -177,10 +179,10 @@ class Medicine extends Component {
                     "key": "2",
                     "date": "2018-12-04",
                     "iniSymptoms": "咳嗽、咳痰带血、发热",
-                    "mainMedcine": "酰胺，阿霉素",
+                    "mainMedcine": "环磷酰胺，阿霉素",
                     "auxMedicine": "甘草，干姜，乌梅，黑附子，细辛，炒苍术，秦艽，百部，黄芪，制黄精，百合，黄柏炭，制鳖甲，红花，灵磁石，野丹参",
                     "effect": "憋喘、咳嗽、咳痰",
-                    "abnDetection": "肝脏转氨酶等指标升高",
+                    "bloodDetection": "癌胚抗原CEA偏高，肝脏转氨酶等指标升高",
                     "infraredDetection": "左右肺瓣不均衡",
                     "tongueDetection": "无异常",
                     "pulseDetection": "脉来急数，时而一止，止无定数",
@@ -192,7 +194,7 @@ class Medicine extends Component {
                     "mainMedcine": "长春新碱",
                     "auxMedicine": "百合，甘草，生晒参片，炙甘草，砂仁，黄柏",
                     "effect": "发热，咳嗽，咳痰不出",
-                    "abnDetection": "红细胞、血红蛋白降低",
+                    "bloodDetection": "癌胚抗原CEA及癌抗原CA125偏高，红细胞、血红蛋白降低",
                     "infraredDetection": "无异常",
                     "tongueDetection": "舌苔厚",
                     "pulseDetection": "脉搏快有不规则的间歇。",
@@ -582,6 +584,7 @@ class Medicine extends Component {
                             columns={this.state.infraredColumns}
                             dataSource={this.state.infraredData}>
                         </Table>
+                        <Button type="primary" onClick={this.fetchData} style={{marginRight: '10px'}}> 红外图像分析</Button>
                         <strong style={{ fontSize: "18px" }}>结论：左右肺瓣对称，肺部炎症减少，有好转趋势</strong>
                     </TabPane>
                     <TabPane tab="舌象图谱变化" key="2">
@@ -592,6 +595,7 @@ class Medicine extends Component {
                             columns={this.state.tongueColumns}
                             dataSource={this.state.tongueData}>
                         </Table>
+                        <Button type="primary" onClick={this.fetchData} style={{marginRight: '10px'}}> 舌象分析</Button>
                         <strong style={{ fontSize: "18px" }}>结论：舌色红润，视为健康</strong>
                     </TabPane>
                     <TabPane tab="脉象数据变化" key="3">
@@ -602,6 +606,7 @@ class Medicine extends Component {
                             columns={this.state.pulseColumns}
                             dataSource={this.state.pulseData}>
                         </Table>
+                        <Button type="primary" onClick={this.fetchData} style={{marginRight: '10px'}}> 脉象分析</Button>
                         <strong style={{ fontSize: "18px" }}>结论：脉象逐渐稳定，规律，起落明显</strong>
                     </TabPane>
                 </Tabs>
@@ -624,16 +629,16 @@ class Medicine extends Component {
                     dataSource={this.state.patientData}
                 >
                     <Column title="就诊时间" dataIndex="date" key="date" align="center" width="120px" />
-                    <Column title="初始症状" dataIndex="iniSymptoms" key="iniSymptoms" align="center" pxwidth="150px" />
+                    <Column title="初始症状" dataIndex="iniSymptoms" key="iniSymptoms" align="center" width="140px" className="column-text"/>
                     <ColumnGroup title="用药情况">
-                        <Column title="主药" dataIndex="mainMedcine" key="mainMedcine" align="center" width="150px" />
-                        <Column title="辅药" dataIndex="auxMedicine" key="auxMedicine" align="center" width="200px" />
+                        <Column title="主药" dataIndex="mainMedcine" key="mainMedcine" align="center" width="120px" />
+                        <Column title="辅药" dataIndex="auxMedicine" key="auxMedicine" align="center" width="150px" />
                     </ColumnGroup>
-                    <Column title="用药效果" dataIndex="effect" key="effect" align="center" width="150px" />
-                    <Column title="异常检测结果" dataIndex="abnDetection" key="abnDetection" align="center" width="150px" />
-                    <Column title="红外检测分析" dataIndex="infraredDetection" key="infraredDetection" align="center" width="150px" />
-                    <Column title="舌象检测分析" dataIndex="tongueDetection" key="tongueDetection" align="center" width="150px" />
-                    <Column title="脉象检测分析" dataIndex="pulseDetection" key="pulseDetection" align="center" width="150px" />
+                    <Column title="用药效果" dataIndex="effect" key="effect" align="center" width="140px" className="column-text"/>
+                    <Column title="血液检测异常" dataIndex="bloodDetection" key="bloodDetection" align="center" width="120px" />
+                    <Column title="红外检测异常" dataIndex="infraredDetection" key="infraredDetection" align="center" width="120px" />
+                    <Column title="舌象检测异常" dataIndex="tongueDetection" key="tongueDetection" align="center" width="120px" />
+                    <Column title="脉象检测异常" dataIndex="pulseDetection" key="pulseDetection" align="center" width="120px" />
                     <Column title="操作" dataIndex="action" key="action" align="center"
                         render={(text, record, index) => {
                             return (
@@ -658,26 +663,30 @@ class Medicine extends Component {
                             <div style={{ fontSize: '20px' }}>
                                 <span><strong style={{ marginRight: '100px' }}>患者ID:</strong>256</span>
                             </div>
-                            <div style={{ fontSize: '20px' }}>
-                                <strong>现有主药概述:</strong>
-                                <Table
-                                    bordered
-                                    pagination={false}
-                                    scroll={{ y: true, y: 300 }}
-                                    columns={this.state.mainMedColumn}
-                                    dataSource={this.state.mainMedData}
-                                ></Table>
-                            </div>
-                            <div style={{ fontSize: '20px' }}>
-                                <strong>现有辅药概述:</strong>
-                                <Table
-                                    bordered
-                                    pagination={false}
-                                    scroll={{ y: true, y: 300 }}
-                                    columns={this.state.secondaryMedColumn}
-                                    dataSource={this.state.secondaryMedData}
-                                ></Table>
-                            </div>
+                            <Row className="table-frame">
+                                <div style={{ fontSize: '20px' }}>
+                                    <strong>现有主药概述:</strong>
+                                    <Table
+                                        bordered
+                                        pagination={false}
+                                        scroll={{ y: true, y: 200 }}
+                                        columns={this.state.mainMedColumn}
+                                        dataSource={this.state.mainMedData}
+                                    ></Table>
+                                </div>
+                            </Row>
+                            <Row className="table-frame">
+                                <div style={{ fontSize: '20px' }}>
+                                    <strong>现有辅药概述:</strong>
+                                    <Table
+                                        bordered
+                                        pagination={false}
+                                        scroll={{ y: true, y: 200 }}
+                                        columns={this.state.secondaryMedColumn}
+                                        dataSource={this.state.secondaryMedData}
+                                    ></Table>
+                                </div>
+                            </Row>
                         </div>
                         <div style={{ marginLeft: '60px' }}>
                             <strong style={{ fontSize: "20px" }}>基于专家用药模型的用药检查</strong>
@@ -692,13 +701,6 @@ class Medicine extends Component {
                             >
                                 {this.state.selectMedicine}
                             </Select>
-                            {/* <p>
-                        <br />
-                        是否加入与甘草关联的<span style={{ color: 'red' }}>太子参(0.84)</span>?
-                        <br />
-                        是否加入与白术关联的<span style={{ color: 'red' }}>麦冬(0.72)</span>?
-                        </p>
-                    <br /> */}
                             <br/>
                             <br/>
                             <hr/>
@@ -715,21 +717,12 @@ class Medicine extends Component {
                             >
                                 {this.state.selectPrescription}
                             </Select>
-                            {/* <br />
-                        <span style={{ color: 'red', margin: '2px 8px 2px 0px' }}>柴胡(1.00)</span>
-                        <span style={{ color: 'red', margin: '2px 8px' }}>当归(0.90)</span>
-                        <span style={{ color: 'red', margin: '2px 8px' }}>白芍(0.85)</span>
-                        <span style={{ color: 'red', margin: '2px 8px' }}>白术(0.74)</span>
-                        <span style={{ color: 'red', margin: '2px 8px' }}>茯苓(0.70)</span>
-                        <span style={{ color: 'red', margin: '2px 8px' }}>郁金(0.65)</span>
-                        <br />
-                        <span style={{ margin: '2px 8px 2px 0px' }}>香附(0.55)</span>
-                        <span style={{ margin: '2px 8px' }}>八月札(0.40)</span> */}
+                           
                             <br/>
                             <br/>
                             <hr style={{width:'400px'}}/>
                             <br/>
-                            <strong style={{ fontSize: "20px" }}>基于决策树的医生自选药物</strong>
+                            <strong style={{ fontSize: "20px" }}>基于树状结构的医生自选药物</strong>
                             <br />
                             <br />
                             <TreeSelect
@@ -743,7 +736,7 @@ class Medicine extends Component {
                                 treeDefaultExpandAll
                                 onChange={this.onChange}
                             >
-                                <TreeNode value="CTX" title="酰胺">
+                                <TreeNode value="CTX" title="环磷酰胺">
                                     <TreeNode value="liver" title="护肝">
                                         <TreeNode value="sweetGrass" title="六味乌灵片" />
                                         <TreeNode value="goldSilverFlower" title="金银花" />
