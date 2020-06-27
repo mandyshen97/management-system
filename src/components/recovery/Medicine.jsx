@@ -42,7 +42,7 @@ class Medicine extends Component {
                     'key': '1',
                     'name': '环磷酰胺',
                     'medUse': '作为抗肿瘤药，用于恶性淋巴瘤、多发性骨髓瘤、乳腺癌、小细胞肺癌、卵巢癌以及急性白血病和慢性淋巴细胞白血病等',
-                    'badEffect': '环磷酰胺可杀伤精子，但为可逆性。超高剂量时（>120mg/kg）可引起心肌损伤及肾毒性'
+                    'badEffect': '用药后，癌细胞数量得到明显抑制，但是环磷酰胺可杀伤精子，超高剂量时（>120mg/kg）可引起心肌损伤及肾毒性'
                 },
                 {
                     'key': '2',
@@ -376,9 +376,9 @@ class Medicine extends Component {
                 { "key": '3', "pulseTime": "2019-02-24", "description": "滑脉滑利如走珠，虚如葱管弱如棉，实脉举按力均强，如按竹棍好思量" }
             ],
             infraredData: [
-                { "key": '1', "infraTime": "2018-08-02", "description": "腹水、盆腔积液,考虑左肺上叶周围型肺癌并右肺转移，建议进一步检查" },
-                { "key": '2', "infraTime": "2018-12-04", "description": "胸廓对称，无畸形，双肺呼吸音清，未闻及干湿啰音,双侧胸腔少量积液,符合左肺下叶周围型肺Ca并左肺门淋巴结、肝多发转移表现" },
-                { "key": '3', "infraTime": "2019-02-24", "description": "左肺上叶病灶，结合临床考虑肿瘤性病变及治疗后改变（病灶较前2018-12-04显示减小）；右肺中叶少许感染性病变；右肺中叶点状钙化灶；左侧包裹型胸腔积液，伴左下肺肺不张；左侧部分肋骨内侧缘骨皮质密度显示增高。头颅MRI示:颅内转移性病灶," }
+                { "key": '1', "infraTime": "2018-08-02", "description": "肺部局部和其他部位存在一定温差,考虑左肺上叶周围型肺癌并右肺转移，建议进一步检查" },
+                { "key": '2', "infraTime": "2018-12-04", "description": "胸廓对称，无畸形,双侧胸腔少量积液,肺部温差明显降低，考虑癌细胞数量减少，建议按照既定治疗方案继续治疗" },
+                { "key": '3', "infraTime": "2019-02-24", "description": "胸廓对称，现与常人无疑" }
             ],
             data: [
                 {
@@ -737,17 +737,19 @@ class Medicine extends Component {
                                 onChange={this.onChange}
                             >
                                 <TreeNode value="CTX" title="环磷酰胺">
-                                    <TreeNode value="liver" title="护肝">
-                                        <TreeNode value="sweetGrass" title="六味乌灵片" />
-                                        <TreeNode value="goldSilverFlower" title="金银花" />
+                                    <TreeNode value="liver" title="补精">
+                                        <TreeNode value="sweetGrass" title="地黄" />
+                                        <TreeNode value="goldSilverFlower" title="枸杞子" />
                                     </TreeNode>
-                                    <TreeNode value="stomach" title="护胃">
-                                        <TreeNode value="chaihu" title="柴胡" />
+                                    <TreeNode value="stomach" title="治心肌损伤">
+                                        <TreeNode value="chaihu" title="黄芪" />
+                                        <TreeNode value="huangqi" title="银杏叶" />
                                     </TreeNode>
                                 </TreeNode>
                                 <TreeNode value="IFO" title="异环磷酰胺">
-                                    <TreeNode value="spleen" title="护脾">
-                                        <TreeNode value="baishao" title="白芍" />
+                                    <TreeNode value="spleen" title="抗骨髓抑制">
+                                        <TreeNode value="baishao" title="鸡血藤" />
+                                        <TreeNode value="shudi" title="熟地" />
                                     </TreeNode>
                                     <TreeNode value="spleen" title="护肾">
                                         <TreeNode value="baishao" title="猪苓" />
