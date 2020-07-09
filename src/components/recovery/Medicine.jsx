@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Input, Button, Table, Form, Tabs, DatePicker, Modal, Select, TreeSelect, Row, Col} from "antd";
+import { Message, Input, Button, Table, Form, Tabs, DatePicker, Modal, Select, TreeSelect, Row} from "antd";
 import ReactEcharts from "echarts-for-react";
-import "./Medicine.less"
-const { SHOW_PARENT } = TreeSelect;
+import "./Medicine.less";
+import API from "../../api/api";
+
 const { TabPane } = Tabs;
 const { Column, ColumnGroup } = Table;
 const { TreeNode } = TreeSelect;
@@ -13,6 +14,11 @@ class Medicine extends Component {
         this.state = {
             visible: false,
             value: undefined,
+            emptyVisible: false,
+            reportVisible: false,
+            reportDesc: "",
+            reportExcp: "",
+            patientInfo: {},
             mainMedColumn: [
                 {
                     title: '名称',
@@ -199,17 +205,7 @@ class Medicine extends Component {
                     "tongueDetection": "舌苔厚",
                     "pulseDetection": "脉搏快有不规则的间歇。",
                 },
-            ],
-            url: [
-                "http://10.13.81.189:8001/feiai1.jpg",
-                "http://10.13.81.189:8001/feiai2.jpg",
-                "http://10.13.81.189:8001/feiai3.jpg"
-            ],
-            url1: [
-                "http://10.13.81.189:8001/tongue3.jpg",
-                "http://10.13.81.189:8001/tongue4.jpg",
-                "http://10.13.81.189:8001/tongue1.jpg"
-            ],
+            ],        
             infraredColumns: [
                 {
                     title: '就诊时间',
@@ -227,7 +223,7 @@ class Medicine extends Component {
                     render: (record, url, index) => {
                         return (
                             <div>
-                                <img src={this.state.url[index]} alt="" width="200px" height="200px" />
+                                <img src={this.state.infraredData[index].url} alt="" width="200px" height="200px" />
                             </div>
                         );
                     }
@@ -257,7 +253,7 @@ class Medicine extends Component {
                     render: (record, url, index) => {
                         return (
                             <div>
-                                <img src={this.state.url1[index]} alt="" width="200px" height="200px" />
+                                <img src={this.state.tongueData[index].url} alt="" width="200px" height="200px" />
                             </div>
                         );
                     }
@@ -317,12 +313,12 @@ class Medicine extends Component {
                     render: (record, url, index) => {
                         return (
                             <div>
-                                <img src={this.state.url[index]} alt="" width="200px" height="200px" />
+                                <img src={this.state.infraredData[index].url} alt="" width="200px" height="200px" />
                                 <br />
                                 <Button type="primary" size="small" style={{ marginTop: '5px', backgroundColor: 'green', borderColor: 'green' }}
-                                    onClick={() => this.show(record)
+                                    onClick={() => this.show("infrared", index)
                                     }>红外报告
-    </Button>
+                                </Button>
                             </div>
                         );
                     }
@@ -336,10 +332,10 @@ class Medicine extends Component {
                     render: (record, url1, index) => {
                         return (
                             <div>
-                                <img src={this.state.url1[index]} alt="" width="200px" height="200px" />
+                                <img src={this.state.tongueData[index].url} alt="" width="200px" height="200px" />
                                 <br />
                                 <Button type="primary" size="small" style={{ marginTop: '5px', backgroundColor: 'green', borderColor: 'green' }}
-                                    onClick={() => this.show(record)
+                                    onClick={() => this.show("tongue", index)
                                     }>舌像报告
     </Button>
                             </div>
@@ -357,28 +353,28 @@ class Medicine extends Component {
                             <div >
                                 <ReactEcharts option={this.getOption(index)} style={{ height: '200px', width: "", align: 'center' }} />
                                 <Button type="primary" size="small" style={{ marginTop: '5px', backgroundColor: 'green', borderColor: 'green' }}
-                                    onClick={() => this.show(record)
+                                    onClick={() => this.show("pulse", index)
                                     }>脉象报告
-    </Button>
+                                </Button>
                             </div>
                         );
                     }
                 },
             ],
+            infraredData: [
+                { "key": '1', "infraTime": "2018-08-02", "description": "肺部局部和其他部位存在一定温差,考虑左肺上叶周围型肺癌并右肺转移，建议进一步检查", "exception": "肺部出现炎症", "url": "http://10.13.81.189:8001/feiai1.jpg"},
+                { "key": '2', "infraTime": "2018-12-04", "description": "胸廓对称，无畸形,双侧胸腔少量积液,肺部温差明显降低，考虑癌细胞数量减少，建议按照既定治疗方案继续治疗", "exception": "左右肺瓣不均衡", "url": "http://10.13.81.189:8001/feiai2.jpg"},
+                { "key": '3', "infraTime": "2019-02-24", "description": "胸廓对称，现与常人无疑", "exception": "无异常", "url": "http://10.13.81.189:8001/feiai3.jpg" }
+            ],
             tongueData: [
-                { "key": '1', "tongueTime": "2018-08-02", "description": "舌苔薄,唾液粘稠，偏黄，湿气重" },
-                { "key": '2', "tongueTime": "2018-12-04", "description": "舌苔干薄，颜色偏黄，与肺病相关" },
-                { "key": '3', "tongueTime": "2019-02-24", "description": "暂无描述" }
+                { "key": '1', "tongueTime": "2018-08-02", "description": "舌苔薄,唾液粘稠，偏黄，湿气重", "exception": "舌苔白厚，腻", "url": "http://10.13.81.189:8001/tongue3.jpg"},
+                { "key": '2', "tongueTime": "2018-12-04", "description": "舌苔干薄，颜色偏黄，与肺病相关", "exception": "无异常", "url": "http://10.13.81.189:8001/tongue4.jpg" },
+                { "key": '3', "tongueTime": "2019-02-24", "description": "暂无描述", "exception": "舌苔厚", "url": "http://10.13.81.189:8001/tongue1.jpg"}
             ],
             pulseData: [
-                { "key": '1', "pulseTime": "2018-08-02", "description": "浮脉行于皮肤表，似同枯木水上漂，沉脉浮于筋骨间，推筋至骨用力寻" },
-                { "key": '2', "pulseTime": "2018-12-04", "description": "迟脉一息唯三至，分钟少于六十行，数脉一息五六至，九十以上为数频" },
-                { "key": '3', "pulseTime": "2019-02-24", "description": "滑脉滑利如走珠，虚如葱管弱如棉，实脉举按力均强，如按竹棍好思量" }
-            ],
-            infraredData: [
-                { "key": '1', "infraTime": "2018-08-02", "description": "肺部局部和其他部位存在一定温差,考虑左肺上叶周围型肺癌并右肺转移，建议进一步检查" },
-                { "key": '2', "infraTime": "2018-12-04", "description": "胸廓对称，无畸形,双侧胸腔少量积液,肺部温差明显降低，考虑癌细胞数量减少，建议按照既定治疗方案继续治疗" },
-                { "key": '3', "infraTime": "2019-02-24", "description": "胸廓对称，现与常人无疑" }
+                { "key": '1', "pulseTime": "2018-08-02", "description": "浮脉行于皮肤表，似同枯木水上漂，沉脉浮于筋骨间，推筋至骨用力寻", "exception": "端直而长，挺然指下，如按琴弦", "series": [100, 90, 150, 300, 500, 1000, 900, 450, 500, 400, 152,110, 87, 150, 310, 487, 1020, 910, 437, 501, 430, 150, 105, 80, 157, 310, 506, 989, 906, 460, 505, 389, 150]},
+                { "key": '2', "pulseTime": "2018-12-04", "description": "迟脉一息唯三至，分钟少于六十行，数脉一息五六至，九十以上为数频", "exception": "脉来急数，时而一止，止无定数", "series": [60, 90, 75, 200, 300, 500, 700, 550, 500, 400, 152, 210, 107, 160, 330, 487, 512, 450, 437, 501, 420, 130, 165, 96, 240, 310, 532, 768, 601, 450, 505, 389, 150]},
+                { "key": '3', "pulseTime": "2019-02-24", "description": "滑脉滑利如走珠，虚如葱管弱如棉，实脉举按力均强，如按竹棍好思量", "exception": "脉搏快有不规则的间歇", "series": [70, 90, 120, 200, 400, 600, 800, 680, 450, 600, 520, 310, 165, 150, 340, 285, 850, 900, 740, 430, 501, 100, 75, 125, 170, 310, 500, 900, 909, 840, 540, 390, 250]}
             ],
             data: [
                 {
@@ -395,18 +391,10 @@ class Medicine extends Component {
                 }
             ],
             selectPrescription: [
-                <Option key={"柴胡(1.00)"}>{"柴胡(1.00)"}</Option>,
-                <Option key={"当归(0.90"}>{"当归(0.90"}</Option>,
-                <Option key={"白芍(0.85)"}>{"白芍(0.85)"}</Option>,
-                <Option key={"白术(0.74)"}>{"白术(0.74)"}</Option>,
-                <Option key={"茯苓(0.70)"}>{"茯苓(0.70)"}</Option>,
-                <Option key={"郁金(0.65)"}>{"郁金(0.65)"}</Option>,
-                <Option key={"香附(0.55)"}>{"香附(0.55)"}</Option>,
-                <Option key={"八月札(0.40)"}>{"八月札(0.40)"}</Option>
+                
             ],
             selectMedicine: [
-                <Option key={"与甘草关联的太子参(0.84)"}>{"与甘草关联的太子参(0.84)"}</Option>,
-                <Option key={"与白术关联的麦冬(0.72)"}>{"与白术关联的麦冬(0.72)"}</Option>,
+                
             ]
         };
     }
@@ -414,106 +402,107 @@ class Medicine extends Component {
     handleOk = () => {
         this.setState({
             visible: false,
+            emptyVisible: false,
+            reportVisible: false,
         });
     }
     handleCancel = () => {
         this.setState({
             visible: false,
+            emptyVisible: false,
+            reportVisible: false,
         });
     }
-    medicineHelp = () => {
+    medicineHelp = (record) => {
+        
+        let tmpPriscription = [];
+        let tmpMedicine = []
+        let tmpData = ["柴胡(1.00)", "当归(0.72", "白芍(0.85)", "白术(0.74)", "茯苓(0.70)", "郁金(0.65)", "香附(0.55)", "八月札(0.40)"];
+        tmpData.forEach(item => {
+            tmpPriscription.push(<Option key={item}>{item}</Option>,)
+        });
+
+        tmpData = ["与甘草关联的太子参(0.84)", "与白术关联的麦冬(0.72)"];
+        tmpData.forEach(item => {
+            tmpMedicine.push(<Option key={item}>{item}</Option>,)
+        });
+        /*
+        let param = {
+            medicines: record.chineseMedicine
+        };
+        API.proMedicineHelp(param).then(res => {
+            let _data = res.data;
+            let _code = res.code;
+            let _msg = res.msg;
+            if (_code === "200") {
+              _data.data.map((item, index) => {
+                let selectItem = "与" + item.base + "关联的" + item.target + "(" + item.score + ")";
+                tmpMedicine.push(<Option key={selectItem}>{selectItem}</Option>,)
+              });
+            } else {
+              Message.error(_msg);
+            }
+          });
+          let param = {
+            medicines: record.simRecId
+        };
+        
+        API.simMedicineHelp(param).then(res => {
+        let _data = res.data;
+        let _code = res.code;
+        let _msg = res.msg;
+        if (_code === "200") {
+            _data.data.map((item, index) => {
+            let selectItem = item.name + "(" + item.score + ")";
+            tmpPriscription.push(<Option key={selectItem}>{selectItem}</Option>)
+            });
+        } else {
+            Message.error(_msg);
+        }
+        });
+        */
+
         this.setState({
+            selectMedicine: tmpMedicine,
+            selectPrescription: tmpPriscription,
             visible: true,
         });
     }
-    medicineHelp() {
 
-    }
     // 抽屉等组件关闭
     getOption = (index) => {
 
-        let option1 = {
-            title: {  //标题
-                // text: '折线图一',
-                x: 'center',
-                textStyle: { //字体颜色
-                    color: '#ccc'
-                }
-            },
-            tooltip: { //提示框组件
-                trigger: 'axis'
-            },
-            xAxis: { //X轴坐标值
-                data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32', '33']
-            },
-            yAxis: {
-                type: 'value' //数值轴，适用于连续数据
-            },
-            series: [
-                {
-                    name: '数值', //坐标点名称
-                    type: 'line', //线类型
-                    data: [100, 90, 150, 300, 500, 1000, 900, 450, 500, 400, 152,
-                        110, 87, 150, 310, 487, 1020, 910, 437, 501, 430, 150,
-                        105, 80, 157, 310, 506, 989, 906, 460, 505, 389, 150] //坐标点数据
-                }
-            ]
+        let xData = []
+        let len = this.state.pulseData[index].series.length
+        for(let i = 1; i <= len; i++) {
+            xData.push(i.toString())
         }
-        let option2 = {
-            title: {  //标题
-                // text: '折线图一',
-                x: 'center',
-                textStyle: { //字体颜色
-                    color: '#ccc'
-                }
-            },
-            tooltip: { //提示框组件
-                trigger: 'axis'
-            },
-            xAxis: { //X轴坐标值
-                data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32', '33']
-            },
-            yAxis: {
-                type: 'value' //数值轴，适用于连续数据
-            },
-            series: [
-                {
-                    name: '数值', //坐标点名称
-                    type: 'line', //线类型
-                    data: [60, 90, 75, 200, 300, 500, 700, 550, 500, 400, 152,
-                        210, 107, 160, 330, 487, 512, 450, 437, 501, 420, 130,
-                        165, 96, 240, 310, 532, 768, 601, 450, 505, 389, 150] //坐标点数据
-                }
-            ]
-        }
-        let option3 = {
-            title: {  //标题
-                // text: '折线图一',
-                x: 'center',
-                textStyle: { //字体颜色
-                    color: '#ccc'
-                }
-            },
-            tooltip: { //提示框组件
-                trigger: 'axis'
-            },
-            xAxis: { //X轴坐标值
-                data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32', '33']
-            },
-            yAxis: {
-                type: 'value' //数值轴，适用于连续数据
-            },
-            series: [
-                {
-                    name: '数值', //坐标点名称
-                    type: 'line', //线类型
-                    data: [70, 90, 120, 200, 400, 600, 800, 680, 450, 600, 520,
-                        310, 165, 150, 340, 285, 850, 900, 740, 430, 501, 100,
-                        75, 125, 170, 310, 500, 900, 909, 840, 540, 390, 250] //坐标点数据
-                }
-            ]
-        }
-        return index == 0 ? option1 : (index == 1 ? option2 : option3);
+        let option = {
+                title: {  //标题
+                    x: 'center',
+                    textStyle: { //字体颜色
+                        color: '#ccc'
+                    }
+                },
+                tooltip: { //提示框组件
+                    trigger: 'axis'
+                },
+                xAxis: { //X轴坐标值
+                    data: xData
+                },
+                yAxis: {
+                    type: 'value' //数值轴，适用于连续数据
+                },
+                series: [
+                    {
+                        name: '数值', //坐标点名称
+                        type: 'line', //线类型
+                        data: this.state.pulseData[index].series
+                    }
+                ]
+            }
+
+        return option;
     }
     onChange = value => {
         console.log('onChange ', value);
@@ -525,6 +514,73 @@ class Medicine extends Component {
     search() {
 
     }
+
+    show = (label, index) => {
+        let desc = label == "infra"? this.state.infraredData[index].description: label == "tongue"? this.state.tongueData[index].description: this.state.pulseData[index].description
+        let excp = label == "infra"? this.state.infraredData[index].exception: label == "tongue"? this.state.tongueData[index].exception: this.state.pulseData[index].exception
+        this.setState({
+            reportDesc: desc,
+            reportExcp: excp,
+            reportVisible: true,
+        })
+    }
+
+    fetchData() {
+        this.props.form.validateFields((err, values) => {
+            if (!err) {
+              let param = {
+                patientId: values.patientId,
+                startDate: values.startDate,
+                endDate: values.endDate,
+              };
+              API.recordTrace(param).then(res => {
+                let _data = res.data;
+                let _code = res.code;
+                let _msg = res.msg;
+                if (_code === "200") {
+                  _data.data.map((item, index) => {
+                    // 在这了更新irtUrl tongueUrl pulseSeries patientInfo
+                  });
+                  this.setState({
+
+                  })
+                } else if (_code === "302") {
+                  Message.error(_msg);
+                  setTimeout(() => {
+                    this.props.history.replace("/login");
+                  }, 1000);
+                } else {
+                  Message.error(_msg);
+                }
+              });
+            }
+          });
+    }
+
+    readPulse() {
+        var url = "http://10.13.81.189:8001/pulse1.txt";
+        var ajx = new XMLHttpRequest()
+        ajx.open("get", url, true)
+        ajx.onreadystatechange = function(){
+            console.log(ajx);
+            if(ajx.readyState!=4){
+                return;
+            }
+            if(ajx.status>=200){
+                console.log(ajx.responseText);
+            }
+        }        
+    }
+
+    emptyFunction = () => {
+        this.setState({
+            emptyVisible: true,
+          });
+    }
+    componentDidMount() {
+        this.readPulse();
+    }
+    
     render() {
         const { form } = this.props;
         const { getFieldDecorator } = form;
@@ -536,7 +592,6 @@ class Medicine extends Component {
                         {getFieldDecorator("patientId", {})(
                             <Input
                                 style={{ width: 100, marginRight: 15 }}
-                                // prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />}
                                 placeholder="患者id"
                             />
                         )}
@@ -580,33 +635,33 @@ class Medicine extends Component {
                         <Table
                             bordered
                             pagination={false}
-                            scroll={{ y: true, y: 500 }}
+                            scroll={{y: 500 }}
                             columns={this.state.infraredColumns}
                             dataSource={this.state.infraredData}>
                         </Table>
-                        <Button type="primary" onClick={this.fetchData} style={{marginRight: '10px'}}> 红外图像分析</Button>
+                        <Button type="primary" onClick={this.emptyFunction} style={{marginRight: '10px'}}> 红外图像分析</Button>
                         <strong style={{ fontSize: "18px" }}>结论：左右肺瓣对称，肺部炎症减少，有好转趋势</strong>
                     </TabPane>
                     <TabPane tab="舌象图谱变化" key="2">
                         <Table
                             bordered
                             pagination={false}
-                            scroll={{ y: true, y: 500 }}
+                            scroll={{y: 500 }}
                             columns={this.state.tongueColumns}
                             dataSource={this.state.tongueData}>
                         </Table>
-                        <Button type="primary" onClick={this.fetchData} style={{marginRight: '10px'}}> 舌象分析</Button>
+                        <Button type="primary" onClick={this.emptyFunction} style={{marginRight: '10px'}}> 舌象分析</Button>
                         <strong style={{ fontSize: "18px" }}>结论：舌色红润，视为健康</strong>
                     </TabPane>
                     <TabPane tab="脉象数据变化" key="3">
                         <Table
                             bordered
                             pagination={false}
-                            scroll={{ y: true, y: 500 }}
+                            scroll={{y: 500 }}
                             columns={this.state.pulseColumns}
                             dataSource={this.state.pulseData}>
                         </Table>
-                        <Button type="primary" onClick={this.fetchData} style={{marginRight: '10px'}}> 脉象分析</Button>
+                        <Button type="primary" onClick={this.emptyFunction} style={{marginRight: '10px'}}> 脉象分析</Button>
                         <strong style={{ fontSize: "18px" }}>结论：脉象逐渐稳定，规律，起落明显</strong>
                     </TabPane>
                 </Tabs>
@@ -614,18 +669,18 @@ class Medicine extends Component {
                 <hr />
                 <br />
                 <div style={{ fontSize: "20px" }}>
-                    <span><strong>患者ID：</strong>256</span>
-                    <span style={{ marginLeft: "70px" }}><strong>性别：</strong>男</span>
-                    <span style={{ marginLeft: "70px" }}><strong>身高：</strong>174cm</span>
-                    <span style={{ marginLeft: "70px" }}><strong>体重：</strong>72kg</span>
-                    <span style={{ marginLeft: "70px" }}><strong>过敏史：</strong>否认药物过敏史</span>
-                    <span style={{ marginLeft: "70px" }}><strong>初始就诊时间：</strong>2018-08-02</span>
+                    <span><strong>患者ID：</strong>{this.state.patientInfo.patientId}</span>
+                    <span style={{ marginLeft: "70px" }}><strong>性别：</strong>{this.state.patientInfo.gender == 1 ? "男" : "女"}</span>
+                    <span style={{ marginLeft: "70px" }}><strong>身高：</strong>{this.state.patientInfo.height} </span>
+                    <span style={{ marginLeft: "70px" }}><strong>体重：</strong>{this.state.patientInfo.weight}</span>
+                    <span style={{ marginLeft: "70px" }}><strong>过敏史：</strong>{this.state.patientInfo.allergy}</span>
+                    <span style={{ marginLeft: "70px" }}><strong>初始就诊时间：</strong>{this.state.patientInfo.firstTime}</span>
                 </div>
                 <br />
                 <Table
                     bordered
                     pagination={false}
-                    scroll={{ y: true, y: 300 }}
+                    scroll={{y: 300 }}
                     dataSource={this.state.patientData}
                 >
                     <Column title="就诊时间" dataIndex="date" key="date" align="center" width="120px" />
@@ -669,7 +724,7 @@ class Medicine extends Component {
                                     <Table
                                         bordered
                                         pagination={false}
-                                        scroll={{ y: true, y: 200 }}
+                                        scroll={{ y: 200 }}
                                         columns={this.state.mainMedColumn}
                                         dataSource={this.state.mainMedData}
                                     ></Table>
@@ -681,7 +736,7 @@ class Medicine extends Component {
                                     <Table
                                         bordered
                                         pagination={false}
-                                        scroll={{ y: true, y: 200 }}
+                                        scroll={{ y: 200 }}
                                         columns={this.state.secondaryMedColumn}
                                         dataSource={this.state.secondaryMedData}
                                     ></Table>
@@ -759,8 +814,32 @@ class Medicine extends Component {
                         </div>
                     </div>
                 </Modal>
+                <Modal
+                    title="提示"
+                    visible={this.state.emptyVisible}
+                    onOk={this.handleOk}
+                    onCancel={this.handleCancel}
+                    >
+                    <p>敬请期待！</p>
+                </Modal>
+                <Modal
+                    title="报告详情"
+                    visible={this.state.reportVisible}
+                    onOk={this.handleOk}
+                    onCancel={this.handleCancel}
+                    >
+                    <strong  style={{ fontSize: "18px" }}>检测描述</strong>
+                    <br/>
+                    {this.state.reportDesc}
+                    <br/>
+                    <br/>
+                    <strong  style={{ fontSize: "18px" }}>检测异常</strong>
+                    <br/>
+                    {this.state.reportExcp}
+                </Modal>
             </div>
         )
     }
+
 }
 export default Form.create()(Medicine);

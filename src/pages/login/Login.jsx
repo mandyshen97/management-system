@@ -34,7 +34,7 @@ class Login extends Component {
           username: values.username,
           password: values.password
         };
-        API.doctorLogin(param)
+        API.login(param)
           .then(res => {
             if (res.code !== "200") {
               Message.error("登录失败，用户名或密码错误！");
@@ -239,10 +239,10 @@ class Login extends Component {
                 {getFieldDecorator("remember", {
                   valuePropName: "checked",
                   initialValue: true
-                })(<Checkbox className="login-form-check">记住我</Checkbox>)}
-                <Link className="login-form-forgot" to="/login">
+                })}
+                {/* <Link className="login-form-forgot" to="/login">
                   忘记密码
-                </Link>
+                </Link> */}
                 <Button
                   type="primary"
                   block

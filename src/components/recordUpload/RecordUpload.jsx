@@ -129,20 +129,33 @@ class RecordUpload extends Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         let param = {
-          recordId:values.recordId,
-          doctorId: values.doctorId,
+          patientId:values.patientId,
           name: values.name,
-          gender: values.gender,
-          birthday: values.birthday,
-          weight: values.weight,
           height: values.height,
+          weight: values.weight,
+          doctorId: values.doctorId,
+          birthday: values.birthday,
+          gender: values.gender,
+          diseaseId: values.diseaseId,
           chfCmp: values.chfCmp,
+          patientSign: values.patientSign,
+          tcmType: values.tcmType,
+          preMedHis: values.preMedHis,
           hisPreIll: values.hisPreIll,
-          hisTre: values.hisTre,
-          prvMedHis: values.prvMedHis,
-          perHis: values.perHis,
-          famHis: values.famHis,
-          treAdv: values.treAdv
+          allergies: values.allergies,
+          bloodTest: values.bloodTest,
+          bloodExcp: values.bloodExcp,
+          irtFile: values.infraFile,
+          irtDesc: values.infraDesc,
+          irtExcp: values.infraExcp,
+          tongueFile: values.tongueFile,
+          tongueDesc: values.tongueDesc,
+          tongueExcp: values.tongueExcp,
+          pulseFile: values.pulseFile,
+          pulseDesc: values.pulseDesc,
+          pulseExcp: values.pulseExcp,
+          mainMedicine: values.mainMedicine,
+          auxMedicine: values.auxMedicine
         };
         API.uploadRecord(param).then((response) => {
           let _code = response.code,
@@ -150,9 +163,6 @@ class RecordUpload extends Component {
           Message.success(_msg);
           if (_code === "200") {
             Message.success('提交成功!');
-            // setTimeout(() => {
-            //     this.$router.push('/')
-            // }, 500);
           }
         }).catch((err) => {
           console.log(err)
@@ -170,10 +180,9 @@ class RecordUpload extends Component {
     return (
       <Form layout="inline">
         <Form.Item label="病人id" style={{ marginLeft: 15 }}>
-          {getFieldDecorator("recordId", {})(
+          {getFieldDecorator("patientId", {})(
             <Input
               style={{ width: 200, marginRight: 25 }}
-              // prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />}
               placeholder="请输入病人id"
             />
           )}
@@ -182,7 +191,6 @@ class RecordUpload extends Component {
           {getFieldDecorator("name", {})(
             <Input
               style={{ width: 200, marginRight: 25 }}
-              // prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />}
               placeholder="请输入姓名"
             />
           )}
@@ -191,7 +199,6 @@ class RecordUpload extends Component {
           {getFieldDecorator("height", {})(
             <Input
               style={{ width: 200, marginRight: 25 }}
-              // prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />}
               placeholder="请输入身高"
             />
           )}
@@ -201,7 +208,6 @@ class RecordUpload extends Component {
           {getFieldDecorator("weight", {})(
             <Input
               style={{ width: 160, marginRight: 25 }}
-              // prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />}
               placeholder="请输入体重"
             />
           )}
@@ -232,7 +238,7 @@ class RecordUpload extends Component {
           )}
         </Form.Item>
         <Form.Item label="诊断" style={{ marginLeft: 165 }}>
-          {getFieldDecorator("diagnosis", {})(
+          {getFieldDecorator("diseaseId", {})(
             <Select style={{ width: 200, marginRight: 25 }} placeholder="请选择" >
             {disOptions}
           </Select>
@@ -245,30 +251,35 @@ class RecordUpload extends Component {
           )}
         </Form.Item>
         <Form.Item label="症状" style={{ marginLeft: 0 }}>
-          {getFieldDecorator("perHis", {})(
+          {getFieldDecorator("patientSign", {})(
             <TextArea style={{ width: 350, height: 32, marginRight: 25 }} autoSize={{ minRows: 1, maxRows: 10 }}
               placeholder="请输入..." />
           )}
         </Form.Item>
         <Form.Item label="中医证型" style={{ marginLeft: 0 }}>
-          {getFieldDecorator("perHis", {})(
+          {getFieldDecorator("tcmType", {})(
             <TextArea style={{ width: 200, height: 32 }} autoSize={{ minRows: 1, maxRows: 10 }}
               placeholder="请输入..." />
           )}
         </Form.Item>
         <Form.Item label="既往史" style={{ marginLeft: 15 }}>
-          {getFieldDecorator("hisPreIll", {})(
+          {getFieldDecorator("preMedHis", {})(
             <TextArea style={{ width: 1100 }} autoSize={{ minRows: 2, maxRows: 10 }}
               placeholder="请输入..." />
           )}
         </Form.Item>
         <Form.Item label="现病史" style={{ marginLeft: 15 }}>
-          {getFieldDecorator("hisTre", {})(
+          {getFieldDecorator("hisPreIll", {})(
             <TextArea style={{ width: 1100 }} autoSize={{ minRows: 3, maxRows: 10 }}
               placeholder="请输入..." />
           )}
         </Form.Item>
-        
+        <Form.Item label="过敏史" style={{ marginLeft: 15 }}>
+          {getFieldDecorator("allergies", {})(
+            <TextArea style={{ width: 1100 }} autoSize={{ minRows: 1, maxRows: 10 }}
+              placeholder="请输入..." />
+          )}
+        </Form.Item>
         <Form.Item label="血液检查" style={{ marginLeft: 0 }}>
           {getFieldDecorator("bloodTest", {})(
             <TextArea style={{ width: 600 }} autoSize={{ minRows: 2, maxRows: 10 }}
@@ -276,14 +287,14 @@ class RecordUpload extends Component {
           )}
         </Form.Item>
         <Form.Item label="检查异常" style={{ marginLeft: 25 }}>
-          {getFieldDecorator("bloodException", {})(
+          {getFieldDecorator("bloodExcp", {})(
             <TextArea style={{ width: 400 }} autoSize={{ minRows: 2, maxRows: 10 }}
               placeholder="请输入..." />
           )}
         </Form.Item>
         <br/>
         <Form.Item label="红外热像" >
-          {getFieldDecorator("infraFiles", {})(
+          {getFieldDecorator("infraFile", {})(
             <Upload multiple={true}>
               <Button type="primary" icon="upload">选择要上传文件的文件</Button>
             </Upload>
@@ -296,7 +307,7 @@ class RecordUpload extends Component {
           )}
         </Form.Item>
         <Form.Item label="异常">
-          {getFieldDecorator("infraException", {})(
+          {getFieldDecorator("infraExcp", {})(
             <TextArea style={{ width: 400, height: 32 }} autoSize={{ minRows: 1, maxRows: 10 }}
               placeholder="请输入..." />
           )}
@@ -304,7 +315,7 @@ class RecordUpload extends Component {
         <br />
 
         <Form.Item label="舌象图谱" >
-          {getFieldDecorator("infraFiles", {})(
+          {getFieldDecorator("tongueFile", {})(
             <Upload multiple={true}>
               <Button type="primary" icon="upload">选择要上传文件的文件</Button>
             </Upload>
@@ -317,7 +328,7 @@ class RecordUpload extends Component {
           )}
         </Form.Item>
         <Form.Item label="异常">
-          {getFieldDecorator("tongueException", {})(
+          {getFieldDecorator("tongueExcp", {})(
             <TextArea style={{ width: 400, height: 32 }} autoSize={{ minRows: 1, maxRows: 10 }}
               placeholder="请输入..." />
           )}
@@ -325,7 +336,7 @@ class RecordUpload extends Component {
         <br />
 
         <Form.Item label="脉象数据" >
-          {getFieldDecorator("pulseFiles", {})(
+          {getFieldDecorator("pulseFile", {})(
             <Upload multiple={true}>
               <Button type="primary" icon="upload">选择要上传文件的文件</Button>
             </Upload>
@@ -338,7 +349,7 @@ class RecordUpload extends Component {
           )}
         </Form.Item>
         <Form.Item label="异常">
-          {getFieldDecorator("pulseException", {})(
+          {getFieldDecorator("pulseExcp", {})(
             <TextArea style={{ width: 400, height: 32 }} autoSize={{ minRows: 1, maxRows: 10 }}
               placeholder="请输入..." />
           )}

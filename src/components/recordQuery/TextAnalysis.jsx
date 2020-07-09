@@ -302,14 +302,14 @@ class TextAnalysis extends Component {
                         <span style={{color: 'rgba(0, 0, 0, 0.85)', fontSize: '16px', fontWeight: '500'}}>推荐处方用药：</span>
                         <br/>
                         <span style={{color:'red', margin: '2px 8px 2px 10px'}}>柴胡(1.00)</span>
-                        <span style={{color:'red', margin: '2px 8px'}}>当归(0.90)</span>
+                        <span style={{color:'red', margin: '2px 8px'}}>当归(0.91)</span>
                         <span style={{color:'red', margin: '2px 8px'}}>白芍(0.85)</span>
-                        <span style={{color:'red', margin: '2px 8px'}}>白术(0.74)</span>
-                        <span style={{color:'red', margin: '2px 8px'}}>茯苓(0.70)</span>
+                        <span style={{color:'red', margin: '2px 8px'}}>白术(0.77)</span>
+                        <span style={{color:'red', margin: '2px 8px'}}>茯苓(0.74)</span>
                         <span style={{color:'red', margin: '2px 8px'}}>郁金(0.65)</span>
                         <br/>
-                        <span style={{margin: '2px 8px 2px 10px'}}>香附(0.55)</span>
-                        <span style={{margin: '2px 8px'}}>八月札(0.40)</span>
+                        <span style={{margin: '2px 8px 2px 10px'}}>香附(0.58)</span>
+                        <span style={{margin: '2px 8px'}}>八月札(0.44)</span>
                     </p>
                 </Modal>
             </div>)

@@ -4,21 +4,12 @@ import { Switch, Redirect, Route } from 'react-router-dom';
 import menuList from '../../config/menuConfig'
 import LeftNav from './../../components/left-nav/LeftNav';
 import Header from '../../components/header/Header'
-import Introduction from '../../components/introduction/Introduction';
-import Home from './../../components/home/Home';
-import Assist from './../../components/assist/Assist';
 import RecordQuery from './../../components/recordQuery/RecordQuery';
 import TextAnalysis from './../../components/recordQuery/TextAnalysis';
-import RecordUpload from './../../components/recordUpload/RecordUpload';
-import Infrared from '../../components/recovery/Infrared';
-import Tongue from '../../c../../components/recovery/Tongue'
-import Pulse from '../../components/recovery/Pulse';
-import TextRecord from '../../components/recovery/TextRecord'
+import RecordUpload from '../../components/recordUpload/RecordUpload'
 import Medicine from '../../components/recovery/Medicine';
 
 import './admin.less'
-import InformationManagement from '../../components/userManagement/UserInformationManagement';
-import LabelInformationManagement from './../../components/labelManagement/LabelInformationManagement';
 
 const { Sider, Content } = Layout
 class Admin extends Component {
@@ -66,19 +57,10 @@ class Admin extends Component {
           </Breadcrumb>
           <Content>
             <Switch>
-              <Redirect from='/admin' exact to='/admin/home' />
-              <Route path='/admin/home'  component={Home} />
-              <Route path='/admin/informationManagement'  component={InformationManagement} />
-              <Route path='/admin/introduction' component={Introduction} />
-              <Route path='/admin/assist' component={Assist} />
-              <Route path='/admin/labelInformationManagement' component={LabelInformationManagement} />
+              <Redirect from='/admin' exact to='/admin/recordQuery' />
               <Route path='/admin/recordQuery' component={RecordQuery} />
               <Route path='/admin/textAnalysis/:id' component={TextAnalysis} />
               <Route path='/admin/recordUpload' component={RecordUpload} />
-              <Route path='/admin/recovery/infrared' component={Infrared} />
-              <Route path='/admin/recovery/tongue' component={Tongue} />
-              <Route path='/admin/recovery/pulse' component={Pulse} />
-              <Route path='/admin/recovery/textRecord' component={TextRecord} />
               <Route path='/admin/recovery/medicine' component={Medicine} />
             </Switch>
           </Content>
