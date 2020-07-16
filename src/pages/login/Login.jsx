@@ -29,31 +29,27 @@ class Login extends Component {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        console.log("Received values of form: ");
-        let param = {
-          username: values.username,
-          password: values.password
-        };
-        API.login(param)
+        if(this.state.code.toLowerCase()!=values.verificationCode.toLowerCase()){
+          Message.error("登录失败，验证码错误！");
+          this.reloadPic();
+        } else {
+          let param = {
+            username: values.username,
+            password: values.password
+          };
+          API.login(param)
           .then(res => {
             if (res.code !== "200") {
               Message.error("登录失败，用户名或密码错误！");
-            } else {
-              console.log(this.state.code.toLowerCase())
-              console.log(values.verificationCode)
-              if(this.state.code.toLowerCase()!=values.verificationCode.toLowerCase()){
-                Message.error("登录失败，验证码错误！");
-              }
-              else{
+            } else{
                 Message.success("登录成功！");
                 this.props.history.push("/admin");
               }
-              
-            }
           })
           .catch(err => {
             Message.error(err + "登录失败！请重试！");
           });
+        }
       }
     });
   }
@@ -130,9 +126,6 @@ class Login extends Component {
 
   reloadPic = () => {
       this.drawPic()
-      this.props.form.setFieldsValue({
-          sendcode: '',
-      });
   }
 
 
@@ -162,10 +155,6 @@ class Login extends Component {
           this.drawDot(ctx)
       })
   }
-
-
-
-
 
   render() {
     const { current } = this.state;
@@ -236,13 +225,6 @@ class Login extends Component {
                 )}
               </Form.Item>
               <Form.Item>
-                {getFieldDecorator("remember", {
-                  valuePropName: "checked",
-                  initialValue: true
-                })}
-                {/* <Link className="login-form-forgot" to="/login">
-                  忘记密码
-                </Link> */}
                 <Button
                   type="primary"
                   block

@@ -1,9 +1,15 @@
 // const BaseUrl = "http://10.13.81.186:8080";
 const UrlMap = [
   {
-    description: "医生登录",
+    description: "用户登录",
     method: "login",
     url: "http://10.13.81.186:8081/user/login",
+    type: "POST"
+  },
+  {
+    description: "用户注册",
+    method: "register",
+    url: "http://10.13.81.186:8081/user/register",
     type: "POST"
   },
   {

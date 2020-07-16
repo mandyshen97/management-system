@@ -27,23 +27,30 @@ class Register extends Component {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        console.log("Received values of form: ", values);
-        let param = {
-          username: values.username,
-          password: values.password
-        };
-        API.doctorRegister(param)
-          .then(res => {
-            if (res.code !== "200") {
-              Message.error("注册失败！");
-            } else {
-              Message.success("注册成功！");
-              this.props.history.push("/login");
-            }
-          })
-          .catch(err => {
-            Message.warning(err + "注册失败！");
-          });
+        if(values.confirmPassword!=values.password){
+          Message.error("请确认密码");
+          this.reloadPic();
+        } else if(this.state.code.toLowerCase()!=values.verificationCode.toLowerCase()){
+          Message.error("注册失败，验证码错误！");
+          this.reloadPic();
+        } else {
+          let param = {
+            username: values.username,
+            password: values.password
+          };
+          API.register(param)
+            .then(res => {
+              if (res.code !== "200") {
+                Message.error("注册失败！");
+              } else {
+                Message.success("注册成功！");
+                this.props.history.push("/login");
+              }
+            })
+            .catch(err => {
+              Message.warning(err + "注册失败！");
+            });
+        }
       }
     });
   };
@@ -138,10 +145,7 @@ class Register extends Component {
     this.randomCode()
   }
   reloadPic = () => {
-      this.drawPic()
-      this.props.form.setFieldsValue({
-          sendcode: '',
-      });
+      this.drawPic();
   }
 
   render() {
@@ -238,7 +242,7 @@ class Register extends Component {
             </Form>
           </div>
         </div>
-        <div className="footer">——————— 失眠症辅助诊断平台 —————————</div>
+        <div className="footer">——————— 辅助诊断平台 —————————</div>
       </div>
     );
   }
