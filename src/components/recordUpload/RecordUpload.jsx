@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
 import './record-upload.less';
 import API from "../../api/api";
-import { Input, Icon, Button, Select, Table, Form, Radio, Upload, Page, DatePicker, Message, Drawer, Col, Modal } from "antd";
+import { Input, Icon, Button, Select, Form, Radio, Upload, DatePicker, Message } from "antd";
 const { TextArea } = Input;
 const { Option } = Select;
 class RecordUpload extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      irtFileData: null,
+      tongueFileData: null,
+      pulseFileData: null,
       doctorList: [],
       diseaseList: [],
       visible: false,
@@ -124,40 +127,63 @@ class RecordUpload extends Component {
   handleReset = () => {
     this.props.form.resetFields();
   }
+  beforeUploadIrtFile = (file) => {
+    this.setState({
+      irtFileData: file,
+    })
+    return false;
+  }
+  beforeUploadTongueFile = (file) => {
+    this.setState({
+      tongueFileData: file,
+    })
+    return false;
+  }
+  beforeUploadPulseFile = (file) => {
+    this.setState({
+      pulseFileData: file,
+    })
+    return false;
+  }
   // 处理提交按钮
   handleSubmit = () => {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         let param = {
-          patientId:values.patientId,
+          patientId: values.patientId,
           name: values.name,
           height: values.height,
           weight: values.weight,
           doctorId: values.doctorId,
           birthday: values.birthday,
           gender: values.gender,
-          diseaseId: values.diseaseId,
+          disease: values.diseaseId,
           chfCmp: values.chfCmp,
           patientSign: values.patientSign,
           tcmType: values.tcmType,
           preMedHis: values.preMedHis,
           hisPreIll: values.hisPreIll,
-          allergies: values.allergies,
+          allergy: values.allergies,
           bloodTest: values.bloodTest,
           bloodExcp: values.bloodExcp,
-          irtFile: values.infraFile,
+          irtFile: this.state.irtFileData,
           irtDesc: values.infraDesc,
           irtExcp: values.infraExcp,
-          tongueFile: values.tongueFile,
+          tongueFile: this.state.tongueFileData,
           tongueDesc: values.tongueDesc,
           tongueExcp: values.tongueExcp,
-          pulseFile: values.pulseFile,
+          pulseFile: this.state.pulseFileData,
           pulseDesc: values.pulseDesc,
           pulseExcp: values.pulseExcp,
-          mainMedicine: values.mainMedicine,
-          auxMedicine: values.auxMedicine
+          westernMedicine: values.mainMedicine.join(" "),
+          chineseMedicine: values.auxMedicine.join(" ")
         };
-        API.uploadRecord(param).then((response) => {
+        const formData = new FormData();
+        for (let key in param) {
+          formData.append(key, param[key]);
+        }
+        console.log(param);
+        API.uploadRecord(formData).then((response) => {
           let _code = response.code,
             _msg = response.msg;
           Message.success(_msg);
@@ -213,7 +239,7 @@ class RecordUpload extends Component {
           )}
           <span style={{ marginRight: 25 }}>/kg</span>
         </Form.Item>
-        <br/>
+        <br />
         <Form.Item label="医生姓名">
           {getFieldDecorator("doctorId", {})(
             <Select style={{ width: 200, marginRight: 25 }} placeholder="请选择" >
@@ -240,8 +266,8 @@ class RecordUpload extends Component {
         <Form.Item label="诊断" style={{ marginLeft: 165 }}>
           {getFieldDecorator("diseaseId", {})(
             <Select style={{ width: 200, marginRight: 25 }} placeholder="请选择" >
-            {disOptions}
-          </Select>
+              {disOptions}
+            </Select>
           )}
         </Form.Item>
         <Form.Item label="主诉" style={{ marginLeft: 27 }}>
@@ -292,11 +318,16 @@ class RecordUpload extends Component {
               placeholder="请输入..." />
           )}
         </Form.Item>
-        <br/>
+        <br />
         <Form.Item label="红外热像" >
           {getFieldDecorator("infraFile", {})(
-            <Upload multiple={true}>
-              <Button type="primary" icon="upload">选择要上传文件的文件</Button>
+            // <Input type="file" placeholder="选择要上传的文件"/>
+            // <Upload multiple={true}>
+            //   <Button type="primary" icon="upload">选择要上传文件的文件</Button>
+            // </Upload>
+            <Upload action='路径'
+              beforeUpload={this.beforeUploadIrtFile}>
+              <Button type="primary" icon="upload">选择要上传的文件</Button>
             </Upload>
           )}
         </Form.Item>
@@ -316,8 +347,13 @@ class RecordUpload extends Component {
 
         <Form.Item label="舌象图谱" >
           {getFieldDecorator("tongueFile", {})(
-            <Upload multiple={true}>
-              <Button type="primary" icon="upload">选择要上传文件的文件</Button>
+            // <Input type="file" placeholder="选择要上传的文件" />
+            // <Upload multiple={true}>
+            //   <Button type="primary" icon="upload">选择要上传文件的文件</Button>
+            // </Upload>
+            <Upload action='路径'
+              beforeUpload={this.beforeUploadTongueFile}>
+              <Button type="primary" icon="upload">选择要上传的文件</Button>
             </Upload>
           )}
         </Form.Item>
@@ -337,8 +373,13 @@ class RecordUpload extends Component {
 
         <Form.Item label="脉象数据" >
           {getFieldDecorator("pulseFile", {})(
-            <Upload multiple={true}>
-              <Button type="primary" icon="upload">选择要上传文件的文件</Button>
+            // <Input type="file" placeholder="选择要上传的文件" />
+            // <Upload multiple={true}>
+            //   <Button type="primary" icon="upload">选择要上传文件的文件</Button>
+            // </Upload>
+            <Upload
+              beforeUpload={this.beforeUploadPulseFile}>
+              <Button type="primary" icon="upload">选择要上传的文件</Button>
             </Upload>
           )}
         </Form.Item>
@@ -357,19 +398,19 @@ class RecordUpload extends Component {
         <br />
         <Form.Item label="西医主药" style={{ marginLeft: 0 }}>
           {getFieldDecorator("mainMedicine", {})(
-              <Select style={{ width: 400, marginRight: 20 }} placeholder="请选择" mode="multiple">
-                {options}
-              </Select>
-            )}
+            <Select style={{ width: 400, marginRight: 20 }} placeholder="请选择" mode="multiple">
+              {options}
+            </Select>
+          )}
         </Form.Item>
         <Form.Item label="中医辅药">
           {getFieldDecorator("auxMedicine", {})(
-              <Select style={{ width: 600, marginRight: 25 }} placeholder="请选择" mode="multiple">
-                {options}
-              </Select>
-            )}
+            <Select style={{ width: 600, marginRight: 25 }} placeholder="请选择" mode="multiple">
+              {options}
+            </Select>
+          )}
         </Form.Item>
-        <br/>
+        <br />
         <Form.Item>
           <Button type="primary" onClick={this.handleSubmit} style={{ marginLeft: 70 }}>
             提交

@@ -3,13 +3,13 @@ const UrlMap = [
   {
     description: "用户登录",
     method: "login",
-    url: "http://10.13.81.186:8081/user/login",
+    url: "http://localhost:8081/user/login",
     type: "POST"
   },
   {
     description: "用户注册",
     method: "register",
-    url: "http://10.13.81.186:8081/user/register",
+    url: "http://localhost:8081/user/register",
     type: "POST"
   },
   {
@@ -21,7 +21,7 @@ const UrlMap = [
   {
     description: "获取病种id列表",
     method: "getDisease",
-    url: "http://10.13.81.186:8081/disease/all",
+    url: "http://localhost:8081/disease/all",
     type: "GET"
   },
   {
@@ -45,13 +45,13 @@ const UrlMap = [
   {
     description: "获取医生列表",
     method: "getDoctors",
-    url: "http://10.13.81.186:8081/user/doctors",
+    url: "http://localhost:8081/user/doctors",
     type: "POST"
   },
   {
     description: "添加病历列表",
     method: "uploadRecord",
-    url: "http://10.13.81.186:8081/record/add",
+    url: "http://localhost:8081/record/upload",
     type: "POST",
   },
   {
@@ -104,13 +104,13 @@ UrlMap.forEach(item => {
       credentials: "include"
     };
     // 如果是添加数据记录，则改变option
-    if(url=="http://10.13.81.186:8081/record/add"){
+    if(url=="http://localhost:8081/record/upload"){
       option = {
         method: item.type, // 请求方式
         mode: "cors",
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        },
+        // headers: {
+        //   'Content-Type': 'multipart/form-data'
+        // },
         credentials: "include"
       };
     }
@@ -126,7 +126,8 @@ UrlMap.forEach(item => {
         }
       }
     } else {
-      option.body = JSON.stringify(data); // 如果是POST请求，则将请求参数对象拼接好的字符串放在请求体中。
+      // option.body = JSON.stringify(data); // 如果是POST请求，则将请求参数对象拼接好的字符串放在请求体中。
+      option.body = data;
     }
     // 通过fetch发送请求，第一个参数是请求地址。
     // json()返回一个被解析为JSON格式的promise对象
