@@ -13,6 +13,8 @@ class RecordUpload extends Component {
       pulseFileData: null,
       doctorList: [],
       diseaseList: [],
+      westernMedicineList:[],
+      chineseMedicineList:[],
       visible: false,
       fileList: [],
       loadingStatus: false,
@@ -76,7 +78,53 @@ class RecordUpload extends Component {
   componentDidMount() {
     this.getDoctors();
     this.getDiseases();
+    this.getMedicine();
     // console.log(this.state.doctorList)
+  }
+  // 获取主辅药
+  getMedicine = () => {
+    API.getWesternMedicine().
+      then((response) => {
+        let _code = response.code,
+          _data = response.data;
+        if (_code === "200") {
+          let newMedicineList = []
+          _data.forEach(item => {
+            newMedicineList.push({
+              "value": item.name,
+              "label": item.name
+            })
+
+          })
+          this.setState({
+            westernMedicineList: newMedicineList
+          })
+          console.log(this.state.westernMedicineList);
+        }
+      }).catch((err) => {
+        console.log(err)
+      })
+      API.getChineseMedicine().
+      then((response) => {
+        let _code = response.code,
+          _data = response.data;
+        if (_code === "200") {
+          let newMedicineList = []
+          _data.forEach(item => {
+            newMedicineList.push({
+              "value": item.name,
+              "label": item.name
+            })
+
+          })
+          this.setState({
+            chineseMedicineList: newMedicineList
+          })
+          console.log(this.state.chineseMedicineList);
+        }
+      }).catch((err) => {
+        console.log(err)
+      })
   }
   // 获取医生列表，并将form表单中doctor选择框赋值
   getDoctors = () => {
@@ -202,6 +250,9 @@ class RecordUpload extends Component {
     const { form } = this.props;
     const { getFieldDecorator } = form;
     const options = this.state.doctorList.map(d => <Option key={d.value}>{d.label}</Option>);
+    const options1 = this.state.westernMedicineList.map(d => <Option key={d.value}>{d.label}</Option>);
+    const options2 = this.state.chineseMedicineList.map(d => <Option key={d.value}>{d.label}</Option>);
+    // const options2 = this.state.chineseMedicineList.map(d => <Option key={d.value}>{d.label}</Option>);
     const disOptions = this.state.diseaseList.map(d => <Option key={d.value}>{d.label}</Option>);
     return (
       <Form layout="inline">
@@ -399,14 +450,14 @@ class RecordUpload extends Component {
         <Form.Item label="西医主药" style={{ marginLeft: 0 }}>
           {getFieldDecorator("mainMedicine", {})(
             <Select style={{ width: 400, marginRight: 20 }} placeholder="请选择" mode="multiple">
-              {options}
+              {options1}
             </Select>
           )}
         </Form.Item>
         <Form.Item label="中医辅药">
           {getFieldDecorator("auxMedicine", {})(
             <Select style={{ width: 600, marginRight: 25 }} placeholder="请选择" mode="multiple">
-              {options}
+              {options2}
             </Select>
           )}
         </Form.Item>

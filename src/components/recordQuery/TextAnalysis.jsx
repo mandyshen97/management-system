@@ -7,6 +7,7 @@ class TextAnalysis extends Component {
         super(props);
         this.state = {
             medRecord: {},
+            simMedRecordId: null,
             simMedRecord: {},
             diseaseList: [],
             helpSwitch: false,
@@ -16,10 +17,11 @@ class TextAnalysis extends Component {
     //   处理下载按钮
     handleDownload() {
         // Message.success("敬请期待");
+        // console.log(this.props.match.params.id)
         this.callDownload(this.props.match.params.id)
     }
-    callDownload(recor_id) {
-        window.location.href = 'http://10.13.81.186:8081/record/download?id=' + recor_id
+    callDownload(record_id) {
+        window.location.href = "http://localhost:8081/record/download?id="+record_id;
     }
     medicineHelp() {
         this.setState({
@@ -28,9 +30,9 @@ class TextAnalysis extends Component {
     }
     helpConfirm = () => {
         this.setState({
-          helpSwitch: false
+            helpSwitch: false
         })
-      }
+    }
     // 处理开始分析按钮
     handleAnalyse(record) {
         let text = record.chfCmp + '。' + record.hisPreIll + "。" + record.prvMedHis;
@@ -94,8 +96,6 @@ class TextAnalysis extends Component {
             return "尚未分析";
         }
         let disease = "诊断异常";
-        console.log(diseaseId);
-        console.log(this.state.diseaseList);
         this.state.diseaseList.forEach(element => {
             if (element.id == diseaseId) {
                 disease = element.disease;
@@ -124,21 +124,55 @@ class TextAnalysis extends Component {
                 console.log(error);
             });
     }
-    //   获取相似电子病历id
-    getMedRecord(medRecordId) {
+    // 获取相似电子病历
+    getSimMedRecord(medRecordId) {
         let param = {
             id: medRecordId
         }
-        API.getSimRecord(param).then((response) => {
+        API.getRecord(param).then((response) => {
             let _data = response.data,
                 _code = response.code,
                 _msg = response.msg;
             if (_code === "200") {
                 // console.log(_data.data);
+                // console.log(_data);
                 this.setState({
-                    medRecord: _data.record,
-                    simMedRecord: _data.simRecord
+                    simMedRecord: _data,
                 })
+                // console.log("medRecord:", this.medRecord);
+                // console.log("simMedRecord", this.simMedRecord);
+            } else if (_code === "302") {
+                Message.error(_msg);
+                setTimeout(() => {
+                    this.props.history.replace("/login");
+                }, 1000);
+            } else {
+                Message.error(_msg);
+            }
+        }).catch(function (error) {
+            console.log(error);
+        });
+    }
+    //   获取相似电子病历id
+    getMedRecord(medRecordId) {
+        let param = {
+            id: medRecordId
+        }
+        API.getRecord(param).then((response) => {
+            let _data = response.data,
+                _code = response.code,
+                _msg = response.msg;
+            if (_code === "200") {
+                // console.log(_data.data);
+                // console.log(_data);
+                this.setState({
+                    medRecord: _data,
+                    simMedRecordId: _data.simRecordId
+                })
+                if(this.state.medRecord.analysisStatus==1&&this.state.medRecord.simRecordId!=null){
+                    console.log("我是你爸爸");
+                    this.getSimMedRecord(this.state.medRecord.simRecordId);
+                }
                 // console.log("medRecord:", this.medRecord);
                 // console.log("simMedRecord", this.simMedRecord);
             } else if (_code === "302") {
@@ -171,7 +205,7 @@ class TextAnalysis extends Component {
                 <Divider className="divide" />
                 <Row justify="space-between">
                     <Col span={4}>
-                        <strong>姓名:</strong><span style={{ marginLeft: 15, padding: 8}}>{this.state.medRecord.name}</span>
+                        <strong>姓名:</strong><span style={{ marginLeft: 15, padding: 8 }}>{this.state.medRecord.name}</span>
                     </Col>
                     <Col span={4}>
                         <strong>主治医生:</strong><span style={{ marginLeft: 15 }}>{this.state.medRecord.doctorName}</span>
@@ -192,11 +226,11 @@ class TextAnalysis extends Component {
                         <Button type="primary" style={{ backgroundColor: 'green', borderColor: 'green' }} onClick={() => this.handleDownload()}>病历下载</Button>
                     </Col>
                     <Col span={2}>
-                        <Button type="primary" style={{ backgroundColor: 'red',borderColor: 'red'  }} onClick={() => this.medicineHelp()}>用药帮助</Button>
+                        <Button type="primary" style={{ backgroundColor: 'red', borderColor: 'red' }} onClick={() => this.medicineHelp()}>用药帮助</Button>
                     </Col>
                 </Row>
 
-                <Divider className="divide"/>
+                <Divider className="divide" />
                 <b>病历对比</b>
                 <Divider />
                 <Row justify="space-between">
@@ -267,23 +301,23 @@ class TextAnalysis extends Component {
                     <Col span={2}>
                         <div className="m-box">病人体征</div>
                     </Col>
-                    <Col span={10}>{this.state.medRecord.patientSigns}</Col>
-                    <Col span={10} style={{ marginLeft: 15 }}>{this.state.simMedRecord.patientSigns}</Col>
+                    <Col span={10}>{this.state.medRecord.patientSign}</Col>
+                    <Col span={10} style={{ marginLeft: 15 }}>{this.state.simMedRecord.patientSign}</Col>
                 </Row>
                 <br />
                 <Row justify="space-between">
                     <Col span={2}>
                         <div className="m-box">西医主药</div>
                     </Col>
-                    <Col span={10}><p>威猛，卡铂</p></Col>
-                    <Col span={10} style={{ marginLeft: 15 }}><p>长春花碱</p></Col>
+                    <Col span={10}>{this.state.medRecord.westernMedicine}</Col>
+                    <Col span={10} style={{ marginLeft: 15 }}>{this.state.simMedRecord.westernMedicine}</Col>
                 </Row>
                 <Row justify="space-between">
                     <Col span={2}>
                         <div className="m-box">中医辅药</div>
                     </Col>
-                    <Col span={10}>{this.state.medRecord.prescription}</Col>
-                    <Col span={10} style={{ marginLeft: 15 }}>{this.state.simMedRecord.prescription}</Col>
+                    <Col span={10}>{this.state.medRecord.chineseMedicine}</Col>
+                    <Col span={10} style={{ marginLeft: 15 }}>{this.state.simMedRecord.chineseMedicine}</Col>
                 </Row>
                 <Divider />
                 <b>治疗建议</b>
@@ -299,17 +333,17 @@ class TextAnalysis extends Component {
                     onOk={this.helpConfirm}
                     onCancel={this.helpConfirm}>
                     <p>
-                        <span style={{color: 'rgba(0, 0, 0, 0.85)', fontSize: '16px', fontWeight: '500'}}>推荐处方用药：</span>
-                        <br/>
-                        <span style={{color:'red', margin: '2px 8px 2px 10px'}}>柴胡(1.00)</span>
-                        <span style={{color:'red', margin: '2px 8px'}}>当归(0.91)</span>
-                        <span style={{color:'red', margin: '2px 8px'}}>白芍(0.85)</span>
-                        <span style={{color:'red', margin: '2px 8px'}}>白术(0.77)</span>
-                        <span style={{color:'red', margin: '2px 8px'}}>茯苓(0.74)</span>
-                        <span style={{color:'red', margin: '2px 8px'}}>郁金(0.65)</span>
-                        <br/>
-                        <span style={{margin: '2px 8px 2px 10px'}}>香附(0.58)</span>
-                        <span style={{margin: '2px 8px'}}>八月札(0.44)</span>
+                        <span style={{ color: 'rgba(0, 0, 0, 0.85)', fontSize: '16px', fontWeight: '500' }}>推荐处方用药：</span>
+                        <br />
+                        <span style={{ color: 'red', margin: '2px 8px 2px 10px' }}>柴胡(1.00)</span>
+                        <span style={{ color: 'red', margin: '2px 8px' }}>当归(0.91)</span>
+                        <span style={{ color: 'red', margin: '2px 8px' }}>白芍(0.85)</span>
+                        <span style={{ color: 'red', margin: '2px 8px' }}>白术(0.77)</span>
+                        <span style={{ color: 'red', margin: '2px 8px' }}>茯苓(0.74)</span>
+                        <span style={{ color: 'red', margin: '2px 8px' }}>郁金(0.65)</span>
+                        <br />
+                        <span style={{ margin: '2px 8px 2px 10px' }}>香附(0.58)</span>
+                        <span style={{ margin: '2px 8px' }}>八月札(0.44)</span>
                     </p>
                 </Modal>
             </div>)

@@ -15,7 +15,13 @@ const UrlMap = [
   {
     description: "获取病历列表",
     method: "getRecordList",
-    url: "http://10.13.81.186:8081/record/get",
+    url: "http://localhost:8081/record/get",
+    type: "POST"
+  },
+  {
+    description: "获取单个病历",
+    method: "getRecord",
+    url: "http://localhost:8081/record/getSimRecord",
     type: "POST"
   },
   {
@@ -27,7 +33,7 @@ const UrlMap = [
   {
     description: "删除电子病历记录",
     method: "removeRecord",
-    url: "http://10.13.81.186:8081/record/remove",
+    url: "http://localhost:8081/record/remove",
     type: "POST"
   },
   {
@@ -38,14 +44,26 @@ const UrlMap = [
   },
   {
     description: "处理分析结果，即更新数据库",
-    method: "handleAnalyseResult",
-    url: "http://10.13.81.186:8081/record/update",
+    method: "updateRecord",
+    url: "http://localhost:8081/record/update",
     type: "POST"
   },
   {
     description: "获取医生列表",
     method: "getDoctors",
     url: "http://localhost:8081/user/doctors",
+    type: "POST"
+  },
+  {
+    description: "获取西医主药",
+    method: "getWesternMedicine",
+    url: "http://localhost:8081/record/westernMedicine",
+    type: "POST"
+  },
+  {
+    description: "获取中医辅药",
+    method: "getChineseMedicine",
+    url: "http://localhost:8081/record/chineseMedicine",
     type: "POST"
   },
   {
@@ -57,13 +75,13 @@ const UrlMap = [
   {
     description: "电子病历下载",
     method: "downloadRecord",
-    url: "http://10.13.81.186:8081/record/download",
+    url: "http://localhost:8081/record/download",
     type: "GET",
   },
   {
     description: "康复跟踪",
     method: "recordTrace",
-    url: "http://10.13.81.186:8081/record/trace",
+    url: "http://localhost:8081/record/trace",
     type: "POST"
   },
 
@@ -126,8 +144,13 @@ UrlMap.forEach(item => {
         }
       }
     } else {
+      if(url=="http://localhost:8081/record/upload"){
+        option.body = data;
+      }
+      else{
+        option.body = JSON.stringify(data)
+      }
       // option.body = JSON.stringify(data); // 如果是POST请求，则将请求参数对象拼接好的字符串放在请求体中。
-      option.body = data;
     }
     // 通过fetch发送请求，第一个参数是请求地址。
     // json()返回一个被解析为JSON格式的promise对象
