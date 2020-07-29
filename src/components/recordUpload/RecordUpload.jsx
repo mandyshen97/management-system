@@ -137,7 +137,7 @@ class RecordUpload extends Component {
           _data.forEach(item => {
             newDoctorList.push({
               "value": item.id,
-              "label": item.department + ':' + item.name
+              "label": item.name
             })
 
           })

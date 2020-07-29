@@ -131,7 +131,6 @@ class RecordQuery extends Component {
 
         <Option key={"白芍"}>{"白芍"}</Option>,
         <Option key={"白术"}>{"白术"}</Option>,
-        <Option key={"茯苓"}>{"茯苓"}</Option>,
         <Option key={"郁金"}>{"郁金"}</Option>,
         <Option key={"香附"}>{"香附"}</Option>,
         <Option key={"八月札"}>{"八月札"}</Option>,
@@ -170,7 +169,14 @@ class RecordQuery extends Component {
     })
   }
 
-  showHelp() {
+  showHelp(record) {
+    if(record.record.medCheck != null) {
+      // 显示record.medCheck
+    } else {
+      // 请求算法端获得用药帮助
+      // 显示请求结果
+      // 将请求结果写入后端数据库
+    }
     this.setState({
       helpSwitch: true
     })
@@ -221,8 +227,8 @@ class RecordQuery extends Component {
         patientSign:values.patientSign,
         tcmType:values.tcmType,
         diseaseId:values.disease,
-        westernMedicine:values.mainMedicine.join(","),
-        chineseMedicine:values.auxMedicine.join(",")
+        westernMedicine:values.mainMedicine.join("，"),
+        chineseMedicine:values.auxMedicine.join("，")
       }
       console.log(values.disease);
       API.updateRecord(param).then((response) => {
@@ -376,7 +382,7 @@ class RecordQuery extends Component {
           let _msg = res.msg;
           if (_code === "200") {
             let newListData = [];
-            // Todo 写的太烂 重写
+            // Todo 重写
             _data.data.map((item, index) => {
               let newListDataItem = {};
               newListDataItem.key = index;
@@ -404,11 +410,12 @@ class RecordQuery extends Component {
   }
 
   // 分页页数改变触发函数
-  pageChange = (page) => {
+  pageChange = (page) => {    
     this.setState({
       pageNum: page
-    })
-    this.fetchData()
+    }, () => {
+      this.fetchData()
+    });    
   }
 
   // 页面渲染前执行函数
@@ -582,7 +589,7 @@ class RecordQuery extends Component {
             </Row>
             <Row>
               <Col>
-                <Button type="primary" onClick={() => this.showHelp()}>
+                <Button type="primary" onClick={() => this.showHelp(this.state.patientInfo)}>
                   用药帮助
                 </Button>
                 <Button type="primary" style={{ margin: '0 8px', backgroundColor: 'green', borderColor: 'green' }} onClick={() => this.showUpdate()}>
@@ -719,7 +726,7 @@ class RecordQuery extends Component {
             </Form.Item>
             <Form.Item label="诊断" style={{ marginLeft: 27 }}>
               {getFieldDecorator("disease", {
-                initialValue: this.getDisease(this.state.patientInfo.disease),
+                initialValue: this.state.patientInfo.disease,
               })(
                 <Select
                   allowClear={true}

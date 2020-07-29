@@ -23,7 +23,14 @@ class TextAnalysis extends Component {
     callDownload(record_id) {
         window.location.href = "http://localhost:8081/record/download?id="+record_id;
     }
-    medicineHelp() {
+    medicineHelp(record) {
+        if(record.recPrescription != null) {
+            // 显示用药帮助
+        } else {
+            // 请求算法端获得用药帮助
+            // 显示请求结果
+            // 将请求结果写入后端数据库
+        }
         this.setState({
             helpSwitch: true
         })
@@ -95,7 +102,7 @@ class TextAnalysis extends Component {
         if (status == 0) {
             return "尚未分析";
         }
-        let disease = "诊断异常";
+        let disease = "尚未诊断";
         this.state.diseaseList.forEach(element => {
             if (element.id == diseaseId) {
                 disease = element.disease;
@@ -226,7 +233,7 @@ class TextAnalysis extends Component {
                         <Button type="primary" style={{ backgroundColor: 'green', borderColor: 'green' }} onClick={() => this.handleDownload()}>病历下载</Button>
                     </Col>
                     <Col span={2}>
-                        <Button type="primary" style={{ backgroundColor: 'red', borderColor: 'red' }} onClick={() => this.medicineHelp()}>用药帮助</Button>
+                        <Button type="primary" style={{ backgroundColor: 'red', borderColor: 'red' }} onClick={() => this.medicineHelp(this.state.medRecord)}>用药帮助</Button>
                     </Col>
                 </Row>
 
@@ -273,22 +280,6 @@ class TextAnalysis extends Component {
                     <Col span={10} style={{ marginLeft: 15 }}>{this.state.simMedRecord.prvMedHis}</Col>
                 </Row>
                 <br />
-                {/* <Row justify="space-between">
-                    <Col span={2}>
-                        <div className="m-box">个人史</div>
-                    </Col>
-                    <Col span={10}>{this.state.medRecord.perHis}</Col>
-                    <Col span={10} style={{ marginLeft: 15 }}>{this.state.simMedRecord.perHis}</Col>
-                </Row>
-                <br />
-                <Row justify="space-between">
-                    <Col span={2}>
-                        <div className="m-box">家族史</div>
-                    </Col>
-                    <Col span={10}>{this.state.medRecord.famHis}</Col>
-                    <Col span={10} style={{ marginLeft: 15 }}>{this.state.simMedRecord.famHis}</Col>
-                </Row>
-                <br /> */}
                 <Row justify="space-between">
                     <Col span={2}>
                         <div className="m-box">中医证型</div>
@@ -318,14 +309,6 @@ class TextAnalysis extends Component {
                     </Col>
                     <Col span={10}>{this.state.medRecord.chineseMedicine}</Col>
                     <Col span={10} style={{ marginLeft: 15 }}>{this.state.simMedRecord.chineseMedicine}</Col>
-                </Row>
-                <Divider />
-                <b>治疗建议</b>
-                <Divider />
-                <Row>
-                    <Col>
-                        <strong>治疗建议：</strong><div className='setformat'>{this.state.medRecord.treAdv} </div>
-                    </Col>
                 </Row>
                 <Modal
                     visible={this.state.helpSwitch}

@@ -414,10 +414,9 @@ class Medicine extends Component {
         });
     }
     medicineHelp = (record) => {
-
         let tmpPriscription = [];
-        let tmpMedicine = []
-        let tmpData = ["柴胡(1.00)", "当归(0.72", "白芍(0.85)", "白术(0.74)", "茯苓(0.70)", "郁金(0.65)", "香附(0.55)", "八月札(0.40)"];
+        let tmpMedicine = [];
+        let tmpData = ["柴胡(1.00)", "当归(0.72)", "白芍(0.85)", "白术(0.74)", "茯苓(0.70)", "郁金(0.65)", "香附(0.55)", "八月札(0.40)"];
         tmpData.forEach(item => {
             tmpPriscription.push(<Option key={item}>{item}</Option>,)
         });
