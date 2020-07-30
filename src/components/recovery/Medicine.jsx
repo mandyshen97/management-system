@@ -172,7 +172,7 @@ class Medicine extends Component {
                 {
                     "key": "1",
                     "date": "2018-08-02",
-                    "iniSymptoms": "反复咯血",
+                    "iniSymptoms": "",
                     "mainMedcine": "环磷酰胺，异环磷酰胺",
                     "auxMedicine": "旋覆花，全瓜蒌，碧桃干，老鹳草，五味子，甘草，黄芪，仙灵脾，巴戟天，苁蓉",
                     "effect": "咳嗽、咳痰带血、发热",
@@ -209,8 +209,8 @@ class Medicine extends Component {
             infraredColumns: [
                 {
                     title: '就诊时间',
-                    dataIndex: 'infraTime',
-                    key: 'infraTime',
+                    dataIndex: 'time',
+                    key: 'time',
                     width: 70,
                     align: "center"
                 },
@@ -239,8 +239,8 @@ class Medicine extends Component {
             tongueColumns: [
                 {
                     title: '就诊时间',
-                    dataIndex: 'tongueTime',
-                    key: 'tongueTime',
+                    dataIndex: 'time',
+                    key: 'time',
                     width: 70,
                     align: "center"
                 },
@@ -269,8 +269,8 @@ class Medicine extends Component {
             pulseColumns: [
                 {
                     title: '就诊时间',
-                    dataIndex: 'pulseTime',
-                    key: 'pulseTime',
+                    dataIndex: 'time',
+                    key: 'time',
                     width: 70,
                     align: "center"
                 },
@@ -361,35 +361,10 @@ class Medicine extends Component {
                     }
                 },
             ],
-            infraredData: [
-                { "key": '1', "infraTime": "2018-08-02", "description": "肺部局部和其他部位存在一定温差,考虑左肺上叶周围型肺癌并右肺转移，建议进一步检查", "exception": "肺部出现炎症", "url": "http://10.13.81.189:8001/feiai1.jpg" },
-                { "key": '2', "infraTime": "2018-12-04", "description": "胸廓对称，无畸形,双侧胸腔少量积液,肺部温差明显降低，考虑癌细胞数量减少，建议按照既定治疗方案继续治疗", "exception": "左右肺瓣不均衡", "url": "http://10.13.81.189:8001/feiai2.jpg" },
-                { "key": '3', "infraTime": "2019-02-24", "description": "胸廓对称，现与常人无疑", "exception": "无异常", "url": "http://10.13.81.189:8001/feiai3.jpg" }
-            ],
-            tongueData: [
-                { "key": '1', "tongueTime": "2018-08-02", "description": "舌苔薄,唾液粘稠，偏黄，湿气重", "exception": "舌苔白厚，腻", "url": "http://10.13.81.189:8001/tongue3.jpg" },
-                { "key": '2', "tongueTime": "2018-12-04", "description": "舌苔干薄，颜色偏黄，与肺病相关", "exception": "无异常", "url": "http://10.13.81.189:8001/tongue4.jpg" },
-                { "key": '3', "tongueTime": "2019-02-24", "description": "暂无描述", "exception": "舌苔厚", "url": "http://10.13.81.189:8001/tongue1.jpg" }
-            ],
-            pulseData: [
-                { "key": '1', "pulseTime": "2018-08-02", "description": "浮脉行于皮肤表，似同枯木水上漂，沉脉浮于筋骨间，推筋至骨用力寻", "exception": "端直而长，挺然指下，如按琴弦", "series": [100, 90, 150, 300, 500, 1000, 900, 450, 500, 400, 152, 110, 87, 150, 310, 487, 1020, 910, 437, 501, 430, 150, 105, 80, 157, 310, 506, 989, 906, 460, 505, 389, 150] },
-                { "key": '2', "pulseTime": "2018-12-04", "description": "迟脉一息唯三至，分钟少于六十行，数脉一息五六至，九十以上为数频", "exception": "脉来急数，时而一止，止无定数", "series": [60, 90, 75, 200, 300, 500, 700, 550, 500, 400, 152, 210, 107, 160, 330, 487, 512, 450, 437, 501, 420, 130, 165, 96, 240, 310, 532, 768, 601, 450, 505, 389, 150] },
-                { "key": '3', "pulseTime": "2019-02-24", "description": "滑脉滑利如走珠，虚如葱管弱如棉，实脉举按力均强，如按竹棍好思量", "exception": "脉搏快有不规则的间歇", "series": [70, 90, 120, 200, 400, 600, 800, 680, 450, 600, 520, 310, 165, 150, 340, 285, 850, 900, 740, 430, 501, 100, 75, 125, 170, 310, 500, 900, 909, 840, 540, 390, 250] }
-            ],
-            data: [
-                {
-                    "key": "1",
-                    "time": "2018-08-02",
-                },
-                {
-                    "key": "2",
-                    "time": "2018-12-04"
-                },
-                {
-                    "key": "3",
-                    "time": "2019-02-24"
-                }
-            ],
+            infraredData: [],
+            tongueData: [],
+            pulseData: [],
+            data: [],
             selectPrescription: [
 
             ],
@@ -470,11 +445,11 @@ class Medicine extends Component {
 
     // 抽屉等组件关闭
     getOption = (index) => {
-
         let xData = []
+        console.log(this.state.pulseData[index]);
         let len = this.state.pulseData[index].series.length
         for (let i = 1; i <= len; i++) {
-            xData.push(i.toString())
+            xData.push(i.toString());
         }
         let option = {
             title: {  //标题
@@ -524,26 +499,66 @@ class Medicine extends Component {
         })
     }
 
-    fetchData() {
+    fetchData = () => {
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 let param = {
                     patientId: values.patientId,
                     startTime: values.startDate,
                     endTime: values.endDate,
-                    pageNo:1,
-                    pageSize:10,
                 };
                 API.recordTrace(param).then(res => {
                     let _data = res.data;
                     let _code = res.code;
                     let _msg = res.msg;
+                    let tmpInfraredData = [];
+                    let tmpTongueData = [];
+                    let tmpPulseData = [];
+                    let tmpPatientInfo = {};
+                    let tmpData = [];
                     if (_code === "200") {
-                        _data.data.map((item, index) => {
-                            // 在这了更新irtUrl tongueUrl pulseSeries patientInfo
+                        if (_data.length >= 1) {
+                            tmpPatientInfo = {
+                                "gender": _data[0].gender,
+                                "height": _data[0].height,
+                                "weight": _data[0].weight,
+                                "allergy": _data[0].allergy,
+                                "firstTime": _data[0].createAt,
+                            }
+                        }
+                        _data.map((item, index) => {
+                            tmpInfraredData.push({
+                                "key": index,
+                                "time": item.createAt,
+                                "description": item.irtDesc,
+                                "exception": item.irtExcp,
+                                "url": "http://10.13.81.189:8001/" + item.irtPath
+                            });
+                            tmpTongueData.push({
+                                "key": index,
+                                "time": item.createAt,
+                                "description": item.tongueDesc,
+                                "exception": item.tongueExcp,
+                                "url": "http://10.13.81.189:8001/" + item.tonguePath
+                            });
+                            tmpPulseData.push({
+                                "key": index,
+                                "time": item.createAt,
+                                "description": item.pulseDesc,
+                                "exception": item.pulseExcp,
+                                "series":  this.readPulse("http://10.13.81.189:8001/" + item.pulsePath),
+                            });
+                            tmpData.push({
+                                "key": index,
+                                "time": item.createAt,
+                            })
                         });
                         this.setState({
-
+                            patientInfo: tmpPatientInfo,
+                            infraredData: tmpInfraredData,
+                            tongueData: tmpTongueData,
+                            pulseData: tmpPulseData,
+                            data: tmpData
                         })
                     } else if (_code === "302") {
                         Message.error(_msg);
@@ -558,19 +573,17 @@ class Medicine extends Component {
         });
     }
 
-    readPulse() {
-        var url = "http://10.13.81.189:8001/pulse1.txt";
-        var ajx = new XMLHttpRequest()
-        ajx.open("get", url, true)
-        ajx.onreadystatechange = function () {
-            console.log(ajx);
-            if (ajx.readyState != 4) {
-                return;
-            }
-            if (ajx.status >= 200) {
-                console.log(ajx.responseText);
-            }
-        }
+    async readPulse(url) {
+        let res = await fetch(url, {
+            method: 'GET',
+            mode: "cors",
+        });
+        let num = [];
+        console.log(res);
+        await res.text().then(data => {
+            data.split(",").forEach(element => num.push(parseInt(element.trim())));
+        })
+        return num;
     }
 
     emptyFunction = () => {
@@ -579,7 +592,9 @@ class Medicine extends Component {
         });
     }
     componentDidMount() {
-        this.readPulse();
+        this.readPulse("http://10.13.81.189:8001/pulse1.txt");
+        this.readPulse("http://10.13.81.189:8001/pulse2.txt");
+        this.readPulse("http://10.13.81.189:8001/pulse3.txt");
     }
 
     render() {
