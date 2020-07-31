@@ -177,7 +177,6 @@ class TextAnalysis extends Component {
                     simMedRecordId: _data.simRecordId
                 })
                 if(this.state.medRecord.analysisStatus==1&&this.state.medRecord.simRecordId!=null){
-                    console.log("我是你爸爸");
                     this.getSimMedRecord(this.state.medRecord.simRecordId);
                 }
                 // console.log("medRecord:", this.medRecord);

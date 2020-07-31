@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Message, Input, Button, Table, Form, Tabs, DatePicker, Modal, Select, TreeSelect, Row } from "antd";
 import ReactEcharts from "echarts-for-react";
+import { Link } from 'react-router-dom';
 import "./Medicine.less";
 import API from "../../api/api";
 
@@ -13,11 +14,14 @@ class Medicine extends Component {
         super(props);
         this.state = {
             visible: false,
-            value: undefined,
+            treeValue: undefined,
+            medicineValue: undefined,
+            prescriptionValue: undefined,
             emptyVisible: false,
             reportVisible: false,
             reportDesc: "",
             reportExcp: "",
+            recordId: undefined,
             patientInfo: {},
             mainMedColumn: [
                 {
@@ -112,7 +116,6 @@ class Medicine extends Component {
                     'medUse': '有敛肺止咳、滋补涩精、止泻止汗之效',
                     'toxicity': '用量不当会出现打嗝、反酸、胃痛、胃部烧灼感、肠鸣、乏力、困倦等不良反应'
                 },
-
             ],
             options: [
                 {
@@ -169,42 +172,6 @@ class Medicine extends Component {
                 },
             ],
             patientData: [
-                {
-                    "key": "1",
-                    "date": "2018-08-02",
-                    "iniSymptoms": "",
-                    "mainMedcine": "环磷酰胺，异环磷酰胺",
-                    "auxMedicine": "旋覆花，全瓜蒌，碧桃干，老鹳草，五味子，甘草，黄芪，仙灵脾，巴戟天，苁蓉",
-                    "effect": "咳嗽、咳痰带血、发热",
-                    "bloodDetection": "红细胞计数偏低，血红蛋白浓度偏低，癌胚抗原CEA偏高",
-                    "infraredDetection": "肺部出现炎症",
-                    "tongueDetection": "舌苔白厚，腻",
-                    "pulseDetection": "端直而长，挺然指下，如按琴弦。",
-                },
-                {
-                    "key": "2",
-                    "date": "2018-12-04",
-                    "iniSymptoms": "咳嗽、咳痰带血、发热",
-                    "mainMedcine": "环磷酰胺，阿霉素",
-                    "auxMedicine": "甘草，干姜，乌梅，黑附子，细辛，炒苍术，秦艽，百部，黄芪，制黄精，百合，黄柏炭，制鳖甲，红花，灵磁石，野丹参",
-                    "effect": "憋喘、咳嗽、咳痰",
-                    "bloodDetection": "癌胚抗原CEA偏高，肝脏转氨酶等指标升高",
-                    "infraredDetection": "左右肺瓣不均衡",
-                    "tongueDetection": "无异常",
-                    "pulseDetection": "脉来急数，时而一止，止无定数",
-                },
-                {
-                    "key": "3",
-                    "date": "2019-02-24",
-                    "iniSymptoms": "憋喘、咳嗽、咳痰",
-                    "mainMedcine": "长春新碱",
-                    "auxMedicine": "百合，甘草，生晒参片，炙甘草，砂仁，黄柏",
-                    "effect": "发热，咳嗽，咳痰不出",
-                    "bloodDetection": "癌胚抗原CEA及癌抗原CA125偏高，红细胞、血红蛋白降低",
-                    "infraredDetection": "无异常",
-                    "tongueDetection": "舌苔厚",
-                    "pulseDetection": "脉搏快有不规则的间歇。",
-                },
             ],
             infraredColumns: [
                 {
@@ -376,9 +343,44 @@ class Medicine extends Component {
 
     handleOk = () => {
         this.setState({
-            visible: false,
             emptyVisible: false,
             reportVisible: false,
+        });
+    }
+    handleHelp = () => {
+        let medicines = [];
+        this.state.medicineValue.forEach(element => {
+            medicines.push(element.match(/的(\S*)\(/)[1]);
+        })
+        this.state.prescriptionValue.forEach(element => {
+            medicines.push(element.split("(")[0]);
+        })
+        this.state.value.forEach(element => {
+            medicines.push(element);
+        })
+        medicines = Array.from(new Set(medicines)).join(",");
+        console.log("medicines: ", medicines);
+        let param = {
+            id: this.state.recordId,
+            corPrescription: medicines
+        };
+        API.updateRecord(param).then((response) => {
+            let _data = response.data;
+            let _code = response.code;
+            let _msg = response.msg;
+            if (_code === "200") {
+                Message.info('矫正处方写入成功');
+            } else {
+                Message.info('矫正处方写入失败，请稍后重试！');
+            }
+        }).catch((error) => {
+            console.log(error);
+        });
+        this.setState({
+            visible: false,
+            value: undefined,
+            medicineValue: undefined,
+            prescriptionValue: undefined
         });
     }
     handleCancel = () => {
@@ -388,55 +390,20 @@ class Medicine extends Component {
             reportVisible: false,
         });
     }
-    medicineHelp = (record) => {
+    medicineHelp = (index) => {
+        let record = this.state.patientData[index];
         let tmpPriscription = [];
         let tmpMedicine = [];
-        let tmpData = ["柴胡(1.00)", "当归(0.72)", "白芍(0.85)", "白术(0.74)", "茯苓(0.70)", "郁金(0.65)", "香附(0.55)", "八月札(0.40)"];
-        tmpData.forEach(item => {
-            tmpPriscription.push(<Option key={item}>{item}</Option>,)
+        record.recPrescription.split(" ").forEach(item => {
+            tmpPriscription.push(<Option key={item}>{item}</Option>)
         });
 
-        tmpData = ["与甘草关联的太子参(0.84)", "与白术关联的麦冬(0.72)"];
-        tmpData.forEach(item => {
-            tmpMedicine.push(<Option key={item}>{item}</Option>,)
+        record.medCheck.split(" ").forEach(item => {
+            tmpMedicine.push(<Option key={item}>{item}</Option>)
         });
-        /*
-        let param = {
-            medicines: record.chineseMedicine
-        };
-        API.proMedicineHelp(param).then(res => {
-            let _data = res.data;
-            let _code = res.code;
-            let _msg = res.msg;
-            if (_code === "200") {
-              _data.data.map((item, index) => {
-                let selectItem = "与" + item.base + "关联的" + item.target + "(" + item.score + ")";
-                tmpMedicine.push(<Option key={selectItem}>{selectItem}</Option>,)
-              });
-            } else {
-              Message.error(_msg);
-            }
-          });
-          let param = {
-            medicines: record.simRecId
-        };
-        
-        API.simMedicineHelp(param).then(res => {
-        let _data = res.data;
-        let _code = res.code;
-        let _msg = res.msg;
-        if (_code === "200") {
-            _data.data.map((item, index) => {
-            let selectItem = item.name + "(" + item.score + ")";
-            tmpPriscription.push(<Option key={selectItem}>{selectItem}</Option>)
-            });
-        } else {
-            Message.error(_msg);
-        }
-        });
-        */
 
         this.setState({
+            recordId: record.id,
             selectMedicine: tmpMedicine,
             selectPrescription: tmpPriscription,
             visible: true,
@@ -446,7 +413,6 @@ class Medicine extends Component {
     // 抽屉等组件关闭
     getOption = (index) => {
         let xData = []
-        console.log(this.state.pulseData[index]);
         let len = this.state.pulseData[index].series.length
         for (let i = 1; i <= len; i++) {
             xData.push(i.toString());
@@ -475,17 +441,23 @@ class Medicine extends Component {
                 }
             ]
         }
-
         return option;
     }
     onChange = value => {
         console.log('onChange ', value);
         this.setState({ value });
     }
-    handleChange(value) {
-        console.log(`selected ${value}`);
+    handleMedicineChange = value => {
+        this.setState({
+            medicineValue: value
+        });
     }
-    search() {
+    handlePrescriptionChange = value => {
+        this.setState({
+            prescriptionValue: value
+        });
+    }
+    search(index) {
 
     }
 
@@ -507,15 +479,16 @@ class Medicine extends Component {
                     startTime: values.startDate,
                     endTime: values.endDate,
                 };
-                API.recordTrace(param).then(res => {
+                let tmpInfraredData = [];
+                let tmpTongueData = [];
+                let tmpPulseData = [];
+                let tmpPatientInfo = {};
+                let tmpData = [];
+                let tmpPatientData = [];
+                API.recordTrace(param).then(async res => {
                     let _data = res.data;
                     let _code = res.code;
                     let _msg = res.msg;
-                    let tmpInfraredData = [];
-                    let tmpTongueData = [];
-                    let tmpPulseData = [];
-                    let tmpPatientInfo = {};
-                    let tmpData = [];
                     if (_code === "200") {
                         if (_data.length >= 1) {
                             tmpPatientInfo = {
@@ -526,7 +499,9 @@ class Medicine extends Component {
                                 "firstTime": _data[0].createAt,
                             }
                         }
-                        _data.map((item, index) => {
+                        for (let index = 0; index < _data.length; index++) {
+                            let item = _data[index]
+                            let tmpSeries = [];
                             tmpInfraredData.push({
                                 "key": index,
                                 "time": item.createAt,
@@ -541,25 +516,50 @@ class Medicine extends Component {
                                 "exception": item.tongueExcp,
                                 "url": "http://10.13.81.189:8001/" + item.tonguePath
                             });
+                            await fetch("http://10.13.81.189:8001/" + item.pulsePath, {
+                                method: 'GET',
+                                mode: "cors",
+                            }).then(res => {
+                                return res.text()
+                            }).then(res => {
+                                return res.split(",").forEach(element => tmpSeries.push(element));
+                            });
                             tmpPulseData.push({
                                 "key": index,
                                 "time": item.createAt,
                                 "description": item.pulseDesc,
                                 "exception": item.pulseExcp,
-                                "series":  this.readPulse("http://10.13.81.189:8001/" + item.pulsePath),
+                                "series": tmpSeries,
+                                // "series": await this.readPulse("http://10.13.81.189:8001/" + item.pulsePath),
                             });
                             tmpData.push({
                                 "key": index,
                                 "time": item.createAt,
+                            });
+                            tmpPatientData.push({
+                                "key": index,
+                                "id": item.id,
+                                "date": item.createAt,
+                                "iniSymptoms": index > 0 ? _data[index - 1].chfCmp : "",
+                                "mainMedcine": item.westernMedicine,
+                                "auxMedicine": item.chineseMedicine,
+                                "effect": item.chfCmp,
+                                "bloodExcp": item.bloodExcp,
+                                "infraredExcp": item.irtExcp,
+                                "tongueExcp": item.tongueExcp,
+                                "pulseExcp": item.pulseExcp,
+                                "medCheck": item.medCheck,
+                                "recPrescription": item.recPrescription
                             })
-                        });
+                        }
                         this.setState({
                             patientInfo: tmpPatientInfo,
                             infraredData: tmpInfraredData,
                             tongueData: tmpTongueData,
                             pulseData: tmpPulseData,
-                            data: tmpData
-                        })
+                            data: tmpData,
+                            patientData: tmpPatientData
+                        });
                     } else if (_code === "302") {
                         Message.error(_msg);
                         setTimeout(() => {
@@ -573,18 +573,17 @@ class Medicine extends Component {
         });
     }
 
-    async readPulse(url) {
-        let res = await fetch(url, {
-            method: 'GET',
-            mode: "cors",
-        });
-        let num = [];
-        console.log(res);
-        await res.text().then(data => {
-            data.split(",").forEach(element => num.push(parseInt(element.trim())));
-        })
-        return num;
-    }
+    // async readPulse(url) {
+    //     let res = await fetch(url, {
+    //         method: 'GET',
+    //         mode: "cors",
+    //     });
+    //     let num = [];
+    //     await res.text().then(data => {
+    //         data.split(",").forEach(element => num.push(parseInt(element.trim())));
+    //     })
+    //     return num;
+    // }
 
     emptyFunction = () => {
         this.setState({
@@ -592,9 +591,9 @@ class Medicine extends Component {
         });
     }
     componentDidMount() {
-        this.readPulse("http://10.13.81.189:8001/pulse1.txt");
-        this.readPulse("http://10.13.81.189:8001/pulse2.txt");
-        this.readPulse("http://10.13.81.189:8001/pulse3.txt");
+        // this.readPulse("http://10.13.81.189:8001/pulse1.txt");
+        // this.readPulse("http://10.13.81.189:8001/pulse2.txt");
+        // this.readPulse("http://10.13.81.189:8001/pulse3.txt");
     }
 
     render() {
@@ -706,21 +705,21 @@ class Medicine extends Component {
                         <Column title="辅药" dataIndex="auxMedicine" key="auxMedicine" align="center" width="150px" />
                     </ColumnGroup>
                     <Column title="用药效果" dataIndex="effect" key="effect" align="center" width="140px" className="column-text" />
-                    <Column title="血液检测异常" dataIndex="bloodDetection" key="bloodDetection" align="center" width="120px" />
-                    <Column title="红外检测异常" dataIndex="infraredDetection" key="infraredDetection" align="center" width="120px" />
-                    <Column title="舌象检测异常" dataIndex="tongueDetection" key="tongueDetection" align="center" width="120px" />
-                    <Column title="脉象检测异常" dataIndex="pulseDetection" key="pulseDetection" align="center" width="120px" />
+                    <Column title="血液检测异常" dataIndex="bloodExcp" key="bloodExcp" align="center" width="120px" />
+                    <Column title="红外检测异常" dataIndex="infraredExcp" key="infraredExcp" align="center" width="120px" />
+                    <Column title="舌象检测异常" dataIndex="tongueExcp" key="tongueExcp" align="center" width="120px" />
+                    <Column title="脉象检测异常" dataIndex="pulseExcp" key="pulseExcp" align="center" width="120px" />
                     <Column title="操作" dataIndex="action" key="action" align="center"
                         render={(text, record, index) => {
                             return (
                                 <div>
-                                    <Button type="primary" size="small"
-                                        onClick={() => this.search()
-                                        }>同类检索
-                        </Button>
+                                    <Link to={`/admin/textAnalysis/${record.id}`} target="_blank">
+                                        <Button type="primary" size="small"
+                                        >同类检索
+                                                    </Button></Link>
                                     <br></br>
                                     <Button type="primary" size="small" style={{ marginTop: '5px', backgroundColor: 'green', borderColor: 'green' }}
-                                        onClick={() => this.medicineHelp()
+                                        onClick={() => this.medicineHelp(index)
                                         }>用药帮助
                         </Button>
                                 </div>
@@ -728,7 +727,7 @@ class Medicine extends Component {
                         }} />
                 </Table>
                 <Modal title="用药帮助" visible={this.state.visible}
-                    onOk={this.handleOk} onCancel={this.handleCancel} width="1000px">
+                    onOk={this.handleHelp} onCancel={this.handleCancel} width="1000px">
                     <div style={{ display: 'flex' }}>
                         <div style={{ width: '500px' }}>
                             <div style={{ fontSize: '20px' }}>
@@ -768,7 +767,8 @@ class Medicine extends Component {
                                 style={{ width: '100%' }}
                                 placeholder="请选择"
                                 defaultValue={[]}
-                                onChange={this.handleChange}
+                                value={this.state.medicineValue}
+                                onChange={this.handleMedicineChange}
                             >
                                 {this.state.selectMedicine}
                             </Select>
@@ -784,7 +784,8 @@ class Medicine extends Component {
                                 style={{ width: '100%' }}
                                 placeholder="请选择"
                                 defaultValue={[]}
-                                onChange={this.handleChange}
+                                value={this.state.prescriptionValue}
+                                onChange={this.handlePrescriptionChange}
                             >
                                 {this.state.selectPrescription}
                             </Select>
@@ -809,21 +810,21 @@ class Medicine extends Component {
                             >
                                 <TreeNode value="CTX" title="环磷酰胺">
                                     <TreeNode value="liver" title="补精">
-                                        <TreeNode value="sweetGrass" title="地黄" />
-                                        <TreeNode value="goldSilverFlower" title="枸杞子" />
+                                        <TreeNode value="地黄" title="地黄" />
+                                        <TreeNode value="枸杞子" title="枸杞子" />
                                     </TreeNode>
                                     <TreeNode value="stomach" title="治心肌损伤">
-                                        <TreeNode value="chaihu" title="黄芪" />
-                                        <TreeNode value="huangqi" title="银杏叶" />
+                                        <TreeNode value="黄芪" title="黄芪" />
+                                        <TreeNode value="银杏叶" title="银杏叶" />
                                     </TreeNode>
                                 </TreeNode>
                                 <TreeNode value="IFO" title="异环磷酰胺">
                                     <TreeNode value="spleen" title="抗骨髓抑制">
-                                        <TreeNode value="baishao" title="鸡血藤" />
-                                        <TreeNode value="shudi" title="熟地" />
+                                        <TreeNode value="鸡血藤" title="鸡血藤" />
+                                        <TreeNode value="熟地" title="熟地" />
                                     </TreeNode>
-                                    <TreeNode value="spleen" title="护肾">
-                                        <TreeNode value="baishao" title="猪苓" />
+                                    <TreeNode value="kidney" title="护肾">
+                                        <TreeNode value="猪苓" title="猪苓" />
                                     </TreeNode>
                                 </TreeNode>
                             </TreeSelect>

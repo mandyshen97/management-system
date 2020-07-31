@@ -10,7 +10,7 @@ const menuList = [
     icon: 'file'
   },
   {
-    title: '康复评估',
+    title: '康复评测',
     path: '/admin/recovery/Medicine',
     icon: 'switcher',
   },

@@ -227,8 +227,8 @@ class RecordQuery extends Component {
         patientSign:values.patientSign,
         tcmType:values.tcmType,
         diseaseId:values.disease,
-        westernMedicine:values.mainMedicine.join("，"),
-        chineseMedicine:values.auxMedicine.join("，")
+        westernMedicine:values.mainMedicine.join(","),
+        chineseMedicine:values.auxMedicine.join(",")
       }
       console.log(values.disease);
       API.updateRecord(param).then((response) => {
@@ -726,7 +726,7 @@ class RecordQuery extends Component {
             </Form.Item>
             <Form.Item label="诊断" style={{ marginLeft: 27 }}>
               {getFieldDecorator("disease", {
-                initialValue: this.state.patientInfo.disease,
+                initialValue: this.getDisease(this.state.patientInfo.disease),
               })(
                 <Select
                   allowClear={true}
