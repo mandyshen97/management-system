@@ -178,7 +178,7 @@ class Login extends Component {
           <div className="login-left">
             <div className="login-left-container">
               <img src={logo} alt="logo" />
-              <h1>医学数据的管理和辅助诊疗系统</h1>
+              <h1>脊椎康复辅助诊疗系统</h1>
             </div>
           </div>
           <div className="login-right">
@@ -245,4 +245,5 @@ class Login extends Component {
   }
 }
 const WrappedNormalLoginForm = Form.create({ name: "normal_login" })(Login);
+// const WrappedNormalLoginForm = Login;
 export default WrappedNormalLoginForm;

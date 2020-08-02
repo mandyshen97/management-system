@@ -166,7 +166,7 @@ class Register extends Component {
           <div className="login-left">
             <div className="login-left-container">
               <img src={logo} alt="logo" />
-              <h1>失眠症辅助诊断平台</h1>
+              <h1>脊椎康复辅助诊疗系统</h1>
             </div>
           </div>
           <div className="login-right">

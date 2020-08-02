@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "./record-query.less";
+import "./patient-query.less";
 import {
   Input,
   Button,
@@ -19,7 +19,7 @@ import ReactEcharts from "echarts-for-react";
 const { Option } = Select;
 const { TextArea } = Input;
 
-class RecordQuery extends Component {
+class PatientQuery extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -159,7 +159,7 @@ class RecordQuery extends Component {
           let _msg = response.msg;
           if (_code === "200") {
             Message.info("病历更新成功");
-            this.fetchData();
+            this.queryPatient();
             this.setState({
               updateSwitch: false,
               drawerSwitch: false,
@@ -360,48 +360,70 @@ class RecordQuery extends Component {
       });
   }
 
-  // 获取病历列表
-  fetchData = () => {
+  // 获取患者信息列表
+  queryPatient = () => {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         let param = {
-          id: values.recordId,
-          startDate: values.startDate,
-          endDate: values.endDate,
-          diseaseId: values.diseaseId,
-          keyWord: values.word,
-          pageNo: this.state.pageNum,
-          pageSize: this.state.pageSize,
+          id: values.patientId,
+          name: values.name,
         };
-        API.getRecordList(param).then((res) => {
-          console.log("getRecordList", res);
-          let _data = res.data;
-          let _code = res.code;
-          let _msg = res.msg;
-          if (_code === "200") {
-            let newListData = [];
-            // Todo 写的太烂 重写
-            _data.data.map((item, index) => {
-              let newListDataItem = {};
-              newListDataItem.key = index;
-              newListDataItem.id = item.id;
-              Object.assign(item, newListDataItem);
-              item.key = index;
-              newListData.push(item);
-            });
-            this.setState({
-              listData: newListData,
-              totalNum: _data.totalNum,
-            });
-          } else if (_code === "302") {
-            Message.error(_msg);
-            setTimeout(() => {
-              this.props.history.replace("/login");
-            }, 1000);
-          } else {
-            Message.error(_msg);
-          }
-        });
+        // todo
+        // 获取患者列表的API
+        // API.getPatientList(param).then((res) => {
+        //   const { data, code, msg } = res;
+        //   if(code==='200'){
+        //     let newListData = []
+
+        //   }
+        // });
+        fetch(
+          "https://www.fastmock.site/mock/9df39432386360a59e2d0557525f4887/query/query/getPatientList"
+        )
+          .then((res) => res.json())
+          .then((res) => {
+            console.log("res", res);
+            const { data, code, desc } = res;
+            if (code === "200") {
+              // let newListData = [];
+              // data.map((item, index) => {
+              //   let newListDataItem = {};
+              //   // newListDataItem.key = index+item.patientId;
+              //   newListData.push(item);
+              // });
+              this.setState({
+                listData: data,
+              });
+            }
+          });
+        // API.getRecordList(param).then((res) => {
+        //   let _data = res.data;
+        //   let _code = res.code;
+        //   let _msg = res.msg;
+        //   if (_code === "200") {
+        //     let newListData = [];
+        //     // Todo 写的太烂 重写
+        //     _data.data.map((item, index) => {
+        //       let newListDataItem = {};
+        //       newListDataItem.key = index;
+        //       newListDataItem.id = item.id;
+        //       Object.assign(item, newListDataItem);
+        //       item.key = index;
+        //       newListData.push(item);
+        //     });
+        //     this.setState({
+        //       listData: newListData,
+        //       totalNum: _data.totalNum,
+        //     });
+        //   } else if (_code === "302") {
+        //     Message.error(_msg);
+        //     setTimeout(() => {
+        //       this.props.history.replace("/login");
+        //     }, 1000);
+        //   } else {
+        //     Message.error(_msg);
+        //   }
+        // });
       }
     });
   };
@@ -411,12 +433,12 @@ class RecordQuery extends Component {
     this.setState({
       pageNum: page,
     });
-    this.fetchData();
+    this.queryPatient();
   };
 
   // 页面渲染前执行函数
   componentDidMount() {
-    this.fetchData();
+    this.queryPatient();
     this.fetchDisease();
   }
   // 查询表单
@@ -425,81 +447,32 @@ class RecordQuery extends Component {
     const { getFieldDecorator } = form;
     return (
       <Form layout="inline">
+        <Form.Item label="患者id">
+          {/* <span className="input-text">患者id</span> */}
+          {/* {getFieldDecorator(
+            "patientId",
+            {}
+          )( */}
+            <Input
+              style={{ width: 100, marginRight: 15 }}
+              placeholder="患者id"
+            />
+          {/* )} */}
+        </Form.Item>
         <Form.Item>
-          <span className="input-text">病历id</span>
+          <span className="input-text">患者姓名</span>
           {getFieldDecorator(
-            "recordId",
+            "name",
             {}
           )(
             <Input
               style={{ width: 100, marginRight: 15 }}
-              placeholder="病历id"
+              placeholder="患者姓名"
             />
           )}
         </Form.Item>
         <Form.Item>
-          <span className="input-text">起始时间</span>
-          {getFieldDecorator(
-            "startDate",
-            {}
-          )(
-            <DatePicker
-              style={{ width: 130, marginRight: 5 }}
-              placeholder="就诊起始时间"
-            />
-          )}
-        </Form.Item>
-        <Form.Item>
-          <span className="input-text">结束时间</span>
-          {getFieldDecorator(
-            "endDate",
-            {}
-          )(
-            <DatePicker
-              style={{ width: 130, marginRight: 5 }}
-              placeholder="就诊结束时间"
-            />
-          )}
-        </Form.Item>
-        <Form.Item>
-          <span className="input-text">病种</span>
-          {getFieldDecorator(
-            "diseaseId",
-            {}
-          )(
-            <Select
-              allowClear={true}
-              showSearch
-              style={{ width: 120 }}
-              placeholder="请选择病种"
-              filterOption={(input, option) =>
-                option.props.children
-                  .toLowerCase()
-                  .indexOf(input.toLowerCase()) >= 0
-              }
-            >
-              {this.state.diseaseList.map((item, index) => (
-                <Option value={item.id} key={index}>
-                  {item.disease}
-                </Option>
-              ))}
-            </Select>
-          )}
-        </Form.Item>
-        <Form.Item>
-          <span className="input-text">检索字段</span>
-          {getFieldDecorator(
-            "word",
-            {}
-          )(
-            <Input
-              style={{ width: 130, marginRight: 5 }}
-              placeholder="请输入关键词"
-            />
-          )}
-        </Form.Item>
-        <Form.Item>
-          <Button type="primary" onClick={this.fetchData}>
+          <Button type="primary" onClick={this.queryPatient}>
             查询
           </Button>
         </Form.Item>
@@ -507,12 +480,21 @@ class RecordQuery extends Component {
     );
   };
 
+  updataPatientInfo = () => {
+    console.log("更新患者信息！");
+  };
+
+  addRecord = () => {
+    console.log("新增病历！");
+  };
+
   // 渲染的页面
   render() {
+    console.log("this.state.listData", this.state.listData);
     const tableColumns = [
       {
-        title: "病历id",
-        dataIndex: "id",
+        title: "患者id",
+        dataIndex: "patientId",
         width: 50,
       },
       {
@@ -526,10 +508,6 @@ class RecordQuery extends Component {
         width: 30,
         render: (gender) => {
           return gender === 1 ? "男" : "女";
-          // return h(
-          //     'div',
-          //     params.row.gender === 1 ? '男' : '女'
-          // )
         },
       },
       {
@@ -544,9 +522,6 @@ class RecordQuery extends Component {
         title: "就诊时间",
         dataIndex: "createAt",
         width: 50,
-        // render: (h, params) => {
-        //     return h('div', this.formatDate(params.row.createAt));
-        // }
       },
       {
         title: "病人主诉",
@@ -560,8 +535,24 @@ class RecordQuery extends Component {
         dataIndex: "disease",
         width: 50,
         render: (disease) => {
-          // let disease = params.row.disease;
           return this.getDisease(disease);
+        },
+      },
+      {
+        title: "病历详情",
+        dataIndex: "detail",
+        width: 50,
+        render: (text, record, index) => {
+          return (
+            <Button
+              type="primary"
+              size="small"
+              style={{ marginRight: "5px" }}
+              onClick={() => this.show(record)}
+            >
+              病历详情
+            </Button>
+          );
         },
       },
       {
@@ -572,37 +563,17 @@ class RecordQuery extends Component {
         render: (text, record, index) => {
           return (
             <div>
-              <Button
-                type="primary"
-                size="small"
-                style={{ marginRight: "5px" }}
-                onClick={() => this.show(record)}
-              >
-                病历详情
-              </Button>
-              <Button
-                type="primary"
-                size="small"
-                style={{
-                  marginRight: "5px",
-                  backgroundColor: "green",
-                  borderColor: "green",
-                }}
-                onClick={() => this.detectionData(record)}
-              >
-                检测数据
-              </Button>
-              <Link to={`/admin/textAnalysis/${record.id}`} target='_blank'>
+              <Link to={`/admin/addRecord/${record.patientId}`} target='_blank'>
                 <Button
                   type="primary"
                   size="small"
                   style={{
                     marginRight: "5px",
-                    backgroundColor: "#EAC100",
-                    borderColor: "#EAC100",
+                    backgroundColor: "green",
+                    borderColor: "green",
                   }}
                 >
-                  文本分析
+                  新增病历
                 </Button>
               </Link>
               <Button
@@ -613,9 +584,9 @@ class RecordQuery extends Component {
                   backgroundColor: "red",
                   borderColor: "red",
                 }}
-                onClick={() => this.remove(index)}
+                onClick={() => this.updataPatientInfo}
               >
-                删除
+                更新患者信息
               </Button>
             </div>
           );
@@ -771,157 +742,6 @@ class RecordQuery extends Component {
               </Col>
             </Row>
           </div>
-        </Drawer>
-
-        <Drawer
-          title="实验检查数据"
-          placement="right"
-          width="750"
-          closable={false}
-          onClose={this.onClose}
-          visible={this.state.tableSwitch}
-        >
-          <Row>
-            <Col span={8}>
-              <strong>患者姓名:</strong>
-              <span style={{ marginLeft: 20 }}>
-                {this.state.patientInfo.name}
-              </span>
-            </Col>
-            <Col span={8}>
-              <strong>性别:</strong>
-              <span style={{ marginLeft: 50 }}>
-                {this.state.patientInfo.gender == 0 ? "男" : "女"}
-              </span>
-            </Col>
-            <Col span={8}>
-              <strong>生日:</strong>
-              <span style={{ marginLeft: 45 }}>
-                {this.state.patientInfo.birthday}
-              </span>
-            </Col>
-          </Row>
-          <Row>
-            <Col span={8}>
-              <strong>身高(cm):</strong>
-              <span style={{ marginLeft: 20 }}>
-                {this.state.patientInfo.height}{" "}
-              </span>
-            </Col>
-            <Col span={8}>
-              <strong>体重(kg)：</strong>
-              <span style={{ marginLeft: 10 }}>
-                {this.state.patientInfo.weight}{" "}
-              </span>
-            </Col>
-            <Col span={8}>
-              <strong>病种：</strong>
-              <span style={{ marginLeft: 37 }}>
-                {this.getDisease(this.state.patientInfo.disease)}
-              </span>
-            </Col>
-          </Row>
-          <Row>
-            <Col span={12}>
-              <strong>血液检测</strong>
-            </Col>
-            <Col span={12}>
-              <strong style={{ marginLeft: 37 }}>检测异常</strong>
-            </Col>
-          </Row>
-          <Row>
-            <Col span={12}>{this.state.patientInfo.bloodTest}</Col>
-            <Col span={12}>
-              <p style={{ marginLeft: 37 }}>
-                {this.state.patientInfo.bloodExcp}
-              </p>
-            </Col>
-          </Row>
-          <Row>
-            <Col span={8}>
-              <strong>红外热成像图</strong>
-            </Col>
-            <Col span={8}>
-              <strong style={{ marginLeft: 37 }}>检测描述</strong>
-            </Col>
-            <Col span={8}>
-              <strong style={{ marginLeft: 37 }}>检测异常</strong>
-            </Col>
-          </Row>
-          <Row>
-            <Col span={8}>
-              <img
-                src="http://10.13.81.189:8001/feiai04.jpg"
-                width="200px"
-                alt=""
-              />{" "}
-            </Col>
-            <Col span={8}>
-              <p style={{ marginLeft: 37 }}>{this.state.patientInfo.irtDesc}</p>
-            </Col>
-            <Col span={8}>
-              <p style={{ marginLeft: 37 }}>{this.state.patientInfo.irtExcp}</p>
-            </Col>
-          </Row>
-          <Row>
-            <Col span={8}>
-              <strong>舌象图谱</strong>
-            </Col>
-            <Col span={8}>
-              <strong style={{ marginLeft: 37 }}>检测描述</strong>
-            </Col>
-            <Col span={8}>
-              <strong style={{ marginLeft: 37 }}>检测异常</strong>
-            </Col>
-          </Row>
-          <Row>
-            <Col span={8}>
-              <img
-                src="http://10.13.81.189:8001/tongue2.jpg"
-                width="200px"
-                alt=""
-              />
-            </Col>
-            <Col span={8}>
-              <p style={{ marginLeft: 37 }}>
-                {this.state.patientInfo.tongueDesc}
-              </p>
-            </Col>
-            <Col span={8}>
-              <p style={{ marginLeft: 37 }}>
-                {this.state.patientInfo.tongueExcp}
-              </p>
-            </Col>
-          </Row>
-          <Row>
-            <Col span={8}>
-              <strong>脉象数据</strong>
-            </Col>
-            <Col span={8}>
-              <strong style={{ marginLeft: 37 }}>检测描述</strong>
-            </Col>
-            <Col span={8}>
-              <strong style={{ marginLeft: 37 }}>检测异常</strong>
-            </Col>
-          </Row>
-          <Row>
-            <Col span={8}>
-              <ReactEcharts
-                option={this.getOption()}
-                style={{ height: "200px", width: "", align: "center" }}
-              />
-            </Col>
-            <Col span={8}>
-              <p style={{ marginLeft: 37 }}>
-                {this.state.patientInfo.pulseDesc}
-              </p>
-            </Col>
-            <Col span={8}>
-              <p style={{ marginLeft: 37 }}>
-                {this.state.patientInfo.pulseExcp}
-              </p>
-            </Col>
-          </Row>
         </Drawer>
 
         <Modal
@@ -1086,4 +906,4 @@ class RecordQuery extends Component {
   }
 }
 
-export default Form.create()(RecordQuery);
+export default Form.create()(PatientQuery);

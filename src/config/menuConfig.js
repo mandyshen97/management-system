@@ -1,12 +1,17 @@
 const menuList = [
   {
-    title: '电子病历上传',
+    title: '患者信息上传',
     path: '/admin/recordUpload',
     icon: 'upload'
   },
   {
-    title: '电子病历查询',
+    title: '病历信息管理',
     path: '/admin/recordQuery',
+    icon: 'file'
+  },
+  {
+    title: '患者信息管理',
+    path: '/admin/patientQuery',
     icon: 'file'
   },
   {

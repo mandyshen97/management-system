@@ -93,7 +93,7 @@ class LeftNav extends Component {
           onClick={() => this.handleChangeColor("/admin/home")}
         >
           <img src={logo} alt="logo" />
-          <h1>辅助系统</h1>
+          <h2>脊椎康复辅助诊疗</h2>
         </Link>
         <Menu mode="inline" theme="dark" selectable={false}>
           {this.getMenuNodes_map(menuList)}

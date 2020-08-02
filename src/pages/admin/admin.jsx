@@ -6,8 +6,10 @@ import LeftNav from './../../components/left-nav/LeftNav';
 import Header from '../../components/header/Header'
 import RecordQuery from './../../components/recordQuery/RecordQuery';
 import TextAnalysis from './../../components/recordQuery/TextAnalysis';
+import AddRecord from '../../components/addRecord/AddRecord'
 import RecordUpload from '../../components/recordUpload/RecordUpload'
 import Medicine from '../../components/recovery/Medicine';
+import PatientQuery from '../../components/patientQuery/PatientQuery'
 
 import './admin.less'
 
@@ -59,7 +61,9 @@ class Admin extends Component {
             <Switch>
               <Redirect from='/admin' exact to='/admin/recordQuery' />
               <Route path='/admin/recordQuery' component={RecordQuery} />
+              <Route path='/admin/patientQuery' component={PatientQuery} />
               <Route path='/admin/textAnalysis/:id' component={TextAnalysis} />
+              <Route path='/admin/addRecord/:id' component={AddRecord} />
               <Route path='/admin/recordUpload' component={RecordUpload} />
               <Route path='/admin/recovery/medicine' component={Medicine} />
             </Switch>
