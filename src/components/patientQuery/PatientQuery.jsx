@@ -447,20 +447,20 @@ class PatientQuery extends Component {
     const { getFieldDecorator } = form;
     return (
       <Form layout="inline">
-        <Form.Item label="患者id">
-          {/* <span className="input-text">患者id</span> */}
-          {/* {getFieldDecorator(
+        <Form.Item>
+          <span className="input-text">患者id：</span>
+          {getFieldDecorator(
             "patientId",
             {}
-          )( */}
+          )(
             <Input
               style={{ width: 100, marginRight: 15 }}
               placeholder="患者id"
             />
-          {/* )} */}
+          )}
         </Form.Item>
         <Form.Item>
-          <span className="input-text">患者姓名</span>
+          <span className="input-text">患者姓名：</span>
           {getFieldDecorator(
             "name",
             {}
@@ -563,7 +563,7 @@ class PatientQuery extends Component {
         render: (text, record, index) => {
           return (
             <div>
-              <Link to={`/admin/addRecord/${record.patientId}`} target='_blank'>
+              <Link to={`/admin/addRecord/${record.patientId}`} target="_blank">
                 <Button
                   type="primary"
                   size="small"

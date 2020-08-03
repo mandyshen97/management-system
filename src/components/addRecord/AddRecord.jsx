@@ -1,11 +1,10 @@
 import React, { Component } from "react";
 import {
+  Upload,
   Input,
   Form,
-  TextArea,
   Icon,
   Button,
-  Upload,
   br,
   Row,
   Divider,
@@ -16,10 +15,13 @@ import {
   Drawer,
   Col,
   Modal,
+  Select,
   Descriptions,
 } from "antd";
 import "./add-record.less";
 import API from "../../api/api";
+const { TextArea } = Input;
+const { Option } = Select;
 class AddRecord extends Component {
   constructor(props) {
     super(props);
@@ -36,8 +38,39 @@ class AddRecord extends Component {
       simMedRecord: {},
       diseaseList: [],
       helpSwitch: false,
+      // 照片墙 start
+      previewVisible: false,
+      previewImage: "",
+      fileList: [],
+      // 照片墙 end
     };
   }
+
+  // 照片墙 start
+  getBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+  }
+
+  handleCancel = () => this.setState({ previewVisible: false });
+
+  handlePreview = async (file) => {
+    if (!file.url && !file.preview) {
+      file.preview = await this.getBase64(file.originFileObj);
+    }
+
+    this.setState({
+      previewImage: file.url || file.preview,
+      previewVisible: true,
+    });
+  };
+
+  handleChange = ({ fileList }) => this.setState({ fileList });
+  // 照片墙 end
 
   //   根据生日获取年龄
   getAge(birthday) {
@@ -48,6 +81,10 @@ class AddRecord extends Component {
     //一年毫秒数(365 * 86400000 = 31536000000)
     return Math.ceil((nowTime - birthDayTime) / 31536000000);
   }
+
+  handleTreatChange = (value) => {
+    console.log("selected", value);
+  };
 
   //   页面渲染前执行函数
   componentDidMount() {
@@ -60,44 +97,63 @@ class AddRecord extends Component {
   //   渲染的页面
   render() {
     const { form } = this.props;
-    // const { getFieldDecorator } = form;
+    const { getFieldDecorator } = form;
+    // 照片墙start
+    const { previewVisible, previewImage, fileList } = this.state;
+    const uploadButton = (
+      <div>
+        <Icon type="plus" />
+        <div className="ant-upload-text">Upload</div>
+      </div>
+    );
+    // 照片墙end
+    const treatList = [
+      "针灸",
+      "推拿",
+      "药物",
+      "康复训练",
+      "理疗",
+      "爬行训练",
+      "手术",
+      "其他方法",
+    ];
     return (
       <div className="main-content">
         <b>基本信息</b>
         <Divider className="divide" />
-        <Row justify="space-between">
-          <Col span={3}>
+        <Row justify="space-between" className="basicInformation">
+          <Col>
             <strong>患者id:</strong>
             <span style={{ marginLeft: 15, padding: 8 }}>
               {this.state.medRecord.patientId}
             </span>
           </Col>
-          <Col span={2}>
+          <Col>
             <strong>姓名:</strong>
             <span style={{ marginLeft: 15, padding: 8 }}>
               {this.state.medRecord.name}
             </span>
           </Col>
-          <Col span={2}>
+          <Col>
             <strong>性别:</strong>
             <span style={{ marginLeft: 15 }}>
               {this.state.medRecord.gender == 1 ? "男" : "女"}
             </span>
           </Col>
-          <Col span={2}>
+          <Col>
             <strong>年龄:</strong>
             <span style={{ marginLeft: 15 }}>
               {this.getAge(this.state.medRecord.birthday)}
             </span>
           </Col>
-          <Col span={4}>
+          <Col>
             <strong>病人主诉:</strong>
             <span style={{ marginLeft: 15 }}>
               {this.state.medRecord.chfCmp}
             </span>
           </Col>
-          <Col span={4}>
-            <strong>诊断</strong>
+          <Col>
+            <strong>诊断:</strong>
             <span style={{ marginLeft: 15 }}>
               {this.state.medRecord.disease}
             </span>
@@ -119,57 +175,170 @@ class AddRecord extends Component {
         </div>
         {/* <Descriptions.Item label="UserName">Zhou Maomao</Descriptions.Item>
           <Descriptions.Item label="Telephone">1810000000</Descriptions.Item>
-          <Descriptions.Item label="Live">Hangzhou, Zhejiang</Descriptions.Item>
-          <Descriptions.Item label="Remark">empty</Descriptions.Item>
-          <Descriptions.Item label="Address">
-            No. 18, Wantang Road, Xihu District, Hangzhou, Zhejiang, China
-          </Descriptions.Item> */}
         {/* </Descriptions> */}
         <Divider />
-        <b>上传治疗前的红外热像图</b>
-        <div>
-          <Form.Item label="红外热像">
-            {/* {getFieldDecorator(
+        <b>治疗前</b>
+        <div className="uploadFile">
+          <Form.Item label="红外热像" className="imageFile">
+            {getFieldDecorator(
               "infraFile",
               {}
-            )( */}
-              <Upload action="路径" beforeUpload={this.beforeUploadIrtFile}>
-                <Button style={{ width: 200 }} type="primary" icon="upload">
-                  选择要上传的文件
-                </Button>
+            )(
+              // <Upload action="路径" beforeUpload={this.beforeUploadIrtFile}>
+              //   <Button style={{ width: 200 }} type="primary" icon="upload">
+              //     选择要上传的文件
+              //   </Button>
+              // </Upload>
+              <Upload
+                action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                listType="picture-card"
+                fileList={fileList}
+                onPreview={this.handlePreview}
+                onChange={this.handleChange}
+              >
+                {fileList.length >= 8 ? null : uploadButton}
               </Upload>
-            {/* )} */}
+            )}
+            <Modal
+              visible={previewVisible}
+              footer={null}
+              onCancel={this.handleCancel}
+            >
+              <img alt="example" style={{ width: "100%" }} src={previewImage} />
+            </Modal>
           </Form.Item>
-          {/* <Form.Item label="描述" style={{ marginLeft: 0 }}>
+          <Form.Item label="描述">
             {getFieldDecorator(
               "infraDesc",
               {}
             )(
               <TextArea
-                style={{ width: 200, height: 32 }}
-                autoSize={{ minRows: 1, maxRows: 10 }}
+                style={{ width: 400, height: 32 }}
+                autoSize={{ minRows: 4, maxRows: 10 }}
                 placeholder="请输入..."
               />
             )}
-          </Form.Item> */}
-          {/* <Form.Item label="异常">
+          </Form.Item>
+          <Form.Item label="异常">
             {getFieldDecorator(
               "infraExcp",
               {}
             )(
               <TextArea
-                style={{ width: 200, height: 32 }}
-                autoSize={{ minRows: 1, maxRows: 10 }}
+                style={{ width: 400, height: 32, marginLeft: 10 }}
+                autoSize={{ minRows: 4, maxRows: 10 }}
                 placeholder="请输入..."
               />
             )}
-          </Form.Item> */}
+          </Form.Item>
         </div>
-        F
+        <Form.Item label="用药情况">
+          {getFieldDecorator(
+            "pulseExcp",
+            {}
+          )(
+            <TextArea
+              // style={{ width: 200, height: 32 }}
+              autoSize={{ minRows: 3, maxRows: 10 }}
+              placeholder="请输入..."
+            />
+          )}
+        </Form.Item>
         <Divider />
-        <b>治疗建议</b>
+        <b>选择或新增治疗方案</b>
+        <div className="treat">
+          <Form.Item label="选择治疗方案">
+            {getFieldDecorator(
+              "treat",
+              {}
+            )(
+              <Select
+                mode="multiple"
+                showArrow="true"
+                style={{ width: "50%" }}
+                placeholder="Please select"
+                // defaultValue={["a10", "c12"]}
+                onChange={this.handleTreatChange}
+              >
+                {treatList.map((item, index) => {
+                  return (
+                    <Option value={item} key={item}>
+                      {item}
+                    </Option>
+                  );
+                })}
+              </Select>
+            )}
+          </Form.Item>
+          <Form.Item label="治疗情况说明">
+            {getFieldDecorator(
+              "treatDetail",
+              {}
+            )(
+              <TextArea
+                style={{ width: 400, height: 32 }}
+                autoSize={{ minRows: 4, maxRows: 10 }}
+                placeholder="请输入..."
+              />
+            )}
+          </Form.Item>
+        </div>
         <Divider />
-       
+        <b>治疗后</b>
+        <div className="uploadFile">
+          <Form.Item label="红外热像" className="imageFile">
+            {getFieldDecorator(
+              "infraFile",
+              {}
+            )(
+              // <Upload action="路径" beforeUpload={this.beforeUploadIrtFile}>
+              //   <Button style={{ width: 200 }} type="primary" icon="upload">
+              //     选择要上传的文件
+              //   </Button>
+              // </Upload>
+              <Upload
+                action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                listType="picture-card"
+                fileList={fileList}
+                onPreview={this.handlePreview}
+                onChange={this.handleChange}
+              >
+                {fileList.length >= 8 ? null : uploadButton}
+              </Upload>
+            )}
+            <Modal
+              visible={previewVisible}
+              footer={null}
+              onCancel={this.handleCancel}
+            >
+              <img alt="example" style={{ width: "100%" }} src={previewImage} />
+            </Modal>
+          </Form.Item>
+          <Form.Item label="描述">
+            {getFieldDecorator(
+              "infraDesc",
+              {}
+            )(
+              <TextArea
+                style={{ width: 400, height: 32 }}
+                autoSize={{ minRows: 4, maxRows: 10 }}
+                placeholder="请输入..."
+              />
+            )}
+          </Form.Item>
+          <Form.Item label="异常">
+            {getFieldDecorator(
+              "infraExcp",
+              {}
+            )(
+              <TextArea
+                style={{ width: 400, height: 32, marginLeft: 10 }}
+                autoSize={{ minRows: 4, maxRows: 10 }}
+                placeholder="请输入..."
+              />
+            )}
+          </Form.Item>
+        </div>
       </div>
     );
   }
