@@ -13,11 +13,6 @@ const menuList = [
     title: "患者信息管理",
     path: "/admin/patientQuery",
     icon: "idcard",
-  },
-  {
-    title: "康复评估",
-    path: "/admin/recovery/Medicine",
-    icon: "switcher",
-  },
+  }
 ];
 export default menuList;

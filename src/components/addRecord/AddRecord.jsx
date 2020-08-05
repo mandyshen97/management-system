@@ -344,4 +344,4 @@ class AddRecord extends Component {
   }
 }
 
-export default Form.create()(AddRecord);
+export default AddRecord;

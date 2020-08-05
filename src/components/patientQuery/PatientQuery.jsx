@@ -141,42 +141,42 @@ class PatientQuery extends Component {
     });
   };
 
-  updateConfirm = () => {
-    this.props.form.validateFields((err, values) => {
-      let param = {
-        id: this.state.patientInfo.id,
-        patientSign: values.patientSign,
-        tcmType: values.tcmType,
-        diseaseId: values.disease,
-        westernMedicine: values.mainMedicine.join(","),
-        chineseMedicine: values.auxMedicine.join(","),
-      };
-      console.log(values.disease);
-      API.updateRecord(param)
-        .then((response) => {
-          let _data = response.data;
-          let _code = response.code;
-          let _msg = response.msg;
-          if (_code === "200") {
-            Message.info("病历更新成功");
-            this.queryPatient();
-            this.setState({
-              updateSwitch: false,
-              drawerSwitch: false,
-            });
-          } else {
-            Message.info("病历更新失败，请稍后重试！");
-            this.setState({
-              updateSwitch: false,
-              drawerSwitch: false,
-            });
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    });
-  };
+  // updateConfirm = () => {
+  //   // this.props.form.validateFields((err, values) => {
+  //   let param = {
+  //     id: this.state.patientInfo.id,
+  //     patientSign: values.patientSign,
+  //     tcmType: values.tcmType,
+  //     diseaseId: values.disease,
+  //     westernMedicine: values.mainMedicine.join(","),
+  //     chineseMedicine: values.auxMedicine.join(","),
+  //   };
+  //   console.log(values.disease);
+  //   API.updateRecord(param)
+  //     .then((response) => {
+  //       let _data = response.data;
+  //       let _code = response.code;
+  //       let _msg = response.msg;
+  //       if (_code === "200") {
+  //         Message.info("病历更新成功");
+  //         this.queryPatient();
+  //         this.setState({
+  //           updateSwitch: false,
+  //           drawerSwitch: false,
+  //         });
+  //       } else {
+  //         Message.info("病历更新失败，请稍后重试！");
+  //         this.setState({
+  //           updateSwitch: false,
+  //           drawerSwitch: false,
+  //         });
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  //   // });
+  // };
   updateCancel = () => {
     this.setState({
       updateSwitch: false,
@@ -362,70 +362,71 @@ class PatientQuery extends Component {
 
   // 获取患者信息列表
   queryPatient = () => {
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        let param = {
-          id: values.patientId,
-          name: values.name,
-        };
-        // todo
-        // 获取患者列表的API
-        // API.getPatientList(param).then((res) => {
-        //   const { data, code, msg } = res;
-        //   if(code==='200'){
-        //     let newListData = []
+    console.log('queryPatient')
+  //   this.props.form.validateFields((err, values) => {
+  //     if (!err) {
+  //       let param = {
+  //         id: values.patientId,
+  //         name: values.name,
+  //       };
+  //       // todo
+  //       // 获取患者列表的API
+  //       // API.getPatientList(param).then((res) => {
+  //       //   const { data, code, msg } = res;
+  //       //   if(code==='200'){
+  //       //     let newListData = []
 
-        //   }
-        // });
-        fetch(
-          "https://www.fastmock.site/mock/9df39432386360a59e2d0557525f4887/query/query/getPatientList"
-        )
-          .then((res) => res.json())
-          .then((res) => {
-            console.log("res", res);
-            const { data, code, desc } = res;
-            if (code === "200") {
-              // let newListData = [];
-              // data.map((item, index) => {
-              //   let newListDataItem = {};
-              //   // newListDataItem.key = index+item.patientId;
-              //   newListData.push(item);
-              // });
-              this.setState({
-                listData: data,
-              });
-            }
-          });
-        // API.getRecordList(param).then((res) => {
-        //   let _data = res.data;
-        //   let _code = res.code;
-        //   let _msg = res.msg;
-        //   if (_code === "200") {
-        //     let newListData = [];
-        //     // Todo 写的太烂 重写
-        //     _data.data.map((item, index) => {
-        //       let newListDataItem = {};
-        //       newListDataItem.key = index;
-        //       newListDataItem.id = item.id;
-        //       Object.assign(item, newListDataItem);
-        //       item.key = index;
-        //       newListData.push(item);
-        //     });
-        //     this.setState({
-        //       listData: newListData,
-        //       totalNum: _data.totalNum,
-        //     });
-        //   } else if (_code === "302") {
-        //     Message.error(_msg);
-        //     setTimeout(() => {
-        //       this.props.history.replace("/login");
-        //     }, 1000);
-        //   } else {
-        //     Message.error(_msg);
-        //   }
-        // });
-      }
-    });
+  //       //   }
+  //       // });
+  //       fetch(
+  //         "https://www.fastmock.site/mock/9df39432386360a59e2d0557525f4887/query/query/getPatientList"
+  //       )
+  //         .then((res) => res.json())
+  //         .then((res) => {
+  //           console.log("res", res);
+  //           const { data, code, desc } = res;
+  //           if (code === "200") {
+  //             // let newListData = [];
+  //             // data.map((item, index) => {
+  //             //   let newListDataItem = {};
+  //             //   // newListDataItem.key = index+item.patientId;
+  //             //   newListData.push(item);
+  //             // });
+  //             this.setState({
+  //               listData: data,
+  //             });
+  //           }
+  //         });
+  //       // API.getRecordList(param).then((res) => {
+  //       //   let _data = res.data;
+  //       //   let _code = res.code;
+  //       //   let _msg = res.msg;
+  //       //   if (_code === "200") {
+  //       //     let newListData = [];
+  //       //     // Todo 写的太烂 重写
+  //       //     _data.data.map((item, index) => {
+  //       //       let newListDataItem = {};
+  //       //       newListDataItem.key = index;
+  //       //       newListDataItem.id = item.id;
+  //       //       Object.assign(item, newListDataItem);
+  //       //       item.key = index;
+  //       //       newListData.push(item);
+  //       //     });
+  //       //     this.setState({
+  //       //       listData: newListData,
+  //       //       totalNum: _data.totalNum,
+  //       //     });
+  //       //   } else if (_code === "302") {
+  //       //     Message.error(_msg);
+  //       //     setTimeout(() => {
+  //       //       this.props.history.replace("/login");
+  //       //     }, 1000);
+  //       //   } else {
+  //       //     Message.error(_msg);
+  //       //   }
+  //       // });
+  //     }
+  //   });
   };
 
   // 分页页数改变触发函数
@@ -444,32 +445,20 @@ class PatientQuery extends Component {
   // 查询表单
   renderSearch = () => {
     const { form } = this.props;
-    const { getFieldDecorator } = form;
     return (
       <Form layout="inline">
-        <Form.Item>
+        <Form.Item name="patientId">
           <span className="input-text">患者id：</span>
-          {getFieldDecorator(
-            "patientId",
-            {}
-          )(
-            <Input
-              style={{ width: 100, marginRight: 15 }}
-              placeholder="患者id"
-            />
-          )}
+
+          <Input style={{ width: 100, marginRight: 15 }} placeholder="患者id" />
         </Form.Item>
-        <Form.Item>
+        <Form.Item name="name">
           <span className="input-text">患者姓名：</span>
-          {getFieldDecorator(
-            "name",
-            {}
-          )(
-            <Input
-              style={{ width: 100, marginRight: 15 }}
-              placeholder="患者姓名"
-            />
-          )}
+
+          <Input
+            style={{ width: 100, marginRight: 15 }}
+            placeholder="患者姓名"
+          />
         </Form.Item>
         <Form.Item>
           <Button type="primary" onClick={this.queryPatient}>
@@ -594,7 +583,6 @@ class PatientQuery extends Component {
       },
     ];
     const { form } = this.props;
-    const { getFieldDecorator } = form;
     return (
       <div className="main-content">
         {this.renderSearch()}
@@ -803,48 +791,44 @@ class PatientQuery extends Component {
               </p>
             </Form.Item>
 
-            <Form.Item label="病人症状" style={{ marginLeft: 0 }}>
-              {getFieldDecorator("patientSign", {
-                initialValue: this.state.patientInfo.patientSign,
-              })(
-                <TextArea
-                  style={{ width: 400 }}
-                  autoSize={{ minRows: 1, maxRows: 3 }}
-                />
-              )}
+            <Form.Item
+              label="病人症状"
+              name="patientSign"
+              style={{ marginLeft: 0 }}
+            >
+              <TextArea
+                style={{ width: 400 }}
+                autoSize={{ minRows: 1, maxRows: 3 }}
+              />
             </Form.Item>
-            <Form.Item label="中医证型" style={{ marginLeft: 0 }}>
-              {getFieldDecorator("tcmType", {
-                initialValue: this.state.patientInfo.tcmType,
-              })(
-                <TextArea
-                  style={{ width: 400 }}
-                  autoSize={{ minRows: 1, maxRows: 3 }}
-                />
-              )}
+            <Form.Item
+              label="中医证型"
+              name="tcmType"
+              style={{ marginLeft: 0 }}
+            >
+              <TextArea
+                style={{ width: 400 }}
+                autoSize={{ minRows: 1, maxRows: 3 }}
+              />
             </Form.Item>
-            <Form.Item label="诊断" style={{ marginLeft: 27 }}>
-              {getFieldDecorator("disease", {
-                initialValue: this.getDisease(this.state.patientInfo.disease),
-              })(
-                <Select
-                  allowClear={true}
-                  showSearch
-                  style={{ width: 400 }}
-                  placeholder="请选择病种"
-                  filterOption={(input, option) =>
-                    option.props.children
-                      .toLowerCase()
-                      .indexOf(input.toLowerCase()) >= 0
-                  }
-                >
-                  {this.state.diseaseList.map((item, index) => (
-                    <Option value={item.id} key={index}>
-                      {item.disease}
-                    </Option>
-                  ))}
-                </Select>
-              )}
+            <Form.Item label="诊断" name="disease" style={{ marginLeft: 27 }}>
+              <Select
+                allowClear={true}
+                showSearch
+                style={{ width: 400 }}
+                placeholder="请选择病种"
+                filterOption={(input, option) =>
+                  option.props.children
+                    .toLowerCase()
+                    .indexOf(input.toLowerCase()) >= 0
+                }
+              >
+                {this.state.diseaseList.map((item, index) => (
+                  <Option value={item.id} key={index}>
+                    {item.disease}
+                  </Option>
+                ))}
+              </Select>
             </Form.Item>
 
             <Form.Item label="上次处方" style={{ marginLeft: 0 }}>
@@ -871,33 +855,27 @@ class PatientQuery extends Component {
                 <span style={{ margin: "0px 2px" }}>青黛</span>
               </p>
             </Form.Item>
-            <Form.Item label="西医主药" style={{ marginLeft: 0 }}>
-              {getFieldDecorator(
-                "mainMedicine",
-                {}
-              )(
-                <Select
-                  style={{ width: 400 }}
-                  placeholder="请选择"
-                  mode="multiple"
-                >
-                  {this.state.selectMainMedicine}
-                </Select>
-              )}
+            <Form.Item
+              label="西医主药"
+              name="mainMedicine"
+              style={{ marginLeft: 0 }}
+            >
+              <Select
+                style={{ width: 400 }}
+                placeholder="请选择"
+                mode="multiple"
+              >
+                {this.state.selectMainMedicine}
+              </Select>
             </Form.Item>
-            <Form.Item label="中医辅药">
-              {getFieldDecorator(
-                "auxMedicine",
-                {}
-              )(
-                <Select
-                  style={{ width: 400 }}
-                  placeholder="请选择"
-                  mode="multiple"
-                >
-                  {this.state.selectAuxliMedicine}
-                </Select>
-              )}
+            <Form.Item label="中医辅药" name="auxMedicine">
+              <Select
+                style={{ width: 400 }}
+                placeholder="请选择"
+                mode="multiple"
+              >
+                {this.state.selectAuxliMedicine}
+              </Select>
             </Form.Item>
           </Form>
         </Modal>
@@ -906,4 +884,4 @@ class PatientQuery extends Component {
   }
 }
 
-export default Form.create()(PatientQuery);
+export default PatientQuery;
