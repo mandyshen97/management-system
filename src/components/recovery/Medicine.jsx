@@ -412,8 +412,8 @@ class Medicine extends Component {
 
     // 抽屉等组件关闭
     getOption = (index) => {
-        let xData = []
-        let len = this.state.pulseData[index].series.length
+        let xData = [];
+        let len = this.state.pulseData[index].series.length;
         for (let i = 1; i <= len; i++) {
             xData.push(i.toString());
         }

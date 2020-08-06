@@ -16,7 +16,6 @@ class RecordUpload extends Component {
       westernMedicineList:[],
       chineseMedicineList:[],
       visible: false,
-      fileList: [],
       loadingStatus: false,
       formData: {
         doctorId: 0,
@@ -79,7 +78,6 @@ class RecordUpload extends Component {
     this.getDoctors();
     this.getDiseases();
     this.getMedicine();
-    // console.log(this.state.doctorList)
   }
   // 获取主辅药
   getMedicine = () => {
@@ -99,7 +97,6 @@ class RecordUpload extends Component {
           this.setState({
             westernMedicineList: newMedicineList
           })
-          console.log(this.state.westernMedicineList);
         }
       }).catch((err) => {
         console.log(err)
@@ -120,7 +117,6 @@ class RecordUpload extends Component {
           this.setState({
             chineseMedicineList: newMedicineList
           })
-          console.log(this.state.chineseMedicineList);
         }
       }).catch((err) => {
         console.log(err)
@@ -159,7 +155,7 @@ class RecordUpload extends Component {
           _data.forEach(item => {
             newDiseaseList.push({
               "value": item.id,
-              "label": item.disease
+              "label": item.name
             })
 
           })
@@ -205,11 +201,11 @@ class RecordUpload extends Component {
           doctorId: values.doctorId,
           birthday: values.birthday,
           gender: values.gender,
-          disease: values.diseaseId,
+          diseaseId: values.diseaseId,
           chfCmp: values.chfCmp,
           patientSign: values.patientSign,
           tcmType: values.tcmType,
-          preMedHis: values.preMedHis,
+          prvMedHis: values.preMedHis,
           hisPreIll: values.hisPreIll,
           allergy: values.allergies,
           bloodTest: values.bloodTest,
@@ -223,14 +219,13 @@ class RecordUpload extends Component {
           pulseFile: this.state.pulseFileData,
           pulseDesc: values.pulseDesc,
           pulseExcp: values.pulseExcp,
-          westernMedicine: values.mainMedicine.join(" "),
-          chineseMedicine: values.auxMedicine.join(" ")
+          westernPrescription: values.mainMedicine.join(","),
+          chinesePrescription: values.auxMedicine.join(",")
         };
         const formData = new FormData();
         for (let key in param) {
           formData.append(key, param[key]);
         }
-        console.log(param);
         API.uploadRecord(formData).then((response) => {
           let _code = response.code,
             _msg = response.msg;
@@ -372,10 +367,6 @@ class RecordUpload extends Component {
         <br />
         <Form.Item label="红外热像" >
           {getFieldDecorator("infraFile", {})(
-            // <Input type="file" placeholder="选择要上传的文件"/>
-            // <Upload multiple={true}>
-            //   <Button type="primary" icon="upload">选择要上传文件的文件</Button>
-            // </Upload>
             <Upload action='路径'
               beforeUpload={this.beforeUploadIrtFile}>
               <Button type="primary" icon="upload">选择要上传的文件</Button>
@@ -398,10 +389,6 @@ class RecordUpload extends Component {
 
         <Form.Item label="舌象图谱" >
           {getFieldDecorator("tongueFile", {})(
-            // <Input type="file" placeholder="选择要上传的文件" />
-            // <Upload multiple={true}>
-            //   <Button type="primary" icon="upload">选择要上传文件的文件</Button>
-            // </Upload>
             <Upload action='路径'
               beforeUpload={this.beforeUploadTongueFile}>
               <Button type="primary" icon="upload">选择要上传的文件</Button>
@@ -424,10 +411,6 @@ class RecordUpload extends Component {
 
         <Form.Item label="脉象数据" >
           {getFieldDecorator("pulseFile", {})(
-            // <Input type="file" placeholder="选择要上传的文件" />
-            // <Upload multiple={true}>
-            //   <Button type="primary" icon="upload">选择要上传文件的文件</Button>
-            // </Upload>
             <Upload
               beforeUpload={this.beforeUploadPulseFile}>
               <Button type="primary" icon="upload">选择要上传的文件</Button>

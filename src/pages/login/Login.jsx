@@ -41,6 +41,7 @@ class Login extends Component {
           .then(res => {
             if (res.code !== "200") {
               Message.error("登录失败，用户名或密码错误！");
+              this.reloadPic();
             } else{
                 Message.success("登录成功！");
                 this.props.history.push("/admin");

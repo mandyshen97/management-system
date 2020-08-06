@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Icon, Button, br, Row, Divider, Tooltip, Tag, DatePicker, Message, Drawer, Col, Modal } from "antd";
+import { Button, Row, Divider, Message, Col, Modal } from "antd";
 import './text-analysis.less';
 import API from '../../api/api';
 class TextAnalysis extends Component {
@@ -11,27 +11,47 @@ class TextAnalysis extends Component {
             simMedRecord: {},
             diseaseList: [],
             helpSwitch: false,
+            recPresciption: ""
         }
     }
 
-    //   处理下载按钮
+    // 处理下载按钮
     handleDownload() {
-        // Message.success("敬请期待");
-        // console.log(this.props.match.params.id)
         this.callDownload(this.props.match.params.id)
     }
     callDownload(record_id) {
         window.location.href = "http://localhost:8081/record/download?id="+record_id;
     }
-    medicineHelp(record) {
-        if(record.recPrescription != null) {
-            // 显示用药帮助
+    async medicineHelp(record) {
+        let tmpMessage = "";
+        if (record.disease != "肺癌") {
+            tmpMessage = "非癌症患者不提供用药帮助"; 
+        } else if(record.recPrescription != null && record.recPrescription != "") {
+            tmpMessage = record.recPrescription;
         } else {
-            // 请求算法端获得用药帮助
-            // 显示请求结果
-            // 将请求结果写入后端数据库
+            let param = {
+                simRecIds: record.simRecIds
+            }
+            await API.simMedicineHelp(param).then((response) => {
+                let _data = response.data,
+                    _code = response.code,
+                    _msg = response.msg;
+                if (_code === "200") {
+                    let recMedicines = "";
+                    _data.rec_medicines.forEach(element => {
+                        recMedicines += element[0] + "(" + element[1].toFixed(2) + ")" + " ";
+                    })
+                    tmpMessage = recMedicines.trim();
+                    this.handleAnalyseResult(null, null, recMedicines.trim(), 0);    // 更新电子病历的响应字段
+                } else {
+                    Message.error(_msg);
+                }
+            }).catch(function (error) {
+                console.log(error);
+            });
         }
         this.setState({
+            recPrescription: tmpMessage,
             helpSwitch: true
         })
     }
@@ -40,14 +60,11 @@ class TextAnalysis extends Component {
             helpSwitch: false
         })
     }
-    // 处理开始分析按钮
+
     handleAnalyse(record) {
-        let text = record.chfCmp + '。' + record.hisPreIll + "。" + record.prvMedHis;
-        this.callAnalysis(text);
-    }
-    callAnalysis(record) {
         let param = {
-            record: record
+            recordId: record.id,
+            diseaseId: this.getDiseaseId(record.disease)
         }
         API.getAnalyseResult(param).then((response) => {
             let _data = response.data,
@@ -55,8 +72,8 @@ class TextAnalysis extends Component {
                 _msg = response.msg;
             if (_code === "200") {
                 let diseaseId = _data.disease_id;
-                let simRecordId = _data.record_id;
-                this.handleAnalyseResult(diseaseId, simRecordId);    // 更新电子病历的响应字段
+                let simRecordId = _data.sim_records;
+                this.handleAnalyseResult(diseaseId, simRecordId, null, 1);    // 更新电子病历的相应字段
             } else {
                 Message.error(_msg);
             }
@@ -65,20 +82,22 @@ class TextAnalysis extends Component {
         });
     }
     //   将分析结果更新数据库
-    handleAnalyseResult(diseaseId, simRecordId) {
+    handleAnalyseResult(diseaseId, simRecordId, recMedicines, doReload) {
         let param = {
             id: this.props.match.params.id,
-            analysisStatus: 1,
-            diagnosticResult: diseaseId,
-            similarRecord: simRecordId
+            auxDiseaseId: diseaseId,
+            simRecIds: simRecordId,
+            recPrescription: recMedicines
         }
-        API.handleAnalyseResult(param).then((response) => {
+        API.updateRecord(param).then((response) => {
             let _data = response.data,
                 _code = response.code,
                 _msg = response.msg;
             console.log(_data);
             if (_code === "200") {
-                window.location.reload();  // 刷新页面
+                if (doReload == 1) {
+                    window.location.reload();  // 刷新页面
+                }
             } else {
                 Message.error(_msg);
             }
@@ -89,6 +108,9 @@ class TextAnalysis extends Component {
 
     //   根据生日获取年龄
     getAge(birthday) {
+        if(birthday == null) {
+            return '';
+        }
         //出生时间 毫秒
         var birthDayTime = new Date(birthday).getTime();
         //当前时间 毫秒
@@ -98,17 +120,24 @@ class TextAnalysis extends Component {
     }
 
     //   根据病种id获取病种
-    getDisease(status, diseaseId) {
-        if (status == 0) {
-            return "尚未分析";
-        }
-        let disease = "尚未诊断";
+    getDisease(diseaseId) {
+        let disease = "尚未分析";
         this.state.diseaseList.forEach(element => {
             if (element.id == diseaseId) {
-                disease = element.disease;
+                disease = element.name;
             }
         });
         return disease;
+    }
+    //   根据病种获取病种idIIdd
+    getDiseaseId(disease) {
+        let diseaseId = 0;
+        this.state.diseaseList.forEach(element => {
+            if (element.name == disease) {
+                diseaseId = element.id;
+            }
+        });
+        return diseaseId;
     }
     //   获取病种列表
     getDiseaseList() {
@@ -133,21 +162,18 @@ class TextAnalysis extends Component {
     }
     // 获取相似电子病历
     getSimMedRecord(medRecordId) {
+        let firstId = parseInt(medRecordId.split(" ")[0]);
         let param = {
-            id: medRecordId
+            id: firstId
         }
         API.getRecord(param).then((response) => {
             let _data = response.data,
                 _code = response.code,
                 _msg = response.msg;
             if (_code === "200") {
-                // console.log(_data.data);
-                // console.log(_data);
                 this.setState({
                     simMedRecord: _data,
                 })
-                // console.log("medRecord:", this.medRecord);
-                // console.log("simMedRecord", this.simMedRecord);
             } else if (_code === "302") {
                 Message.error(_msg);
                 setTimeout(() => {
@@ -170,17 +196,13 @@ class TextAnalysis extends Component {
                 _code = response.code,
                 _msg = response.msg;
             if (_code === "200") {
-                // console.log(_data.data);
-                // console.log(_data);
                 this.setState({
                     medRecord: _data,
-                    simMedRecordId: _data.simRecordId
+                }, () => {
+                    if(this.state.medRecord.simRecIds != null && this.state.medRecord.simRecIds != ""){
+                        this.getSimMedRecord(this.state.medRecord.simRecIds);
+                    }
                 })
-                if(this.state.medRecord.analysisStatus==1&&this.state.medRecord.simRecordId!=null){
-                    this.getSimMedRecord(this.state.medRecord.simRecordId);
-                }
-                // console.log("medRecord:", this.medRecord);
-                // console.log("simMedRecord", this.simMedRecord);
             } else if (_code === "302") {
                 Message.error(_msg);
                 setTimeout(() => {
@@ -211,7 +233,7 @@ class TextAnalysis extends Component {
                 <Divider className="divide" />
                 <Row justify="space-between">
                     <Col span={4}>
-                        <strong>姓名:</strong><span style={{ marginLeft: 15, padding: 8 }}>{this.state.medRecord.name}</span>
+                        <strong>姓名:</strong><span style={{ marginLeft: 15, padding: 8 }}>{this.state.medRecord.patientName}</span>
                     </Col>
                     <Col span={4}>
                         <strong>主治医生:</strong><span style={{ marginLeft: 15 }}>{this.state.medRecord.doctorName}</span>
@@ -223,7 +245,7 @@ class TextAnalysis extends Component {
                         <strong>年龄:</strong><span style={{ marginLeft: 15 }}>{this.getAge(this.state.medRecord.birthday)}</span>
                     </Col>
                     <Col span={3}>
-                        <strong>病种:</strong><span style={{ marginLeft: 15 }}>{this.getDisease(this.state.medRecord.analysisStatus, this.state.medRecord.diagnosticResult)}</span>
+                        <strong>病种:</strong><span style={{ marginLeft: 15 }}>{this.getDisease(this.state.medRecord.auxDiseaseId)}</span>
                     </Col>
                     <Col span={2}>
                         <Button type="primary" onClick={() => this.handleAnalyse(this.state.medRecord)}>开始分析</Button>
@@ -299,15 +321,15 @@ class TextAnalysis extends Component {
                     <Col span={2}>
                         <div className="m-box">西医主药</div>
                     </Col>
-                    <Col span={10}>{this.state.medRecord.westernMedicine}</Col>
-                    <Col span={10} style={{ marginLeft: 15 }}>{this.state.simMedRecord.westernMedicine}</Col>
+                    <Col span={10}>{this.state.medRecord.westernPrescription}</Col>
+                    <Col span={10} style={{ marginLeft: 15 }}>{this.state.simMedRecord.westernPrescription}</Col>
                 </Row>
                 <Row justify="space-between">
                     <Col span={2}>
                         <div className="m-box">中医辅药</div>
                     </Col>
-                    <Col span={10}>{this.state.medRecord.chineseMedicine}</Col>
-                    <Col span={10} style={{ marginLeft: 15 }}>{this.state.simMedRecord.chineseMedicine}</Col>
+                    <Col span={10}>{this.state.medRecord.chinesePrescription}</Col>
+                    <Col span={10} style={{ marginLeft: 15 }}>{this.state.simMedRecord.chinesePrescription}</Col>
                 </Row>
                 <Modal
                     visible={this.state.helpSwitch}
@@ -315,17 +337,18 @@ class TextAnalysis extends Component {
                     onOk={this.helpConfirm}
                     onCancel={this.helpConfirm}>
                     <p>
-                        <span style={{ color: 'rgba(0, 0, 0, 0.85)', fontSize: '16px', fontWeight: '500' }}>推荐处方用药：</span>
+                        {this.state.recPrescription}
+                        {/* <span style={{ color: 'rgba(0, 0, 0, 0.85)', fontSize: '16px', fontWeight: '500' }}>推荐处方用药：</span>
                         <br />
                         <span style={{ color: 'red', margin: '2px 8px 2px 10px' }}>柴胡(1.00)</span>
                         <span style={{ color: 'red', margin: '2px 8px' }}>当归(0.91)</span>
                         <span style={{ color: 'red', margin: '2px 8px' }}>白芍(0.85)</span>
                         <span style={{ color: 'red', margin: '2px 8px' }}>白术(0.77)</span>
                         <span style={{ color: 'red', margin: '2px 8px' }}>茯苓(0.74)</span>
-                        <span style={{ color: 'red', margin: '2px 8px' }}>郁金(0.65)</span>
-                        <br />
+                        <span style={{ color: 'red', margin: '2px 8px' }}>郁金(0.65)</span> */}
+                        {/* <br />
                         <span style={{ margin: '2px 8px 2px 10px' }}>香附(0.58)</span>
-                        <span style={{ margin: '2px 8px' }}>八月札(0.44)</span>
+                        <span style={{ margin: '2px 8px' }}>八月札(0.44)</span> */}
                     </p>
                 </Modal>
             </div>)
