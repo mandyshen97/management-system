@@ -6,7 +6,8 @@ import { Link } from 'react-router-dom';
 import ReactEcharts from "echarts-for-react";
 const { Option } = Select;
 const { TextArea } = Input;
-const baseURL = "http://10.13.81.189:8001/"
+// const baseURL = "http://10.13.81.189:8001/"
+const baseURL = "http://localhost:8001/"
 class RecordQuery extends Component {
   constructor(props) {
     super(props);
@@ -111,7 +112,9 @@ class RecordQuery extends Component {
       ],
       doctorList: [],
       chineseMedicine: [],
-      westernMedicine: []
+      westernMedicine: [],
+      defaultWesternMedicine: [],
+      defaultChineseMedicine: []
     };
   }
 
@@ -153,7 +156,6 @@ class RecordQuery extends Component {
                 checkMedicines += '与' + element.base + '关联的' + element.target + "(" + element.score + ")" + " ";
               })
               tmpMessage = checkMedicines.trim();
-              console.log("tmpMessage: ", tmpMessage);
               this.handleAnalyseResult(record.id, checkMedicines.trim());    // 更新电子病历的响应字段
           } else {
               Message.error(_msg);
@@ -200,11 +202,13 @@ handleAnalyseResult(recordId, checkMedicines) {
         tmpRecPrescrition += element.split("(")[0] + " ";
       })
     }
-    
+    console.log("westernPrescription", this.state.patientInfo.westernPrescription.split(","))
     this.setState({
       updateSwitch: true,
       checkPrescription: tmpCheckPrescription,
-      recPrescription: tmpRecPrescrition
+      recPrescription: tmpRecPrescrition,
+      defaultChineseMedicine: this.state.patientInfo.chinesePrescription == null? null: this.state.patientInfo.chinesePrescription.split(","),
+      defaultWesternMedicine: this.state.patientInfo.westernPrescription == null? null: this.state.patientInfo.westernPrescription.split(",")
     })
   }
 
@@ -214,6 +218,7 @@ handleAnalyseResult(recordId, checkMedicines) {
     Object.keys(record).map(item => {
       newPatientInfo[item] = record[item] === null ? '' : record[item];
     })
+    console.log("newPatientInfo:", newPatientInfo);
     this.setState({
       drawerSwitch: true,
       patientInfo: newPatientInfo
@@ -225,7 +230,7 @@ handleAnalyseResult(recordId, checkMedicines) {
     let newPatientInfo = {};
     let tmpSeries = []
     Object.keys(record).map(item => {
-      newPatientInfo[item] = record[item] === null ? '' : record[item];
+      newPatientInfo[item] = record[item] === null ? "" : record[item];
     })
     newPatientInfo["irtFileName"] = baseURL + newPatientInfo["irtFileName"];
     newPatientInfo["tongueFileName"] = baseURL + newPatientInfo["tongueFileName"];
@@ -254,12 +259,12 @@ handleAnalyseResult(recordId, checkMedicines) {
   updateConfirm = () => {
     this.props.form.validateFields((err, values) => {
       let param = {
-        id:this.state.patientInfo.id,
-        patientSign:values.patientSign,
-        tcmType:values.tcmType,
-        diseaseId:values.disease,
-        westernMedicine:values.mainMedicine == null? null: values.mainMedicine.join(","),
-        chineseMedicine:values.auxMedicine == null? null: values.auxMedicine.join(",")
+        id: this.state.patientInfo.id,
+        patientSign: values.patientSign,
+        tcmType: values.tcmType,
+        diseaseId: this.getDiseaseId(values.disease),
+        westernMedicine: values.mainMedicine == null? null: values.mainMedicine.join(","),
+        chineseMedicine: values.auxMedicine == null? null: values.auxMedicine.join(",")
       }
       console.log(values.disease);
       API.updateRecord(param).then((response) => {
@@ -341,7 +346,16 @@ handleAnalyseResult(recordId, checkMedicines) {
     });
     return disease;
   }
-
+  //   根据病种获取病种idIIdd
+  getDiseaseId(disease) {
+    let diseaseId = 0;
+    this.state.diseaseList.forEach(element => {
+        if (element.name == disease) {
+            diseaseId = element.id;
+        }
+    });
+    return diseaseId;
+  }
   getOption = () => {
     console.log("pulseSeries", this.state.patientInfo["pulseSeries"]);
     let xData = [];
@@ -435,6 +449,10 @@ handleAnalyseResult(recordId, checkMedicines) {
       }).catch(function (error) {
         console.log(error);
       });
+  }
+
+  valueOrDefault(value) {
+    return value == null || value == ''? '暂无': value;
   }
 
   // 获取病历列表
@@ -624,42 +642,42 @@ handleAnalyseResult(recordId, checkMedicines) {
             </Row>
             <Row>
               <Col>
-                <strong>主诉：</strong><div className='setformat'>{this.state.patientInfo.chfCmp}</div>
+                <strong>主诉：</strong><div className='setformat'>{this.valueOrDefault(this.state.patientInfo.chfCmp)}</div>
               </Col>
             </Row>
             <Row>
               <Col>
-                <strong>既往史：</strong><div className='setformat'>{this.state.patientInfo.prvMedHis} </div>
+                <strong>既往史：</strong><div className='setformat'>{this.valueOrDefault(this.state.patientInfo.prvMedHis)} </div>
               </Col>
             </Row>
             <Row>
               <Col>
-                <strong>现病史：</strong><div className='setformat'>{this.state.patientInfo.hisPreIll} </div>
+                <strong>现病史：</strong><div className='setformat'>{this.valueOrDefault(this.state.patientInfo.hisPreIll)} </div>
               </Col>
             </Row>
             <Row>
               <Col>
-                <strong>中医证型：</strong><div className='setformat'>{this.state.patientInfo.tcmType} </div>
+                <strong>中医证型：</strong><div className='setformat'>{this.valueOrDefault(this.state.patientInfo.tcmType)} </div>
               </Col>
             </Row>
             <Row>
               <Col>
-                <strong>症状：</strong><div className='setformat'>{this.state.patientInfo.patientSign} </div>
+                <strong>症状：</strong><div className='setformat'>{this.valueOrDefault(this.state.patientInfo.patientSign)} </div>
               </Col>
             </Row>
             <Row>
               <Col>
-                <strong>病种：</strong><div className='setformat'>{this.state.patientInfo.disease} </div>
+                <strong>病种：</strong><div className='setformat'>{this.valueOrDefault(this.state.patientInfo.disease)} </div>
               </Col>
             </Row>
             <Row>
               <Col>
-                <strong>主药：</strong><div className='setformat'>{this.state.patientInfo.westernPrescription}</div>
+                <strong>主药：</strong><div className='setformat'>{this.valueOrDefault(this.state.patientInfo.westernPrescription)}</div>
               </Col>
             </Row>
             <Row>
               <Col>
-                <strong>辅药：</strong><div className='setformat'>{this.state.patientInfo.chinesePrescription}</div>
+                <strong>辅药：</strong><div className='setformat'>{this.valueOrDefault(this.state.patientInfo.chinesePrescription)}</div>
               </Col>
             </Row>
             <Row>
@@ -804,7 +822,7 @@ handleAnalyseResult(recordId, checkMedicines) {
             </Form.Item>
             <Form.Item label="诊断" style={{ marginLeft: 27 }}>
               {getFieldDecorator("disease", {
-                // initialValue: this.state.patientInfo.disease,
+                initialValue: this.state.patientInfo.disease,
               })(
                 <Select
                   allowClear={true}
@@ -818,7 +836,7 @@ handleAnalyseResult(recordId, checkMedicines) {
                   }
                 >
                   {this.state.diseaseList.map((item, index) => (
-                    <Option value={item.id} key={index}>
+                    <Option value={item.name} key={index}>
                       {item.name}
                     </Option>
                   ))}
@@ -844,14 +862,18 @@ handleAnalyseResult(recordId, checkMedicines) {
               </p>
             </Form.Item>
             <Form.Item label="西医主药" style={{ marginLeft: 0 }}>
-              {getFieldDecorator("mainMedicine", {})(
+              {getFieldDecorator("mainMedicine", {
+                initialValue: this.state.defaultWesternMedicine
+              })(
                 <Select style={{ width: 400 }} placeholder="请选择" mode="multiple">
                   {this.state.westernMedicine}
                 </Select>
               )}
             </Form.Item>
             <Form.Item label="中医辅药">
-              {getFieldDecorator("auxMedicine", {})(
+              {getFieldDecorator("auxMedicine", {
+                initialValue: this.state.defaultChineseMedicine
+              })(
                 <Select style={{ width: 400 }} placeholder="请选择" mode="multiple">
                   {this.state.chineseMedicine}
                 </Select>

@@ -9,10 +9,13 @@ const { TabPane } = Tabs;
 const { Column, ColumnGroup } = Table;
 const { TreeNode } = TreeSelect;
 const { Option } = Select;
+// const baseURL = "http://10.13.81.189:8001/"
+const baseURL = "http://localhost:8001/"
 class Medicine extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            patientId: undefined,
             visible: false,
             treeValue: undefined,
             medicineValue: undefined,
@@ -458,12 +461,12 @@ class Medicine extends Component {
         });
     }
     search(index) {
-
+        
     }
 
     show = (label, index) => {
-        let desc = label == "infra" ? this.state.infraredData[index].description : label == "tongue" ? this.state.tongueData[index].description : this.state.pulseData[index].description
-        let excp = label == "infra" ? this.state.infraredData[index].exception : label == "tongue" ? this.state.tongueData[index].exception : this.state.pulseData[index].exception
+        let desc = label == "infrared" ? this.state.infraredData[index].description : label == "tongue" ? this.state.tongueData[index].description : this.state.pulseData[index].description
+        let excp = label == "infrared" ? this.state.infraredData[index].exception : label == "tongue" ? this.state.tongueData[index].exception : this.state.pulseData[index].exception
         this.setState({
             reportDesc: desc,
             reportExcp: excp,
@@ -496,7 +499,7 @@ class Medicine extends Component {
                                 "height": _data[0].height,
                                 "weight": _data[0].weight,
                                 "allergy": _data[0].allergy,
-                                "firstTime": _data[0].createAt,
+                                "firstTime": _data[0].createdAt,
                             }
                         }
                         for (let index = 0; index < _data.length; index++) {
@@ -504,19 +507,19 @@ class Medicine extends Component {
                             let tmpSeries = [];
                             tmpInfraredData.push({
                                 "key": index,
-                                "time": item.createAt,
+                                "time": item.createdAt,
                                 "description": item.irtDesc,
                                 "exception": item.irtExcp,
-                                "url": "http://10.13.81.189:8001/" + item.irtPath
+                                "url": baseURL + item.irtFileName
                             });
                             tmpTongueData.push({
                                 "key": index,
-                                "time": item.createAt,
+                                "time": item.createdAt,
                                 "description": item.tongueDesc,
                                 "exception": item.tongueExcp,
-                                "url": "http://10.13.81.189:8001/" + item.tonguePath
+                                "url": baseURL + item.tongueFileName
                             });
-                            await fetch("http://10.13.81.189:8001/" + item.pulsePath, {
+                            await fetch(baseURL + item.pulseFileName, {
                                 method: 'GET',
                                 mode: "cors",
                             }).then(res => {
@@ -526,7 +529,7 @@ class Medicine extends Component {
                             });
                             tmpPulseData.push({
                                 "key": index,
-                                "time": item.createAt,
+                                "time": item.createdAt,
                                 "description": item.pulseDesc,
                                 "exception": item.pulseExcp,
                                 "series": tmpSeries,
@@ -534,15 +537,15 @@ class Medicine extends Component {
                             });
                             tmpData.push({
                                 "key": index,
-                                "time": item.createAt,
+                                "time": item.createdAt,
                             });
                             tmpPatientData.push({
                                 "key": index,
                                 "id": item.id,
-                                "date": item.createAt,
+                                "date": item.createdAt,
                                 "iniSymptoms": index > 0 ? _data[index - 1].chfCmp : "",
-                                "mainMedcine": item.westernMedicine,
-                                "auxMedicine": item.chineseMedicine,
+                                "mainMedcine": item.westernPrescription,
+                                "auxMedicine": item.chinesePrescription,
                                 "effect": item.chfCmp,
                                 "bloodExcp": item.bloodExcp,
                                 "infraredExcp": item.irtExcp,
@@ -553,6 +556,7 @@ class Medicine extends Component {
                             })
                         }
                         this.setState({
+                            patientId: values.patientId,
                             patientInfo: tmpPatientInfo,
                             infraredData: tmpInfraredData,
                             tongueData: tmpTongueData,
@@ -684,8 +688,8 @@ class Medicine extends Component {
                 <hr />
                 <br />
                 <div style={{ fontSize: "20px" }}>
-                    <span><strong>患者ID：</strong>{this.state.patientInfo.patientId}</span>
-                    <span style={{ marginLeft: "70px" }}><strong>性别：</strong>{this.state.patientInfo.gender == 1 ? "男" : "女"}</span>
+                    <span><strong>患者ID：</strong>{this.state.patientId}</span>
+                    <span style={{ marginLeft: "70px" }}><strong>性别：</strong>{this.state.patientInfo.gender == null? '': this.state.patientInfo.gender == 1 ? "男" : "女"}</span>
                     <span style={{ marginLeft: "70px" }}><strong>身高：</strong>{this.state.patientInfo.height} </span>
                     <span style={{ marginLeft: "70px" }}><strong>体重：</strong>{this.state.patientInfo.weight}</span>
                     <span style={{ marginLeft: "70px" }}><strong>过敏史：</strong>{this.state.patientInfo.allergy}</span>
@@ -731,7 +735,7 @@ class Medicine extends Component {
                     <div style={{ display: 'flex' }}>
                         <div style={{ width: '500px' }}>
                             <div style={{ fontSize: '20px' }}>
-                                <span><strong style={{ marginRight: '100px' }}>患者ID:</strong>256</span>
+                                <span><strong style={{ marginRight: '100px' }}>患者ID:</strong>{this.state.patientId}</span>
                             </div>
                             <Row className="table-frame">
                                 <div style={{ fontSize: '20px' }}>
