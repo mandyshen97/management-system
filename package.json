@@ -5,6 +5,7 @@
   "dependencies": {
     "antd": "^4.5.2",
     "babel-plugin-import": "^1.12.2",
+    "craco-less": "^1.17.0",
     "customize-cra": "^0.8.0",
     "echarts": "^4.4.0",
     "echarts-for-react": "^2.0.15-beta.1",
