@@ -153,7 +153,7 @@ class RecordQuery extends Component {
           if (_code === "200") {
               let checkMedicines = "";
               _data.apriori_res.forEach(element => {
-                checkMedicines += '与' + element.base + '关联的' + element.target + "(" + element.score + ")" + " ";
+                checkMedicines += '是否加入与' + element.base + '关联的' + "<span style='color:red;'>" + element.target + "(" + element.score + ")" + '</span>' + "？<br/> ";
               })
               tmpMessage = checkMedicines.trim();
               this.handleAnalyseResult(record.id, checkMedicines.trim());    // 更新电子病历的响应字段
@@ -164,6 +164,9 @@ class RecordQuery extends Component {
           console.log(error);
       });
     }
+    setTimeout(()=>{
+      this.refs.p.innerHTML = tmpMessage;
+    })
     this.setState({
         medCheck: tmpMessage,
         helpSwitch: true
@@ -774,7 +777,7 @@ handleAnalyseResult(recordId, checkMedicines) {
           title="基于专家用药模型的用药帮助"
           onOk={this.helpConfirm}
           onCancel={this.helpConfirm}>
-          <p>
+          <p ref='p'>
             {this.state.medCheck}
           </p>
           {/* <p>是否加入与甘草关联的<span style={{ color: 'red' }}>太子参(0.84)</span>?

@@ -27,7 +27,7 @@ class TextAnalysis extends Component {
         if (record.disease != "肺癌") {
             tmpMessage = "非癌症患者不提供用药帮助"; 
         } else if(record.recPrescription != null && record.recPrescription != "") {
-            tmpMessage = record.recPrescription;
+            tmpMessage = "<span style='color:red;'>" + record.recPrescription +"</span>";
         } else {
             let param = {
                 simRecIds: record.simRecIds
@@ -39,7 +39,7 @@ class TextAnalysis extends Component {
                 if (_code === "200") {
                     let recMedicines = "";
                     _data.rec_medicines.forEach(element => {
-                        recMedicines += element[0] + "(" + element[1].toFixed(2) + ")" + " ";
+                        recMedicines += "<span style='color:red;'>" + element[0] + "11111(" + element[1].toFixed(2) + ")" + "</span>" + " ";
                     })
                     tmpMessage = recMedicines.trim();
                     this.handleAnalyseResult(null, null, recMedicines.trim(), 0);    // 更新电子病历的响应字段
@@ -50,6 +50,10 @@ class TextAnalysis extends Component {
                 console.log(error);
             });
         }
+        console.log(tmpMessage);
+        setTimeout(()=>{
+            this.refs.p.innerHTML = tmpMessage;
+        })
         this.setState({
             recPrescription: tmpMessage,
             helpSwitch: true
@@ -336,7 +340,8 @@ class TextAnalysis extends Component {
                     title="基于相似电子病历的用药帮助"
                     onOk={this.helpConfirm}
                     onCancel={this.helpConfirm}>
-                    <p>
+                    <h3>推荐处方用药</h3>
+                    <p ref='p'>
                         {this.state.recPrescription}
                         {/* <span style={{ color: 'rgba(0, 0, 0, 0.85)', fontSize: '16px', fontWeight: '500' }}>推荐处方用药：</span>
                         <br />
