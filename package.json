@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@ant-design/icons": "^4.2.2",
     "antd": "^4.5.2",
     "babel-plugin-import": "^1.12.2",
     "craco-less": "^1.17.0",

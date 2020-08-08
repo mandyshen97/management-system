@@ -103,6 +103,20 @@ const UrlMap = [
     url: "http://10.13.81.189:5000/simMedicineHelp",
     type: "POST"
   },
+  //=====================================新的
+  {
+    description: "提交患者个人信息",
+    method: "addPatient",
+    url: "/api/addPatient",
+    type: "POST"
+  },
+  {
+    description: "患者信息查询",
+    method: "queryPatient",
+    url: "/api/queryPatient",
+    type: "POST"
+  },
+
 
 ];
 const API = {};

@@ -361,81 +361,17 @@ class PatientQuery extends Component {
   }
 
   // 获取患者信息列表
-  queryPatient = () => {
-    console.log('queryPatient')
-  //   this.props.form.validateFields((err, values) => {
-  //     if (!err) {
-  //       let param = {
-  //         id: values.patientId,
-  //         name: values.name,
-  //       };
-  //       // todo
-  //       // 获取患者列表的API
-  //       // API.getPatientList(param).then((res) => {
-  //       //   const { data, code, msg } = res;
-  //       //   if(code==='200'){
-  //       //     let newListData = []
-
-  //       //   }
-  //       // });
-  //       fetch(
-  //         "https://www.fastmock.site/mock/9df39432386360a59e2d0557525f4887/query/query/getPatientList"
-  //       )
-  //         .then((res) => res.json())
-  //         .then((res) => {
-  //           console.log("res", res);
-  //           const { data, code, desc } = res;
-  //           if (code === "200") {
-  //             // let newListData = [];
-  //             // data.map((item, index) => {
-  //             //   let newListDataItem = {};
-  //             //   // newListDataItem.key = index+item.patientId;
-  //             //   newListData.push(item);
-  //             // });
-  //             this.setState({
-  //               listData: data,
-  //             });
-  //           }
-  //         });
-  //       // API.getRecordList(param).then((res) => {
-  //       //   let _data = res.data;
-  //       //   let _code = res.code;
-  //       //   let _msg = res.msg;
-  //       //   if (_code === "200") {
-  //       //     let newListData = [];
-  //       //     // Todo 写的太烂 重写
-  //       //     _data.data.map((item, index) => {
-  //       //       let newListDataItem = {};
-  //       //       newListDataItem.key = index;
-  //       //       newListDataItem.id = item.id;
-  //       //       Object.assign(item, newListDataItem);
-  //       //       item.key = index;
-  //       //       newListData.push(item);
-  //       //     });
-  //       //     this.setState({
-  //       //       listData: newListData,
-  //       //       totalNum: _data.totalNum,
-  //       //     });
-  //       //   } else if (_code === "302") {
-  //       //     Message.error(_msg);
-  //       //     setTimeout(() => {
-  //       //       this.props.history.replace("/login");
-  //       //     }, 1000);
-  //       //   } else {
-  //       //     Message.error(_msg);
-  //       //   }
-  //       // });
-  //     }
-  //   });
+  queryPatient = (values) => {
+    console.log("查询患者信息", values);
   };
 
   // 分页页数改变触发函数
-  pageChange = (page) => {
-    this.setState({
-      pageNum: page,
-    });
-    this.queryPatient();
-  };
+  // pageChange = (page) => {
+  //   this.setState({
+  //     pageNum: page,
+  //   });
+  //   this.queryPatient();
+  // };
 
   // 页面渲染前执行函数
   componentDidMount() {
@@ -444,24 +380,23 @@ class PatientQuery extends Component {
   }
   // 查询表单
   renderSearch = () => {
-    const { form } = this.props;
     return (
-      <Form layout="inline">
-        <Form.Item name="patientId">
-          <span className="input-text">患者id：</span>
-
+      <Form
+        layout="inline"
+        style={{ marginBottom: 30 }}
+        onFinish={this.queryPatient}
+      >
+        <Form.Item name="patientId" label="患者id：">
           <Input style={{ width: 100, marginRight: 15 }} placeholder="患者id" />
         </Form.Item>
-        <Form.Item name="name">
-          <span className="input-text">患者姓名：</span>
-
+        <Form.Item name="name" label="患者姓名：">
           <Input
             style={{ width: 100, marginRight: 15 }}
             placeholder="患者姓名"
           />
         </Form.Item>
         <Form.Item>
-          <Button type="primary" onClick={this.queryPatient}>
+          <Button type="primary" htmlType="submit">
             查询
           </Button>
         </Form.Item>
@@ -582,7 +517,6 @@ class PatientQuery extends Component {
         },
       },
     ];
-    const { form } = this.props;
     return (
       <div className="main-content">
         {this.renderSearch()}

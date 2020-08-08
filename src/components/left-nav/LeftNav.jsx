@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { Menu, Icon } from "antd";
-import menuList from "../../config/menuConfig";
+import menuList from '../../config/menuConfig'
 import logo from "../../assets/images/logo.jpg";
 import "./left-nav.less";
 
@@ -11,13 +11,13 @@ class LeftNav extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentPath: '/admin/home'
+      currentPath: "/admin/home",
     };
   }
 
-  handleChangeColor = path => {
+  handleChangeColor = (path) => {
     this.setState({
-      currentPath: path
+      currentPath: path,
     });
   };
 
@@ -25,8 +25,8 @@ class LeftNav extends Component {
    * 根据menu的数组生成对应的数组标签
    * 使用 map() + 递归
    */
-  getMenuNodes_map = menuList => {
-    return menuList.map(item => {
+  getMenuNodes_map = (menuList) => {
+    return menuList.map((item) => {
       if (!item.children) {
         return (
           <Menu.Item
@@ -80,7 +80,7 @@ class LeftNav extends Component {
    */
   componentDidMount() {
     this.setState({
-      currentPath: this.props.path
+      currentPath: this.props.path,
     });
   }
 
@@ -88,7 +88,7 @@ class LeftNav extends Component {
     return (
       <div className="left-nav">
         <Link
-          to="/admin/home"
+          to="/home"
           className="left-nav-header"
           onClick={() => this.handleChangeColor("/admin/home")}
         >

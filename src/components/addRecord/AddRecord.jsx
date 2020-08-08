@@ -4,19 +4,11 @@ import {
   Input,
   Form,
   Icon,
-  Button,
-  br,
   Row,
   Divider,
-  Tooltip,
-  Tag,
-  DatePicker,
-  Message,
-  Drawer,
   Col,
   Modal,
   Select,
-  Descriptions,
 } from "antd";
 import "./add-record.less";
 import API from "../../api/api";
@@ -96,8 +88,6 @@ class AddRecord extends Component {
 
   //   渲染的页面
   render() {
-    const { form } = this.props;
-    const { getFieldDecorator } = form;
     // 照片墙start
     const { previewVisible, previewImage, fileList } = this.state;
     const uploadButton = (
@@ -179,26 +169,17 @@ class AddRecord extends Component {
         <Divider />
         <b>治疗前</b>
         <div className="uploadFile">
-          <Form.Item label="红外热像" className="imageFile">
-            {getFieldDecorator(
-              "infraFile",
-              {}
-            )(
-              // <Upload action="路径" beforeUpload={this.beforeUploadIrtFile}>
-              //   <Button style={{ width: 200 }} type="primary" icon="upload">
-              //     选择要上传的文件
-              //   </Button>
-              // </Upload>
-              <Upload
-                action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                listType="picture-card"
-                fileList={fileList}
-                onPreview={this.handlePreview}
-                onChange={this.handleChange}
-              >
-                {fileList.length >= 8 ? null : uploadButton}
-              </Upload>
-            )}
+          <Form.Item label="红外热像" className="imageFile" name="infraFile">
+            <Upload
+              action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+              listType="picture-card"
+              fileList={fileList}
+              onPreview={this.handlePreview}
+              onChange={this.handleChange}
+            >
+              {fileList.length >= 8 ? null : uploadButton}
+            </Upload>
+
             <Modal
               visible={previewVisible}
               footer={null}
@@ -207,105 +188,76 @@ class AddRecord extends Component {
               <img alt="example" style={{ width: "100%" }} src={previewImage} />
             </Modal>
           </Form.Item>
-          <Form.Item label="描述">
-            {getFieldDecorator(
-              "infraDesc",
-              {}
-            )(
-              <TextArea
-                style={{ width: 400, height: 32 }}
-                autoSize={{ minRows: 4, maxRows: 10 }}
-                placeholder="请输入..."
-              />
-            )}
-          </Form.Item>
-          <Form.Item label="异常">
-            {getFieldDecorator(
-              "infraExcp",
-              {}
-            )(
-              <TextArea
-                style={{ width: 400, height: 32, marginLeft: 10 }}
-                autoSize={{ minRows: 4, maxRows: 10 }}
-                placeholder="请输入..."
-              />
-            )}
-          </Form.Item>
-        </div>
-        <Form.Item label="用药情况">
-          {getFieldDecorator(
-            "pulseExcp",
-            {}
-          )(
+          <Form.Item label="描述" name="infraDesc">
             <TextArea
-              // style={{ width: 200, height: 32 }}
-              autoSize={{ minRows: 3, maxRows: 10 }}
+              style={{ width: 400, height: 32 }}
+              autoSize={{ minRows: 4, maxRows: 10 }}
               placeholder="请输入..."
             />
-          )}
+          </Form.Item>
+          <Form.Item label="异常" name="infraExcp">
+            <TextArea
+              style={{ width: 400, height: 32, marginLeft: 10 }}
+              autoSize={{ minRows: 4, maxRows: 10 }}
+              placeholder="请输入..."
+            />
+          </Form.Item>
+        </div>
+        <Form.Item label="用药情况" name="pulseExcp">
+          <TextArea
+            // style={{ width: 200, height: 32 }}
+            autoSize={{ minRows: 3, maxRows: 10 }}
+            placeholder="请输入..."
+          />
         </Form.Item>
         <Divider />
         <b>选择或新增治疗方案</b>
         <div className="treat">
-          <Form.Item label="选择治疗方案">
-            {getFieldDecorator(
-              "treat",
-              {}
-            )(
-              <Select
-                mode="multiple"
-                showArrow="true"
-                style={{ width: "50%" }}
-                placeholder="Please select"
-                // defaultValue={["a10", "c12"]}
-                onChange={this.handleTreatChange}
-              >
-                {treatList.map((item, index) => {
-                  return (
-                    <Option value={item} key={item}>
-                      {item}
-                    </Option>
-                  );
-                })}
-              </Select>
-            )}
+          <Form.Item label="选择治疗方案" name="treat">
+            <Select
+              mode="multiple"
+              showArrow="true"
+              style={{ width: "50%" }}
+              placeholder="Please select"
+              // defaultValue={["a10", "c12"]}
+              onChange={this.handleTreatChange}
+            >
+              {treatList.map((item, index) => {
+                return (
+                  <Option value={item} key={item}>
+                    {item}
+                  </Option>
+                );
+              })}
+            </Select>
           </Form.Item>
-          <Form.Item label="治疗情况说明">
-            {getFieldDecorator(
-              "treatDetail",
-              {}
-            )(
-              <TextArea
-                style={{ width: 400, height: 32 }}
-                autoSize={{ minRows: 4, maxRows: 10 }}
-                placeholder="请输入..."
-              />
-            )}
+          <Form.Item label="治疗情况说明" name="treatDetail">
+            <TextArea
+              style={{ width: 400, height: 32 }}
+              autoSize={{ minRows: 4, maxRows: 10 }}
+              placeholder="请输入..."
+            />
           </Form.Item>
         </div>
         <Divider />
         <b>治疗后</b>
         <div className="uploadFile">
-          <Form.Item label="红外热像" className="imageFile">
-            {getFieldDecorator(
-              "infraFile",
-              {}
-            )(
-              // <Upload action="路径" beforeUpload={this.beforeUploadIrtFile}>
+          <Form.Item label="红外热像" className="imageFile" name="infraFile">
+            {/* // <Upload action="路径" beforeUpload={this.beforeUploadIrtFile}>
               //   <Button style={{ width: 200 }} type="primary" icon="upload">
               //     选择要上传的文件
               //   </Button>
-              // </Upload>
-              <Upload
-                action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                listType="picture-card"
-                fileList={fileList}
-                onPreview={this.handlePreview}
-                onChange={this.handleChange}
-              >
-                {fileList.length >= 8 ? null : uploadButton}
-              </Upload>
-            )}
+              // </Upload> */}
+            <Upload
+              action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+              listType="picture-card"
+              fileList={fileList}
+              onPreview={this.handlePreview}
+              onChange={this.handleChange}
+            >
+              {fileList.length >= 8 ? null : uploadButton}
+            </Upload>
+
             <Modal
               visible={previewVisible}
               footer={null}
@@ -314,29 +266,19 @@ class AddRecord extends Component {
               <img alt="example" style={{ width: "100%" }} src={previewImage} />
             </Modal>
           </Form.Item>
-          <Form.Item label="描述">
-            {getFieldDecorator(
-              "infraDesc",
-              {}
-            )(
-              <TextArea
-                style={{ width: 400, height: 32 }}
-                autoSize={{ minRows: 4, maxRows: 10 }}
-                placeholder="请输入..."
-              />
-            )}
+          <Form.Item label="描述" name="infraDesc">
+            <TextArea
+              style={{ width: 400, height: 32 }}
+              autoSize={{ minRows: 4, maxRows: 10 }}
+              placeholder="请输入..."
+            />
           </Form.Item>
-          <Form.Item label="异常">
-            {getFieldDecorator(
-              "infraExcp",
-              {}
-            )(
-              <TextArea
-                style={{ width: 400, height: 32, marginLeft: 10 }}
-                autoSize={{ minRows: 4, maxRows: 10 }}
-                placeholder="请输入..."
-              />
-            )}
+          <Form.Item label="异常" name="infraExcp">
+            <TextArea
+              style={{ width: 400, height: 32, marginLeft: 10 }}
+              autoSize={{ minRows: 4, maxRows: 10 }}
+              placeholder="请输入..."
+            />
           </Form.Item>
         </div>
       </div>

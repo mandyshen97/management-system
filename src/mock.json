@@ -1,0 +1,12 @@
+
+// 提交患者基本信息
+{
+  "department": "科室",
+  "patientId": "患者id",
+  "name": "患者姓名",
+  "age": "患者年龄",
+  "gender": "性别",
+  "chief": "主诉",
+  "medical_history": "既往史",
+  "opinion": "诊断意见"
+}
