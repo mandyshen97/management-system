@@ -11,6 +11,7 @@ import RecordUpload from "../../components/recordUpload/RecordUpload";
 import PatientQuery from "../../components/patientQuery/PatientQuery";
 //
 import NewPatient from '../../components/newPatient/NewPatient'
+import AIAnalysis from '../../components/AIAnalysis/AIAnalysis'
 
 import "./admin.less";
 
@@ -74,6 +75,7 @@ class Admin extends Component {
               <Route path="/admin/textAnalysis/:id" component={TextAnalysis} />
               <Route path="/admin/addRecord/:id" component={AddRecord} />
               <Route path="/admin/addRecord" component={AddRecord} />
+              <Route path="/admin/AIAnalysis" component={AIAnalysis} />
 
               <Route path="/admin/recordUpload" component={RecordUpload} />
               <Route path="/admin/newPatient" component={NewPatient} />

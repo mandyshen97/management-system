@@ -117,9 +117,9 @@ class Header extends Component {
     const data = [
       {
         key: "1",
-        name: "失眠症辅助诊疗平台",
+        name: "脊椎康复辅助系统",
         version: "1.1.0",
-        updateTime: "2019-11-15"
+        updateTime: "2020-08-01"
       }
     ];
     return (
@@ -148,7 +148,7 @@ class Header extends Component {
           footer={[<Button onClick={this.handleCancel}>关闭</Button>]}
         >
           <div className="about-content">
-            <h3 className="table-title">失眠症辅助诊疗平台</h3>
+            <h3 className="table-title">脊椎康复辅助平台</h3>
             <Table
               columns={columns}
               dataSource={data}

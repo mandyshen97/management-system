@@ -1,7 +1,14 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { Menu, Icon } from "antd";
-import menuList from '../../config/menuConfig'
+import {
+  UserAddOutlined,
+  SolutionOutlined,
+  FileAddOutlined,
+  MonitorOutlined,
+  AlertOutlined,
+  CodeOutlined,
+} from "@ant-design/icons";
 import logo from "../../assets/images/logo.jpg";
 import "./left-nav.less";
 
@@ -12,6 +19,38 @@ class LeftNav extends Component {
     super(props);
     this.state = {
       currentPath: "/admin/home",
+      menuList: [
+        {
+          title: "新建患者个人信息",
+          path: "/admin/newPatient",
+          icon: <UserAddOutlined />,
+        },
+        {
+          title: "患者信息查询管理",
+          path: "/admin/patientQuery",
+          icon: <SolutionOutlined />,
+        },
+        {
+          title: "新增治疗记录",
+          path: "/admin/addRecord",
+          icon: <FileAddOutlined />,
+        },
+        {
+          title: "病历查询",
+          path: "/admin/recordQuery",
+          icon: <MonitorOutlined />,
+        },
+        {
+          title: "智能分析",
+          path: "/admin/AIAnalysis",
+          icon: <AlertOutlined />,
+        },
+        {
+          title: "新增治疗方案",
+          path: "/admin/newTreatMethod",
+          icon: <CodeOutlined />,
+        },
+      ],
     };
   }
 
@@ -37,7 +76,7 @@ class LeftNav extends Component {
             }
           >
             <Link to={item.path}>
-              <Icon type={item.icon} />
+              {item.icon}
               <span>{item.title}</span>
             </Link>
           </Menu.Item>
@@ -60,24 +99,6 @@ class LeftNav extends Component {
       }
     });
   };
-  // componentWillReceiveProps(nextProps) {
-  //   console.log(nextProps);
-  //   if (this.props.path !== nextProps)
-  //     this.setState({
-  //       currentPath: nextProps
-  //     });
-  // }
-
-  // UNSAFE_componentWillMount() {
-  //   this.setState({
-  //     currentPath: this.props.path
-  //   });
-  // }
-
-  /*
-  在第一次render()之前执行一次
-  为第一个render()准备数据(必须同步的)
-   */
   componentDidMount() {
     this.setState({
       currentPath: this.props.path,
@@ -85,6 +106,7 @@ class LeftNav extends Component {
   }
 
   render() {
+    const { menuList } = this.state;
     return (
       <div className="left-nav">
         <Link

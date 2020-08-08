@@ -45,30 +45,7 @@ class PatientQuery extends Component {
 
       doctorList: [],
       selectAuxliMedicine: [
-        <Option key={"青黛"}>{"青黛"}</Option>,
-        <Option key={"蛤蚧"}>{"蛤蚧"}</Option>,
-        <Option key={"白芥子"}>{"白芥子"}</Option>,
-        <Option key={"苏子"}>{"苏子"}</Option>,
-        <Option key={"莱菔子"}>{"莱菔子"}</Option>,
-        <Option key={"麻黄"}>{"麻黄"}</Option>,
-        <Option key={"僵蚕"}>{"僵蚕"}</Option>,
-        <Option key={"陈皮"}>{"陈皮"}</Option>,
-        <Option key={"半夏"}>{"半夏"}</Option>,
-        <Option key={"茯苓"}>{"茯苓"}</Option>,
-        <Option key={"甘草"}>{"甘草"}</Option>,
-
-        <Option key={"白芍"}>{"白芍"}</Option>,
-        <Option key={"白术"}>{"白术"}</Option>,
-        <Option key={"茯苓"}>{"茯苓"}</Option>,
-        <Option key={"郁金"}>{"郁金"}</Option>,
-        <Option key={"香附"}>{"香附"}</Option>,
-        <Option key={"八月札"}>{"八月札"}</Option>,
-        <Option key={"桂枝"}>{"桂枝"}</Option>,
-        <Option key={"炙甘草"}>{"炙甘草"}</Option>,
-        <Option key={"乌药"}>{"乌药"}</Option>,
-        <Option key={"生姜"}>{"生姜"}</Option>,
-        <Option key={"大枣"}>{"大枣"}</Option>,
-        <Option key={"沉香"}>{"沉香"}</Option>,
+        
       ],
       selectMainMedicine: [
         <Option key={"环磷酰胺"}>{"环磷酰胺"}</Option>,
