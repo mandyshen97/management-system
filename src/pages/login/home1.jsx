@@ -1,12 +1,12 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import { Form, Icon, Input, Button, Message ,Select} from "antd";
-import "../login/login.less";
+import { Redirect, Link } from "react-router-dom";
+import { Form, Icon, Input, Button, Message, Checkbox } from "antd";
+import "./login.less";
 import logo from "../../assets/images/logo1.jpg";
+import memoryUtils from "../../utils/memoryUtils";
 //import API from "../../api/api";
 import API from "../../api/algorithm"
-const { Option } = Select;
-class Register extends Component {
+class Home1 extends Component {
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
@@ -16,35 +16,40 @@ class Register extends Component {
           username: values.username,
           password: values.password
         };
-        API.register(param)
+        API.login(param)
           .then(res => {
             console.log(res);
             if (res.code !== '200') {
-              Message.error("注册失败！");
+              Message.error("登录失败，用户名或密码错误！");
             } else {
-              Message.success("注册成功！");
-              this.props.history.push("/login");
+              Message.success("登录成功！");
+              this.props.history.push("/");
             }
           })
           .catch(err => {
-            Message.warning("注册失败！");
+            Message.error("登录失败！请重试！");
           });
       }
     });
   };
   render() {
+    const user = memoryUtils.user;
+    if (user && user._id) {
+      return <Redirect to="/" />;
+    }
     const { getFieldDecorator } = this.props.form;
     return (
+      
       <div className="login">
         <div className="login-wrapper">
           <div className="login-left">
             <div className="login-left-container">
               <img src={logo} alt="logo" />
-              <h1>失眠症智能辅助诊疗系统</h1>
+              <h1>失眠症智能辅助诊疗平台</h1>
             </div>
           </div>
           <div className="login-right">
-            <h2>用户注册</h2>
+            <h2>用户登录</h2>
             <Form onSubmit={this.handleSubmit} className="login-form">
               <Form.Item>
                 {getFieldDecorator("username", {
@@ -71,53 +76,32 @@ class Register extends Component {
                   />
                 )}
               </Form.Item>
-
               <Form.Item>
-              <Select
-    showSearch
-    style={{ width: 438 }}
-    placeholder="请选择所在医院"
-    optionFilterProp="children"
-    
-    filterOption={(input, option) =>
-      option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-    }
-  ></Select>
-              </Form.Item>
-              <Form.Item>
-              <Select
-    showSearch
-    style={{ width: 438 }}
-    placeholder="请选择所在科室"
-    optionFilterProp="children"
-    
-    filterOption={(input, option) =>
-      option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-    }
-  ></Select>
-              </Form.Item>
-
-              
-              <Form.Item>
+                {getFieldDecorator("remember", {
+                  valuePropName: "checked",
+                  initialValue: true
+                })(<Checkbox className="login-form-check">记住我</Checkbox>)}
+                <Link className="login-form-forgot" to="/login">
+                  忘记密码
+                </Link>
                 <Button
                   type="primary"
                   block
                   htmlType="submit"
                   className="login-form-button"
                 >
-                  注册
+                  登录
                 </Button>
-                <span style={{ color: "white", marginRight: "5px" }}>
-                  或已存在账号
-                </span>
-                <Link to="/login">现在登录!</Link>
+                <span style={{ color: "white", marginRight: "5px" }}>或</span>
+                <Link to="/register">现在注册!</Link>
               </Form.Item>
             </Form>
           </div>
         </div>
-        <div className="footer">——————— 失眠症智能辅助诊疗系统 —————————</div>
+        <div className="footer">——————— 失眠症智能辅助诊疗平台 —————————</div>
       </div>
     );
   }
 }
-export default Form.create()(Register);
+const WrappedNormalLoginForm = Form.create({ name: "normal_login" })(Home1);
+export default WrappedNormalLoginForm;

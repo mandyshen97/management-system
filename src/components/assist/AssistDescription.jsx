@@ -3,69 +3,95 @@
  */
 
 import React, { Component } from "react";
-import { Form, Modal, Divider, Descriptions } from "antd";
+import { Form, Modal, Divider, Descriptions,Card} from "antd";
+class AssistDescriptionForm extends Component {
+  state = {
+    currentRecord :{
+      name: undefined,
+      disease: undefined,
+      medId: undefined,
+      gender: undefined,
+      age: undefined,
+      weight: undefined,
+      height: undefined,
+      symptomTime:undefined,
+      presentIllnessHistory:undefined,
+      chiCom: undefined,
+      treatmentHistory:undefined,
+      pastHistory:undefined,
+      personalHistory:undefined,
+      familyHistory:undefined
+    }
 
-class PatientsDescriptionForm extends Component {
-  state = {};
+  };
 
   renderDescription() {
     const { currentRecord } = this.props;
+    var gender = ""
+    if  (currentRecord. gender ===1) {
+      gender = "男"
+    }
+    if (currentRecord. gender ===0) {
+      gender = "女"
+    } 
     return (
       <div>
-        <Descriptions title="患者信息">
+        <Card>
+        <Descriptions bordered title="Custom Size" title="患者信息">
           <Descriptions.Item label="患者姓名">
-            {currentRecord.name}
+            {/* {currentRecord.name} */}
+            陈强
           </Descriptions.Item>
           <Descriptions.Item label="患病类型">
-            {currentRecord.disease}
+            {/* {currentRecord.disease} */}
+            未诊断
           </Descriptions.Item>
           <Descriptions.Item label="患者编号">
-            {currentRecord.medId}
+            {/* {currentRecord.medId} */}
+            000021
           </Descriptions.Item>
           <Descriptions.Item label="患者性别">
-            {currentRecord.gender === 1 ? "男" : "女"}
+            {/* {gender} */}
+            男
           </Descriptions.Item>
           <Descriptions.Item label="患者年龄">
-            {currentRecord.age}
+           62
           </Descriptions.Item>
           <Descriptions.Item label="患者体重(kg)">
-            {currentRecord.weight}
+            67
           </Descriptions.Item>
           <Descriptions.Item label="患者身高(cm)">
-            {currentRecord.height}
+            172
           </Descriptions.Item>
-        </Descriptions>
-        <Divider />
-        <Descriptions title="临床信息">
           <Descriptions.Item label="症状持续时间">
             三个月
-            {/* {currentRecord.symptomTime} */}
           </Descriptions.Item>
           <Descriptions.Item label="现病史">
-          现夜寐2至3小时，多汗，潮热，手足心热，背部冷，舌淡白，脉虚细无力，中药也吃了倆多月，不效
             {/* {currentRecord.presentIllnessHistory} */}
+            心烦易怒、入睡困难，多梦，睡后易醒；乏力，神疲；食欲稍差，胃脘饱胀
           </Descriptions.Item>
           <Descriptions.Item label="主诉">
-          平素睡眠质量较差，睡眠时稍有声响很容易醒，偶尔入睡困难
             {/* {currentRecord.chiCom} */}
+            失眠已近2个多月
           </Descriptions.Item>
           <Descriptions.Item label="用药疗效">
-          严重时口服谷维素，维生素B1等，效果理想，但易复发。
+          给于安定，佐匹克隆，初效，后无效，伴随嘴唇颤抖
             {/* {currentRecord.treatmentHistory} */}
           </Descriptions.Item>
           <Descriptions.Item label="既往史">
-          俩年前偶发失眠，经治疗给于安定，佐匹克隆，初效，后无效，伴随嘴唇颤抖
             {/* {currentRecord.pastHistory} */}
+            既往高血压病史8年，糖尿病病史6年，肥厚性心肌病10年
           </Descriptions.Item>
           <Descriptions.Item label="个人史">
-            长期居住在杭州，无烟酒等不良嗜好
+           出生并长大于杭州，有抽烟喝酒等嗜好
             {/* {currentRecord.personalHistory} */}
-          </Descriptions.Item>  
+          </Descriptions.Item>
           <Descriptions.Item label="家族史">
             无家族遗传病
             {/* {currentRecord.familyHistory} */}
           </Descriptions.Item>
         </Descriptions>
+        </Card>
       </div>
     );
   }
@@ -75,21 +101,10 @@ class PatientsDescriptionForm extends Component {
     const { currentRecord } = this.props;
     const title = `患者信息展示——${currentRecord.medId}_${currentRecord.name}`;
     return (
-      <Modal
-        visible={this.props.modalVisible}
-        width="60%"
-        title={title}
-        onOk={() => {
-          this.props.handleModalVisible(false, "patientsDescription");
-        }}
-        onCancel={() =>
-          this.props.handleModalVisible(false, "patientsDescription")
-        }
-        destroyOnClose
-      >
+      <div>
         {this.renderDescription()}
-      </Modal>
+      </div>
     );
   }
 }
-export default Form.create()(PatientsDescriptionForm);
+export default Form.create()(AssistDescriptionForm);

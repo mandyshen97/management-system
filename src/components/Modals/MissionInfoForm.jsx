@@ -166,11 +166,30 @@ class MissionInfoForm extends Component {
               }
             >
               <Option value="0">WCST</Option>
-              <Option value="1">整测量晚</Option>
+              <Option value="1">整晚测量</Option>
             </Select>
           )}
         </Form.Item>
         <Form.Item label="测试前服用药物">
+          {getFieldDecorator("medicine", {
+            initialValue: missionFormData.medicine
+          })(
+            <Select
+              showSearch
+              style={{ width: 200 }}
+              mode="multiple"
+              placeholder="选择药物"
+              initialValue={["SSRI", "SNRI"]}
+            >
+              {this.state.medicineList.map((item, index) => (
+                <Option key={index}>{item}</Option>
+              ))}
+            </Select>
+            
+     
+          )}
+        </Form.Item>
+        <Form.Item label="服用药物剂量">
           {getFieldDecorator("medicine", {
             initialValue: missionFormData.medicine
           })(

@@ -21,7 +21,7 @@ class Home extends Component {
       var items = [];
       var date = "";
       var strDay = "";
-      for (var i=0;i<31;i++){
+      for (var i=0;i<30;i++){
         strDay = (i+1).toString()
         if (strDay.length===1){
             strDay = "0"+strDay;

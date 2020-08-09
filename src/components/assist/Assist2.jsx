@@ -1,6 +1,6 @@
 import React, {Component } from 'react';
 import AssistDescriptionForm from '../assist/AssistDescription'
-import InfradAnalysisForm from "../Modals/infradForm"
+import InfradJingAnalysisForm from "../Modals/JingInfradForm"
 import RuxianAnalysisForm from "../Modals/ruxianForm"
 import { 
   Upload,
@@ -21,14 +21,14 @@ import {
 
 
 
-class Assist extends Component {
+class Assist2 extends Component {
   constructor(props) {
     super(props);
     this.state = { 
       picName: "",
       previewVisible: false,
       previewImage: '',
-      infradAnalysisVisible: false,
+      jingInfradAnalysisVisible: false,
       ruxianAnalysisVisible: false,
       currentRecord :{
         name: undefined,
@@ -50,9 +50,9 @@ class Assist extends Component {
   };
 
   handleModalVisible = (flag, msg) => {
-    if (msg === "infradAnalysisInfo") {
+    if (msg === "jingInfradAnalysisInfo") {
       this.setState({
-        infradAnalysisVisible: flag
+        jingInfradAnalysisVisible: flag
       });
     }
     if (msg === "ruxianAnalysisInfo") {
@@ -67,7 +67,7 @@ class Assist extends Component {
     this.setState({
       picName: file.name,
       //previewImage: file.url || file.thumbUrl,
-      previewImage: "http://10.13.81.190:5000/static/images/" + file.name,
+      previewImage: "http://10.13.81.190:5000/static/images2/" + file.name,
       previewVisible: true,
     });
   };
@@ -77,7 +77,7 @@ class Assist extends Component {
   handleDownload = file => {
     const aLink = document.createElement('a');
     const filename = file.name;
-    const objectUrl = "http://10.13.81.190:5000/static/images/" + file.name;
+    const objectUrl = "http://10.13.81.190:5000/static/images2/" + file.name;
     aLink.href = objectUrl;
     aLink.download = filename;
     aLink.click();
@@ -120,7 +120,7 @@ class Assist extends Component {
         <Card>
         <Upload 
           accept= ".jpg,.png,.JPG,.bmp,.PNG"
-          action="http://10.13.81.190:5000/analysis/uploadImg"
+          action="http://10.13.81.190:5000/analysis/uploadImg2"
           listType="picture-card"
           data= {this.state}
           onPreview = {this.handlePreview}
@@ -134,14 +134,14 @@ class Assist extends Component {
        <Modal visible={previewVisible} width="900px" footer={null} onCancel={this.handleCancel}>
           <img alt="example" style={{ width: '100%' }} src={previewImage} />
         </Modal>
-        <Button type="primary" onClick= {()=>this.handleModalVisible(true, "infradAnalysisInfo")}>
+        <Button type="primary" onClick= {()=>this.handleModalVisible(true, "jingInfradAnalysisInfo")}>
           查看智能分析结果
         </Button>
         </Card>
         </Descriptions>
-        {this.state.infradAnalysisVisible && (
-          <InfradAnalysisForm 
-            modalVisible={this.state.infradAnalysisVisible}
+        {this.state.jingInfradAnalysisVisible && (
+          <InfradJingAnalysisForm
+            modalVisible={this.state.jingInfradAnalysisVisible}
             handleModalVisible={this.handleModalVisible}
             filename={this.state.picName}
           />
@@ -158,4 +158,4 @@ class Assist extends Component {
   }
 }
 
-export default Assist;
+export default Assist2;

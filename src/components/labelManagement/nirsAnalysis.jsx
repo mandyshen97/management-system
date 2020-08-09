@@ -30,7 +30,7 @@ const { Option } = Select;
 const { RangePicker } = DatePicker;
 const initTime = [moment().subtract(7, "days"), moment().subtract(1, "days")];
 
-class LabelInformationManagement extends Component {
+class nirsAnalysis extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -424,98 +424,102 @@ class LabelInformationManagement extends Component {
       dataIndex: "testTime",
       width: "10%"
     },
+    // {
+    //   title: "任务类型",
+    //   dataIndex: "testType",
+    //   width: "10%"
+    // },
     {
-      title: "任务类型",
-      dataIndex: "testType",
-      width: "10%"
-    },
-    {
-      title: "采集信息汇总展示",
+      title: "操作",
       width: "15%",
       render: (text, record) => {
         return (
-          <Fragment>
-            <Row type="flex" justify="center">
-              <Tooltip title="采集信息展示">
+          <div>
+            
+                {/* <Button  type="primary">上传热像</Button>
+                <Button  type="primary">查看热像</Button> */}
+                <Button  type="primary">智能分析</Button>
+              {/* <Tooltip title="上传热像">
                 <span
-                  onClick={() => this.handleClick(true, record, "description")}
+                  //onClick={() => this.handleClick(true, record, "description")}
                   style={{ cursor: "pointer" }}
                 >
                   <Icon type="edit" />
-                  <span style={{ marginLeft: "5px" }}>采集信息展示</span>
+                  <span style={{ marginLeft: "5px" }}>上传热像</span>
+                </span>
+              </Tooltip> */}
+              {/* <Tooltip title="查看热像">
+                <span
+                  //onClick={() => this.handleClick(true, record, "description")}
+                  style={{ cursor: "pointer" }}
+                >
+                  <Icon type="edit" />
+                  <span style={{ marginLeft: "5px" }}>查看热像</span>
                 </span>
               </Tooltip>
-            </Row>
-          </Fragment>
+              <Tooltip title="智能分析">
+                <span
+                  //onClick={() => this.handleClick(true, record, "description")}
+                  style={{ cursor: "pointer" }}
+                >
+                  <Icon type="edit" />
+                  <span style={{ marginLeft: "5px" }}>智能分析</span>
+                </span>
+              </Tooltip> */}
+           
+          </div>
         );
       }
     },
-    {
-      title: "添加/修改采集信息",
-      width: "30%",
-      render: (text, record) => {
-        return (
-          <Fragment>
-            <Tooltip title="数据存储关联">
-              <span
-                onClick={() => this.handleClick(true, record, "dataPath")}
-                style={{ cursor: "pointer" }}
-              >
-                <Icon type="dropbox" />
-                <span style={{ marginLeft: "5px" }}>数据存储关联</span>
-              </span>
-            </Tooltip>
-            {record.testType === "WCST" && (
-              <Fragment>
-                <Divider type="vertical" />
-                <Tooltip title="任务测试信息">
-                  <span
-                    onClick={() => this.handleClick(true, record, "taskInfo")}
-                    style={{ cursor: "pointer" }}
-                  >
-                    <Icon type="apple" />
-                    <span style={{ marginLeft: "5px" }}>更新任务测试信息</span>
-                  </span>
-                </Tooltip>
-              </Fragment>
-            )}
-            <Divider type="vertical" />
-            <Tooltip title="删除此条任务">
-              <span
-                onClick={() => this.deleteTask(record)}
-                style={{ cursor: "pointer" }}
-              >
-                <Icon type="delete" />
-                <span style={{ marginLeft: "5px" }}>删除</span>
-              </span>
-            </Tooltip>
-          </Fragment>
-        );
-      }
-    }
+    // {
+    //   title: "添加/修改采集信息",
+    //   width: "30%",
+    //   render: (text, record) => {
+    //     return (
+    //       <Fragment>
+    //         <Tooltip title="数据存储关联">
+    //           <span
+    //             onClick={() => this.handleClick(true, record, "dataPath")}
+    //             style={{ cursor: "pointer" }}
+    //           >
+    //             <Icon type="dropbox" />
+    //             <span style={{ marginLeft: "5px" }}>数据存储关联</span>
+    //           </span>
+    //         </Tooltip>
+    //         {record.testType === "WCST" && (
+    //           <Fragment>
+    //             <Divider type="vertical" />
+    //             <Tooltip title="任务测试信息">
+    //               <span
+    //                 onClick={() => this.handleClick(true, record, "taskInfo")}
+    //                 style={{ cursor: "pointer" }}
+    //               >
+    //                 <Icon type="apple" />
+    //                 <span style={{ marginLeft: "5px" }}>更新任务测试信息</span>
+    //               </span>
+    //             </Tooltip>
+    //           </Fragment>
+    //         )}
+    //         <Divider type="vertical" />
+    //         <Tooltip title="删除此条任务">
+    //           <span
+    //             onClick={() => this.deleteTask(record)}
+    //             style={{ cursor: "pointer" }}
+    //           >
+    //             <Icon type="delete" />
+    //             <span style={{ marginLeft: "5px" }}>删除</span>
+    //           </span>
+    //         </Tooltip>
+    //       </Fragment>
+    //     );
+    //   }
+    // }
   ];
   render() {
     return (
       <div className="main-content">
         {this.renderSearch()}
-        {/* <Card title="标注信息统计图表" style={{ marginTop: 15 }}>
-          <Tabs animated={false} style={{ textAlign: "right" }}>
-            <TabPane
-              tab={<Icon type="bar-chart" />}
-              key="1"
-              style={{ textAlign: "left" }}
-            >
-              <ReactEcharts option={this.getBarOption(this.state.barData)}></ReactEcharts>
-            </TabPane>
-            <TabPane
-              tab={<Icon type="pie-chart" />}
-              key="2"
-              style={{ textAlign: "left" }}
-            >
-            
-            </TabPane>
-          </Tabs>
-        </Card> */}
+        
         <Table
           style={{ marginTop: "24px" }}
           bordered
@@ -554,4 +558,4 @@ class LabelInformationManagement extends Component {
   }
 }
 
-export default Form.create()(LabelInformationManagement);
+export default Form.create()(nirsAnalysis);

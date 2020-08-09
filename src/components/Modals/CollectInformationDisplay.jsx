@@ -5,7 +5,8 @@ class CollectInformationDisplay extends Component {
   constructor(props) {
     super(props);
     this.state = {
-    medicineList:[]
+    medicineList:[],
+    medicineName:[]
     }
   }
 
@@ -52,15 +53,42 @@ class CollectInformationDisplay extends Component {
     const { currentRecord } = this.props;
     const patientInfo = currentRecord.patient;
     const task = currentRecord.task;
+    const nonMedicineList = ["无","rTMs","CBT-I"]
 
-    const medId = [];
+    var medicineName = [];
+
     if(task.medicineId && task.medicineId.indexOf("-")){
-      console.log("------")
-      //medId = task.medicineId.split("-")    
+      var med_ids = task.medicineId.split("-") 
+      for (var i=0;i<med_ids.length;i++){
+        medicineName.push(this.state.medicineList[Number(med_ids[i])])
+        medicineName.push(",")
+      }
+      medicineName.pop()
     }
+    else if (task.medicineId.length>0){
+      medicineName.push(this.state.medicineList[Number(task.medicineId)])
+    }
+
+
+    var nonMedicineName = [];
+
+    if(task.nonMedicineId && task.nonMedicineId.indexOf("-")){
+      var non_med_ids = task.nonMedicineId.split("-") 
+      for (var i=0;i<med_ids.length;i++){
+        nonMedicineName.push(nonMedicineList[Number(non_med_ids[i])])
+        nonMedicineName.push(",")
+      }
+      nonMedicineName.pop()
+    }
+    else if (task.nonMedicineId.length>0){
+      nonMedicineName.push(nonMedicineList[Number(task.nonMedicineId)])
+    }
+
+
+
+
     
-    console.log("++++++++==")
-    console.log(medId)
+    
     return (
       <div>
         <Descriptions title="患者信息">
@@ -89,13 +117,16 @@ class CollectInformationDisplay extends Component {
             {patientInfo.height}
           </Descriptions.Item>
           <Descriptions.Item label="测试前服用药物">
-            {task.medicineId}
+            {medicineName}
+          </Descriptions.Item>
+          <Descriptions.Item label="药物剂量">
+            {medicineName}
           </Descriptions.Item>
           <Descriptions.Item label="服药后多久进行测试">
             {task.medInt}
           </Descriptions.Item>
           <Descriptions.Item label="非药物干预">
-            {task.nonMedicineId}
+            {nonMedicineName}
           </Descriptions.Item>
           <Descriptions.Item label="测试近红外时间">
             {task.time}

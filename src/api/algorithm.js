@@ -5,6 +5,11 @@ const UrlMap = [
     url: "/analysis/uploadImg",
     type: "POST"
     },
+    {description: "上传颈椎病图像",
+    method: "uploadImg",
+    url: "/analysis/uploadImg2",
+    type: "POST"
+    },
     {
         description: "医生登录",
         method: "login",
@@ -98,6 +103,30 @@ const UrlMap = [
         type: "GET"
     },
     {
+        description: "分析失眠症红外热像图",
+        method: "infradAnalysis",
+        url: "/analysis/analysis",
+        type: "POST"
+    },
+    {
+        description: "分析颈椎病红外热像图",
+        method: "infradJingAnalysis",
+        url: "/analysis/jinganalysis",
+        type: "POST"
+    },
+    {
+        description: "分析红外前的准备工作",
+        method: "preAnalysis",
+        url: "/analysis/preAnalysis",
+        type: "POST"
+    },
+    {
+        description: "分析颈椎病红外前的准备工作",
+        method: "preAnalysis2",
+        url: "/analysis/preAnalysis2",
+        type: "POST"
+    },
+    {
         description: "获取非药物干预列表",
         method: "getNonMedicineList",
         url: "/getNonMedicineList",
@@ -114,7 +143,9 @@ const UrlMap = [
         method: "getTaskTotal",
         url: "/statistic/getTaskTotal",
         type: "GET"
-    }
+    },
+    
+    
 
 ]
 const API = {};

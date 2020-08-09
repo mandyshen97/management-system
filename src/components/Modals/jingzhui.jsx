@@ -3,21 +3,21 @@
  */
 
 import React, { Component } from "react";
-import { Card,Form, Input, Button, Modal, Row,Typography, Divider, Select,Descriptions,Table,Collapse} from "antd";
+import { Card,Form, Input, Button, Modal, Divider,Typography, Menu, Select,Descriptions,Table,Collapse} from "antd";
 import ReactEcharts from 'echarts-for-react';
-import imgURL from '../../assets/images/pic4.png';
-import imgURL2 from '../../assets/images/pic.png';
-import imgURL3 from '../../assets/images/pic2.png';
-import imgURL4 from '../../assets/images/pic3.png';
+import imgURL from '../../assets/images/jingzhui1.png';
+import imgURL2 from '../../assets/images/jingzhui4.png';
+import imgURL3 from '../../assets/images/jingzhui3.png';
+import imgURL4 from '../../assets/images/jingzhui2.png';
 
 const { Option } = Select;
 const { Title } = Typography;
 const { Panel } = Collapse;
-class ScaleForm extends Component {
+class JingzhuiForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      ScaleInfo: {
+      jingzhuiInfo: {
         count: undefined, //次数
         week: undefined, //周数
         scaleTime: undefined, //评估时间
@@ -58,7 +58,7 @@ class ScaleForm extends Component {
         // todo
         // 哪个接口？？？
       }
-      this.props.handleModalVisible(false, "scaleInfo");
+      this.props.handleModalVisible(false, "jingzhuiInfo");
     });
   }
 
@@ -66,7 +66,7 @@ class ScaleForm extends Component {
 
   renderForm = () => {
     const { getFieldDecorator } = this.props.form;
-    const { scaleInfo } = this.state;
+    const { jingzhuiInfo } = this.state;
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -197,7 +197,8 @@ class ScaleForm extends Component {
           <Button type='primary'>查看详细报告</Button>
           <Divider></Divider>
           <h3>智能分析结果</h3>
-          <h3>患失眠症概率：95.2%</h3>
+          <h3>退行性变化概率：86.7%</h3>
+          <h3>颈肌劳损：11.2%</h3>
           </div>,
       },
         {title: '2019.11.09',
@@ -211,7 +212,8 @@ class ScaleForm extends Component {
           <Button type='primary'>查看详细报告</Button>
           <Divider></Divider>
           <h3>智能分析结果</h3>
-          <h3>患失眠症概率：87.9%</h3>
+          <h3>退行性变化概率：85.3%</h3>
+          <h3>颈肌劳损：9.4%</h3>
           </div>,
       
       },
@@ -220,30 +222,29 @@ class ScaleForm extends Component {
         key: 'img3',
         render: () => 
         <div align="center">
-          <img src={imgURL3} width="200px" height="300px"/>
+          <img src={imgURL3} width="200px" height="300px" />
           <br/>
           <br/>
           <Button type='primary'>查看详细报告</Button>
-          <br/>
           <Divider></Divider>
           <h3>智能分析结果</h3>
-          <h3>患失眠症概率：75.3%</h3>
+          <h3>退行性变化概率：80.1%</h3>
+          <h3>颈肌劳损：15.3%</h3>
           </div>,
-          
-          
        },
         {title: '2019.11.21',
         dataIndex: 'img4',
         key: 'img4',
         render:() => 
         <div align="center">
-          <img src={imgURL4} width="200px" height="300px"/>
+          <img src={imgURL4} width="200px" height="300px" />
           <br/>
           <br/>
-          <Button type='primary'>查看详细报告</Button>
+          <Button type='primary' >查看详细报告</Button>
           <Divider></Divider>
           <h3>智能分析结果</h3>
-          <h3>患失眠症概率：63.7%</h3>
+          <h3>退行性变化概率：83.9%</h3>
+          <h3>颈肌劳损：10.3%</h3>
           </div>,
        },
       ];
@@ -433,116 +434,57 @@ class ScaleForm extends Component {
         { 
           key: '1',
           week: '2019.11.01',
-          medicine: '赛乐特',
-          medicine_dose: '早中晚各一片',
+          medicine: '颈复康颗粒',
+          medicine_dose: '早中晚各一剂',
           non_medicine: '无'
         },
         { 
           key: '2',
           week: '2019.11.09',
-          medicine: '赛乐特',
-          medicine_dose: '早中晚各一片',
+          medicine: '颈复康颗粒',
+          medicine_dose: '早中晚各一剂',
           non_medicine: '无'
         },
         { 
           key: '3',
           week: '2019.11.15',
-          medicine: '赛乐特',
-          medicine_dose: '早中晚各一片',
-          non_medicine: '无'
+          medicine: '颈复康颗粒',
+          medicine_dose: '早中晚各一剂',
+          non_medicine: '主以夹脊穴，辅以风池、外关、合谷、后溪进行针灸治疗'
         },
         { 
           key: '4',
           week: '2019.11.21',
-          medicine: '赛乐特',
-          medicine_dose: '早中晚各一片',
-          non_medicine: '针灸辅助治疗'
+          medicine: '颈复康颗粒',
+          medicine_dose: '早中晚各一剂',
+          non_medicine: '主以夹脊穴，辅以风池、外关、合谷、后溪进行针灸治疗'
         },
     ]
 
     return (
         <div>
-      
-       <Card className="basic">
-        <Descriptions bordered title="Custom Size" title="患者基本信息">
-          <Descriptions.Item label="失眠持续时间">
-            {/* //{scaleInfo.lastingTime} */}
-            {"三个月"}
-          </Descriptions.Item>
-          <Descriptions.Item label="现在是否服用药物?">
-            {"是"}
-            {/* {scaleInfo.isNowMedicine === false ? "否":"是"} */}
-          </Descriptions.Item>
-          <Descriptions.Item label="既往是否服用药物?">
-            {"否"}
-            {/* {scaleInfo.isPastMedicine === false ? "否":"是"} */}
-          </Descriptions.Item>
-          <Descriptions.Item label="父母兄弟是否存在失眠?">
-              {"否"}
-            {/* {scaleInfo.isGenetic === false ? "否" : "是"} */}
-          </Descriptions.Item>
-          <Descriptions.Item label="是否打鼾?">
-              {"否"}
-            {/* {scaleInfo.isSnoring === false ? "否" : "是"} */}
-          </Descriptions.Item>
-          <Descriptions.Item label="睡觉时腿是否抽动酸痛?">
-              {"是"}
-            {/* {scaleInfo.isPain === false ? "否" : "是"} */}
-          </Descriptions.Item>
-          <Descriptions.Item label="睡觉时双腿是否有虫爬感、刺痛感、瘙痒感?">
-            {/* {scaleInfo.isItch === false ? "否" : "是"} */}
-            {"否"}
-          </Descriptions.Item>
-          <Descriptions.Item label="出现这些感觉时是否有移动双腿的冲动?">
-            {/* {scaleInfo.isMoveLegs === false ? "否" : "是"} */}
-            {"是"}
-          </Descriptions.Item>
-          <Descriptions.Item label="是否首次失眠?">
-            {/* {scaleInfo.isMoveLegs === false ? "否" : "是"} */}
-            {"是"}
-          </Descriptions.Item>
-        </Descriptions>
-        </Card>
-        <Collapse defaultActiveKey={['2']} >
-        <Panel header="患者治疗状况表" key="2">
-        <Card className="table"> 
+          <Collapse defaultActiveKey={['1']} >
+    <Panel header="患者治疗状况表" key="1">
+       <Card className="table"> 
         <Descriptions title="患者治疗状况表"></Descriptions>
        <Table columns={columns2} dataSource={data2} />
        </Card>
-       </Panel>
-       
-        <Panel header="患者红外热像图变化" key="3">
-       <Card className="table"> 
+    </Panel>
+    <Panel header="患者红外热像图变化" key="2">
+    <Card className="table"> 
         <Descriptions title="患者红外热像图变化"></Descriptions>
        <Table columns={columns3} dataSource={data3}/>
-       <Descriptions title="结论：双眼内眦生理热区缩小，睡眠线有所减少，睡眠有变好趋势"></Descriptions>
+       <Descriptions title="结论：颈部见热区包绕减少，颈椎病有变好趋势"></Descriptions>
        </Card>
-       </Panel>
-      
-        <Panel header="患者自测量表" key="4">
-        <Card className="table"> 
-        <Descriptions title="患者睡眠状况表"></Descriptions>
-       <Table columns={columns} dataSource={data}/>
-       </Card>
-        <Card className="bar">
-         <ReactEcharts option={option} />
-        </Card>
-        </Panel>
-        
-        <Panel header="患者近红外测试状况表" key="5">
-        <Card className="table"> 
-        <Descriptions title="患者近红外测试状况表"></Descriptions>
-       <Table columns={columns4} dataSource={data4}/>
-       </Card>
-       </Panel>
-        <Panel header="填写康复评估意见" key="6">
-       <Card>
+    </Panel>
+    <Panel header="填写康复评估意见" key="3" >
+    <Card>
            <Descriptions title="综合各方历史信息，请医生填写康复评估意见"></Descriptions>
           <Input placeholder="综合各方历史信息，请医生填写康复评估意见" />
         </Card>
-        </Panel>
-        </Collapse>
-      </div>
+    </Panel>
+  </Collapse>
+        </div>
     );
   };
   render() {
@@ -553,13 +495,14 @@ class ScaleForm extends Component {
         visible={this.props.modalVisible}
         title={title}
         width= "1200px"
-        onCancel={() => this.props.handleModalVisible(false, "scaleInfo")}
+        onCancel={() => this.props.handleModalVisible(false, "jingzhuiInfo")}
         onOk={this.handleClinicalSubmit}
       >
+
         {this.renderForm()}
       </Modal>
     );
   }
 }
 
-export default Form.create()(ScaleForm);
+export default Form.create()(JingzhuiForm);

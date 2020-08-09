@@ -24,9 +24,6 @@ class TaskInformationCollection extends Component {
       };
       Object.assign(param, values);
       API.updateWcstTask(param).then(res => {
-        console.log("++++++====")
-        console.log(param)
-        console.log(res);
       }).then(resolve=>{
         API.getTaskList({}).then(res => {
           this.props.getTableDate(res);
@@ -133,7 +130,7 @@ class TaskInformationCollection extends Component {
             initialValue: task.pr
           })(<Input />)}
         </Form.Item>
-        <Form.Item label="持持续性应答数百分比">
+        <Form.Item label="持续性应答数百分比">
           {getFieldDecorator("ppr", {
             initialValue: task.ppr
           })(<Input />)}

@@ -7,9 +7,14 @@ import Header from '../../components/header/Header'
 import Introduction from '../../components/introduction/Introduction';
 import Home from './../../components/home/Home';
 import Assist from './../../components/assist/Assist';
+import Assist2 from './../../components/assist/Assist2';
 import './admin.less'
 import InformationManagement from '../../components/userManagement/UserInformationManagement';
+import kangfuManagement from '../../components/userManagement/kangfu';
 import LabelInformationManagement from './../../components/labelManagement/LabelInformationManagement';
+import infradAnalysis from './../../components/labelManagement/infradAnalysis';
+import nirsAnalysis from './../../components/labelManagement/nirsAnalysis';
+import infradAnalysis2 from '../../components/labelManagement/infradAnalysis2';
 
 const { Sider, Content } = Layout
 class Admin extends Component {
@@ -62,7 +67,12 @@ class Admin extends Component {
               <Route path='/informationManagement'  component={InformationManagement} />
               <Route path='/introduction' component={Introduction} />
               <Route path='/assist' component={Assist} />
+              <Route path='/assist2' component={Assist2} />
               <Route path='/labelInformationManagement' component={LabelInformationManagement} />
+              <Route path='/infradAna' component={infradAnalysis} />
+              <Route path='/infradAna2' component={infradAnalysis2} />
+              <Route path='/nirsAna' component={nirsAnalysis} />
+              <Route path='/kangfu' component={kangfuManagement} />
             </Switch>
           </Content>
         </Layout>

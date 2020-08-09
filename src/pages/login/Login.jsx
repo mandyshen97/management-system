@@ -1,11 +1,12 @@
 import React, { Component } from "react";
 import { Redirect, Link } from "react-router-dom";
-import { Form, Icon, Input, Button, Message, Checkbox } from "antd";
+import { Form, Icon, Input, Button, Message, Checkbox,  } from "antd";
 import "./login.less";
-import logo from "../../assets/images/logo.jpg";
+import logo from "../../assets/images/logo1.jpg";
 import memoryUtils from "../../utils/memoryUtils";
 //import API from "../../api/api";
 import API from "../../api/algorithm"
+
 class Login extends Component {
   handleSubmit = e => {
     e.preventDefault();
@@ -44,11 +45,11 @@ class Login extends Component {
           <div className="login-left">
             <div className="login-left-container">
               <img src={logo} alt="logo" />
-              <h1>失眠症辅助诊断平台</h1>
+              <h1>失眠症智能辅助诊疗系统</h1>
             </div>
           </div>
           <div className="login-right">
-            <h2>用户登录</h2>
+            {/* <h2>用户登录</h2>
             <Form onSubmit={this.handleSubmit} className="login-form">
               <Form.Item>
                 {getFieldDecorator("username", {
@@ -94,10 +95,25 @@ class Login extends Component {
                 <span style={{ color: "white", marginRight: "5px" }}>或</span>
                 <Link to="/register">现在注册!</Link>
               </Form.Item>
-            </Form>
+            </Form> */}
+            <div className="login-left-container">
+              <br/>
+              <br/>
+              <br/>
+              <h1>登陆成功！</h1>
+              <h1>欢迎您，张医生！</h1>
+              <br/>
+              <br/>
+              <Button type="dashed" ghost="True" shape="round" size="large">患者信息管理</Button>
+              <Button type="dashed" ghost="True" shape="round" size="large">近红外标注管理</Button>
+              <Button type="dashed" ghost="True" shape="round" size="large">红外热像智能分析</Button>
+              <Button type="dashed" ghost="True" shape="round" size="large">近红外光谱智能分析</Button>
+              <Button type="dashed" ghost="True" shape="round" size="large">康复评估</Button>
+           
+            </div>
           </div>
         </div>
-        <div className="footer">——————— 失眠症辅助诊断平台 —————————</div>
+        <div className="footer">——————— 失眠症智能辅助诊疗系统 —————————</div>
       </div>
     );
   }

@@ -8,7 +8,6 @@ import {
   Table,
   Form,
   Row,
-  Divider,
   Tooltip,
   Tag
 } from "antd";
@@ -17,15 +16,16 @@ import ClinicalForm from "../Modals/ClinicalForm";
 import MissionInfoForm from "../Modals/MissionInfoForm";
 import PatientsDescriptionForm from "../Modals/PatientsDescriptionForm";
 import UpdatePersonalForm from "../Modals/UpdatePersonalForm";
+import JingzhuiForm from "../Modals/jingzhui";
+import RuxianForm from "../Modals/ruxian"
 import ScaleForm from "../Modals/ScaleForm";
 import "./user-information-management.less";
-import { Link } from "react-router-dom";
 //import API from "../../api/api";
 import API from "../../api/algorithm"
 
 const { Option } = Select;
 
-class InformationManagement extends Component {
+class kangfuManagement extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -33,6 +33,8 @@ class InformationManagement extends Component {
       clinicalModalVisible: false, // 患者临床信息填写
       missionModalVisible: false, // 新建近红外信息
       scaleModalVisible: false, // 量表信息查看
+      jingzhuiVisible: false,
+      ruxianVisible: false,
       PatientsDescriptionModalVisible: false, //患者基本信息展示
       UpdatePersonalFormVisible: false, // 更新患者个人信息弹框是否显示
       edit: false,
@@ -53,7 +55,7 @@ class InformationManagement extends Component {
     // 获取医生列表
     API.getDoctorList({}).then(res => {
       let newDoctorList = [];
-      res.data.map((item, index) => {
+      res.data.map((item) => {
         newDoctorList.push(item);
       });
       this.setState({
@@ -144,6 +146,22 @@ class InformationManagement extends Component {
       this.setState({
         edit: true,
         scaleModalVisible: flag,
+        currentRecord: record
+      });
+    }
+    if (msg === "jingzhuiInfo") {
+    
+      this.setState({
+        edit: true,
+        jingzhuiVisible: flag,
+        currentRecord: record
+      });
+    }
+    if (msg === "ruxianInfo") {
+    
+      this.setState({
+        edit: true,
+        ruxianVisible: flag,
         currentRecord: record
       });
     }
@@ -276,6 +294,18 @@ class InformationManagement extends Component {
         scaleModalVisible: flag
       });
     }
+    if (msg === "jingzhuiInfo") {
+      this.setState({
+        edit: false,
+        jingzhuiVisible: flag
+      });
+    }
+    if (msg === "ruxianInfo") {
+      this.setState({
+        edit: false,
+        ruxianVisible: flag
+      });
+    }
     if (msg === "missionBasicInfo") {
       this.setState({
         edit: false,
@@ -369,109 +399,105 @@ class InformationManagement extends Component {
         );
       }
     },
+    // {
+    //   title: "添加/修改采集信息",
+    //   width: "40%",
+    //   render: (text, record) => {
+    //     return (
+    //       <Fragment>
+    //         <Tooltip title="个人信息采集">
+    //           <span
+    //             onClick={() =>
+    //               this.handleClick(true, record, "updatePersonalInfo")
+    //             }
+    //           >
+    //             <Icon type="edit" style={{ justifyContent: "center" }} />
+    //             <span
+    //               style={{
+    //                 cursor: "pointer",
+    //                 marginLeft: "5px",
+    //                 lineHeight: "1"
+    //               }}
+    //             >
+    //               更新个人信息
+    //             </span>
+    //           </span>
+    //         </Tooltip>
+    //         <Divider type="vertical" />
+    //         <Tooltip title="临床信息采集">
+    //           <span
+    //             onClick={() => this.handleClick(true, record, "clinicalInfo")}
+    //           >
+    //             <Icon
+    //               type="codepen-circle"
+    //               style={{ justifyContent: "center" }}
+    //             />
+    //             <span
+    //               style={{
+    //                 cursor: "pointer",
+    //                 marginLeft: "5px",
+    //                 lineHeight: "1"
+    //               }}
+    //             >
+    //               临床信息采集
+    //             </span>
+    //           </span>
+    //         </Tooltip>
+    //         <Divider type="vertical" />
+    //         <Tooltip title="查看量表信息">
+    //           <span
+    //             onClick={() => this.handleClick(true, record, "scaleInfo")}
+    //           >
+    //             <Icon type="copy" style={{ justifyContent: "center" }} />
+    //             <span
+    //               style={{
+    //                 cursor: "pointer",
+    //                 marginLeft: "5px",
+    //                 lineHeight: "1"
+    //               }}
+    //             >
+    //               查看量表
+    //             </span>
+    //           </span>
+    //         </Tooltip>
+    //         <Divider type="vertical" />
+    //         <Tooltip title="新建近红外采集信息">
+    //           <span
+    //             onClick={() =>
+    //               this.handleClick(true, record, "missionBasicInfo")
+    //             }
+    //           >
+    //             <Icon type="arrow-right" style={{ justifyContent: "center" }} />
+    //             <span
+    //               style={{
+    //                 cursor: "pointer",
+    //                 marginLeft: "5px",
+    //                 lineHeight: "1"
+    //               }}
+    //             >
+    //               添加测试任务
+    //             </span>
+    //           </span>
+    //         </Tooltip>
+    //       </Fragment>
+    //     );
+    //   }
+    // },
     {
-      title: "添加/修改采集信息",
+      title: "查看历史诊疗记录",
       width: "40%",
       render: (text, record) => {
         return (
-          <Fragment>
-            <Tooltip title="个人信息采集">
-              <span
-                onClick={() =>
-                  this.handleClick(true, record, "updatePersonalInfo")
-                }
-              >
-                <Icon type="edit" style={{ justifyContent: "center" }} />
-                <span
-                  style={{
-                    cursor: "pointer",
-                    marginLeft: "5px",
-                    lineHeight: "1"
-                  }}
-                >
-                  更新个人信息
-                </span>
-              </span>
-            </Tooltip>
-            <Divider type="vertical" />
-            <Tooltip title="临床信息采集">
-              <span
-                onClick={() => this.handleClick(true, record, "clinicalInfo")}
-              >
-                <Icon
-                  type="codepen-circle"
-                  style={{ justifyContent: "center" }}
-                />
-                <span
-                  style={{
-                    cursor: "pointer",
-                    marginLeft: "5px",
-                    lineHeight: "1"
-                  }}
-                >
-                  临床信息采集
-                </span>
-              </span>
-            </Tooltip>
-            <Divider type="vertical" />
-            <Tooltip title="查看量表信息">
-              <span
-                onClick={() => this.handleClick(true, record, "scaleInfo")}
-              >
-                <Icon type="copy" style={{ justifyContent: "center" }} />
-                <span
-                  style={{
-                    cursor: "pointer",
-                    marginLeft: "5px",
-                    lineHeight: "1"
-                  }}
-                >
-                  查看量表
-                </span>
-              </span>
-            </Tooltip>
-            <Divider type="vertical" />
-            <Tooltip title="新建近红外采集信息">
-              <span
-                onClick={() =>
-                  this.handleClick(true, record, "missionBasicInfo")
-                }
-              >
-                <Icon type="arrow-right" style={{ justifyContent: "center" }} />
-                <span
-                  style={{
-                    cursor: "pointer",
-                    marginLeft: "5px",
-                    lineHeight: "1"
-                  }}
-                >
-                  添加测试任务
-                </span>
-              </span>
-            </Tooltip>
-          </Fragment>
-        );
-      }
-    },
-  //   {
-  //     title: "红外热像分析",
-  //     width: "40%",
-  //     render: (text, record) => {
-  //       console.log("+++++")
-  //       console.log(record)
-  //       return (
-  //         <Link to={{
-  //           pathname: '/Assist',
-  //           state: {currentRecord: record}
-  //         }}>
-  //         <Button type="primary" style={{ marginLeft: "20px" }}>
-  //             分析
-  //         </Button>
-  //         </Link>
-  //       )
-  //   }
-  // }
-]
+          
+          <Button type="primary" 
+           onClick={() => this.handleClick(true, record, "jingzhuiInfo")}
+             style={{ marginLeft: "20px" }}>
+              查看并进行评估
+          </Button>
+          
+        )
+    }
+  }]
 
 
   render() {
@@ -522,6 +548,21 @@ class InformationManagement extends Component {
             currentRecord={this.state.currentRecord}
           />
         )}
+        {/* 查看颈椎病弹框 */}
+        {this.state.jingzhuiVisible && (
+          <JingzhuiForm 
+            modalVisible={this.state.jingzhuiVisible}
+            handleModalVisible={this.handleModalVisible}
+            currentRecord={this.state.currentRecord}
+          />
+        )}
+        {this.state.ruxianVisible && (
+          <RuxianForm 
+            modalVisible={this.state.ruxianVisible}
+            handleModalVisible={this.handleModalVisible}
+            currentRecord={this.state.currentRecord}
+          />
+        )}
         {/* 新建近红外采集信息 */}
         {this.state.missionModalVisible && (
           <MissionInfoForm
@@ -542,4 +583,4 @@ class InformationManagement extends Component {
     );
   }
 }
-export default Form.create()(InformationManagement);
+export default Form.create()(kangfuManagement);
