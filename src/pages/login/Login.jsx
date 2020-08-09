@@ -3,6 +3,7 @@ import { Redirect, Link } from "react-router-dom";
 import { Form, Icon, Input, Button, Message, Checkbox } from "antd";
 import "./login.less";
 import logo from "../../assets/images/logo.jpg";
+import kangfu from "../../assets/images/kangfu.jpg";
 import memoryUtils from "../../utils/memoryUtils";
 import API from "../../api/api";
 
@@ -206,7 +207,7 @@ class Login extends Component {
         <div className="login-wrapper">
           <div className="login-left">
             <div className="login-left-container">
-              <img src={logo} alt="logo" />
+              <img src={kangfu} alt="logo" />
               <h1>脊椎康复辅助诊疗系统</h1>
             </div>
           </div>
@@ -221,9 +222,7 @@ class Login extends Component {
                   placeholder="用户名"
                 />
               </Form.Item>
-              <Form.Item
-                rules={[{ required: true, message: "请输入密码!" }]}
-              >
+              <Form.Item rules={[{ required: true, message: "请输入密码!" }]}>
                 <Input
                   prefix={
                     <Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />
@@ -250,11 +249,14 @@ class Login extends Component {
                   block
                   htmlType="submit"
                   className="login-form-button"
+                  href="/home"
                 >
                   登录
                 </Button>
                 <span style={{ color: "white", marginRight: "5px" }}>或</span>
-                <Link to="/register">现在注册!</Link>
+                <Link to="/register" className="link">
+                  现在注册!
+                </Link>
               </Form.Item>
             </Form>
           </div>

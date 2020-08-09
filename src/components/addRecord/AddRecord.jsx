@@ -9,11 +9,16 @@ import {
   Col,
   Modal,
   Select,
+  Table,
+  DatePicker,
+  Button,
+  Descriptions,
 } from "antd";
 import "./add-record.less";
 import API from "../../api/api";
 const { TextArea } = Input;
 const { Option } = Select;
+const { Column, ColumnGroup } = Table;
 class AddRecord extends Component {
   constructor(props) {
     super(props);
@@ -107,6 +112,16 @@ class AddRecord extends Component {
       "手术",
       "其他方法",
     ];
+    const dataSource = [
+      {
+        firstDate: "2020-02-20",
+        iniSymptoms: "腰酸背痛",
+      },
+    ];
+    const layout = {
+      labelCol: { span: 8 },
+      wrapperCol: { span: 16 },
+    };
     return (
       <div className="main-content">
         <b>基本信息</b>
@@ -150,66 +165,85 @@ class AddRecord extends Component {
           </Col>
         </Row>
         <Divider className="divide" />
-        <b>治疗历史记录</b>
-        {/* <Descriptions title="历史治疗记录"> */}
-        <div
-          style={{
-            height: 80,
-            fontSize: 20,
-            fontWeight: "bold",
-            color: "red",
-            marginLeft: "100px",
-          }}
-        >
-          展示病历中的历史治疗记录
-        </div>
-        {/* <Descriptions.Item label="UserName">Zhou Maomao</Descriptions.Item>
-          <Descriptions.Item label="Telephone">1810000000</Descriptions.Item>
-        {/* </Descriptions> */}
+        <b>历史治疗记录</b>
+        <Table dataSource={dataSource} bordered>
+          <Column title="初次就诊时间" dataIndex="firstDate" key="firstDate" />
+          <Column title="初始症状" dataIndex="iniSymptoms" key="iniSymptoms" />
+          <ColumnGroup title="第1次治疗">
+            <Column title="就诊时间" dataIndex="date" key="date" />
+            <Column title="红外热像图" dataIndex="firstName" key="firstName" />
+            <Column title="描述" dataIndex="lastName" key="lastName" />
+          </ColumnGroup>
+          <ColumnGroup title="第2次治疗">
+            <Column title="就诊时间" dataIndex="date" key="date" />
+            <Column title="红外热像图" dataIndex="firstName" key="firstName" />
+            <Column title="描述" dataIndex="lastName" key="lastName" />
+          </ColumnGroup>
+          <ColumnGroup title="第3次治疗">
+            <Column title="就诊时间" dataIndex="date" key="date" />
+            <Column title="红外热像图" dataIndex="firstName" key="firstName" />
+            <Column title="描述" dataIndex="lastName" key="lastName" />
+          </ColumnGroup>
+          <ColumnGroup title="第4次治疗">
+            <Column title="就诊时间" dataIndex="date" key="date" />
+            <Column title="红外热像图" dataIndex="firstName" key="firstName" />
+            <Column title="描述" dataIndex="lastName" key="lastName" />
+          </ColumnGroup>
+        </Table>
         <Divider />
-        <b>治疗前</b>
-        <div className="uploadFile">
-          <Form.Item label="红外热像" className="imageFile" name="infraFile">
-            <Upload
-              action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-              listType="picture-card"
-              fileList={fileList}
-              onPreview={this.handlePreview}
-              onChange={this.handleChange}
-            >
-              {fileList.length >= 8 ? null : uploadButton}
-            </Upload>
-
-            <Modal
-              visible={previewVisible}
-              footer={null}
-              onCancel={this.handleCancel}
-            >
-              <img alt="example" style={{ width: "100%" }} src={previewImage} />
-            </Modal>
-          </Form.Item>
-          <Form.Item label="描述" name="infraDesc">
-            <TextArea
-              style={{ width: 400, height: 32 }}
-              autoSize={{ minRows: 4, maxRows: 10 }}
-              placeholder="请输入..."
-            />
-          </Form.Item>
-          <Form.Item label="异常" name="infraExcp">
-            <TextArea
-              style={{ width: 400, height: 32, marginLeft: 10 }}
-              autoSize={{ minRows: 4, maxRows: 10 }}
-              placeholder="请输入..."
-            />
-          </Form.Item>
-        </div>
-        <Form.Item label="用药情况" name="pulseExcp">
-          <TextArea
-            // style={{ width: 200, height: 32 }}
-            autoSize={{ minRows: 3, maxRows: 10 }}
-            placeholder="请输入..."
-          />
-        </Form.Item>
+        <b>本次治疗前</b>
+        <br />
+        <Form {...layout} layout="horizontal">
+          <div style={{ display: "flex" }}>
+            <Form.Item label="红外热像" className="imageFile" name="infraFile">
+              <Upload
+                action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                listType="picture-card"
+                fileList={fileList}
+                onPreview={this.handlePreview}
+                onChange={this.handleChange}
+              >
+                {fileList.length >= 8 ? null : uploadButton}
+              </Upload>
+              <Modal
+                visible={previewVisible}
+                footer={null}
+                onCancel={this.handleCancel}
+              >
+                <img
+                  alt="example"
+                  style={{ width: "100%" }}
+                  src={previewImage}
+                />
+              </Modal>
+            </Form.Item>
+            <Form.Item label="描述" style={{ marginLeft: 0 }} name="infraDesc">
+              <TextArea
+                // style={{ width: 400, height: 32 }}
+                autoSize={{ minRows: 4, maxRows: 10 }}
+                placeholder="请输入..."
+              />
+            </Form.Item>
+            <Form.Item label="异常" name="infraExcp">
+              <TextArea
+                // style={{ width: 400, height: 32 }}
+                autoSize={{ minRows: 4, maxRows: 10 }}
+                placeholder="请输入..."
+              />
+            </Form.Item>
+            <Form.Item label="用药情况" name="pulseExcp">
+              <TextArea
+                // style={{ width: 400, height: 32 }}
+                autoSize={{ minRows: 4, maxRows: 10 }}
+                placeholder="请输入..."
+              />
+            </Form.Item>
+            <Button type="primary" style={{ marginLeft: 5 }}>
+              保存
+            </Button>
+          </div>
+        </Form>
+        <br />
         <Divider />
         <b>选择或新增治疗方案</b>
         <div className="treat">
@@ -217,7 +251,7 @@ class AddRecord extends Component {
             <Select
               mode="multiple"
               showArrow="true"
-              style={{ width: "50%" }}
+              style={{ width: 400 }}
               placeholder="Please select"
               // defaultValue={["a10", "c12"]}
               onChange={this.handleTreatChange}
@@ -231,6 +265,9 @@ class AddRecord extends Component {
               })}
             </Select>
           </Form.Item>
+          <Form.Item label="就诊时间" name="date">
+            <DatePicker style={{ width: 400 }}></DatePicker>
+          </Form.Item>
           <Form.Item label="治疗情况说明" name="treatDetail">
             <TextArea
               style={{ width: 400, height: 32 }}
@@ -240,47 +277,63 @@ class AddRecord extends Component {
           </Form.Item>
         </div>
         <Divider />
-        <b>治疗后</b>
-        <div className="uploadFile">
-          <Form.Item label="红外热像" className="imageFile" name="infraFile">
-            {/* // <Upload action="路径" beforeUpload={this.beforeUploadIrtFile}>
-              //   <Button style={{ width: 200 }} type="primary" icon="upload">
-              //     选择要上传的文件
-              //   </Button>
-              // </Upload> */}
-            <Upload
-              action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-              listType="picture-card"
-              fileList={fileList}
-              onPreview={this.handlePreview}
-              onChange={this.handleChange}
-            >
-              {fileList.length >= 8 ? null : uploadButton}
-            </Upload>
-
-            <Modal
-              visible={previewVisible}
-              footer={null}
-              onCancel={this.handleCancel}
-            >
-              <img alt="example" style={{ width: "100%" }} src={previewImage} />
-            </Modal>
-          </Form.Item>
-          <Form.Item label="描述" name="infraDesc">
-            <TextArea
-              style={{ width: 400, height: 32 }}
-              autoSize={{ minRows: 4, maxRows: 10 }}
-              placeholder="请输入..."
-            />
-          </Form.Item>
-          <Form.Item label="异常" name="infraExcp">
-            <TextArea
-              style={{ width: 400, height: 32, marginLeft: 10 }}
-              autoSize={{ minRows: 4, maxRows: 10 }}
-              placeholder="请输入..."
-            />
-          </Form.Item>
-        </div>
+        <b>本次治疗后</b>
+        <Form {...layout} layout="horizontal">
+          <div style={{ display: "flex" }}>
+            <Form.Item label="红外热像" className="imageFile" name="infraFile">
+              <Upload
+                action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                listType="picture-card"
+                fileList={fileList}
+                onPreview={this.handlePreview}
+                onChange={this.handleChange}
+              >
+                {fileList.length >= 8 ? null : uploadButton}
+              </Upload>
+              <Modal
+                visible={previewVisible}
+                footer={null}
+                onCancel={this.handleCancel}
+              >
+                <img
+                  alt="example"
+                  style={{ width: "100%" }}
+                  src={previewImage}
+                />
+              </Modal>
+            </Form.Item>
+            <Form.Item label="描述" style={{ marginLeft: 0 }} name="infraDesc">
+              <TextArea
+                // style={{ width: 400, height: 32 }}
+                autoSize={{ minRows: 4, maxRows: 10 }}
+                placeholder="请输入..."
+              />
+            </Form.Item>
+            <Form.Item label="异常" name="infraExcp">
+              <TextArea
+                // style={{ width: 400, height: 32 }}
+                autoSize={{ minRows: 4, maxRows: 10 }}
+                placeholder="请输入..."
+              />
+            </Form.Item>
+            <Form.Item label="用药情况" name="pulseExcp">
+              <TextArea
+                // style={{ width: 400, height: 32 }}
+                autoSize={{ minRows: 4, maxRows: 10 }}
+                placeholder="请输入..."
+              />
+            </Form.Item>
+            <Button type="primary" style={{ marginLeft: 5 }}>
+              保存
+            </Button>
+          </div>
+        </Form>
+        <br />
+        <Button type="primary">
+          点击进行本次治疗红外热成像图像变化智能分析
+        </Button>
+        <h2>结论</h2>
+        <p>背部炎症减少，有好转趋势</p>
       </div>
     );
   }

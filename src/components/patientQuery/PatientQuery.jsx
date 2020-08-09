@@ -44,9 +44,7 @@ class PatientQuery extends Component {
       diseaseList: [],
 
       doctorList: [],
-      selectAuxliMedicine: [
-        
-      ],
+      selectAuxliMedicine: [],
       selectMainMedicine: [
         <Option key={"环磷酰胺"}>{"环磷酰胺"}</Option>,
         <Option key={"阿霉素"}>{"阿霉素"}</Option>,
@@ -206,8 +204,8 @@ class PatientQuery extends Component {
   // 获取病种id对应的病种
   getDisease(diseaseId) {
     let disease = "未诊断";
-    this.state.diseaseList.forEach((element) => {
-      if (element.id == diseaseId) {
+    (this.state.diseaseList || []).forEach((element) => {
+      if (element.id === diseaseId) {
         disease = element.disease;
       }
     });
@@ -338,8 +336,41 @@ class PatientQuery extends Component {
   }
 
   // 获取患者信息列表
-  queryPatient = (values) => {
-    console.log("查询患者信息", values);
+  queryPatient = () => {
+    let values = this.refs.patientQueryForm.getFieldsValue();
+    let param = {
+      id: values.patientId,
+      name: values.name,
+    };
+    // todo
+    // 获取患者列表的API
+    // API.getPatientList(param).then((res) => {
+    //   const { data, code, msg } = res;
+    //   if(code==='200'){
+    //     let newListData = []
+
+    //   }
+    // });
+
+    fetch(
+      "https://www.fastmock.site/mock/9df39432386360a59e2d0557525f4887/query/query/getPatientList"
+    )
+      .then((res) => res.json())
+      .then((res) => {
+        console.log("res", res);
+        const { data, code, desc } = res;
+        if (code === "200") {
+          // let newListData = [];
+          // data.map((item, index) => {
+          //   let newListDataItem = {};
+          //   // newListDataItem.key = index+item.patientId;
+          //   newListData.push(item);
+          // });
+          this.setState({
+            listData: data,
+          });
+        }
+      });
   };
 
   // 分页页数改变触发函数
@@ -362,6 +393,7 @@ class PatientQuery extends Component {
         layout="inline"
         style={{ marginBottom: 30 }}
         onFinish={this.queryPatient}
+        ref="patientQueryForm"
       >
         <Form.Item name="patientId" label="患者id：">
           <Input style={{ width: 100, marginRight: 15 }} placeholder="患者id" />

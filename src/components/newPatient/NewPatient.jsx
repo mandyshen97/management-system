@@ -9,11 +9,11 @@ const { TextArea } = Input;
 const { Option } = Select;
 const formItemLayout = {
   labelCol: {
-    sm: { span: 3 },
+    sm: { span: 6 },
   },
-  // wrapperCol: {
-  //   sm: { span: 20 },
-  // },
+  wrapperCol: {
+    sm: { span: 10 },
+  },
 };
 
 function NewPatient() {

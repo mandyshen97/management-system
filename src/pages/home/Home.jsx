@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { Layout, Card, Col, Row, Divider } from "antd";
 import { Link } from "react-router-dom";
+import { UserOutlined } from "@ant-design/icons";
+
 import "./home.less";
 
 const { Header, Content } = Layout;
@@ -9,6 +11,10 @@ class Home extends Component {
     super(props);
     this.state = {};
   }
+
+  logout = () => {
+    this.props.history.replace("/login");
+  };
 
   render() {
     return (
@@ -22,28 +28,29 @@ class Home extends Component {
           }}
         >
           <div style={{ display: "flex" }}>
-            <h1>脊椎康复辅助系统</h1>
-            <img
+            <h1 style={{ color: "#ffffff" }}>脊椎康复辅助系统</h1>
+            <div
               style={{
-                width: 40,
-                height: 40,
-                position: "absolute",
-                right: 100,
-              }}
-              src=""
-              // alt="头像"
-            />
-            <p
-              style={{
-                width: 40,
+                width: 300,
                 height: 40,
                 position: "absolute",
                 right: 40,
                 color: "#ffffff",
               }}
             >
-              骨科
-            </p>
+              <UserOutlined
+                style={{ color: "blue", fontSize: "30px", marginRight: "10px" }}
+              />
+              <span>科室：骨科 </span>
+              <span style={{ marginLeft: 10 }}> 医生id: 002342</span>
+              <span
+                style={{ marginLeft: 10 }}
+                className="logout"
+                onClick={this.logout}
+              >
+                退出
+              </span>
+            </div>
           </div>
         </Header>
         <Content

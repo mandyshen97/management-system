@@ -10,6 +10,7 @@ import {
   CodeOutlined,
 } from "@ant-design/icons";
 import logo from "../../assets/images/logo.jpg";
+import kangfu from "../../assets/images/kangfu.jpg";
 import "./left-nav.less";
 
 const SubMenu = Menu.SubMenu;
@@ -114,7 +115,7 @@ class LeftNav extends Component {
           className="left-nav-header"
           onClick={() => this.handleChangeColor("/admin/home")}
         >
-          <img src={logo} alt="logo" />
+          <img src={kangfu} alt="logo" />
           <h2>脊椎康复辅助诊疗</h2>
         </Link>
         <Menu mode="inline" theme="dark" selectable={false}>
