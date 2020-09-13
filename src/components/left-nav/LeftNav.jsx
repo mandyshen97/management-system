@@ -8,6 +8,7 @@ import {
   MonitorOutlined,
   AlertOutlined,
   CodeOutlined,
+  SettingOutlined
 } from "@ant-design/icons";
 import logo from "../../assets/images/logo.jpg";
 import kangfu from "../../assets/images/kangfu.jpg";
@@ -50,6 +51,11 @@ class LeftNav extends Component {
           title: "新增治疗方案",
           path: "/admin/newTreatMethod",
           icon: <CodeOutlined />,
+        },
+        {
+          title: "权限控制",
+          path: "/admin/accessControl",
+          icon: <SettingOutlined />,
         },
       ],
     };

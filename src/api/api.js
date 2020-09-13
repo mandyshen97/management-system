@@ -140,6 +140,18 @@ const UrlMap = [
     url: "/api/saveAfterTreat",
     type: "POST"
   },
+  {
+    description: "获取医生权限列表", // 用到
+    method: "getAccessList",
+    url: "/api/getAccessList",
+    type: "GET"
+  },
+  {
+    description: "修改医生权限后提交", // 用到
+    method: "updataAccess",
+    url: "/api/updataAccess",
+    type: "POST"
+  },
 
 
 ];
@@ -160,7 +172,7 @@ UrlMap.forEach(item => {
       credentials: "include"
     };
     // 如果是添加数据记录，则改变option
-    if(url=="http://localhost:8081/record/upload"){
+    if(url==="http://localhost:8081/record/upload"){
       option = {
         method: item.type, // 请求方式
         mode: "cors",
@@ -182,7 +194,7 @@ UrlMap.forEach(item => {
         }
       }
     } else {
-      if(url=="http://localhost:8081/record/upload"){
+      if(url==="http://localhost:8081/record/upload"){
         option.body = data;
       }
       else{

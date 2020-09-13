@@ -26,35 +26,31 @@ class Login extends Component {
       contentHeight: 38,
     };
   }
-  handleSubmit = (e) => {
-    e.preventDefault();
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        if (
-          this.state.code.toLowerCase() != values.verificationCode.toLowerCase()
-        ) {
-          Message.error("登录失败，验证码错误！");
-          this.reloadPic();
-        } else {
-          let param = {
-            username: values.username,
-            password: values.password,
-          };
-          API.login(param)
-            .then((res) => {
-              if (res.code !== "200") {
-                Message.error("登录失败，用户名或密码错误！");
-              } else {
-                Message.success("登录成功！");
-                this.props.history.push("/admin");
-              }
-            })
-            .catch((err) => {
-              Message.error(err + "登录失败！请重试！");
-            });
-        }
-      }
-    });
+  handleSubmit = (values) => {
+    console.log("values", values);
+    if (
+      this.state.code.toLowerCase() !== values.verificationCode.toLowerCase()
+    ) {
+      Message.error("登录失败，验证码错误！");
+      this.reloadPic();
+    } else {
+      let param = {
+        username: values.username,
+        password: values.password,
+      };
+      API.login(param)
+        .then((res) => {
+          if (res.code !== "200") {
+            Message.error("登录失败，用户名或密码错误！");
+          } else {
+            Message.success("登录成功！");
+            this.props.history.push("/admin");
+          }
+        })
+        .catch((err) => {
+          Message.error(err + "登录失败！请重试！");
+        });
+    }
   };
   componentWillMount() {
     this.canvas = React.createRef();
@@ -213,8 +209,11 @@ class Login extends Component {
           </div>
           <div className="login-right">
             <h2>用户登录</h2>
-            <Form onSubmit={this.handleSubmit} className="login-form">
-              <Form.Item rules={[{ required: true, message: "请输入用户名!" }]}>
+            <Form onFinish={this.handleSubmit} className="login-form">
+              <Form.Item
+                rules={[{ required: true, message: "请输入用户名!" }]}
+                name="username"
+              >
                 <Input
                   prefix={
                     <Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />
@@ -222,7 +221,10 @@ class Login extends Component {
                   placeholder="用户名"
                 />
               </Form.Item>
-              <Form.Item rules={[{ required: true, message: "请输入密码!" }]}>
+              <Form.Item
+                rules={[{ required: true, message: "请输入密码!" }]}
+                name="password"
+              >
                 <Input
                   prefix={
                     <Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />
@@ -231,7 +233,10 @@ class Login extends Component {
                   placeholder="密码"
                 />
               </Form.Item>
-              <Form.Item rules={[{ required: true, message: "请输入验证码!" }]}>
+              <Form.Item
+                rules={[{ required: true, message: "请输入验证码!" }]}
+                name="verificationCode"
+              >
                 <div>
                   <Input
                     style={{ float: "left", width: 150, marginRight: 50 }}
@@ -249,7 +254,7 @@ class Login extends Component {
                   block
                   htmlType="submit"
                   className="login-form-button"
-                  href="/home"
+                  href="/home" // 正式环境去掉这一句
                 >
                   登录
                 </Button>

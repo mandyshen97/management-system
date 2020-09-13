@@ -57,7 +57,7 @@ class Home extends Component {
           className="site-layout"
           style={{
             padding: "20px 50px",
-            height: "89vh",
+            height: "100vh",
             marginTop: 64,
             marginBottom: 0,
             background: "rgb(236,236,236)",
@@ -136,6 +136,17 @@ class Home extends Component {
                 </Card>
               </Link>
             </Col>
+          </Row>
+          <Row gutter={16} style={{ marginTop: 30 }}>
+            <Col span={8}>
+              <Link to="/admin/accessControl">
+                <Card title="权限控制" bordered={true} className="cardSelect">
+                  用户权限控制
+                </Card>
+              </Link>
+            </Col>
+            
+           
           </Row>
         </Content>
       </Layout>
