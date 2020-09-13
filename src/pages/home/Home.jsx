@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Card, Col, Row, Divider } from "antd";
+import { Layout, Card, Col, Row, Button } from "antd";
 import { Link } from "react-router-dom";
 import { UserOutlined } from "@ant-design/icons";
 
@@ -57,11 +57,24 @@ class Home extends Component {
           className="site-layout"
           style={{
             padding: "20px 50px",
-            height: "100vh",
+            height: "89vh",
             marginTop: 64,
+            marginBottom: 0,
             background: "rgb(236,236,236)",
           }}
         >
+          <a
+            href="/operationGuide/operation-guide.html"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              marginBottom: "20px",
+              display: "block",
+              fontWeight: "bold",
+            }}
+          >
+            点击查看操作指南
+          </a>
           <Row gutter={16}>
             <Col span={8}>
               <Link to="/admin/newPatient">

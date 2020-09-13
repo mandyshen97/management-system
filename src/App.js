@@ -5,6 +5,7 @@ import Register from "./pages/register/Register";
 import Login from "./pages/login/Login";
 import Home from "./pages/home/Home"
 import Print from "./pages/print/Print";
+import OperationGuide from './pages/operationGuide/operationGuide'
 
 import './App.less';
 
@@ -24,6 +25,7 @@ class App extends Component {
           <Route path="/register" component={Register}></Route>
           <Route path="/admin" component={Admin}></Route>
           <Route path="/home" component={Home}></Route>
+          {/* <Route path="/operation-guide" component={OperationGuide}></Route> */}
           <Route path="/print/:id" component={Print}></Route>
           <Route exact path="/">
             <Redirect to="/login" />
