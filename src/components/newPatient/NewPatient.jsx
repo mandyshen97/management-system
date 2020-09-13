@@ -29,7 +29,7 @@ function NewPatient() {
     // 提交接口
     // API.addPatient(values).then((res) => {
     //   console.log(res);
-    //   if ((res.state = "200")) {
+    //   if ((res.code = "200")) {
     //     message.success('提交成功！')
     //   }
     // });

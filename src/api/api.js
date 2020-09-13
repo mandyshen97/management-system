@@ -1,13 +1,13 @@
 // const BaseUrl = "http://10.13.81.186:8080";
 const UrlMap = [
   {
-    description: "用户登录",
+    description: "用户登录", // 用到
     method: "login",
     url: "http://localhost:8081/user/login",
     type: "POST"
   },
   {
-    description: "用户注册",
+    description: "用户注册", // 用到
     method: "register",
     url: "http://localhost:8081/user/register",
     type: "POST"
@@ -25,7 +25,7 @@ const UrlMap = [
     type: "POST"
   },
   {
-    description: "获取病种id列表",
+    description: "获取病种id列表", // 用到
     method: "getDisease",
     url: "http://localhost:8081/disease/all",
     type: "GET"
@@ -105,15 +105,39 @@ const UrlMap = [
   },
   //=====================================新的
   {
-    description: "提交患者个人信息",
+    description: "新建提交患者个人信息", // 用到
     method: "addPatient",
     url: "/api/addPatient",
     type: "POST"
   },
   {
-    description: "患者信息查询",
-    method: "queryPatient",
-    url: "/api/queryPatient",
+    description: "患者信息查询", // 用到
+    method: "getPatientList",
+    url: "/api/getPatientList",
+    type: "POST"
+  },
+  {
+    description: "获取病人历史治疗记录", // 用到
+    method: "getHistoryRecords",
+    url: "/api/getHistoryRecords",
+    type: "POST"
+  },
+  {
+    description: "上传本次治疗前的内容", // 用到
+    method: "saveBeforeTreat",
+    url: "/api/saveBeforeTreat",
+    type: "POST"
+  },
+  {
+    description: "上传本次治疗的内容", // 用到
+    method: "treat",
+    url: "/api/treat",
+    type: "POST"
+  },
+  {
+    description: "上传本次治疗后的内容", // 用到
+    method: "saveAfterTreat",
+    url: "/api/saveAfterTreat",
     type: "POST"
   },
 

@@ -358,7 +358,7 @@ class PatientQuery extends Component {
       .then((res) => res.json())
       .then((res) => {
         console.log("res", res);
-        const { data, code, desc } = res;
+        const { data, code, msg } = res;
         if (code === "200") {
           // let newListData = [];
           // data.map((item, index) => {
@@ -766,7 +766,7 @@ class PatientQuery extends Component {
                     .indexOf(input.toLowerCase()) >= 0
                 }
               >
-                {this.state.diseaseList.map((item, index) => (
+                {(this.state.diseaseList||[]).map((item, index) => (
                   <Option value={item.id} key={index}>
                     {item.disease}
                   </Option>

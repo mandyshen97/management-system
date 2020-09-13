@@ -12,6 +12,7 @@ import {
   Table,
   DatePicker,
   Button,
+  Message,
   Descriptions,
 } from "antd";
 import "./add-record.less";
@@ -23,6 +24,8 @@ class AddRecord extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      patientId: "",
+      name: "",
       medRecord: {
         patientId: "000001",
         name: "张三",
@@ -91,6 +94,131 @@ class AddRecord extends Component {
     // this.getDiseaseList();
   }
 
+  // 查询表单
+  renderSearch = () => {
+    return (
+      <Form
+        layout="inline"
+        style={{ marginBottom: 30 }}
+        onFinish={this.queryPatient}
+        ref="patientQueryForm"
+      >
+        <Form.Item name="patientId" label="患者id：">
+          <Input style={{ width: 100, marginRight: 15 }} placeholder="患者id" />
+        </Form.Item>
+        <Form.Item name="name" label="患者姓名：">
+          <Input
+            style={{ width: 100, marginRight: 15 }}
+            placeholder="患者姓名"
+          />
+        </Form.Item>
+        <Form.Item>
+          <Button type="primary" htmlType="submit">
+            查询
+          </Button>
+        </Form.Item>
+      </Form>
+    );
+  };
+
+  // 患者基本信息查询
+  queryPatient = () => {
+    let values = this.refs.patientQueryForm.getFieldsValue();
+    let param = {
+      id: values.patientId,
+      name: values.name,
+    };
+    this.setState({
+      patientId: values.patientId,
+      name: values.name,
+    });
+    // todo
+    // 获取患者列表的API
+    // API.getPatientList(param).then((res) => {
+    //   const { data, code, msg } = res;
+    //   if(code==='200'){
+    //     let newListData = []
+
+    //   }
+    // });
+
+    fetch(
+      "https://www.fastmock.site/mock/9df39432386360a59e2d0557525f4887/query/query/getPatientList"
+    )
+      .then((res) => res.json())
+      .then((res) => {
+        console.log("res", res);
+        const { data, code, msg } = res;
+        if (code === "200") {
+          // let newListData = [];
+          // data.map((item, index) => {
+          //   let newListDataItem = {};
+          //   // newListDataItem.key = index+item.patientId;
+          //   newListData.push(item);
+          // });
+          this.setState({
+            listData: data,
+          });
+        }
+      });
+  };
+
+  // 获取历史治疗记录
+  queryHistory = () => {
+    let param = {
+      id: this.state.patientId,
+      name: this.state.name,
+    };
+
+    API.getHistoryRecords(param).then((res) => {
+      // todo
+    });
+  };
+
+  // 上传治疗前的内容
+  handleSaveBeforeTreat = () => {
+    const values = this.refs.beforeTreatForm.getFieldsValue();
+    let { infraFile, infraDesc, infraExcp, pulseExcp } = values;
+    let param = values;
+    param.time = new Date();
+    API.saveBeforeTreat(param).then((res) => {
+      if ((res.code = "200")) {
+        Message.success("上传成功！");
+      } else {
+        Message.error("上传失败！");
+      }
+    });
+  };
+
+  // 本次治疗的记录
+  handleTreat = () => {
+    const values = this.refs.treatForm.getFieldsValue();
+    let param = values;
+    API.treat(param).then((res) => {
+      if ((res.code = "200")) {
+        Message.success("上传成功！");
+      } else {
+        Message.error("上传失败！");
+      }
+    });
+  };
+
+  // 上传本次治疗后的内容
+  handleSaveAfterTreat = () => {
+    console.log("treatafter");
+    const values = this.refs.afterTreatForm.getFieldsValue();
+    let { infraDesc, infraExcp, infraFile, pulseExcp } = values;
+    console.log(values);
+    let param = values;
+    API.saveAfterTreat(param).then((res) => {
+      if ((res.code = "200")) {
+        Message.success("上传成功！");
+      } else {
+        Message.error("上传失败！");
+      }
+    });
+  };
+
   //   渲染的页面
   render() {
     // 照片墙start
@@ -124,6 +252,7 @@ class AddRecord extends Component {
     };
     return (
       <div className="main-content">
+        {this.renderSearch()}
         <b>基本信息</b>
         <Divider className="divide" />
         <Row justify="space-between" className="basicInformation">
@@ -171,8 +300,8 @@ class AddRecord extends Component {
           <Column title="初始症状" dataIndex="iniSymptoms" key="iniSymptoms" />
           <ColumnGroup title="第1次治疗">
             <Column title="就诊时间" dataIndex="date" key="date" />
-            <Column title="红外热像图" dataIndex="firstName" key="firstName" />
-            <Column title="描述" dataIndex="lastName" key="lastName" />
+            <Column title="红外热像图" dataIndex="infImage" key="firstName" />
+            <Column title="描述" dataIndex="description" key="lastName" />
           </ColumnGroup>
           <ColumnGroup title="第2次治疗">
             <Column title="就诊时间" dataIndex="date" key="date" />
@@ -193,7 +322,7 @@ class AddRecord extends Component {
         <Divider />
         <b>本次治疗前</b>
         <br />
-        <Form {...layout} layout="horizontal">
+        <Form {...layout} layout="horizontal" ref="beforeTreatForm">
           <div style={{ display: "flex" }}>
             <Form.Item label="红外热像" className="imageFile" name="infraFile">
               <Upload
@@ -238,7 +367,11 @@ class AddRecord extends Component {
                 placeholder="请输入..."
               />
             </Form.Item>
-            <Button type="primary" style={{ marginLeft: 5 }}>
+            <Button
+              onClick={this.handleSaveBeforeTreat}
+              type="primary"
+              style={{ marginLeft: 5 }}
+            >
               保存
             </Button>
           </div>
@@ -246,14 +379,13 @@ class AddRecord extends Component {
         <br />
         <Divider />
         <b>选择或新增治疗方案</b>
-        <div className="treat">
+        <Form className="treat" ref="treatForm">
           <Form.Item label="选择治疗方案" name="treat">
             <Select
               mode="multiple"
               showArrow="true"
               style={{ width: 400 }}
               placeholder="Please select"
-              // defaultValue={["a10", "c12"]}
               onChange={this.handleTreatChange}
             >
               {treatList.map((item, index) => {
@@ -275,10 +407,17 @@ class AddRecord extends Component {
               placeholder="请输入..."
             />
           </Form.Item>
-        </div>
+          <Button
+            onClick={this.handleTreat}
+            type="primary"
+            style={{ marginLeft: 200 }}
+          >
+            确定
+          </Button>
+        </Form>
         <Divider />
         <b>本次治疗后</b>
-        <Form {...layout} layout="horizontal">
+        <Form {...layout} layout="horizontal" ref="afterTreatForm">
           <div style={{ display: "flex" }}>
             <Form.Item label="红外热像" className="imageFile" name="infraFile">
               <Upload
@@ -323,7 +462,11 @@ class AddRecord extends Component {
                 placeholder="请输入..."
               />
             </Form.Item>
-            <Button type="primary" style={{ marginLeft: 5 }}>
+            <Button
+              type="primary"
+              style={{ marginLeft: 5 }}
+              onClick={this.handleSaveAfterTreat}
+            >
               保存
             </Button>
           </div>
