@@ -5,7 +5,6 @@ import Register from "./pages/register/Register";
 import Login from "./pages/login/Login";
 import Home from "./pages/home/Home"
 import Print from "./pages/print/Print";
-import OperationGuide from './pages/operationGuide/operationGuide'
 
 import './App.less';
 
