@@ -204,7 +204,9 @@ class Login extends Component {
           <div className="login-left">
             <div className="login-left-container">
               <img src={kangfu} alt="logo" />
-              <h1>脊椎康复辅助诊疗系统</h1>
+              <h1 style={{ fontSize: 40, fontWeight: "bold" }}>
+                脊椎康复辅助诊疗系统
+              </h1>
             </div>
           </div>
           <div className="login-right">

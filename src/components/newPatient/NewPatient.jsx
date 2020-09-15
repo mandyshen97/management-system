@@ -1,10 +1,11 @@
-import React, { useState } from "react";
-import { Form, Input, Select, Button, message, DatePicker } from "antd";
+import React from "react";
+import { Form, Input, Select, Button, DatePicker, Modal } from "antd";
 import { Link } from "react-router-dom";
+import moment from "moment";
 import API from "../../api/api";
-require("react-dom");
-window.React2 = require("react");
-console.log(window.React1 === window.React2);
+// require("react-dom");
+// window.React2 = require("react");
+// console.log(window.React1 === window.React2);
 const { TextArea } = Input;
 const { Option } = Select;
 const formItemLayout = {
@@ -19,24 +20,52 @@ const formItemLayout = {
 function NewPatient() {
   const [form] = Form.useForm();
 
-  const onFinish = (values) => {
-    console.log("Received values of form: ", values);
-    if (values.opinion) {
-      message.success("提交成功！");
-    }
+  const success = (msg) => {
+    Modal.success({
+      title: msg,
+    });
+  };
 
-    // todo
+  const warning = (msg) => {
+    Modal.warning({
+      title: msg,
+    });
+  };
+
+  const onFinish = (values) => {
+    let param = {
+      id: values.patientId,
+      name: values.name,
+      birthday: moment(values.birthday).format("YYYY-MM-DD"),
+      gender: values.gender,
+      weight: values.weight,
+      height: values.height,
+      department: values.department,
+      doctorId: values.doctorId,
+      chief: values.chief,
+      medicalHistory: values.medical_history,
+      opinion: values.opinion,
+      diseaseId: 1,
+    };
+
     // 提交接口
-    // API.addPatient(values).then((res) => {
-    //   console.log(res);
-    //   if ((res.code = "200")) {
-    //     message.success('提交成功！')
-    //   }
-    // });
+    API.addPatient(param).then((res) => {
+      if (res.code === "200") {
+        success("提交成功！");
+      } else {
+        warning(res.msg);
+      }
+    });
   };
 
   // 医院科室
-  const departmentList = ["骨外科", "普通外科", "神经外科", "心胸外科"];
+  const departmentList = [
+    "脊柱骨科",
+    "骨外科",
+    "普通外科",
+    "神经外科",
+    "心胸外科",
+  ];
 
   return (
     <div className="main-content">
@@ -69,6 +98,19 @@ function NewPatient() {
               );
             })}
           </Select>
+        </Form.Item>
+
+        <Form.Item
+          name="doctorId"
+          label="主治医生id"
+          rules={[
+            {
+              required: true,
+              message: "请输入主治医生Id!",
+            },
+          ]}
+        >
+          <Input />
         </Form.Item>
 
         <Form.Item
@@ -107,7 +149,6 @@ function NewPatient() {
           ]}
         >
           <DatePicker style={{ width: "100%" }} />
-          {/* <Input /> */}
         </Form.Item>
         <Form.Item
           name="gender"
@@ -123,6 +164,32 @@ function NewPatient() {
             <Option value={1}>男</Option>
             <Option value={0}>女</Option>
           </Select>
+        </Form.Item>
+
+        <Form.Item
+          name="height"
+          label="身高"
+          rules={[
+            {
+              required: true,
+              message: "请输入患者身高",
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item
+          name="weight"
+          label="体重"
+          rules={[
+            {
+              required: true,
+              message: "请输入患者体重",
+            },
+          ]}
+        >
+          <Input />
         </Form.Item>
 
         <Form.Item
@@ -161,7 +228,6 @@ function NewPatient() {
           <Button
             type="primary"
             htmlType="submit"
-            onClick={onFinish}
             style={{
               width: 150,
               marginLeft: 400,
