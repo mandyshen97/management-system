@@ -106,7 +106,7 @@ const UrlMap = [
   },
   //=====================================新的
   {
-    description: "新建提交患者个人信息", // 用到
+    description: "新建提交患者个人信息", // 用到, 联调成功
     method: "addPatient",
     url: "/patient/addPatient",
     type: "POST",
@@ -120,7 +120,7 @@ const UrlMap = [
   {
     description: "获取病人历史治疗记录", // 用到
     method: "getHistoryRecords",
-    url: "/api/getHistoryRecords",
+    url: "/record/getHistoryRecords",
     type: "POST",
   },
   {
@@ -170,7 +170,7 @@ UrlMap.forEach((item) => {
       },
       credentials: "include",
     };
-    let body = Object.keys(data)
+    let body = Object.keys(data || {})
       .map((key) => key + "=" + data[key])
       .join("&");
     // 如果是添加数据记录，则改变option
@@ -187,10 +187,10 @@ UrlMap.forEach((item) => {
     if (item.type !== "POST") {
       // 如果不是POST请求，则将参数拼接在url中，以?连接。
       url = `${url}?${body}`;
-    } 
+    }
     // else if (url === "http://localhost:8081/record/upload") {
     //   option.body = data;
-    // } 
+    // }
     else {
       option.body = JSON.stringify(data);
     }

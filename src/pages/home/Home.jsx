@@ -2,6 +2,15 @@ import React, { Component } from "react";
 import { Layout, Card, Col, Row, Button } from "antd";
 import { Link } from "react-router-dom";
 import { UserOutlined } from "@ant-design/icons";
+import {
+  UserAddOutlined,
+  SolutionOutlined,
+  FileAddOutlined,
+  MonitorOutlined,
+  AlertOutlined,
+  CodeOutlined,
+  SettingOutlined,
+} from "@ant-design/icons";
 
 import "./home.less";
 
@@ -25,13 +34,14 @@ class Home extends Component {
             zIndex: 1,
             width: "100%",
             background: "rgb(57,141,238)",
+            fontSize: "24px",
           }}
         >
           <div style={{ display: "flex" }}>
             <h1 style={{ color: "#ffffff" }}>脊椎康复辅助系统</h1>
             <div
               style={{
-                width: 300,
+                width: 500,
                 height: 40,
                 position: "absolute",
                 right: 40,
@@ -61,6 +71,7 @@ class Home extends Component {
             marginTop: 64,
             marginBottom: 0,
             background: "rgb(236,236,236)",
+            fontSize: "24px",
           }}
         >
           <a
@@ -78,76 +89,113 @@ class Home extends Component {
           <Row gutter={16}>
             <Col span={8}>
               <Link to="/admin/newPatient">
-                <Card
-                  title="新建患者个人信息"
-                  bordered={true}
+                <div
                   className="cardSelect"
+                  style={{
+                    backgroundColor: "#52c41a",
+                  }}
                 >
-                  点击添加新患者信息
-                </Card>
+                  <div>
+                    <UserAddOutlined className="icon" />
+                    新建患者个人信息
+                  </div>
+                  <span className="text">点击添加新患者信息</span>
+                </div>
               </Link>
             </Col>
             <Col span={8}>
               <Link to="/admin/patientQuery">
-                <Card
-                  title="患者信息查询管理"
-                  bordered={true}
+                <div
                   className="cardSelect"
+                  style={{
+                    backgroundColor: "#13c2c2",
+                  }}
                 >
-                  患者信息查询管理
-                </Card>
+                  <div>
+                    <SolutionOutlined className="icon" />
+                    患者信息查询管理
+                  </div>
+                  <span className="text">患者信息查询管理</span>
+                </div>
               </Link>
             </Col>
             <Col span={8}>
               <Link to="/admin/addRecord">
-                <Card
-                  title="新增治疗（病历）记录"
-                  bordered={false}
+                <div
                   className="cardSelect"
+                  style={{
+                    backgroundColor: "#1890ff",
+                  }}
                 >
-                  新增诊疗流程，包括治疗前后的记录对比
-                </Card>
+                  <div>
+                    <FileAddOutlined className="icon" />
+                    新增治疗（病历）记录
+                  </div>
+                  <span className="text">
+                    新增诊疗流程，包括治疗前后的记录对比
+                  </span>
+                </div>
               </Link>
             </Col>
           </Row>
           <Row gutter={16} style={{ marginTop: 30 }}>
             <Col span={8}>
               <Link to="/admin/recordQuery">
-                <Card title="病历查询" bordered={true} className="cardSelect">
-                  病历信息查询管理
-                </Card>
+                <div
+                  className="cardSelect"
+                  style={{
+                    backgroundColor: "#722ed1",
+                  }}
+                >
+                  <div>
+                    <MonitorOutlined className="icon" />
+                    病历查询
+                  </div>
+                  <span className="text">病历信息查询管理</span>
+                </div>
               </Link>
             </Col>
             <Col span={8}>
               <Link to="/admin/AIAnalysis">
-                <Card title="智能分析" bordered={true} className="cardSelect">
-                  人工智能分析治疗结果
-                </Card>
-              </Link>
-            </Col>
-            <Col span={8}>
-              <Link to="/admin/newTreatMethod">
-                <Card
-                  title="新增治疗方案"
-                  bordered={false}
+                <div
                   className="cardSelect"
+                  style={{
+                    backgroundColor: "#eb2f96",
+                  }}
                 >
-                  新增治疗方案
-                </Card>
+                  <div>
+                    <AlertOutlined className="icon" />
+                    智能分析
+                  </div>
+                  <span className="text">人工智能分析治疗结果</span>
+                </div>
               </Link>
             </Col>
-          </Row>
-          <Row gutter={16} style={{ marginTop: 30 }}>
             <Col span={8}>
               <Link to="/admin/accessControl">
-                <Card title="权限控制" bordered={true} className="cardSelect">
-                  用户权限控制
-                </Card>
+                <div
+                  className="cardSelect"
+                  style={{
+                    backgroundColor: "#a0d911",
+                  }}
+                >
+                  <div>
+                    <SettingOutlined className="icon" />
+                    权限控制
+                  </div>
+                  <span className="text">用户权限控制</span>
+                </div>
               </Link>
             </Col>
-            
-           
           </Row>
+          <img
+            src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1600354340678&di=957c9d7a43c2fa4e0de8a1afcca881dd&imgtype=0&src=http%3A%2F%2Fbpic.588ku.com%2Fback_pic%2F05%2F83%2F03%2F505c4baf6a587b2.jpg"
+            alt=""
+            style={{
+              width: "100%",
+              marginTop: "30px",
+            }}
+          />
         </Content>
       </Layout>
     );

@@ -181,7 +181,7 @@ class Register extends Component {
           onClick={this.reloadPic}
           ref={this.canvas}
           width="100"
-          height="35"
+          height="60"
         ></canvas>
       </div>
     );
@@ -259,7 +259,9 @@ class Register extends Component {
                 <span style={{ color: "white", marginRight: "5px" }}>
                   或已存在账号
                 </span>
-                <Link to="/login">现在登录!</Link>
+                <Link to="/login" className="link">
+                  现在登录!
+                </Link>
               </Form.Item>
             </Form>
           </div>

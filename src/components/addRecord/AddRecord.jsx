@@ -172,6 +172,7 @@ class AddRecord extends Component {
 
     API.getHistoryRecords(param).then((res) => {
       // todo
+      console.log('res',res)
     });
   };
 
@@ -189,6 +190,7 @@ class AddRecord extends Component {
       }
     });
   };
+
 
   // 本次治疗的记录
   handleTreat = () => {
