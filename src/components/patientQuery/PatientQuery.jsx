@@ -593,29 +593,26 @@ class PatientQuery extends Component {
               </Col>
             </Row>
             <Row>
-              <Col>
+              <Col span={12}>
                 <strong>主诉：</strong>
                 <div className="setformat">{this.state.patientInfo.chfCmp}</div>
               </Col>
-            </Row>
-            <Row>
-              <Col>
+              <Col span={12}>
                 <strong>既往史：</strong>
                 <div className="setformat">
                   {this.state.patientInfo.prvMedHis}{" "}
                 </div>
               </Col>
             </Row>
+
             <Row>
-              <Col>
+              <Col span={12}>
                 <strong>现病史：</strong>
                 <div className="setformat">
-                  {this.state.patientInfo.hisPreIll}{" "}
+                  {this.state.patientInfo.hisPreIll}
                 </div>
               </Col>
-            </Row>
-            <Row>
-              <Col>
+              <Col span={12}>
                 <strong>中医证型：</strong>
                 <div className="setformat">
                   {this.state.patientInfo.tcmType}{" "}
@@ -623,15 +620,13 @@ class PatientQuery extends Component {
               </Col>
             </Row>
             <Row>
-              <Col>
+              <Col span={12}>
                 <strong>症状：</strong>
                 <div className="setformat">
                   {this.state.patientInfo.patientSign}{" "}
                 </div>
               </Col>
-            </Row>
-            <Row>
-              <Col>
+              <Col span={12}>
                 <strong>病种：</strong>
                 <div className="setformat">
                   {this.getDisease(this.state.patientInfo.disease)}{" "}
@@ -639,15 +634,13 @@ class PatientQuery extends Component {
               </Col>
             </Row>
             <Row>
-              <Col>
+              <Col span={12}>
                 <strong>主药：</strong>
                 <div className="setformat">
                   {this.state.patientInfo.westernMedicine}
                 </div>
               </Col>
-            </Row>
-            <Row>
-              <Col>
+              <Col span={12}>
                 <strong>辅药：</strong>
                 <div className="setformat">
                   {this.state.patientInfo.chineseMedicine}
@@ -766,7 +759,7 @@ class PatientQuery extends Component {
                     .indexOf(input.toLowerCase()) >= 0
                 }
               >
-                {(this.state.diseaseList||[]).map((item, index) => (
+                {(this.state.diseaseList || []).map((item, index) => (
                   <Option value={item.id} key={index}>
                     {item.disease}
                   </Option>

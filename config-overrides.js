@@ -19,7 +19,7 @@ module.exports = override(
     modifyVars: { "@primary-color": "#1890ff" },
   }),
   addWebpackAlias({
-    ["@"]: path.resolve(__dirname, "src"),
+    "@": path.resolve(__dirname, "./src"),
     react: path.resolve("./node_modules/react"),
   })
 );

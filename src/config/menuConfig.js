@@ -24,11 +24,6 @@ const menuList = [
     path: "/admin/AIAnalysis",
     icon: "idcard",
   },
-  {
-    title: "新增治疗方案",
-    path: "/admin/newTreatMethod",
-    icon: "idcard",
-  },
 ];
 
 export default menuList;

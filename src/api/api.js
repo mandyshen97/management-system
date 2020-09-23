@@ -4,85 +4,85 @@ const UrlMap = [
   {
     description: "用户登录", // 用到
     method: "login",
-    url: "http://localhost:8081/user/login",
+    url: "/user/login",
     type: "POST",
   },
   {
     description: "用户注册", // 用到
     method: "register",
-    url: "http://localhost:8081/user/register",
+    url: "/user/register",
     type: "POST",
   },
   {
     description: "获取病历列表",
     method: "getRecordList",
-    url: "http://localhost:8081/record/get",
+    url: "/record/get",
     type: "POST",
   },
   {
     description: "获取单个病历",
     method: "getRecord",
-    url: "http://localhost:8081/record/getSimRecord",
+    url: "/record/getSimRecord",
     type: "POST",
   },
   {
     description: "获取病种id列表", // 用到
     method: "getDisease",
-    url: "http://localhost:8081/disease/all",
+    url: "/disease/all",
     type: "GET",
   },
   {
     description: "删除电子病历记录",
     method: "removeRecord",
-    url: "http://localhost:8081/record/remove",
+    url: "/record/remove",
     type: "POST",
   },
   {
     description: "获取相似电子病历",
     method: "getSimRecord",
-    url: "http://10.13.81.186:8081/record/getRecWithSim",
+    url: "/record/getRecWithSim",
     type: "POST",
   },
   {
     description: "处理分析结果，即更新数据库",
     method: "updateRecord",
-    url: "http://localhost:8081/record/update",
+    url: "/record/update",
     type: "POST",
   },
   {
     description: "获取医生列表",
     method: "getDoctors",
-    url: "http://localhost:8081/user/doctors",
+    url: "/user/doctors",
     type: "POST",
   },
   {
     description: "获取西医主药",
     method: "getWesternMedicine",
-    url: "http://localhost:8081/record/westernMedicine",
+    url: "/record/westernMedicine",
     type: "POST",
   },
   {
     description: "获取中医辅药",
     method: "getChineseMedicine",
-    url: "http://localhost:8081/record/chineseMedicine",
+    url: "/record/chineseMedicine",
     type: "POST",
   },
   {
     description: "添加病历列表",
     method: "uploadRecord",
-    url: "http://localhost:8081/record/upload",
+    url: "/record/upload",
     type: "POST",
   },
   {
     description: "电子病历下载",
     method: "downloadRecord",
-    url: "http://localhost:8081/record/download",
+    url: "/record/download",
     type: "GET",
   },
   {
     description: "康复跟踪",
     method: "recordTrace",
-    url: "http://localhost:8081/record/trace",
+    url: "/record/trace",
     type: "POST",
   },
 
@@ -170,27 +170,14 @@ UrlMap.forEach((item) => {
       },
       credentials: "include",
     };
-    let body = Object.keys(data || {})
+    
+    if (item.type !== "POST") {
+      let body = Object.keys(data || {})
       .map((key) => key + "=" + data[key])
       .join("&");
-    // 如果是添加数据记录，则改变option
-    // if(url==="http://localhost:8081/record/upload"){
-    //   option = {
-    //     method: item.type, // 请求方式
-    //     mode: "cors",
-    //     // headers: {
-    //     //   'Content-Type': 'multipart/form-data'
-    //     // },
-    //     credentials: "include"
-    //   };
-    // }
-    if (item.type !== "POST") {
       // 如果不是POST请求，则将参数拼接在url中，以?连接。
       url = `${url}?${body}`;
     }
-    // else if (url === "http://localhost:8081/record/upload") {
-    //   option.body = data;
-    // }
     else {
       option.body = JSON.stringify(data);
     }

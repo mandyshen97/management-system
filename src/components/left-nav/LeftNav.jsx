@@ -48,11 +48,6 @@ class LeftNav extends Component {
           icon: <AlertOutlined />,
         },
         {
-          title: "新增治疗方案",
-          path: "/admin/newTreatMethod",
-          icon: <CodeOutlined />,
-        },
-        {
           title: "权限控制",
           path: "/admin/accessControl",
           icon: <SettingOutlined />,

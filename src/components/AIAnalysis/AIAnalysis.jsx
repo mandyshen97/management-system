@@ -100,6 +100,79 @@ class AIAnalysis extends Component {
     console.log("查询");
   };
 
+  renderHistoryTable = () => {
+    const columns = [
+      {
+        title: "治疗次数",
+        dataIndex: "count",
+        key: "count",
+        render: (count) => `第${count}次治疗`,
+      },
+      {
+        title: "就诊时间",
+        dataIndex: "time",
+        key: "time",
+      },
+      {
+        title: "红外热像图",
+        dataIndex: "infImage",
+        key: "infImage",
+      },
+      {
+        title: "红外热像图描述",
+        dataIndex: "infImageDes",
+        key: "infImageDes",
+      },
+      {
+        title: "核磁共振图像",
+        dataIndex: "MRI",
+        key: "MRI",
+      },
+      {
+        title: "核磁共振图像描述",
+        dataIndex: "MRIDes",
+        key: "MRIDes",
+      },
+      {
+        title: "核磁共振图像",
+        dataIndex: "CT",
+        key: "CT",
+      },
+      {
+        title: "核磁共振图像描述",
+        dataIndex: "CTDes",
+        key: "CTDes",
+      },
+    ];
+
+    const data = [
+      {
+        key: 0,
+        count: 1,
+        time: "2020-05-21",
+        infImage: "",
+        infImageDes: "脊椎部位红色较深，炎症",
+        MRI: "",
+        MRIDes: "",
+        CT: "",
+        CTDes: "",
+      },
+      {
+        key: 1,
+        count: 2,
+        time: "2020-05-27",
+        infImage: "",
+        infImageDes: "脊椎部位红色较深，炎症",
+        MRI: "",
+        MRIDes: "",
+        CT: "",
+        CTDes: "",
+      },
+    ];
+
+    return <Table bordered="true" columns={columns} dataSource={data} />;
+  };
+
   // 查询表单
   renderSearch = () => {
     return (
@@ -155,30 +228,7 @@ class AIAnalysis extends Component {
             2020-01-02
           </span>
         </div>
-        <Table dataSource={dataSource} bordered>
-          <Column title="初次就诊时间" dataIndex="firstDate" key="firstDate" />
-          <Column title="初始症状" dataIndex="iniSymptoms" key="iniSymptoms" />
-          <ColumnGroup title="第1次治疗">
-            <Column title="就诊时间" dataIndex="date" key="date" />
-            <Column title="红外热像图" dataIndex="firstName" key="firstName" />
-            <Column title="描述" dataIndex="lastName" key="lastName" />
-          </ColumnGroup>
-          <ColumnGroup title="第2次治疗">
-            <Column title="就诊时间" dataIndex="date" key="date" />
-            <Column title="红外热像图" dataIndex="firstName" key="firstName" />
-            <Column title="描述" dataIndex="lastName" key="lastName" />
-          </ColumnGroup>
-          <ColumnGroup title="第3次治疗">
-            <Column title="就诊时间" dataIndex="date" key="date" />
-            <Column title="红外热像图" dataIndex="firstName" key="firstName" />
-            <Column title="描述" dataIndex="lastName" key="lastName" />
-          </ColumnGroup>
-          <ColumnGroup title="第4次治疗">
-            <Column title="就诊时间" dataIndex="date" key="date" />
-            <Column title="红外热像图" dataIndex="firstName" key="firstName" />
-            <Column title="描述" dataIndex="lastName" key="lastName" />
-          </ColumnGroup>
-        </Table>
+        {this.renderHistoryTable()}
         <Button type="primary" style={{ marginBottom: 20 }}>
           点击进行智能分析
         </Button>

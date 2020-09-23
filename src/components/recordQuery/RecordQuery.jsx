@@ -19,7 +19,7 @@ import ReactEcharts from "echarts-for-react";
 const { Option } = Select;
 const { TextArea } = Input;
 // const baseURL = "http://10.13.81.189:8001/"
-const baseURL = "http://localhost:8001/";
+const baseURL = "";
 class RecordQuery extends Component {
   constructor(props) {
     super(props);
@@ -295,29 +295,29 @@ class RecordQuery extends Component {
 
   //  检测数据按钮实现
   async detectionData(record) {
-    let newPatientInfo = {};
-    let tmpSeries = [];
-    Object.keys(record).map((item) => {
-      newPatientInfo[item] = record[item] === null ? "" : record[item];
-    });
-    newPatientInfo["irtFileName"] = baseURL + newPatientInfo["irtFileName"];
-    newPatientInfo["tongueFileName"] =
-      baseURL + newPatientInfo["tongueFileName"];
-    await fetch(baseURL + newPatientInfo["pulseFileName"], {
-      method: "GET",
-      mode: "cors",
-    })
-      .then((res) => {
-        return res.text();
-      })
-      .then((res) => {
-        return res.split(",").forEach((element) => tmpSeries.push(element));
-      });
-    newPatientInfo["pulseSeries"] = tmpSeries;
-    this.setState({
-      tableSwitch: true,
-      patientInfo: newPatientInfo,
-    });
+    // let newPatientInfo = {};
+    // let tmpSeries = [];
+    // Object.keys(record).map((item) => {
+    //   newPatientInfo[item] = record[item] === null ? "" : record[item];
+    // });
+    // newPatientInfo["irtFileName"] = baseURL + newPatientInfo["irtFileName"];
+    // newPatientInfo["tongueFileName"] =
+    //   baseURL + newPatientInfo["tongueFileName"];
+    // await fetch(baseURL + newPatientInfo["pulseFileName"], {
+    //   method: "GET",
+    //   mode: "cors",
+    // })
+    //   .then((res) => {
+    //     return res.text();
+    //   })
+    //   .then((res) => {
+    //     return res.split(",").forEach((element) => tmpSeries.push(element));
+    //   });
+    // newPatientInfo["pulseSeries"] = tmpSeries;
+    // this.setState({
+    //   tableSwitch: true,
+    //   patientInfo: newPatientInfo,
+    // });
   }
 
   helpConfirm = () => {
@@ -414,7 +414,7 @@ class RecordQuery extends Component {
   // 获取病种id对应的病种
   getDisease(diseaseId) {
     let disease = "未诊断";
-    this.state.diseaseList.forEach((element) => {
+    (this.state.diseaseList||[]).forEach((element) => {
       if (element.id === diseaseId) {
         disease = element.name;
       }
@@ -636,7 +636,7 @@ class RecordQuery extends Component {
                 .indexOf(input.toLowerCase()) >= 0
             }
           >
-            {this.state.diseaseList.map((item, index) => (
+            {(this.state.diseaseList||[]).map((item, index) => (
               <Option value={item.id} key={index}>
                 {item.name}
               </Option>
@@ -1056,7 +1056,7 @@ class RecordQuery extends Component {
                 }
                 initialValue={this.state.patientInfo.disease}
               >
-                {this.state.diseaseList.map((item, index) => (
+                {(this.state.diseaseList||[]).map((item, index) => (
                   <Option value={item.name} key={index}>
                     {item.name}
                   </Option>
