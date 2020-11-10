@@ -118,29 +118,41 @@ const UrlMap = [
     type: "POST",
   },
   {
+    description: "更新患者信息", // 用到，新加的
+    method: "updatePatientInfo",
+    url: "/patient/updatePatientInfo",
+    type: "POST",
+  },
+  {
     description: "获取病人历史治疗记录", // 用到
     method: "getHistoryRecords",
     url: "/record/getHistoryRecords",
     type: "POST",
   },
   {
-    description: "上传本次治疗前的内容", // 用到
-    method: "saveBeforeTreat",
-    url: "/api/saveBeforeTreat",
+    description: "上传本次治疗的内容", // 用到，新的------
+    method: "saveTreatInfo",
+    url: "/record/saveTreatInfo",
     type: "POST",
   },
-  {
-    description: "上传本次治疗的内容", // 用到
-    method: "treat",
-    url: "/api/treat",
-    type: "POST",
-  },
-  {
-    description: "上传本次治疗后的内容", // 用到
-    method: "saveAfterTreat",
-    url: "/api/saveAfterTreat",
-    type: "POST",
-  },
+  // {
+  //   description: "上传本次治疗前的内容", // 用到
+  //   method: "saveBeforeTreat",
+  //   url: "/api/saveBeforeTreat",
+  //   type: "POST",
+  // },
+  // {
+  //   description: "上传本次治疗的内容", // 用到
+  //   method: "treat",
+  //   url: "/api/treat",
+  //   type: "POST",
+  // },
+  // {
+  //   description: "上传本次治疗后的内容", // 用到
+  //   method: "saveAfterTreat",
+  //   url: "/api/saveAfterTreat",
+  //   type: "POST",
+  // },
   {
     description: "获取医生权限列表", // 用到
     method: "getAccessList",

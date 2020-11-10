@@ -15,6 +15,7 @@ import {
 import API from "../../api/api";
 import { Link } from "react-router-dom";
 import ReactEcharts from "echarts-for-react";
+import UpdateModal from "./UpdataModal";
 const { Option } = Select;
 const { TextArea } = Input;
 
@@ -23,7 +24,9 @@ class PatientQuery extends Component {
     super(props);
     this.state = {
       tableDataLoading: true,
+      updateInfoModalVisible: false,
       patientInfo: {},
+      modalPatientInfo: {}, // 一条record
       drawerSwitch: false,
       modalSwitch: false,
       helpSwitch: false,
@@ -312,6 +315,13 @@ class PatientQuery extends Component {
     return option;
   };
 
+  showUpdateInfoModal = (record) => {
+    console.log(record)
+    this.setState({
+      updateInfoModalVisible: true,
+      modalPatientInfo: record,
+    });
+  };
   // 获取病种列表接口
   fetchDisease() {
     API.getDisease()
@@ -412,16 +422,10 @@ class PatientQuery extends Component {
           <Input placeholder="患者姓名" style={{ width: 80 }} />
         </Form.Item>
         <Form.Item name="doctorId" label="主治医生id：">
-          <Input
-            placeholder="主治医生id"
-            style={{ width: 80 }}
-          />
+          <Input placeholder="主治医生id" style={{ width: 80 }} />
         </Form.Item>
         <Form.Item name="doctorName" label="主治医生姓名：">
-          <Input
-            placeholder="主治医生姓名"
-            style={{ width: 80}}
-          />
+          <Input placeholder="主治医生姓名" style={{ width: 80 }} />
         </Form.Item>
         <Form.Item>
           <Button type="primary" htmlType="submit">
@@ -436,7 +440,6 @@ class PatientQuery extends Component {
     //todo
     console.log("更新患者信息！");
   };
-
 
   // 渲染的页面
   render() {
@@ -535,7 +538,7 @@ class PatientQuery extends Component {
                   backgroundColor: "red",
                   borderColor: "red",
                 }}
-                onClick={() => this.updataPatientInfo()}
+                onClick={() => this.showUpdateInfoModal(record)}
               >
                 更新患者信息
               </Button>
@@ -544,6 +547,8 @@ class PatientQuery extends Component {
         },
       },
     ];
+
+    console.log("", this.state.patientInfo);
     return (
       <div className="main-content">
         {this.renderSearch()}
@@ -832,6 +837,10 @@ class PatientQuery extends Component {
             </Form.Item>
           </Form>
         </Modal>
+        <UpdateModal
+          visible={this.state.updateInfoModalVisible}
+          modalPatientInfo={this.state.modalPatientInfo}
+        />
       </div>
     );
   }
