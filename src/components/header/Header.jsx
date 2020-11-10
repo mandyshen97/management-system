@@ -13,7 +13,7 @@ class Header extends Component {
       currentTime: formatDateToSecond(Date.now()), // 当前时间字符串
       dayPictureUrl: "", // 天气图片url
       weather: "", // 天气的文本
-      ModalVisiable: false
+      ModalVisiable: false,
     };
   }
 
@@ -25,16 +25,16 @@ class Header extends Component {
     }, 1000);
   };
 
-  getWeather =  () => {
+  getWeather = () => {
     // todo
     // 调用接口请求异步获取数据
     fetch(
       "https://www.tianqiapi.com/api/?version=v6&cityid=101210101&appid=81135576&appsecret=17HDf3Q1"
-    ).then(res => {
-      res.json().then(result => {
+    ).then((res) => {
+      res.json().then((result) => {
         this.setState({
           weather: result.wea,
-          dayPictureUrl: require(`./banana/${result.wea_img}.png`)
+          dayPictureUrl: require(`./banana/${result.wea_img}.png`),
         });
       });
     });
@@ -47,14 +47,14 @@ class Header extends Component {
     // 得到当前请求路径
     const path = this.props.location.pathname;
     let title;
-    menuList.forEach(item => {
+    menuList.forEach((item) => {
       // 如果当前item对象的key与path一样,item的title就是需要显示的title
       if (item.path === path) {
         title = item.title;
       } else if (item.children) {
         // 如果当前item有子项，在所有子item中查找匹配的
         const cItem = item.children.find(
-          cItem => path.indexOf(cItem.path) === 0
+          (cItem) => path.indexOf(cItem.path) === 0
         );
         if (cItem) {
           // 如果存在说明匹配成功
@@ -87,13 +87,13 @@ class Header extends Component {
 
   handleCancel = () => {
     this.setState({
-      ModalVisiable: false
+      ModalVisiable: false,
     });
   };
 
   showDialog = () => {
     this.setState({
-      ModalVisiable: true
+      ModalVisiable: true,
     });
   };
 
@@ -103,38 +103,38 @@ class Header extends Component {
     const columns = [
       {
         title: "系统名称",
-        dataIndex: "name"
+        dataIndex: "name",
       },
       {
         title: "版本号",
-        dataIndex: "version"
+        dataIndex: "version",
       },
       {
         title: "更新时间",
-        dataIndex: "updateTime"
-      }
+        dataIndex: "updateTime",
+      },
     ];
     const data = [
       {
         key: "1",
         name: "脊椎康复辅助系统",
         version: "1.1.0",
-        updateTime: "2020-08-01"
-      }
+        updateTime: "2020-08-01",
+      },
     ];
     return (
       <div className="header">
         <span className="page-title">{title}</span>
         <div className="header-right">
           <span className="currentTime">{currentTime}</span>
-          <span style={{ marginRight: "10px" }}>
+          {/* <span style={{ marginRight: "10px" }}>
             <span>天气：{weather}</span>
             <img
               style={{ width: "24px", height: "24px", marginLeft: "5px" }}
               src={dayPictureUrl}
               alt="天气"
             />
-          </span>
+          </span> */}
           <Icon type="global" />
           <Icon type="question-circle" onClick={this.showDialog} />
           <span className="logout" onClick={this.logout}>

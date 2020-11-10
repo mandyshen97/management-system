@@ -7,7 +7,6 @@ import {
   Table,
   Form,
   Row,
-  DatePicker,
   Message,
   Drawer,
   Col,
@@ -23,6 +22,7 @@ class PatientQuery extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      tableDataLoading: true,
       patientInfo: {},
       drawerSwitch: false,
       modalSwitch: false,
@@ -91,7 +91,6 @@ class PatientQuery extends Component {
     Object.keys(record).map((item) => {
       newPatientInfo[item] = record[item] === null ? "暂无" : record[item];
     });
-    console.log(record);
     this.setState({
       drawerSwitch: true,
       patientInfo: newPatientInfo,
@@ -115,7 +114,6 @@ class PatientQuery extends Component {
       helpSwitch: false,
     });
   };
-
 
   // updateConfirm = () => {
   //   // this.props.form.validateFields((err, values) => {
@@ -314,10 +312,11 @@ class PatientQuery extends Component {
     return option;
   };
 
-  // 获取病种列表
+  // 获取病种列表接口
   fetchDisease() {
     API.getDisease()
       .then((response) => {
+        console.log("disease", response);
         let _data = response.data,
           _code = response.code,
           _msg = response.msg;
@@ -338,10 +337,15 @@ class PatientQuery extends Component {
 
   // 获取患者信息列表
   queryPatient = () => {
+    this.setState({
+      tableDataLoading: true,
+    });
     let values = this.refs.patientQueryForm.getFieldsValue();
     let param = {
-      id: values.patientId,
-      name: values.name,
+      patientId: values.patientId,
+      patientName: values.name,
+      doctorId: values.doctorId,
+      doctorName: values.doctorName,
     };
     // todo
     // 获取患者列表的API
@@ -349,6 +353,10 @@ class PatientQuery extends Component {
     //   const { data, code, msg } = res;
     //   if(code==='200'){
     //     let newListData = []
+    // this.setState({
+    //   listData: data,
+    // tableDataLoading: false,
+    // });
 
     //   }
     // });
@@ -369,6 +377,7 @@ class PatientQuery extends Component {
           // });
           this.setState({
             listData: data,
+            tableDataLoading: false,
           });
         }
       });
@@ -387,22 +396,31 @@ class PatientQuery extends Component {
     this.queryPatient();
     this.fetchDisease();
   }
-  // 查询表单
+  // 患者查询表单
   renderSearch = () => {
     return (
       <Form
         layout="inline"
-        style={{ marginBottom: 30 }}
+        style={{ marginBottom: 30, display: "flex" }}
         onFinish={this.queryPatient}
         ref="patientQueryForm"
       >
         <Form.Item name="patientId" label="患者id：">
-          <Input style={{ width: 100, marginRight: 15 }} placeholder="患者id" />
+          <Input placeholder="患者id" style={{ width: 80 }} />
         </Form.Item>
         <Form.Item name="name" label="患者姓名：">
+          <Input placeholder="患者姓名" style={{ width: 80 }} />
+        </Form.Item>
+        <Form.Item name="doctorId" label="主治医生id：">
           <Input
-            style={{ width: 100, marginRight: 15 }}
-            placeholder="患者姓名"
+            placeholder="主治医生id"
+            style={{ width: 80 }}
+          />
+        </Form.Item>
+        <Form.Item name="doctorName" label="主治医生姓名：">
+          <Input
+            placeholder="主治医生姓名"
+            style={{ width: 80}}
           />
         </Form.Item>
         <Form.Item>
@@ -415,12 +433,10 @@ class PatientQuery extends Component {
   };
 
   updataPatientInfo = () => {
+    //todo
     console.log("更新患者信息！");
   };
 
-  addRecord = () => {
-    console.log("新增病历！");
-  };
 
   // 渲染的页面
   render() {
@@ -429,17 +445,17 @@ class PatientQuery extends Component {
       {
         title: "患者id",
         dataIndex: "patientId",
-        width: 60,
+        width: "6%",
       },
       {
         title: "患者姓名",
         dataIndex: "name",
-        width: 50,
+        width: "6%",
       },
       {
         title: "性别",
         dataIndex: "gender",
-        width: 30,
+        width: "6%",
         render: (gender) => {
           return gender === 1 ? "男" : "女";
         },
@@ -447,7 +463,7 @@ class PatientQuery extends Component {
       {
         title: "年龄",
         dataIndex: "birthday",
-        width: 40,
+        width: "6%",
         render: (birthday) => {
           return this.calculateAge(birthday);
         },
@@ -455,19 +471,19 @@ class PatientQuery extends Component {
       {
         title: "就诊时间",
         dataIndex: "createAt",
-        width: 50,
+        width: "8%",
       },
       {
         title: "病人主诉",
-        dataIndex: "chfCmp",
-        ellipsis: true,
-        width: 100,
+        dataIndex: "chief",
+        // ellipsis: true,
+        width: "10%",
         tooltip: true,
       },
       {
         title: "诊断结果",
         dataIndex: "disease",
-        width: 50,
+        width: "10%",
         render: (disease) => {
           return this.getDisease(disease);
         },
@@ -475,7 +491,8 @@ class PatientQuery extends Component {
       {
         title: "病历详情",
         dataIndex: "detail",
-        width: 80,
+        width: "14%",
+        align: "center",
         render: (text, record, index) => {
           return (
             <Button
@@ -491,7 +508,7 @@ class PatientQuery extends Component {
       },
       {
         title: "操作",
-        width: 150,
+        width: "28%",
         key: "action",
         align: "center",
         render: (text, record, index) => {
@@ -518,7 +535,7 @@ class PatientQuery extends Component {
                   backgroundColor: "red",
                   borderColor: "red",
                 }}
-                onClick={() => this.updataPatientInfo}
+                onClick={() => this.updataPatientInfo()}
               >
                 更新患者信息
               </Button>
@@ -540,6 +557,8 @@ class PatientQuery extends Component {
           }}
           columns={tableColumns}
           dataSource={this.state.listData}
+          scroll={{ x: "max-content" }} // 表格横向滚动，防止溢出
+          loading={this.state.tableDataLoading}
         ></Table>
         <Drawer
           title="患者病历"
@@ -596,12 +615,12 @@ class PatientQuery extends Component {
             <Row>
               <Col span={12}>
                 <strong>主诉：</strong>
-                <div className="setformat">{this.state.patientInfo.chfCmp}</div>
+                <div className="setformat">{this.state.patientInfo.chief}</div>
               </Col>
               <Col span={12}>
                 <strong>既往史：</strong>
                 <div className="setformat">
-                  {this.state.patientInfo.prvMedHis}{" "}
+                  {this.state.patientInfo.medicalHistory}{" "}
                 </div>
               </Col>
             </Row>
@@ -722,10 +741,7 @@ class PatientQuery extends Component {
               </p>
             </Form.Item>
             <Form.Item label="主诉" style={{ marginLeft: 27 }}>
-              <p style={{ marginBottom: 0 }}>
-                {" "}
-                {this.state.patientInfo.chfCmp}
-              </p>
+              <p style={{ marginBottom: 0 }}> {this.state.patientInfo.chief}</p>
             </Form.Item>
 
             <Form.Item

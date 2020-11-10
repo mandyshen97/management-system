@@ -26,7 +26,7 @@ const UrlMap = [
     type: "POST",
   },
   {
-    description: "获取病种id列表", // 用到
+    description: "获取病种id列表", // 用到,调通了
     method: "getDisease",
     url: "/disease/all",
     type: "GET",
