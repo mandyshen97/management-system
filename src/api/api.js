@@ -106,7 +106,7 @@ const UrlMap = [
   },
   //=====================================新的
   {
-    description: "新建提交患者个人信息", // 用到, 联调成功
+    description: "新建提交患者个人信息", // 用到, 联调成功，缺少diseaseId
     method: "addPatient",
     url: "/patient/addPatient",
     type: "POST",

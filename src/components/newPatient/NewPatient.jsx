@@ -215,7 +215,19 @@ function NewPatient() {
             },
           ]}
         >
-          <TextArea placeholder="请输入病人主诉" />
+          <TextArea placeholder="请输入病人既往史" />
+        </Form.Item>
+        <Form.Item
+          name="diseaseId"
+          label="疾病id"
+          rules={[
+            {
+              // required: true,
+              message: "请输入患者疾病id",
+            },
+          ]}
+        >
+          <Input />
         </Form.Item>
 
         <Form.Item
