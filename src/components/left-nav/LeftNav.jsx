@@ -8,7 +8,7 @@ import {
   MonitorOutlined,
   AlertOutlined,
   CodeOutlined,
-  SettingOutlined
+  SettingOutlined,
 } from "@ant-design/icons";
 import logo from "../../assets/images/logo.jpg";
 import kangfu from "../../assets/images/kangfu.jpg";
@@ -79,7 +79,7 @@ class LeftNav extends Component {
           >
             <Link to={item.path}>
               {item.icon}
-              <span>{item.title}</span>
+              <span style={{ fontSize: "18px" }}>{item.title}</span>
             </Link>
           </Menu.Item>
         );

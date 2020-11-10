@@ -10,9 +10,9 @@ import AddRecord from "../../components/addRecord/AddRecord";
 import RecordUpload from "../../components/recordUpload/RecordUpload";
 import PatientQuery from "../../components/patientQuery/PatientQuery";
 //
-import NewPatient from '../../components/newPatient/NewPatient'
-import AIAnalysis from '../../components/AIAnalysis/AIAnalysis'
-import AccessControl from '../../components/accessControl/accessControl'
+import NewPatient from "../../components/newPatient/NewPatient";
+import AIAnalysis from "../../components/AIAnalysis/AIAnalysis";
+import AccessControl from "../../components/accessControl/accessControl";
 
 import "./admin.less";
 
@@ -80,7 +80,6 @@ class Admin extends Component {
               <Route path="/admin/accessControl" component={AccessControl} />
               <Route path="/admin/recordUpload" component={RecordUpload} />
               <Route path="/admin/newPatient" component={NewPatient} />
-              
             </Switch>
           </Content>
         </Layout>

@@ -289,9 +289,38 @@ class AddRecord extends Component {
         CT: "",
         CTDes: "",
       },
+      {
+        key: 2,
+        count: 2,
+        time: "2020-05-27",
+        infImage: "",
+        infImageDes: "脊椎部位红色较深，炎症",
+        MRI: "",
+        MRIDes: "",
+        CT: "",
+        CTDes: "",
+      },
+      {
+        key: 3,
+        count: 2,
+        time: "2020-05-27",
+        infImage: "",
+        infImageDes: "脊椎部位红色较深，炎症",
+        MRI: "",
+        MRIDes: "",
+        CT: "",
+        CTDes: "",
+      },
     ];
 
-    return <Table bordered="true" columns={columns} dataSource={data} />;
+    return (
+      <Table
+        bordered="true"
+        columns={columns}
+        dataSource={data}
+        scroll={{ x: "max-content", y: 150 }}
+      />
+    );
   };
 
   renderNIRSLine = () => {
@@ -303,7 +332,15 @@ class AddRecord extends Component {
       },
       dataset: {
         source: [
-          ["product", "2020-05-21", "2020-05-30", "2020-06-02", "2020-06-07", "2020-06-12", "2020-06-19"],
+          [
+            "product",
+            "2020-05-21",
+            "2020-05-30",
+            "2020-06-02",
+            "2020-06-07",
+            "2020-06-12",
+            "2020-06-19",
+          ],
           ["Matcha Latte", 41.1, 30.4, 65.1, 53.3, 83.8, 98.7],
           ["Milk Tea", 86.5, 92.1, 85.7, 83.1, 73.4, 55.1],
           ["Cheese Cocoa", 24.1, 67.2, 79.5, 86.4, 65.2, 82.5],
@@ -400,6 +437,7 @@ class AddRecord extends Component {
               fontSize: "16px",
               paddingLeft: "10px",
               paddingRight: "10px",
+              paddingBottom: "10px",
             }}
           >
             <div

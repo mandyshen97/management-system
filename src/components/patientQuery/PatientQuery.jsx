@@ -116,6 +116,7 @@ class PatientQuery extends Component {
     });
   };
 
+
   // updateConfirm = () => {
   //   // this.props.form.validateFields((err, values) => {
   //   let param = {
@@ -428,7 +429,7 @@ class PatientQuery extends Component {
       {
         title: "患者id",
         dataIndex: "patientId",
-        width: 50,
+        width: 60,
       },
       {
         title: "患者姓名",
@@ -460,7 +461,7 @@ class PatientQuery extends Component {
         title: "病人主诉",
         dataIndex: "chfCmp",
         ellipsis: true,
-        width: 150,
+        width: 100,
         tooltip: true,
       },
       {
@@ -474,12 +475,12 @@ class PatientQuery extends Component {
       {
         title: "病历详情",
         dataIndex: "detail",
-        width: 50,
+        width: 80,
         render: (text, record, index) => {
           return (
             <Button
               type="primary"
-              size="small"
+              // size="small"
               style={{ marginRight: "5px" }}
               onClick={() => this.show(record)}
             >
@@ -499,7 +500,7 @@ class PatientQuery extends Component {
               <Link to={`/admin/addRecord/${record.patientId}`} target="_blank">
                 <Button
                   type="primary"
-                  size="small"
+                  // size="small"
                   style={{
                     marginRight: "5px",
                     backgroundColor: "green",
@@ -511,7 +512,7 @@ class PatientQuery extends Component {
               </Link>
               <Button
                 type="primary"
-                size="small"
+                // size="small"
                 style={{
                   marginRight: "5px",
                   backgroundColor: "red",

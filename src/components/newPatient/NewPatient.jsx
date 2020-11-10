@@ -3,6 +3,7 @@ import { Form, Input, Select, Button, DatePicker, Modal } from "antd";
 import { Link } from "react-router-dom";
 import moment from "moment";
 import API from "../../api/api";
+import "./new-patient.less";
 // require("react-dom");
 // window.React2 = require("react");
 // console.log(window.React1 === window.React2);
