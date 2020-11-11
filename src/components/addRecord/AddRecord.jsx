@@ -8,6 +8,7 @@ import {
   Form,
   Icon,
   Divider,
+  Modal,
   Select,
   Table,
   Button,
@@ -24,11 +25,14 @@ const { Option } = Select;
 const { Column, ColumnGroup } = Table;
 const { TabPane } = Tabs;
 const { Step } = Steps;
+const { Search } = Input;
 
 class AddRecord extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      historyRecordVisible: false,
+      historyNIRSVisible: false,
       patientId: "",
       name: "",
       medRecord: {
@@ -44,7 +48,6 @@ class AddRecord extends Component {
       diseaseList: [],
       helpSwitch: false,
     };
-    console.log("this", this);
   }
 
   // 照片墙 start
@@ -323,6 +326,34 @@ class AddRecord extends Component {
     );
   };
 
+  showHistoryRecord = () => {
+    this.setState({
+      historyRecordVisible: true,
+    });
+  };
+
+  historyRecordCancel = () => {
+    this.setState({
+      historyRecordVisible: false,
+    });
+  };
+
+  showHistoryNIRS = () => {
+    this.setState({
+      historyNIRSVisible: true,
+    });
+  };
+
+  historyNIRSCancle = () => {
+    this.setState({
+      historyNIRSVisible: false,
+    });
+  };
+
+  onSearch = (value) => {
+    console.log("searchparam", value);
+  };
+
   renderNIRSLine = () => {
     let option = {
       legend: {},
@@ -363,8 +394,299 @@ class AddRecord extends Component {
   //   渲染的页面
   render() {
     return (
-      <div className="main-content" style={{ backgroundColor: "#efefef" }}>
-        {this.renderSearch()}
+      <div
+        className="main-content"
+        style={{
+          display: "flex",
+          paddingTop: 0,
+          paddingRight: 0,
+          overflow: "hidden",
+        }}
+      >
+        <div className="left" style={{ width: "100%", overflow: "auto" }}>
+          <div
+            className="newRecord"
+            style={{
+              // marginTop: "30px",
+              width: "100%",
+              // height: 600,
+              backgroundColor: "#ffffff",
+              // border:"1px solid gray",
+              // borderRadius: "10px",
+              fontSize: "16px",
+              // paddingLeft: "10px",
+              // paddingRight: "10px",
+            }}
+          >
+            <div
+              style={{
+                paddingTop: "30px",
+                marginBottom: "20px",
+                fontSize: "26px",
+                textAlign: "center",
+                fontWeight: "bold",
+              }}
+            >
+              选择治疗模式 添加治疗记录
+            </div>
+            <Tabs type="card">
+              <TabPane tab="红外热像模式记录" key="1">
+                <RenderInfMode />
+              </TabPane>
+              <TabPane tab="核磁共振模式记录" key="2">
+                <RenderMRIMode />
+              </TabPane>
+              <TabPane tab="CT 图像模式记录" key="3">
+                <RenderCTMode />
+              </TabPane>
+              <TabPane tab="近红外数据记录模式" key="4">
+                <Button type="primary">点击导入近红外数据</Button>
+                <Button type="primary" style={{ marginLeft: "30px" }}>
+                  点击进行近红外数据人工智能分析
+                </Button>
+                <br />
+                <h2>智能分析文本报告</h2>
+                <p>
+                  经过脊椎疾病相关治疗方案，经近红外热技术的客观分析可见，患者脊椎疾病严重程度有了改善。
+                </p>
+              </TabPane>
+            </Tabs>
+          </div>
+          <div
+            className="analysis"
+            style={{
+              marginTop: "10px",
+              width: "100%",
+              backgroundColor: "#f9f9f9",
+              fontSize: "16px",
+              paddingLeft: "10px",
+              paddingRight: "10px",
+            }}
+          >
+            <div
+              style={{
+                paddingTop: "30px",
+                marginBottom: "20px",
+                fontSize: "26px",
+                textAlign: "center",
+                fontWeight: "bold",
+              }}
+            >
+              本次治疗智能分析
+            </div>
+            <div style={{ display: "flex" }}>
+              <div
+                style={{
+                  width: "400px",
+                  height: 400,
+                  border: "1px solid gray",
+                  textAlign: "center",
+                  paddingTop: "30px",
+                }}
+              >
+                治疗前的红外热像图：
+                <br />
+                <img
+                  style={{
+                    width: "100px",
+                    height: "100px",
+                    display: "block",
+                    border: "1px solid gray",
+                    marginLeft: "33%",
+                  }}
+                  src={feiaiImg}
+                  alt=""
+                />
+                <Divider />
+                治疗后的红外热像图：
+                <br />
+                <img
+                  style={{
+                    width: "100px",
+                    height: "100px",
+                    display: "block",
+                    border: "1px solid gray",
+                    marginLeft: "33%",
+                  }}
+                  src={feiaiImg}
+                  alt=""
+                />
+              </div>
+              <div
+                style={{
+                  width: "100%",
+                  height: 400,
+                  border: "1px solid gray",
+                  marginLeft: "20px",
+                  padding: "30px",
+                }}
+              >
+                <Button type="primary">
+                  点击进行本次治疗红外热成像图像变化智能分析
+                </Button>
+                <h2 style={{ marginTop: "30px" }}>结论</h2>
+                <p>背部炎症减少，有好转趋势</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          className="right"
+          style={{ width: "300px", height: "100%", backgroundColor: "#f9f9f9" }}
+        >
+          {/* {this.renderSearch()} */}
+          <Search
+            placeholder="查询患者姓名、id"
+            allowClear
+            onSearch={this.onSearch}
+            enterButton
+            style={{ width: 260, margin: "20px 10px" }}
+          />
+          <div
+            className="userInfo"
+            style={{ display: "flex", fontSize: "14px" }}
+          >
+            <ul>
+              <li>
+                <strong>患者id:</strong>
+                <span style={{ marginLeft: 15, padding: 8 }}>
+                  {this.state.medRecord.patientId}
+                </span>
+              </li>
+              <li>
+                <strong>姓名:</strong>
+                <span style={{ marginLeft: 15, padding: 8 }}>
+                  {this.state.medRecord.name}
+                </span>
+              </li>
+              <li>
+                <strong>性别:</strong>
+                <span style={{ marginLeft: 15 }}>
+                  {this.state.medRecord.gender == 1 ? "男" : "女"}
+                </span>
+              </li>
+              <li>
+                <strong>年龄:</strong>
+                <span style={{ marginLeft: 15 }}>
+                  {this.getAge(this.state.medRecord.birthday)}
+                </span>
+              </li>
+              <li>
+                <strong>病人主诉:</strong>
+                <span style={{ marginLeft: 15 }}>
+                  {this.state.medRecord.chfCmp}
+                </span>
+              </li>
+              <li>
+                <strong>诊断:</strong>
+                <span style={{ marginLeft: 15 }}>
+                  {this.state.medRecord.disease}
+                </span>
+              </li>
+            </ul>
+          </div>
+          <Button
+            onClick={this.showHistoryRecord}
+            style={{
+              width: "80%",
+              height: "100px",
+              backgroundColor: "#52c41a",
+              boxShadow: "0 0 9px gray",
+              borderRadius: "10px",
+              fontSize: "18px",
+              fontWeight: "bold",
+              color: "#ffffff",
+              margin: "25px",
+            }}
+          >
+            点击查看历史治疗记录
+          </Button>
+          <Button
+            onClick={this.showHistoryNIRS}
+            style={{
+              width: "80%",
+              height: "100px",
+              backgroundColor: "#faad14",
+              boxShadow: "0 0 9px gray",
+              borderRadius: "10px",
+              fontSize: "18px",
+              fontWeight: "bold",
+              color: "#ffffff",
+              margin: "25px",
+            }}
+          >
+            点击查看近红外治疗记录
+          </Button>
+        </div>
+        <Modal
+          title="历史治疗记录"
+          visible={this.state.historyRecordVisible}
+          // onOk={this.handleOk}
+          onCancel={this.historyRecordCancel}
+        >
+          <div
+            className="history"
+            // style={{
+            //   width: "100%",
+            //   height: 400,
+            //   backgroundColor: "#ffffff",
+            //   borderRadius: "10px",
+            //   fontSize: "16px",
+            //   paddingLeft: "10px",
+            //   paddingRight: "10px",
+            //   paddingBottom: "10px",
+            // }}
+          >
+            <div
+            // style={{
+            //   paddingTop: "30px",
+            //   marginBottom: "20px",
+            //   fontSize: "26px",
+            //   textAlign: "center",
+            //   fontWeight: "bold",
+            // }}
+            >
+              {/* <FileAddOutlined style={{ marginRight: "10px" }} />
+              历史治疗记录 */}
+            </div>
+            {this.renderHistoryTable()}
+          </div>
+        </Modal>
+        <Modal
+          title="历史近红外治疗记录"
+          visible={this.state.historyNIRSVisible}
+          // onOk={this.handleOk}
+          onCancel={this.historyNIRSCancle}
+        >
+          <div
+            className="jinhongwai"
+            style={{
+              marginTop: "30px",
+              width: "100%",
+              // height: 600,
+              backgroundColor: "#ffffff",
+              borderRadius: "10px",
+              fontSize: "16px",
+              paddingLeft: "10px",
+              paddingRight: "10px",
+            }}
+          >
+            <div
+              style={{
+                paddingTop: "30px",
+                marginBottom: "20px",
+                fontSize: "26px",
+                textAlign: "center",
+                fontWeight: "bold",
+              }}
+            >
+              历史近红外记录分析
+              {this.renderNIRSLine()}
+            </div>
+          </div>
+        </Modal>
+
+        {/* {this.renderSearch()}
         <div className="userInfo" style={{ display: "flex" }}>
           <div
             style={{
@@ -531,8 +853,8 @@ class AddRecord extends Component {
           </Tabs>
         </div>
 
-        <div
-          className="analysis"
+        <div */}
+        {/* className="analysis"
           style={{
             marginTop: "30px",
             width: "100%",
@@ -609,7 +931,7 @@ class AddRecord extends Component {
               <p>背部炎症减少，有好转趋势</p>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     );
   }
