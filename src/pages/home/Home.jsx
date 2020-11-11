@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Card, Col, Row, Button } from "antd";
+import { Layout, Col, Row } from "antd";
 import { Link } from "react-router-dom";
 import { UserOutlined } from "@ant-design/icons";
 import {
@@ -8,7 +8,6 @@ import {
   FileAddOutlined,
   MonitorOutlined,
   AlertOutlined,
-  CodeOutlined,
   SettingOutlined,
 } from "@ant-design/icons";
 

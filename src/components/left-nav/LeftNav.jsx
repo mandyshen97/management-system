@@ -7,10 +7,9 @@ import {
   FileAddOutlined,
   MonitorOutlined,
   AlertOutlined,
-  CodeOutlined,
   SettingOutlined,
 } from "@ant-design/icons";
-import logo from "../../assets/images/logo.jpg";
+// import logo from "../../assets/images/logo.jpg";
 import kangfu from "../../assets/images/kangfu.jpg";
 import "./left-nav.less";
 

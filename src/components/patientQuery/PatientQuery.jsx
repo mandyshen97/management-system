@@ -14,7 +14,7 @@ import {
 } from "antd";
 import API from "../../api/api";
 import { Link } from "react-router-dom";
-import ReactEcharts from "echarts-for-react";
+// import ReactEcharts from "echarts-for-react";
 import UpdateModal from "./UpdataModal";
 const { Option } = Select;
 const { TextArea } = Input;
@@ -169,7 +169,7 @@ class PatientQuery extends Component {
       .then((response) => {
         let _data = response.data;
         let _code = response.code;
-        let _msg = response.msg;
+        // let _msg = response.msg;
         if (_code === "200" && _data === 1) {
           Message.info("该病历已删除！");
           this.state.listData.splice(this.state.chosenIndex, 1);
@@ -316,7 +316,7 @@ class PatientQuery extends Component {
   };
 
   showUpdateInfoModal = (record) => {
-    console.log(record)
+    console.log(record);
     this.setState({
       updateInfoModalVisible: true,
       modalPatientInfo: record,
@@ -327,9 +327,9 @@ class PatientQuery extends Component {
     API.getDisease()
       .then((response) => {
         console.log("disease", response);
-        let _data = response.data,
-          _code = response.code,
-          _msg = response.msg;
+        let _data = response.data;
+        let _code = response.code;
+        // _msg = response.msg;
         if (_code === "200") {
           this.setState({
             diseaseList: _data,
@@ -592,7 +592,7 @@ class PatientQuery extends Component {
               <Col span={12}>
                 <strong>性别:</strong>
                 <span style={{ marginLeft: 50 }}>
-                  {this.state.patientInfo.gender == 1 ? "男" : "女"}
+                  {this.state.patientInfo.gender === 1 ? "男" : "女"}
                 </span>
               </Col>
               <Col span={12}>
@@ -742,7 +742,7 @@ class PatientQuery extends Component {
             </Form.Item>
             <Form.Item label="性别">
               <p style={{ width: 50, marginBottom: 0 }}>
-                {this.state.patientInfo.gender == 0 ? "男" : "女"}
+                {this.state.patientInfo.gender === 0 ? "男" : "女"}
               </p>
             </Form.Item>
             <Form.Item label="主诉" style={{ marginLeft: 27 }}>

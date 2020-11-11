@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { Redirect, Link } from "react-router-dom";
-import { Form, Icon, Input, Button, Message, Checkbox } from "antd";
+import { Form, Icon, Input, Button, Message } from "antd";
 import "./login.less";
-import logo from "../../assets/images/logo.jpg";
+// import logo from "../../assets/images/logo.jpg";
 import kangfu from "../../assets/images/kangfu.jpg";
 import memoryUtils from "../../utils/memoryUtils";
 import API from "../../api/api";
@@ -183,7 +183,7 @@ class Login extends Component {
   }
 
   render() {
-    const { current } = this.state;
+    // const { current } = this.state;
     const suffix = (
       <div>
         <canvas

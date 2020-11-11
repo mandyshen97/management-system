@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb } from "antd";
+import { Layout } from "antd";
 import { Switch, Redirect, Route } from "react-router-dom";
 import menuList from "../../config/menuConfig";
 import LeftNav from "./../../components/left-nav/LeftNav";

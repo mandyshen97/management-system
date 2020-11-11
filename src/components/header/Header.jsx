@@ -98,7 +98,7 @@ class Header extends Component {
   };
 
   render() {
-    const { currentTime, dayPictureUrl, weather } = this.state;
+    const { currentTime  } = this.state;
     const title = this.getTitle();
     const columns = [
       {

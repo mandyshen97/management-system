@@ -174,7 +174,7 @@ class Register extends Component {
   };
 
   render() {
-    const { current } = this.state;
+    // const { current } = this.state;
     const suffix = (
       <div>
         <canvas

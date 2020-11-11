@@ -113,8 +113,8 @@ const UrlMap = [
   },
   {
     description: "患者信息查询", // 用到
-    method: "getPatientList",
-    url: "/api/getPatientList",
+    method: "getPatient",
+    url: "/patient/getPatient",
     type: "POST",
   },
   {
