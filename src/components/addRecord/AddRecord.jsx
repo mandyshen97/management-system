@@ -562,7 +562,7 @@ class AddRecord extends Component {
                 </div>
                 <Tabs type="card">
                   <TabPane tab="红外热像模式记录" key="1">
-                    <RenderInfMode />
+                    <RenderInfMode patientInfo={patientInfo} />
                   </TabPane>
                   <TabPane tab="核磁共振模式记录" key="2">
                     <RenderMRIMode />
@@ -802,23 +802,12 @@ class AddRecord extends Component {
               backgroundColor: "#ffffff",
               borderRadius: "10px",
               fontSize: "16px",
-              // paddingLeft: "10px",
-              // paddingRight: "10px",
-              // paddingBottom: "10px",
             }}
           >
-            <div
-            // style={{
-            //   paddingTop: "30px",
-            //   marginBottom: "20px",
-            //   fontSize: "26px",
-            //   textAlign: "center",
-            //   fontWeight: "bold",
-            // }}
-            >
-              {/* <FileAddOutlined style={{ marginRight: "10px" }} />
+            {/* <div> */}
+            {/* <FileAddOutlined style={{ marginRight: "10px" }} />
               历史治疗记录 */}
-            </div>
+            {/* </div> */}
             {this.renderHistoryTable()}
           </div>
         </Modal>

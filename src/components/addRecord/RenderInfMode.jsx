@@ -1,90 +1,152 @@
 import React, { Component } from "react";
-import {
-  Upload,
-  Input,
-  Form,
-  Icon,
-  Modal,
-  Select,
-  DatePicker,
-  Button,
-  Steps,
-} from "antd";
+import moment from "moment";
+import { Input, Form, Select, DatePicker, Button, Steps, Message } from "antd";
+import API from "../../api/api";
+import { treatList, chineseMedicine } from "../../utils/medicalInfo";
+import PicturesWall from "./pictureWall";
 
 const { Step } = Steps;
 const { TextArea } = Input;
 const { Option } = Select;
-const treatList = [
-  "针灸",
-  "推拿",
-  "药物",
-  "康复训练",
-  "理疗",
-  "爬行训练",
-  "手术",
-  "其他方法",
-];
 
-const chineseMedicine = [
-  "石膏",
-  "菊花",
-  "知母",
-  "柴胡",
-  "银胡",
-  "白薇",
-  "决明子",
-  "夏枯草",
-  "栀子",
-  "芦根",
-  "牛黄",
-  "玄参",
-  "黄芩",
-  "黄连",
-  "黄柏",
-  "龙胆草",
-  "金银花",
-  "连翘",
-  "蒲公英",
-  "白头翁",
-  "与齿苋",
-  "柴草根",
-  "青葙子",
-  "西瓜",
-  "虎耳草",
-];
+function getBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
+}
 
 export default class RenderInfMode extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      infCurrentStep: 0,
-      MRICurrentStep: 0,
-      CTCurrentStep: 0,
-      // 照片墙 start
-      previewVisible: false,
-      previewImage: "",
-      fileList: [],
-      // 照片墙 end
+      infCurrentStep: 0, // 近红外当前步骤
+      infBeforeInfo: {
+        infraBeforePath: "", // 路径
+        infraBeforeDesc: "", // 描述
+        infraBeforeExcp: "", // 异常
+        timeBefore: "", // 时间
+        medicationBefore: "", // 用药情况
+      },
+      infMiddleInfo: {
+        treat: [], // 治疗方案
+        treatDetail: "", //治疗具体情况
+        treatMedicine: [], // 治疗用药
+        timeMiddle: "", //治疗时间
+      },
+      infAfterInfo: {
+        infraAfterPath: "", // 路径
+        infraAfterDesc: "", // 描述
+        infraAfterExcp: "", // 异常
+        timeAfter: "", // 时间
+        medicationAfter: "", // 用药情况
+      },
+      fileInfoBefore: {}, // 治疗前上传的文件信息
+      fileInfoAfter: {}, // 治疗后上传的文件信息
     };
   }
 
+  // 更改近红外当前步骤
   handleInfStepChange = (current) => {
-    console.log("onChange:", current);
     this.setState({ infCurrentStep: current });
   };
 
+  // 处理图片变化
+  handleImageChange = async (fileInfo, process) => {
+    let { file } = fileInfo;
+    let fileUrl = await getBase64(file.originFileObj);
+    // 本次治疗前
+    if (process === "before") {
+      let newInfBeforeInfo = this.state.infBeforeInfo;
+      newInfBeforeInfo.infraBeforePath = fileUrl;
+      this.setState({
+        infBeforeInfo: newInfBeforeInfo,
+        fileInfoBefore: fileInfo,
+      });
+    }
+    // 本次治疗后
+    if (process === "after") {
+      let newInfAfterInfo = this.state.infAfterInfo;
+      newInfAfterInfo.infraAfterPath = fileUrl;
+      this.setState({
+        infAfterInfo: newInfAfterInfo,
+        fileInfoAfter: fileInfo,
+      });
+    }
+  };
+
+  // 处理治疗前
+  handleSaveBeforeTreat = async (values) => {
+    let { infraDesc, infraExcp, medicine } = values;
+    let newInfBeforeInfo = this.state.infBeforeInfo;
+    newInfBeforeInfo.infraBeforeDesc = infraDesc;
+    newInfBeforeInfo.infraBeforeExcp = infraExcp;
+    newInfBeforeInfo.timeBefore = moment().format("YYYY-MM-DD HH:mm");
+    newInfBeforeInfo.medicationBefore = medicine;
+    await this.setState({
+      infBeforeInfo: newInfBeforeInfo,
+    });
+    Message.success("保存成功！");
+  };
+
+  // 处理治疗中
+  handleTreat = async (values) => {
+    let { chineseMedicine, date, treat, treatDetail } = values;
+    let newInfMiddleInfo = this.state.infMiddleInfo;
+    newInfMiddleInfo.treat = treat;
+    newInfMiddleInfo.treatMedicine = chineseMedicine;
+    newInfMiddleInfo.timeMiddle = moment(date).format("YYYY-MM-DD HH:mm");
+    newInfMiddleInfo.treatDetail = treatDetail;
+    await this.setState({
+      infMiddleInfo: newInfMiddleInfo,
+    });
+    Message.success("保存成功！");
+  };
+
+  // 处理治疗后
+  handleSaveAfterTreat = async (values) => {
+    let { infraDesc, infraExcp, medicine } = values;
+    let newInfAfterInfo = this.state.infAfterInfo;
+    newInfAfterInfo.infraAfterDesc = infraDesc;
+    newInfAfterInfo.infraAfterExcp = infraExcp;
+    newInfAfterInfo.timeAfter = moment().format("YYYY-MM-DD HH:mm");
+    newInfAfterInfo.medicationAfter = medicine;
+    await this.setState({
+      infAfterInfo: newInfAfterInfo,
+    });
+    Message.success("保存成功！");
+  };
+
+  // todo 提交到后台
+  handleSubmitInfInfo = () => {
+    console.log("提交！");
+    let param = {};
+    Object.assign(
+      param,
+      this.state.infBeforeInfo,
+      this.state.infMiddleInfo,
+      this.state.infAfterInfo
+    );
+    console.log("param", param);
+    API.saveTreatInfo(param).then((res) => {
+      console.log("res", res);
+      if (res.code === "200") {
+        Message.success("提交成功！");
+      } else {
+        Message.error(res.message);
+      }
+    });
+  };
+
   render() {
-    const { previewVisible, previewImage, fileList } = this.state;
+    const { patientInfo } = this.props;
     const layout = {
       labelCol: { span: 4 },
       wrapperCol: { span: 16 },
     };
-    const uploadButton = (
-      <div>
-        <Icon type="plus" />
-        <div className="ant-upload-text">Upload</div>
-      </div>
-    );
+
     return (
       <div style={{ paddingBottom: "30px" }}>
         <Steps
@@ -110,35 +172,30 @@ export default class RenderInfMode extends Component {
                   textAlign: "center",
                 }}
               >
-                上传本次治疗前的红外热像图及说明
+                {`上传 ${patientInfo.patientId}_${patientInfo.name} 本次治疗前的红外热像图及说明`}
               </h2>
-              <Form {...layout} layout="horizontal" ref="beforeTreatForm">
+              <Form
+                {...layout}
+                layout="horizontal"
+                onFinish={this.handleSaveBeforeTreat}
+                initialValues={{
+                  infraDesc: this.state.infBeforeInfo.infraBeforeDesc,
+                  infraExcp: this.state.infBeforeInfo.infraBeforeExcp,
+                  medicine: this.state.infBeforeInfo.medicationBefore,
+                }}
+              >
                 <div>
                   <Form.Item
                     label="红外热像"
                     className="imageFile"
                     name="infraFile"
                   >
-                    <Upload
-                      action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                      listType="picture-card"
-                      fileList={fileList}
-                      onPreview={this.handlePreview}
-                      onChange={this.handleChange}
-                    >
-                      {fileList.length >= 8 ? null : uploadButton}
-                    </Upload>
-                    <Modal
-                      visible={previewVisible}
-                      footer={null}
-                      onCancel={this.handleCancel}
-                    >
-                      <img
-                        alt="example"
-                        style={{ width: "100%" }}
-                        src={previewImage}
-                      />
-                    </Modal>
+                    <PicturesWall
+                      handleImageChange={(fileUrl) =>
+                        this.handleImageChange(fileUrl, "before")
+                      }
+                      fileInfo={this.state.fileInfoBefore}
+                    />
                   </Form.Item>
                   <Form.Item
                     label="描述"
@@ -156,23 +213,41 @@ export default class RenderInfMode extends Component {
                       placeholder="请输入..."
                     />
                   </Form.Item>
-                  <Form.Item label="用药情况" name="pulseExcp">
+                  <Form.Item label="用药情况" name="medicine">
                     <TextArea
                       autoSize={{ minRows: 4, maxRows: 10 }}
                       placeholder="请输入..."
                     />
                   </Form.Item>
-                  <Button
-                    onClick={this.handleSaveBeforeTreat}
-                    type="primary"
+                  <div
                     style={{
+                      width: "200px",
+                      display: "flex",
                       margin: "auto",
-                      display: "block",
-                      marginBottom: "30px",
                     }}
                   >
-                    保存
-                  </Button>
+                    <Button
+                      type="primary"
+                      htmlType="submit"
+                      style={{
+                        flexGrow: 1,
+                      }}
+                    >
+                      保存
+                    </Button>
+                    <Button
+                      type="primary"
+                      style={{
+                        flexGrow: 1,
+                        marginLeft: "20px",
+                      }}
+                      onClick={() => {
+                        this.setState({ infCurrentStep: 1 });
+                      }}
+                    >
+                      下一步
+                    </Button>
+                  </div>
                 </div>
               </Form>
             </div>
@@ -189,12 +264,24 @@ export default class RenderInfMode extends Component {
               >
                 选择本次方案
               </h2>
-              <Form {...layout} className="treat" ref="treatForm">
+              <Form
+                {...layout}
+                className="treat"
+                onFinish={this.handleTreat}
+                initialValues={{
+                  treat: this.state.infMiddleInfo.treat,
+                  chineseMedicine: this.state.infMiddleInfo.treatMedicine,
+                  date: this.state.infMiddleInfo.timeMiddle
+                    ? moment(this.state.infMiddleInfo.timeMiddle)
+                    : "",
+                  treatDetail: this.state.infMiddleInfo.treatDetail,
+                }}
+              >
                 <Form.Item label="选择治疗方案" name="treat">
                   <Select
                     mode="multiple"
                     showArrow="true"
-                    placeholder="Please select"
+                    placeholder="请选择治疗方案"
                     onChange={this.handleTreatChange}
                   >
                     {treatList.map((item, index) => {
@@ -206,11 +293,11 @@ export default class RenderInfMode extends Component {
                     })}
                   </Select>
                 </Form.Item>
-                <Form.Item label="选择中药配方" name="chineseMedicine">
+                <Form.Item label="选择药物配方" name="chineseMedicine">
                   <Select
                     mode="multiple"
                     showArrow="true"
-                    placeholder="Please select"
+                    placeholder="请选择药物配方"
                     onChange={this.handleTreatChange}
                   >
                     {chineseMedicine.map((item, index) => {
@@ -223,7 +310,7 @@ export default class RenderInfMode extends Component {
                   </Select>
                 </Form.Item>
                 <Form.Item label="就诊时间" name="date">
-                  <DatePicker></DatePicker>
+                  <DatePicker placeholder="选择时间"></DatePicker>
                 </Form.Item>
                 <Form.Item label="治疗情况说明" name="treatDetail">
                   <TextArea
@@ -232,13 +319,47 @@ export default class RenderInfMode extends Component {
                     placeholder="请输入..."
                   />
                 </Form.Item>
-                <Button
-                  onClick={this.handleTreat}
-                  type="primary"
-                  style={{ margin: "auto", display: "block" }}
+                <div
+                  style={{
+                    width: "300px",
+                    display: "flex",
+                    margin: "auto",
+                  }}
                 >
-                  确定
-                </Button>
+                  <Button
+                    type="primary"
+                    style={{
+                      flexGrow: 1,
+                      marginRight: "20px",
+                    }}
+                    onClick={() => {
+                      this.setState({ infCurrentStep: 0 });
+                    }}
+                  >
+                    上一步
+                  </Button>
+                  <Button
+                    type="primary"
+                    htmlType="submit"
+                    style={{
+                      flexGrow: 1,
+                    }}
+                  >
+                    保存
+                  </Button>
+                  <Button
+                    type="primary"
+                    style={{
+                      flexGrow: 1,
+                      marginLeft: "20px",
+                    }}
+                    onClick={() => {
+                      this.setState({ infCurrentStep: 2 });
+                    }}
+                  >
+                    下一步
+                  </Button>
+                </div>
               </Form>
             </div>
           )}
@@ -254,33 +375,28 @@ export default class RenderInfMode extends Component {
               >
                 上传本次治疗后的红外热像图及说明
               </h2>
-              <Form {...layout} layout="horizontal" ref="afterTreatForm">
+              <Form
+                {...layout}
+                layout="horizontal"
+                onFinish={this.handleSaveAfterTreat}
+                initialValues={{
+                  infraDesc: this.state.infAfterInfo.infraAfterDesc,
+                  infraExcp: this.state.infAfterInfo.infraAfterExcp,
+                  medicine: this.state.infAfterInfo.medicationAfter,
+                }}
+              >
                 <div>
                   <Form.Item
                     label="红外热像"
                     className="imageFile"
                     name="infraFile"
                   >
-                    <Upload
-                      action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                      listType="picture-card"
-                      fileList={fileList}
-                      onPreview={this.handlePreview}
-                      onChange={this.handleChange}
-                    >
-                      {fileList.length >= 8 ? null : uploadButton}
-                    </Upload>
-                    <Modal
-                      visible={previewVisible}
-                      footer={null}
-                      onCancel={this.handleCancel}
-                    >
-                      <img
-                        alt="example"
-                        style={{ width: "100%" }}
-                        src={previewImage}
-                      />
-                    </Modal>
+                    <PicturesWall
+                      handleImageChange={(fileUrl) =>
+                        this.handleImageChange(fileUrl, "after")
+                      }
+                      fileInfo={this.state.fileInfoAfter}
+                    />
                   </Form.Item>
                   <Form.Item
                     label="描述"
@@ -298,19 +414,52 @@ export default class RenderInfMode extends Component {
                       placeholder="请输入..."
                     />
                   </Form.Item>
-                  <Form.Item label="用药情况" name="pulseExcp">
+                  <Form.Item label="用药情况" name="medicine">
                     <TextArea
                       autoSize={{ minRows: 4, maxRows: 10 }}
                       placeholder="请输入..."
                     />
                   </Form.Item>
-                  <Button
-                    type="primary"
-                    style={{ margin: "auto", display: "block" }}
-                    onClick={this.handleSaveAfterTreat}
+
+                  <div
+                    style={{
+                      width: "300px",
+                      display: "flex",
+                      margin: "auto",
+                    }}
                   >
-                    保存
-                  </Button>
+                    <Button
+                      type="primary"
+                      style={{
+                        flexGrow: 1,
+                        marginRight: "20px",
+                      }}
+                      onClick={() => {
+                        this.setState({ infCurrentStep: 1 });
+                      }}
+                    >
+                      上一步
+                    </Button>
+                    <Button
+                      type="primary"
+                      htmlType="submit"
+                      style={{
+                        flexGrow: 1,
+                      }}
+                    >
+                      保存
+                    </Button>
+                    <Button
+                      type="primary"
+                      style={{
+                        flexGrow: 1,
+                        marginLeft: "20px",
+                      }}
+                      onClick={this.handleSubmitInfInfo}
+                    >
+                      确认提交
+                    </Button>
+                  </div>
                 </div>
               </Form>
             </div>

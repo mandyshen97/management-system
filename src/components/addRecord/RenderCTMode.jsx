@@ -73,6 +73,22 @@ export default class RenderCTMode extends Component {
     this.setState({ infCurrentStep: current });
   };
 
+  handleSaveBeforeTreat = (values) => {
+    console.log('保存！！！')
+    // const values = this.refs.beforeTreatForm.getFieldsValue();
+    console.log('values',values)
+    let { infraFile, infraDesc, infraExcp, pulseExcp } = values;
+    let param = values;
+    param.time = new Date();
+    // API.saveBeforeTreat(param).then((res) => {
+    //   if ((res.code = "200")) {
+    //     Message.success("上传成功！");
+    //   } else {
+    //     Message.error("上传失败！");
+    //   }
+    // });
+  };
+
   render() {
     const { previewVisible, previewImage, fileList } = this.state;
     const layout = {
@@ -112,7 +128,12 @@ export default class RenderCTMode extends Component {
               >
                 上传本次治疗前的CT图像及说明
               </h2>
-              <Form {...layout} layout="horizontal" ref="beforeTreatForm">
+              <Form
+                {...layout}
+                layout="horizontal"
+                ref="beforeTreatForm"
+                onFinish={this.handleSaveBeforeTreat}
+              >
                 <div>
                   <Form.Item label="CT图像" className="CTFile" name="CTFile">
                     <Upload
