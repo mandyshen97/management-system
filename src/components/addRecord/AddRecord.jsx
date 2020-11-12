@@ -51,7 +51,6 @@ class AddRecord extends Component {
     };
   }
 
-  // 照片墙 start
   getBase64(file) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -60,22 +59,6 @@ class AddRecord extends Component {
       reader.onerror = (error) => reject(error);
     });
   }
-
-  handleCancel = () => this.setState({ previewVisible: false });
-
-  handlePreview = async (file) => {
-    if (!file.url && !file.preview) {
-      file.preview = await this.getBase64(file.originFileObj);
-    }
-
-    this.setState({
-      previewImage: file.url || file.preview,
-      previewVisible: true,
-    });
-  };
-
-  handleChange = ({ fileList }) => this.setState({ fileList });
-  // 照片墙 end
 
   // todo 简化   根据生日获取年龄
   getAge(birthday) {
@@ -87,15 +70,13 @@ class AddRecord extends Component {
     return Math.ceil((nowTime - birthDayTime) / 31536000000);
   }
 
-  // todo ?
-  handleTreatChange = (value) => {
-    console.log("selected", value);
-  };
-
   //   页面渲染前执行函数
   componentDidMount() {
-    let id = this.props.match.params.id;
+    let id = this.props.match.params.id; // 获取url中带的id
     console.log("this.props.match.params", this.props.match.params);
+    if (id) {
+      this.queryPatient(id);
+    }
     // this.getMedRecord(id);
     // this.getDiseaseList();
   }
@@ -128,28 +109,38 @@ class AddRecord extends Component {
   };
 
   // 患者基本信息查询
-  queryPatient = () => {
+  queryPatient = (v) => {
+    debugger;
+    let param = {};
+    // 判断搜索框输入的参数是id还是name(包括搜索框输入，url获取id 这两种)
+    if (typeof Number(v) === "number") {
+      param.id = v;
+    } else {
+      param.name = v;
+    }
+    // 表单输入的形式
     let values = this.refs.patientQueryForm.getFieldsValue();
-    let param = {
-      id: values.patientId,
-      name: values.name,
-    };
-    this.setState({
-      patientId: values.patientId,
-      name: values.name,
-    });
+    if (values.name || values.id) {
+      param = {
+        id: values.patientId,
+        name: values.name,
+      };
+    }
+    // this.setState({
+    //   patientId: values.patientId,
+    //   name: values.name,
+    // });
     // todo
     // 获取患者信息
-    // API.getPatient(param).then((res) => {
-    //   const { data, code, msg } = res;
-    //   if(code==='200'){
-    // this.setState({
-    //   patientId: data[0],
-    //   existPatient: true
-    // });
-
-    //   }
-    // });
+    API.getPatient(param).then((res) => {
+      const { data, code, msg } = res;
+      if (code === "200") {
+        this.setState({
+          patientId: data[0],
+          existPatient: true,
+        });
+      }
+    });
 
     fetch(
       "https://www.fastmock.site/mock/9df39432386360a59e2d0557525f4887/query/query/getPatientList"
@@ -176,8 +167,8 @@ class AddRecord extends Component {
   // 获取历史治疗记录
   queryHistory = () => {
     let param = {
-      id: this.state.patientId,
-      name: this.state.name,
+      id: this.state.patientInfo.patientId,
+      name: this.state.patientInfo.name,
     };
 
     API.getHistoryRecords(param).then((res) => {
@@ -782,7 +773,7 @@ class AddRecord extends Component {
         </div>
 
         <Modal
-          title="历史治疗记录"
+          title={`历史治疗记录——${this.state.patientInfo.patientId}_${this.state.patientInfo.name}`}
           visible={this.state.historyRecordVisible}
           // onOk={this.handleOk}
           onCancel={this.historyRecordCancel}
@@ -804,15 +795,11 @@ class AddRecord extends Component {
               fontSize: "16px",
             }}
           >
-            {/* <div> */}
-            {/* <FileAddOutlined style={{ marginRight: "10px" }} />
-              历史治疗记录 */}
-            {/* </div> */}
             {this.renderHistoryTable()}
           </div>
         </Modal>
         <Modal
-          title="历史近红外治疗记录"
+          title={`历史近红外记录——${this.state.patientInfo.patientId}_${this.state.patientInfo.name}`}
           visible={this.state.historyNIRSVisible}
           onCancel={this.historyNIRSCancle}
           width="90%"
