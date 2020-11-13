@@ -202,7 +202,6 @@ UrlMap.forEach((item) => {
 
     // 通过fetch发送请求，第一个参数是请求地址。
     // json()返回一个被解析为JSON格式的promise对象
-    debugger;
     return fetch(url, option).then((res) => res.json());
   };
 });
