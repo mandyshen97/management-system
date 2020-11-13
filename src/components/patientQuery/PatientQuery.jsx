@@ -27,6 +27,7 @@ class PatientQuery extends Component {
       updateInfoModalVisible: false,
       patientInfo: {},
       modalPatientInfo: {}, // 一条record
+      currentTablePage: 1,
       drawerSwitch: false,
       modalSwitch: false,
       helpSwitch: false,
@@ -63,10 +64,6 @@ class PatientQuery extends Component {
       tableSwitch: false,
     });
   };
-  // textAnalysis(id) {
-  //   console.log(id)
-  //   this.props.history.push('/admin/textAnanlysis');
-  // }
 
   // 删除按钮实现
   remove(id) {
@@ -117,43 +114,6 @@ class PatientQuery extends Component {
       helpSwitch: false,
     });
   };
-
-  // updateConfirm = () => {
-  //   // this.props.form.validateFields((err, values) => {
-  //   let param = {
-  //     id: this.state.patientInfo.id,
-  //     patientSign: values.patientSign,
-  //     tcmType: values.tcmType,
-  //     diseaseId: values.disease,
-  //     westernMedicine: values.mainMedicine.join(","),
-  //     chineseMedicine: values.auxMedicine.join(","),
-  //   };
-  //   console.log(values.disease);
-  //   API.updateRecord(param)
-  //     .then((response) => {
-  //       let _data = response.data;
-  //       let _code = response.code;
-  //       let _msg = response.msg;
-  //       if (_code === "200") {
-  //         Message.info("病历更新成功");
-  //         this.queryPatient();
-  //         this.setState({
-  //           updateSwitch: false,
-  //           drawerSwitch: false,
-  //         });
-  //       } else {
-  //         Message.info("病历更新失败，请稍后重试！");
-  //         this.setState({
-  //           updateSwitch: false,
-  //           drawerSwitch: false,
-  //         });
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  //   // });
-  // };
   updateCancel = () => {
     this.setState({
       updateSwitch: false,
@@ -214,109 +174,7 @@ class PatientQuery extends Component {
     return disease;
   }
 
-  getOption = () => {
-    let option = {
-      title: {
-        //标题
-        // text: '折线图一',
-        x: "center",
-        textStyle: {
-          //字体颜色
-          color: "#ccc",
-        },
-      },
-      tooltip: {
-        //提示框组件
-        trigger: "axis",
-      },
-      xAxis: {
-        //X轴坐标值
-        data: [
-          "1",
-          "2",
-          "3",
-          "4",
-          "5",
-          "6",
-          "7",
-          "8",
-          "9",
-          "10",
-          "11",
-          "12",
-          "13",
-          "14",
-          "15",
-          "16",
-          "17",
-          "18",
-          "19",
-          "20",
-          "21",
-          "22",
-          "23",
-          "24",
-          "25",
-          "26",
-          "27",
-          "28",
-          "29",
-          "30",
-          "31",
-          "32",
-          "33",
-        ],
-      },
-      yAxis: {
-        type: "value", //数值轴，适用于连续数据
-      },
-      series: [
-        {
-          name: "数值", //坐标点名称
-          type: "line", //线类型
-          data: [
-            100,
-            90,
-            150,
-            300,
-            500,
-            1000,
-            900,
-            450,
-            500,
-            400,
-            152,
-            110,
-            87,
-            150,
-            310,
-            487,
-            1020,
-            910,
-            437,
-            501,
-            430,
-            150,
-            105,
-            80,
-            157,
-            310,
-            506,
-            989,
-            906,
-            460,
-            505,
-            389,
-            150,
-          ], //坐标点数据
-        },
-      ],
-    };
-    return option;
-  };
-
   showUpdateInfoModal = (record) => {
-    console.log(record);
     this.setState({
       updateInfoModalVisible: true,
       modalPatientInfo: record,
@@ -326,10 +184,9 @@ class PatientQuery extends Component {
   fetchDisease() {
     API.getDisease()
       .then((response) => {
-        console.log("disease", response);
+        console.log("getDisease", response);
         let _data = response.data;
         let _code = response.code;
-        // _msg = response.msg;
         if (_code === "200") {
           this.setState({
             diseaseList: _data,
@@ -345,52 +202,48 @@ class PatientQuery extends Component {
       });
   }
 
+  handleSearchReset = () => {
+    let config = {
+      patientId: undefined,
+      name: undefined,
+      doctorId: undefined,
+      doctorName: undefined,
+    };
+    this.refs.patientQueryForm.setFieldsValue(config);
+    this.queryPatient();
+  };
+
   // 获取患者信息列表
   queryPatient = () => {
     this.setState({
       tableDataLoading: true,
     });
+    let param = {};
     let values = this.refs.patientQueryForm.getFieldsValue();
-    let param = {
-      patientId: values.patientId,
-      patientName: values.name,
-      doctorId: values.doctorId,
-      doctorName: values.doctorName,
-    };
-    // todo
-    // 获取患者列表的API
-    // API.getPatientList(param).then((res) => {
-    //   const { data, code, msg } = res;
-    //   if(code==='200'){
-    //     let newListData = []
-    // this.setState({
-    //   listData: data,
-    // tableDataLoading: false,
-    // });
+    for (const [, value] of Object.entries(values)) {
+      if (value) {
+        param = {
+          patientId: values.patientId,
+          patientName: values.name,
+          doctorId: values.doctorId,
+          doctorName: values.doctorName,
+        };
+      }
+    }
 
-    //   }
-    // });
-
-    fetch(
-      "https://www.fastmock.site/mock/9df39432386360a59e2d0557525f4887/query/query/getPatientList"
-    )
-      .then((res) => res.json())
-      .then((res) => {
-        console.log("res", res);
-        const { data, code, msg } = res;
-        if (code === "200") {
-          // let newListData = [];
-          // data.map((item, index) => {
-          //   let newListDataItem = {};
-          //   // newListDataItem.key = index+item.patientId;
-          //   newListData.push(item);
-          // });
-          this.setState({
-            listData: data,
-            tableDataLoading: false,
-          });
-        }
-      });
+    // 获取患者列表的API，成功
+    API.getPatient(param).then((res) => {
+      console.log("getPatient", res);
+      const { data, code, msg } = res;
+      if (code === "200") {
+        this.setState({
+          listData: data,
+          tableDataLoading: false,
+        });
+      } else {
+        Message.error(msg);
+      }
+    });
   };
 
   // 分页页数改变触发函数
@@ -432,22 +285,26 @@ class PatientQuery extends Component {
             查询
           </Button>
         </Form.Item>
+        <Form.Item>
+          <Button type="primary" onClick={this.handleSearchReset}>
+            重置
+          </Button>
+        </Form.Item>
       </Form>
     );
   };
 
-  updataPatientInfo = () => {
-    //todo
-    console.log("更新患者信息！");
-  };
-
   // 渲染的页面
   render() {
-    console.log("this.state.listData", this.state.listData);
     const tableColumns = [
       {
+        title: "主治医生",
+        dataIndex: "doctorName",
+        width: "6%",
+      },
+      {
         title: "患者id",
-        dataIndex: "patientId",
+        dataIndex: "id",
         width: "6%",
       },
       {
@@ -487,9 +344,6 @@ class PatientQuery extends Component {
         title: "诊断结果",
         dataIndex: "disease",
         width: "10%",
-        render: (disease) => {
-          return this.getDisease(disease);
-        },
       },
       {
         title: "病历详情",
@@ -517,10 +371,9 @@ class PatientQuery extends Component {
         render: (text, record, index) => {
           return (
             <div>
-              <Link to={`/admin/addRecord/${record.patientId}`} target="_blank">
+              <Link to={`/admin/addRecord/${record.id}`} target="_blank">
                 <Button
                   type="primary"
-                  // size="small"
                   style={{
                     marginRight: "5px",
                     backgroundColor: "green",
@@ -532,7 +385,6 @@ class PatientQuery extends Component {
               </Link>
               <Button
                 type="primary"
-                // size="small"
                 style={{
                   marginRight: "5px",
                   backgroundColor: "red",
@@ -548,18 +400,29 @@ class PatientQuery extends Component {
       },
     ];
 
-    console.log("", this.state.patientInfo);
+    const paginationProps = {
+      showTotal: (total) => {
+        return `共${total}条`;
+      },
+      total: this.state.listData.length, //数据总数
+      defaultCurrent: 1, //默认当前页
+      current: this.state.currentTablePage, //当前页
+      pageSize: 8, //每页条数
+      onChange: (page, pageSize) => {
+        console.log("page", page, pageSize);
+        //页码改变的回调，参数是改变后的页码及每页条数
+        this.setState({
+          currentTablePage: page,
+        });
+      },
+    };
+
     return (
       <div className="main-content">
         {this.renderSearch()}
         <Table
           bordered
-          pagination={{
-            simple: true,
-            current: this.state.pageNum,
-            total: this.state.totalNum,
-            onChange: this.pageChange,
-          }}
+          pagination={paginationProps}
           columns={tableColumns}
           dataSource={this.state.listData}
           scroll={{ x: "max-content" }} // 表格横向滚动，防止溢出

@@ -8,21 +8,17 @@ import {
   Form,
   Divider,
   Modal,
-  Select,
   Table,
   Button,
   Message,
   Tabs,
-  Steps,
 } from "antd";
 import "./add-record.less";
 import API from "../../api/api";
 import feiaiImg from "@/assets/images/feiai2.jpg";
-const { TextArea } = Input;
-const { Option } = Select;
-const { Column, ColumnGroup } = Table;
+import { identity } from "lodash";
+
 const { TabPane } = Tabs;
-const { Step } = Steps;
 const { Search } = Input;
 
 class AddRecord extends Component {
@@ -35,6 +31,7 @@ class AddRecord extends Component {
       existPatient: false, // 是否有患者信息
       patientInfo: {}, // 患者基本信息
       patientId: "",
+      historyRecords: [], // 患者历史治疗记录
       name: "",
       medRecord: {
         patientId: "000001",
@@ -51,14 +48,10 @@ class AddRecord extends Component {
     };
   }
 
-  getBase64(file) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = (error) => reject(error);
-    });
-  }
+  // 子组件传来的图片信息
+  handleInfImage = (v) => {
+    console.log("v", v);
+  };
 
   // todo 简化   根据生日获取年龄
   getAge(birthday) {
@@ -75,10 +68,12 @@ class AddRecord extends Component {
     let id = this.props.match.params.id; // 获取url中带的id
     console.log("this.props.match.params", this.props.match.params);
     if (id) {
-      this.queryPatient(id);
+      this.setState({
+        patientId: id,
+      });
+      this.queryPatient(id); // 查询患者信息
+      this.queryHistory(id); // 查询历史治疗记录
     }
-    // this.getMedRecord(id);
-    // this.getDiseaseList();
   }
 
   // 查询表单
@@ -110,11 +105,10 @@ class AddRecord extends Component {
 
   // 患者基本信息查询
   queryPatient = (v) => {
-    debugger;
     let param = {};
     // 判断搜索框输入的参数是id还是name(包括搜索框输入，url获取id 这两种)
     if (typeof Number(v) === "number") {
-      param.id = v;
+      param.patientId = v;
     } else {
       param.name = v;
     }
@@ -122,7 +116,7 @@ class AddRecord extends Component {
     let values = this.refs.patientQueryForm.getFieldsValue();
     if (values.name || values.id) {
       param = {
-        id: values.patientId,
+        patientId: values.patientId,
         name: values.name,
       };
     }
@@ -132,55 +126,36 @@ class AddRecord extends Component {
     // });
     // todo
     // 获取患者信息
+    console.log("param", param);
     API.getPatient(param).then((res) => {
+      console.log("getPatient", res);
       const { data, code, msg } = res;
       if (code === "200") {
         this.setState({
-          patientId: data[0],
+          patientInfo: data[0],
           existPatient: true,
         });
+      } else {
+        Message.error(msg);
       }
     });
-
-    fetch(
-      "https://www.fastmock.site/mock/9df39432386360a59e2d0557525f4887/query/query/getPatientList"
-    )
-      .then((res) => res.json())
-      .then((res) => {
-        console.log("res", res);
-        const { data, code, msg } = res;
-        if (code === "200") {
-          // let newListData = [];
-          // data.map((item, index) => {
-          //   let newListDataItem = {};
-          //   // newListDataItem.key = index+item.patientId;
-          //   newListData.push(item);
-          // });
-          this.setState({
-            patientInfo: data[0],
-            existPatient: true,
-          });
-        }
-      });
   };
 
   // 获取历史治疗记录
-  queryHistory = () => {
+  queryHistory = (id) => {
     let param = {
-      id: this.state.patientInfo.patientId,
-      name: this.state.patientInfo.name,
+      patientId: id,
     };
-
     API.getHistoryRecords(param).then((res) => {
       // todo
-      console.log("res", res);
+      console.log("getHistoryRecords", res);
     });
   };
 
   // 上传治疗前的内容
   handleSaveBeforeTreat = () => {
     const values = this.refs.beforeTreatForm.getFieldsValue();
-    let { infraFile, infraDesc, infraExcp, pulseExcp } = values;
+    // let { infraFile, infraDesc, infraExcp, pulseExcp } = values;
     let param = values;
     param.time = new Date();
     API.saveBeforeTreat(param).then((res) => {
@@ -209,7 +184,7 @@ class AddRecord extends Component {
   handleSaveAfterTreat = () => {
     console.log("treatafter");
     const values = this.refs.afterTreatForm.getFieldsValue();
-    let { infraDesc, infraExcp, infraFile, pulseExcp } = values;
+    // let { infraDesc, infraExcp, infraFile, pulseExcp } = values;
     console.log(values);
     let param = values;
     API.saveAfterTreat(param).then((res) => {
@@ -418,7 +393,6 @@ class AddRecord extends Component {
       showTotal: (total) => {
         return `共${total}条`;
       },
-
       total: data.length, //数据总数
       defaultCurrent: 1, //默认当前页
       current: this.state.currentTablePage, //当前页
@@ -553,7 +527,10 @@ class AddRecord extends Component {
                 </div>
                 <Tabs type="card">
                   <TabPane tab="红外热像模式记录" key="1">
-                    <RenderInfMode patientInfo={patientInfo} />
+                    <RenderInfMode
+                      patientInfo={patientInfo}
+                      handleInfImage={this.handleInfImage}
+                    />
                   </TabPane>
                   <TabPane tab="核磁共振模式记录" key="2">
                     <RenderMRIMode />
@@ -701,7 +678,7 @@ class AddRecord extends Component {
                   <li>
                     <strong>患者id:</strong>
                     <span style={{ marginLeft: 15, padding: 8 }}>
-                      {this.state.patientInfo.patientId}
+                      {this.state.patientInfo.id}
                     </span>
                   </li>
                   <li>
@@ -713,7 +690,7 @@ class AddRecord extends Component {
                   <li>
                     <strong>性别:</strong>
                     <span style={{ marginLeft: 15 }}>
-                      {this.state.patientInfo.gender == 1 ? "男" : "女"}
+                      {this.state.patientInfo.gender === 1 ? "男" : "女"}
                     </span>
                   </li>
                   <li>
@@ -773,9 +750,8 @@ class AddRecord extends Component {
         </div>
 
         <Modal
-          title={`历史治疗记录——${this.state.patientInfo.patientId}_${this.state.patientInfo.name}`}
+          title={`历史治疗记录——${this.state.patientInfo.id}_${this.state.patientInfo.name}`}
           visible={this.state.historyRecordVisible}
-          // onOk={this.handleOk}
           onCancel={this.historyRecordCancel}
           width="90%"
           style={{

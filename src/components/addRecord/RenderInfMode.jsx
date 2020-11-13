@@ -4,6 +4,7 @@ import { Input, Form, Select, DatePicker, Button, Steps, Message } from "antd";
 import API from "../../api/api";
 import { treatList, chineseMedicine } from "../../utils/medicalInfo";
 import PicturesWall from "./pictureWall";
+import _ from "lodash";
 
 const { Step } = Steps;
 const { TextArea } = Input;
@@ -18,17 +19,37 @@ function getBase64(file) {
   });
 }
 
+//将base64转换为blob
+function dataURLtoBlob(dataurl) {
+  var arr = dataurl.split(","),
+    mime = arr[0].match(/:(.*?);/)[1],
+    bstr = atob(arr[1]),
+    n = bstr.length,
+    u8arr = new Uint8Array(n);
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n);
+  }
+  return new Blob([u8arr], { type: mime });
+}
+//将blob转换为file
+function blobToFile(theBlob, fileName) {
+  theBlob.lastModifiedDate = new Date();
+  theBlob.name = fileName;
+  return theBlob;
+}
+
 export default class RenderInfMode extends Component {
   constructor(props) {
     super(props);
     this.state = {
       infCurrentStep: 0, // 近红外当前步骤
       infBeforeInfo: {
-        infraBeforePath: "", // 路径
+        infraBeforeFile: "", // 路径
         infraBeforeDesc: "", // 描述
         infraBeforeExcp: "", // 异常
         timeBefore: "", // 时间
         medicationBefore: "", // 用药情况
+        chief: "", // 主诉
       },
       infMiddleInfo: {
         treat: [], // 治疗方案
@@ -37,7 +58,7 @@ export default class RenderInfMode extends Component {
         timeMiddle: "", //治疗时间
       },
       infAfterInfo: {
-        infraAfterPath: "", // 路径
+        infraAfterFile: "", // 路径
         infraAfterDesc: "", // 描述
         infraAfterExcp: "", // 异常
         timeAfter: "", // 时间
@@ -55,12 +76,21 @@ export default class RenderInfMode extends Component {
 
   // 处理图片变化
   handleImageChange = async (fileInfo, process) => {
+    console.log("fileInfo", fileInfo);
     let { file } = fileInfo;
     let fileUrl = await getBase64(file.originFileObj);
+
+    // base64 转 file
+    var blob = dataURLtoBlob(fileUrl);
+    var fileMultiple = blobToFile(blob, "图片");
+    console.log("fileMultiple", fileMultiple);
+
     // 本次治疗前
     if (process === "before") {
       let newInfBeforeInfo = this.state.infBeforeInfo;
-      newInfBeforeInfo.infraBeforePath = fileUrl;
+      // newInfBeforeInfo.infraBeforeFile = fileUrl;
+      newInfBeforeInfo.infraBeforeFile = file;
+
       this.setState({
         infBeforeInfo: newInfBeforeInfo,
         fileInfoBefore: fileInfo,
@@ -69,7 +99,8 @@ export default class RenderInfMode extends Component {
     // 本次治疗后
     if (process === "after") {
       let newInfAfterInfo = this.state.infAfterInfo;
-      newInfAfterInfo.infraAfterPath = fileUrl;
+      // newInfAfterInfo.infraAfterFile = fileUrl;
+      newInfAfterInfo.infraAfterFile = file;
       this.setState({
         infAfterInfo: newInfAfterInfo,
         fileInfoAfter: fileInfo,
@@ -122,21 +153,42 @@ export default class RenderInfMode extends Component {
   // todo 提交到后台
   handleSubmitInfInfo = () => {
     console.log("提交！");
-    let param = {};
+    const { patientInfo } = this.props;
+    let param = {
+      patientId: _.get(patientInfo, "id"),
+      createdAt: new Date(),
+      medicalHistory: _.get(patientInfo, "medicalHistory"),
+    };
+
     Object.assign(
       param,
       this.state.infBeforeInfo,
       this.state.infMiddleInfo,
       this.state.infAfterInfo
     );
+
+    // delete param.treatMedicine
     console.log("param", param);
-    API.saveTreatInfo(param).then((res) => {
+
+    // const formData = new FormData();
+    // for (let key in param) {
+    //   formData.append(key, param[key]);
+    // }
+
+    // console.log("formData", formData);
+    
+    API.uploadRecord(param).then((res) => {
       console.log("res", res);
       if (res.code === "200") {
         Message.success("提交成功！");
       } else {
-        Message.error(res.message);
+        Message.error(res.msg);
       }
+    });
+
+    this.props.handleInfImage({
+      fileBefore: this.state.fileInfoBefore,
+      fileAfter: this.state.fileInfoAfter,
     });
   };
 
@@ -172,7 +224,7 @@ export default class RenderInfMode extends Component {
                   textAlign: "center",
                 }}
               >
-                {`上传 ${patientInfo.patientId}_${patientInfo.name} 本次治疗前的红外热像图及说明`}
+                {`上传 ${patientInfo.id}_${patientInfo.name} 本次治疗前的红外热像图及说明`}
               </h2>
               <Form
                 {...layout}
@@ -182,6 +234,7 @@ export default class RenderInfMode extends Component {
                   infraDesc: this.state.infBeforeInfo.infraBeforeDesc,
                   infraExcp: this.state.infBeforeInfo.infraBeforeExcp,
                   medicine: this.state.infBeforeInfo.medicationBefore,
+                  chief: this.state.infBeforeInfo.chief,
                 }}
               >
                 <div>
@@ -214,6 +267,12 @@ export default class RenderInfMode extends Component {
                     />
                   </Form.Item>
                   <Form.Item label="用药情况" name="medicine">
+                    <TextArea
+                      autoSize={{ minRows: 4, maxRows: 10 }}
+                      placeholder="请输入..."
+                    />
+                  </Form.Item>
+                  <Form.Item label="主诉" name="chief">
                     <TextArea
                       autoSize={{ minRows: 4, maxRows: 10 }}
                       placeholder="请输入..."
@@ -262,7 +321,7 @@ export default class RenderInfMode extends Component {
                   textAlign: "center",
                 }}
               >
-                选择本次方案
+                {`选择 ${patientInfo.id}_${patientInfo.name} 的本次方案`}
               </h2>
               <Form
                 {...layout}
@@ -373,7 +432,7 @@ export default class RenderInfMode extends Component {
                   textAlign: "center",
                 }}
               >
-                上传本次治疗后的红外热像图及说明
+                {`上传 ${patientInfo.id}_${patientInfo.name} 本次治疗后的红外热像图及说明`}
               </h2>
               <Form
                 {...layout}

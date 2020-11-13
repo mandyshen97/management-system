@@ -18,7 +18,7 @@ const formItemLayout = {
   },
 };
 
-function NewPatient() {
+function NewPatient(props) {
   const [form] = Form.useForm();
 
   const success = (msg) => {
@@ -46,13 +46,14 @@ function NewPatient() {
       chief: values.chief,
       medicalHistory: values.medical_history,
       opinion: values.opinion,
-      diseaseId: 1,
+      dieseaseId: 1,
     };
 
-    // 提交接口
+    // 提交接口 调试成功
     API.addPatient(param).then((res) => {
       if (res.code === "200") {
         success("提交成功！");
+        props.history.push("/admin/patientQuery");
       } else {
         warning(res.msg);
       }

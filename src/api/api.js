@@ -1,5 +1,5 @@
 // const BaseUrl = "http://10.13.81.186:8080";
-const BaseUrl = "http://localhost:8081";
+const BaseUrl = "http://localhost:8080";
 const UrlMap = [
   {
     description: "用户登录", // 用到
@@ -29,7 +29,7 @@ const UrlMap = [
     description: "获取病种id列表", // 用到,调通了
     method: "getDisease",
     url: "/disease/all",
-    type: "GET",
+    type: "POST",
   },
   {
     description: "删除电子病历记录",
@@ -106,19 +106,19 @@ const UrlMap = [
   },
   //=====================================新的
   {
-    description: "新建提交患者个人信息", // 用到, 联调成功，缺少diseaseId
+    description: "新建提交患者个人信息", // 用到, 联调成功
     method: "addPatient",
     url: "/patient/addPatient",
     type: "POST",
   },
   {
-    description: "患者信息查询", // 用到
+    description: "患者信息查询", // 用到,联调成功
     method: "getPatient",
     url: "/patient/getPatient",
     type: "POST",
   },
   {
-    description: "更新患者信息", // 用到，新加的
+    description: "更新患者信息", // 用到，新加的，联调更新无效
     method: "updatePatientInfo",
     url: "/patient/updatePatientInfo",
     type: "POST",
@@ -131,8 +131,8 @@ const UrlMap = [
   },
   {
     description: "上传本次治疗的内容", // 用到，新的------
-    method: "saveTreatInfo",
-    url: "/record/saveTreatInfo",
+    method: "uploadRecord",
+    url: "/record/uploadRecord",
     type: "POST",
   },
   // {
@@ -182,21 +182,27 @@ UrlMap.forEach((item) => {
       },
       credentials: "include",
     };
-    
+
     if (item.type !== "POST") {
       let body = Object.keys(data || {})
-      .map((key) => key + "=" + data[key])
-      .join("&");
+        .map((key) => key + "=" + data[key])
+        .join("&");
       // 如果不是POST请求，则将参数拼接在url中，以?连接。
       url = `${url}?${body}`;
-    }
-    else {
+    } else {
       option.body = JSON.stringify(data);
     }
     // option.body = JSON.stringify(data); // 如果是POST请求，则将请求参数对象拼接好的字符串放在请求体中。
 
+    // if (item.url === "/record/uploadRecord") {
+    //   option.headers = {
+    //     "Content-Type": "multipart/form-data",
+    //   };
+    // }
+
     // 通过fetch发送请求，第一个参数是请求地址。
     // json()返回一个被解析为JSON格式的promise对象
+    debugger;
     return fetch(url, option).then((res) => res.json());
   };
 });

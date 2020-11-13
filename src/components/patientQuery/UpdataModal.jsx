@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Form, Input, Select, Button, DatePicker, Modal } from "antd";
+import { Form, Input, Select, Button, DatePicker, Modal, Message } from "antd";
 import moment from "moment";
 import API from "../../api/api";
 
@@ -7,16 +7,14 @@ const { TextArea } = Input;
 const { Option } = Select;
 
 function UpdateModal(props) {
-  console.log("props-----------------", props);
   const prePatientInfo = props.modalPatientInfo;
-  console.log("prePatientInfo", prePatientInfo);
   const [form] = Form.useForm();
   const [visible, setVisible] = useState(false);
 
   let initialValues = {
     department: prePatientInfo.department,
     doctorId: prePatientInfo.doctorId,
-    patientId: prePatientInfo.patientId,
+    patientId: prePatientInfo.id,
     name: prePatientInfo.name,
     birthday: moment(prePatientInfo.birthday),
     gender: prePatientInfo.gender,
@@ -45,16 +43,15 @@ function UpdateModal(props) {
   };
 
   const onFinish = (values) => {
-    console.log("更新患者信息！！！", values);
     let param = values;
     param.birthday = moment(values.birthday).format("YYYY-MM-DD");
-    console.log("param", param);
 
     // 更新患者信息提交接口
     API.updatePatientInfo(param).then((res) => {
-      // todo
+      console.log("res", res);
       if (res.code === "200") {
-        success("提交成功！");
+        success("更新成功！");
+        hideModal();
       } else {
         warning(res.msg);
       }
@@ -76,7 +73,7 @@ function UpdateModal(props) {
 
   return (
     <Modal
-      title={`更新患者信息——${prePatientInfo.patientId}——${prePatientInfo.name}`}
+      title={`更新患者信息——${prePatientInfo.id}——${prePatientInfo.name}`}
       visible={visible}
       width={1000}
       onCancel={() => hideModal()}

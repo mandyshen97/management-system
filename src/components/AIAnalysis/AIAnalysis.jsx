@@ -3,12 +3,7 @@ import { Form, message, Input, Button, Table } from "antd";
 import ReactEcharts from "echarts-for-react";
 import { Link } from "react-router-dom";
 import API from "../../api/api";
-
-const { Column, ColumnGroup } = Table;
-
 require("react-dom");
-window.React2 = require("react");
-console.log(window.React1 === window.React2);
 
 class AIAnalysis extends Component {
   constructor(props) {
