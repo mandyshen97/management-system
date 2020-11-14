@@ -194,11 +194,11 @@ UrlMap.forEach((item) => {
     }
     // option.body = JSON.stringify(data); // 如果是POST请求，则将请求参数对象拼接好的字符串放在请求体中。
 
-    // if (item.url === "/record/uploadRecord") {
-    //   option.headers = {
-    //     "Content-Type": "multipart/form-data",
-    //   };
-    // }
+    if (item.url === "/record/uploadRecord") {
+      option.headers = {
+        "Content-Type": "multipart/form-data",
+      };
+    }
 
     // 通过fetch发送请求，第一个参数是请求地址。
     // json()返回一个被解析为JSON格式的promise对象

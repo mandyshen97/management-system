@@ -148,7 +148,7 @@ class AddRecord extends Component {
     };
     API.getHistoryRecords(param).then((res) => {
       // todo
-      console.log("getHistoryRecords", res);
+      console.log("getHistoryRecords 历史治疗记录", res);
     });
   };
 

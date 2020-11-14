@@ -154,18 +154,28 @@ export default class RenderInfMode extends Component {
   handleSubmitInfInfo = () => {
     console.log("提交！");
     const { patientInfo } = this.props;
+    let { infBeforeInfo, infMiddleInfo, infAfterInfo } = this.state;
     let param = {
       patientId: _.get(patientInfo, "id"),
-      createdAt: new Date(),
+      // createdAt: new Date(),
       medicalHistory: _.get(patientInfo, "medicalHistory"),
     };
+    console.log("this.state.infBeforeInfo", this.state.infBeforeInfo);
+    console.log("this.state.infMiddleInfo", this.state.infMiddleInfo);
+    console.log("this.state.infAfterInfo", this.state.infAfterInfo);
 
-    Object.assign(
-      param,
-      this.state.infBeforeInfo,
-      this.state.infMiddleInfo,
-      this.state.infAfterInfo
-    );
+    let handleInfMiddle = {};
+    handleInfMiddle.timeMiddle = moment(infMiddleInfo.timeMiddle);
+    handleInfMiddle.treatDetail = infMiddleInfo.treatDetail;
+    handleInfMiddle.treat = infMiddleInfo.treat.join(",");
+    handleInfMiddle.treatMedicine = infMiddleInfo.treatMedicine.join(",");
+
+    Object.assign(param, infBeforeInfo, handleInfMiddle, infAfterInfo);
+    let tBefore = param.timeBefore;
+    let tAfter = param.timeAfter;
+
+    param.timeBefore = moment(tBefore);
+    param.timeAfter = moment(tAfter);
 
     // delete param.treatMedicine
     console.log("param", param);
@@ -176,7 +186,7 @@ export default class RenderInfMode extends Component {
     // }
 
     // console.log("formData", formData);
-    
+
     API.uploadRecord(param).then((res) => {
       console.log("res", res);
       if (res.code === "200") {
