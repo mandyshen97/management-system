@@ -21,7 +21,6 @@ const { TabPane } = Tabs;
 const { Search } = Input;
 
 function getBase64(file) {
-  debugger
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
@@ -110,7 +109,7 @@ class AddRecord extends Component {
       this.setState({
         patientId: id,
       });
-      this.queryPatient(id); // 查询患者信息
+      this.queryPatient({ patientId: id }); // 查询患者信息
       this.queryHistory(id); // 查询历史治疗记录
     }
   }
@@ -127,7 +126,7 @@ class AddRecord extends Component {
         <Form.Item name="patientId" label="患者id：">
           <Input style={{ width: 100, marginRight: 15 }} placeholder="患者id" />
         </Form.Item>
-        <Form.Item name="name" label="患者姓名：">
+        <Form.Item name="patientName" label="患者姓名：">
           <Input
             style={{ width: 100, marginRight: 15 }}
             placeholder="患者姓名"
@@ -145,24 +144,16 @@ class AddRecord extends Component {
   // 患者基本信息查询
   queryPatient = (v) => {
     let param = {};
-    // 判断搜索框输入的参数是id还是name(包括搜索框输入，url获取id 这两种)
-    if (typeof Number(v) === "number") {
-      param.patientId = v;
+    if (typeof v === "object") {
+      param = v;
     } else {
-      param.name = v;
+      // 判断搜索框输入的参数是id还是name(包括搜索框输入，url获取id 这两种)
+      if (isNaN(v)) {
+        param.patientName = v;
+      } else {
+        param.patientId = v;
+      }
     }
-    // 表单输入的形式
-    let values = this.refs.patientQueryForm.getFieldsValue();
-    if (values.name || values.id) {
-      param = {
-        patientId: values.patientId,
-        name: values.name,
-      };
-    }
-    // this.setState({
-    //   patientId: values.patientId,
-    //   name: values.name,
-    // });
     // todo
     // 获取患者信息
     console.log("param", param);
@@ -187,10 +178,10 @@ class AddRecord extends Component {
     };
     API.getHistoryRecords(param).then((res) => {
       console.log("getHistoryRecords 历史治疗记录", res);
-      let records = _.get(res, "data")
+      let records = _.get(res, "data");
       this.setState({
         historyRecords: records,
-        treatCount: records.length + 1
+        treatCount: records.length + 1,
       });
     });
   };
