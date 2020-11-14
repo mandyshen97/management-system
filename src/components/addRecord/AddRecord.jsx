@@ -3,6 +3,7 @@ import ReactEcharts from "echarts-for-react";
 import RenderInfMode from "./RenderInfMode";
 import RenderCTMode from "./RenderCTMode";
 import RenderMRIMode from "./RenderMRIMode";
+import RenderHistoryTable from "../AIAnalysis/RenderHistoryTable";
 import _ from "lodash";
 import {
   Input,
@@ -110,7 +111,7 @@ class AddRecord extends Component {
         patientId: id,
       });
       this.queryPatient({ patientId: id }); // 查询患者信息
-      this.queryHistory(id); // 查询历史治疗记录
+      this.queryHistory({ patientId: id }); // 查询历史治疗记录
     }
   }
 
@@ -120,7 +121,7 @@ class AddRecord extends Component {
       <Form
         layout="inline"
         style={{ marginBottom: 30 }}
-        onFinish={this.queryPatient}
+        onFinish={this.handleSearch}
         ref="patientQueryForm"
       >
         <Form.Item name="patientId" label="患者id：">
@@ -141,6 +142,11 @@ class AddRecord extends Component {
     );
   };
 
+  handleSearch = (v) => {
+    this.queryPatient(v);
+    this.queryHistory(v);
+  };
+
   // 患者基本信息查询
   queryPatient = (v) => {
     let param = {};
@@ -154,31 +160,51 @@ class AddRecord extends Component {
         param.patientId = v;
       }
     }
-    // todo
     // 获取患者信息
     console.log("param", param);
     API.getPatient(param).then((res) => {
       console.log("getPatient", res);
       const { data, code, msg } = res;
-      if (code === "200") {
+      let patientData = data[0];
+      if (code === "200" && (data || []).length === 1) {
         this.setState({
-          patientInfo: data[0],
+          patientInfo: patientData,
           existPatient: true,
         });
+      } else if (code === "200") {
+        this.setState({
+          patientInfo: {},
+          existPatient: false,
+        });
+        Message.warning("您查询的病人不存在！");
       } else {
-        Message.error(msg);
+        Message.warning(msg);
       }
     });
   };
 
   // 获取历史治疗记录
-  queryHistory = (id) => {
-    let param = {
-      patientId: id,
-    };
+  queryHistory = (v) => {
+    let param = {};
+    if (typeof v === "object") {
+      param = v;
+    } else {
+      // 判断搜索框输入的参数是id还是name(包括搜索框输入，url获取id 这两种)
+      if (isNaN(v)) {
+        param.patientName = v;
+      } else {
+        param.patientId = v;
+      }
+    }
+    // let param = {
+    //   patientId: id,
+    // };
     API.getHistoryRecords(param).then((res) => {
       console.log("getHistoryRecords 历史治疗记录", res);
       let records = _.get(res, "data");
+      records.sort((a, b) => {
+        return a.treatCount - b.treatCount;
+      });
       this.setState({
         historyRecords: records,
         treatCount: records.length + 1,
@@ -775,8 +801,7 @@ class AddRecord extends Component {
         >
           <Search
             placeholder="查询患者姓名、id"
-            allowClear
-            onSearch={this.queryPatient}
+            onSearch={this.handleSearch}
             enterButton
             style={{ width: 260, margin: "20px 10px" }}
           />
@@ -791,49 +816,53 @@ class AddRecord extends Component {
                   <li>
                     <strong>科室:</strong>
                     <span style={{ marginLeft: 15, padding: 8 }}>
-                      {this.state.patientInfo.department}
+                      {_.get(this.state.patientInfo, "department", "")}
                     </span>
                   </li>
                   <li>
                     <strong>主治医生:</strong>
                     <span style={{ marginLeft: 15, padding: 8 }}>
-                      {this.state.patientInfo.doctorName}
+                      {_.get(this.state.patientInfo, "doctorName", "")}
                     </span>
                   </li>
                   <li>
                     <strong>患者id:</strong>
                     <span style={{ marginLeft: 15, padding: 8 }}>
-                      {this.state.patientInfo.id}
+                      {_.get(this.state.patientInfo, "id")}
                     </span>
                   </li>
                   <li>
                     <strong>姓名:</strong>
                     <span style={{ marginLeft: 15, padding: 8 }}>
-                      {this.state.patientInfo.name}
+                      {_.get(this.state.patientInfo, "name", "")}
                     </span>
                   </li>
                   <li>
                     <strong>性别:</strong>
                     <span style={{ marginLeft: 15 }}>
-                      {this.state.patientInfo.gender === 1 ? "男" : "女"}
+                      {_.get(this.state.patientInfo, "gender") === 1
+                        ? "男"
+                        : "女"}
                     </span>
                   </li>
                   <li>
                     <strong>年龄:</strong>
                     <span style={{ marginLeft: 15 }}>
-                      {this.getAge(this.state.patientInfo.birthday)}
+                      {this.getAge(
+                        _.get(this.state.patientInfo, "birthday", "")
+                      )}
                     </span>
                   </li>
                   <li>
                     <strong>病人主诉:</strong>
                     <span style={{ marginLeft: 15 }}>
-                      {this.state.patientInfo.chief}
+                      {_.get(this.state.patientInfo, "chief", "")}
                     </span>
                   </li>
                   <li>
                     <strong>诊断:</strong>
                     <span style={{ marginLeft: 15 }}>
-                      {this.state.patientInfo.opinion}
+                      {_.get(this.state.patientInfo, "opinion", "")}
                     </span>
                   </li>
                 </ul>
@@ -875,7 +904,10 @@ class AddRecord extends Component {
         </div>
 
         <Modal
-          title={`历史治疗记录——${this.state.patientInfo.id}_${this.state.patientInfo.name}`}
+          title={`历史治疗记录——${_.get(this.state.patientInfo, "id")}_${_.get(
+            this.state.patientInfo,
+            "name"
+          )}`}
           visible={this.state.historyRecordVisible}
           onCancel={this.historyRecordCancel}
           width="90%"
@@ -896,11 +928,15 @@ class AddRecord extends Component {
               fontSize: "16px",
             }}
           >
-            {this.renderHistoryTable()}
+            {/* {this.renderHistoryTable()} */}
+            <RenderHistoryTable historyRecords={this.state.historyRecords} />
           </div>
         </Modal>
         <Modal
-          title={`历史近红外记录——${this.state.patientInfo.patientId}_${this.state.patientInfo.name}`}
+          title={`历史近红外记录——${_.get(
+            this.state.patientInfo,
+            "id"
+          )}_${_.get(this.state.patientInfo, "name")}`}
           visible={this.state.historyNIRSVisible}
           onCancel={this.historyNIRSCancle}
           width="90%"

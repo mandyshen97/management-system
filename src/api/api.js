@@ -68,12 +68,6 @@ const UrlMap = [
     type: "POST",
   },
   {
-    description: "添加病历列表",
-    method: "uploadRecord",
-    url: "/record/upload",
-    type: "POST",
-  },
-  {
     description: "电子病历下载",
     method: "downloadRecord",
     url: "/record/download",
@@ -192,14 +186,14 @@ UrlMap.forEach((item) => {
     } else {
       option.body = JSON.stringify(data);
     }
-    // option.body = JSON.stringify(data); // 如果是POST请求，则将请求参数对象拼接好的字符串放在请求体中。
 
     if (item.url === "/record/uploadRecord") {
-      option.headers = {
-        "Content-Type": "multipart/form-data",
+      option = {
+        method: "POST",
+        mode: "cors",
+        body: data,
       };
     }
-
     // 通过fetch发送请求，第一个参数是请求地址。
     // json()返回一个被解析为JSON格式的promise对象
     return fetch(url, option).then((res) => res.json());
