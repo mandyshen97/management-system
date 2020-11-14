@@ -21,6 +21,7 @@ const { TabPane } = Tabs;
 const { Search } = Input;
 
 function getBase64(file) {
+  debugger
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
@@ -40,7 +41,7 @@ class AddRecord extends Component {
       patientInfo: {}, // 患者基本信息
       patientId: "",
       historyRecords: [], // 患者历史治疗记录
-      treatCount: 0,
+      treatCount: 0, // 治疗次数
       analysisFileBefore: {
         img: "",
         txt: {},
@@ -67,19 +68,13 @@ class AddRecord extends Component {
     };
   }
 
-  handleCountChange = (count) => {
-    this.setState({
-      treatCount: count,
-    });
-  };
-
   // todo 子组件传来的 图片、 txt 信息
   handleFile = async (v) => {
     console.log("文件文件文件信息", v);
-    const imgInfoBefore = _.get(v, "fileBefore.imgInfoBefore.originFileObj");
-    const txtInfoBefore = _.get(v, "fileBefore.txtInfoBefore.originFileObj");
-    const imgInfoAfter = _.get(v, "fileAfter.imgInfoAfter.originFileObj");
-    const txtInfoAfter = _.get(v, "fileAfter.txtInfoAfter.originFileObj");
+    const imgInfoBefore = _.get(v, "fileBefore.imgInfoBefore");
+    const txtInfoBefore = _.get(v, "fileBefore.txtInfoBefore");
+    const imgInfoAfter = _.get(v, "fileAfter.imgInfoAfter");
+    const txtInfoAfter = _.get(v, "fileAfter.txtInfoAfter");
     let new_analysisFileBefore = this.state.analysisFileBefore;
     new_analysisFileBefore.img = await getBase64(imgInfoBefore);
     new_analysisFileBefore.txt = txtInfoBefore;
@@ -191,10 +186,11 @@ class AddRecord extends Component {
       patientId: id,
     };
     API.getHistoryRecords(param).then((res) => {
-      // todo
       console.log("getHistoryRecords 历史治疗记录", res);
+      let records = _.get(res, "data")
       this.setState({
-        historyRecords: _.get(res, "data"),
+        historyRecords: records,
+        treatCount: records.length + 1
       });
     });
   };
@@ -245,7 +241,7 @@ class AddRecord extends Component {
 
   // 分析治疗前
   handleAnalysisBefore = () => {
-    var formData = new FormData();
+    let formData = new FormData();
     formData.append("original_img", this.state.analysisFileBefore.img);
     formData.append("temp_matrix", this.state.analysisFileBefore.txt);
     formData.append("treatCount", this.state.treatCount);
@@ -631,7 +627,7 @@ class AddRecord extends Component {
                       patientInfo={patientInfo}
                       handleFile={this.handleFile}
                       historyRecords={historyRecords}
-                      handleCountChange={this.handleCountChange}
+                      treatCount={this.state.treatCount}
                     />
                   </TabPane>
                   <TabPane tab="核磁共振模式记录" key="2">

@@ -20,33 +20,13 @@ function getBase64(file) {
   });
 }
 
-//将base64转换为blob
-function dataURLtoBlob(dataurl) {
-  var arr = dataurl.split(","),
-    mime = arr[0].match(/:(.*?);/)[1],
-    bstr = atob(arr[1]),
-    n = bstr.length,
-    u8arr = new Uint8Array(n);
-  while (n--) {
-    u8arr[n] = bstr.charCodeAt(n);
-  }
-  return new Blob([u8arr], { type: mime });
-}
-//将blob转换为file
-function blobToFile(theBlob, fileName) {
-  theBlob.lastModifiedDate = new Date();
-  theBlob.name = fileName;
-  return theBlob;
-}
-
 export default class RenderInfMode extends Component {
   constructor(props) {
     super(props);
     this.state = {
       infCurrentStep: 0, // 近红外当前步骤
-      treatCount: 0, // 治疗次数
       infBeforeInfo: {
-        infraBeforeFile: "", // 路径
+        infraBeforeFile: undefined, // 图片
         infraBeforeTxt: undefined, // 温度矩阵
         infraBeforeDesc: "", // 描述
         infraBeforeExcp: "", // 异常
@@ -61,7 +41,7 @@ export default class RenderInfMode extends Component {
         timeMiddle: "", //治疗时间
       },
       infAfterInfo: {
-        infraAfterFile: "", // 路径
+        infraAfterFile: undefined, // 路径
         infraAfterTxt: undefined, //温度矩阵
         infraAfterDesc: "", // 描述
         infraAfterExcp: "", // 异常
@@ -76,18 +56,7 @@ export default class RenderInfMode extends Component {
         imgInfoAfter: {},
         txtInfoAfter: {},
       }, // 治疗后上传的文件信息
-      // TxtInfoBefore: {}, // 治疗前上传的图片信息
-      // TxtInfoAfter: {}, // 治疗后上传的图片信息
     };
-  }
-
-  componentDidMount() {
-    const { historyRecords } = this.props;
-    let count = _.get(historyRecords, "treatCount", 0) + 1;
-    this.setState({
-      treatCount: count,
-    });
-    this.props.handleCountChange(count)
   }
 
   // 更改近红外当前步骤
@@ -99,22 +68,15 @@ export default class RenderInfMode extends Component {
   handleImageChange = async (fileInfo, process) => {
     console.log("fileInfo", fileInfo);
     let { file } = fileInfo;
-    let fileUrl = await getBase64(file.originFileObj);
-
-    // // base64 转 file
-    // var blob = dataURLtoBlob(fileUrl);
-    // var fileMultiple = blobToFile(blob, "图片");
-    // console.log("fileMultiple", fileMultiple);
 
     // 本次治疗前
     if (process === "before") {
       let newInfBeforeInfo = this.state.infBeforeInfo;
-      // newInfBeforeInfo.infraBeforeFile = fileUrl;
-      newInfBeforeInfo.infraBeforeFile = file;
+      newInfBeforeInfo.infraBeforeFile = file.originFileObj;
 
       // 图片信息
       let newbeforeFile = this.state.beforeFile;
-      newbeforeFile.imgInfoBefore = file;
+      newbeforeFile.imgInfoBefore = file.originFileObj;
 
       this.setState({
         infBeforeInfo: newInfBeforeInfo,
@@ -124,11 +86,10 @@ export default class RenderInfMode extends Component {
     // 本次治疗后
     if (process === "after") {
       let newInfAfterInfo = this.state.infAfterInfo;
-      // newInfAfterInfo.infraAfterFile = fileUrl;
-      newInfAfterInfo.infraAfterFile = file;
+      newInfAfterInfo.infraAfterFile = file.originFileObj;
       // 图片信息
       let newaferFile = this.state.afterFile;
-      newaferFile.imgInfoAfter = file;
+      newaferFile.imgInfoAfter = file.originFileObj;
 
       this.setState({
         infAfterInfo: newInfAfterInfo,
@@ -139,18 +100,16 @@ export default class RenderInfMode extends Component {
 
   // 处理文件变化
   handleFileChange = async (fileInfo, process) => {
-    console.log("txtfileInfo", fileInfo);
     let { file } = fileInfo;
 
     // 本次治疗前
     if (process === "before") {
       let newInfBeforeInfo = this.state.infBeforeInfo;
-      // newInfBeforeInfo.infraBeforeFile = fileUrl;
-      newInfBeforeInfo.infraBeforeTxt = file;
+      newInfBeforeInfo.infraBeforeTxt = file.originFileObj;
 
       // 文件信息
       let newbeforeFile = this.state.beforeFile;
-      newbeforeFile.txtInfoBefore = file;
+      newbeforeFile.txtInfoBefore = file.originFileObj;
 
       this.setState({
         infBeforeInfo: newInfBeforeInfo,
@@ -160,11 +119,10 @@ export default class RenderInfMode extends Component {
     // 本次治疗后
     if (process === "after") {
       let newInfAfterInfo = this.state.infAfterInfo;
-      // newInfAfterInfo.infraAfterFile = fileUrl;
-      newInfAfterInfo.infraAfterTxt = file;
+      newInfAfterInfo.infraAfterTxt = file.originFileObj;
       // 文件信息
       let newaferFile = this.state.afterFile;
-      newaferFile.txtInfoAfter = file;
+      newaferFile.txtInfoAfter = file.originFileObj;
 
       this.setState({
         infAfterInfo: newInfAfterInfo,
@@ -222,12 +180,8 @@ export default class RenderInfMode extends Component {
     let { infBeforeInfo, infMiddleInfo, infAfterInfo } = this.state;
     let param = {
       patientId: _.get(patientInfo, "id"),
-      // createdAt: new Date(),
       medicalHistory: _.get(patientInfo, "medicalHistory"),
     };
-    console.log("this.state.infBeforeInfo", this.state.infBeforeInfo);
-    console.log("this.state.infMiddleInfo", this.state.infMiddleInfo);
-    console.log("this.state.infAfterInfo", this.state.infAfterInfo);
 
     let handleInfMiddle = {};
     handleInfMiddle.timeMiddle = moment(infMiddleInfo.timeMiddle);
@@ -238,28 +192,38 @@ export default class RenderInfMode extends Component {
     Object.assign(param, infBeforeInfo, handleInfMiddle, infAfterInfo);
     let tBefore = param.timeBefore;
     let tAfter = param.timeAfter;
-
     param.timeBefore = moment(tBefore);
     param.timeAfter = moment(tAfter);
 
-    // delete param.treatMedicine
-    console.log("param", param);
-
-    // const formData = new FormData();
-    // for (let key in param) {
-    //   formData.append(key, param[key]);
-    // }
+    let formData = new FormData();
+    for (let key in param) {
+      formData.append(key, param[key]);
+    }
 
     // console.log("formData", formData);
+    // API.uploadRecord(param).then((res) => {
+    //   console.log("res", res);
+    //   if (res.code === "200") {
+    //     Message.success("提交成功！");
+    //   } else {
+    //     Message.error(res.msg);
+    //   }
+    // });
 
-    API.uploadRecord(param).then((res) => {
-      console.log("res", res);
-      if (res.code === "200") {
-        Message.success("提交成功！");
-      } else {
-        Message.error(res.msg);
-      }
-    });
+    fetch("http://localhost:8080/record/uploadRecord", {
+      method: "POST",
+      mode: "cors",
+      body: formData,
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log("上传结果", res);
+        if (res.code === "200") {
+          Message.success("提交成功！");
+        } else {
+          Message.error(res.msg);
+        }
+      });
 
     // 把文件信息传给父组件AddRecord组件
     this.props.handleFile({
@@ -269,8 +233,7 @@ export default class RenderInfMode extends Component {
   };
 
   render() {
-    const { patientInfo } = this.props;
-    const { treatCount } = this.state;
+    const { patientInfo, treatCount } = this.props;
     const layout = {
       labelCol: { span: 4 },
       wrapperCol: { span: 16 },
