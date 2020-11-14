@@ -182,7 +182,6 @@ export default class RenderInfMode extends Component {
       patientId: _.get(patientInfo, "id"),
       medicalHistory: _.get(patientInfo, "medicalHistory"),
     };
-
     let handleInfMiddle = {};
     handleInfMiddle.timeMiddle = moment(infMiddleInfo.timeMiddle);
     handleInfMiddle.treatDetail = infMiddleInfo.treatDetail;
@@ -201,29 +200,29 @@ export default class RenderInfMode extends Component {
     }
 
     // console.log("formData", formData);
-    // API.uploadRecord(param).then((res) => {
-    //   console.log("res", res);
-    //   if (res.code === "200") {
-    //     Message.success("提交成功！");
-    //   } else {
-    //     Message.error(res.msg);
-    //   }
-    // });
+    API.uploadRecord(formData).then((res) => {
+      console.log("res", res);
+      if (res.code === "200") {
+        Message.success("提交成功！");
+      } else {
+        Message.error(res.msg);
+      }
+    });
 
-    fetch("http://localhost:8080/record/uploadRecord", {
-      method: "POST",
-      mode: "cors",
-      body: formData,
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        console.log("上传结果", res);
-        if (res.code === "200") {
-          Message.success("提交成功！");
-        } else {
-          Message.error(res.msg);
-        }
-      });
+    // fetch("http://localhost:8080/record/uploadRecord", {
+    //   method: "POST",
+    //   mode: "cors",
+    //   body: formData,
+    // })
+    //   .then((res) => res.json())
+    //   .then((res) => {
+    //     console.log("上传结果", res);
+    //     if (res.code === "200") {
+    //       Message.success("提交成功！");
+    //     } else {
+    //       Message.error(res.msg);
+    //     }
+    //   });
 
     // 把文件信息传给父组件AddRecord组件
     this.props.handleFile({
@@ -264,7 +263,10 @@ export default class RenderInfMode extends Component {
                   textAlign: "center",
                 }}
               >
-                {`上传 ${patientInfo.id}_${patientInfo.name} 第 ${treatCount} 次治疗前的红外热像图及说明`}
+                {`上传 ${_.get(patientInfo, "id")}_${_.get(
+                  patientInfo,
+                  "name"
+                )} 第 ${treatCount} 次治疗前的红外热像图及说明`}
               </h2>
               <Form
                 {...layout}
@@ -373,7 +375,10 @@ export default class RenderInfMode extends Component {
                   textAlign: "center",
                 }}
               >
-                {`选择 ${patientInfo.id}_${patientInfo.name} 的第 ${treatCount} 次治疗方案`}
+                {`选择 ${_.get(patientInfo, "id")}_${_.get(
+                  patientInfo,
+                  "name"
+                )}  的第 ${treatCount} 次治疗方案`}
               </h2>
               <Form
                 {...layout}
@@ -484,7 +489,10 @@ export default class RenderInfMode extends Component {
                   textAlign: "center",
                 }}
               >
-                {`上传 ${patientInfo.id}_${patientInfo.name} 第 ${treatCount} 次治疗后的红外热像图及说明`}
+                {`上传 ${_.get(patientInfo, "id")}_${_.get(
+                  patientInfo,
+                  "name"
+                )}  第 ${treatCount} 次治疗后的红外热像图及说明`}
               </h2>
               <Form
                 {...layout}

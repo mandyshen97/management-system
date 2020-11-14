@@ -26,46 +26,55 @@ export function formatDate(time) {
 }
 
 /*根据出生日期算出年龄*/
-export function getAge(strBirthday) {
-  var returnAge;
-  if(strBirthday){
-    var strBirthdayArr = strBirthday.split("-");
-    var birthYear = strBirthdayArr[0];
-    var birthMonth = strBirthdayArr[1];
-    var birthDay = strBirthdayArr[2];
-  }
+// export function getAge(strBirthday) {
+//   var returnAge;
+//   if(strBirthday){
+//     var strBirthdayArr = strBirthday.split("-");
+//     var birthYear = strBirthdayArr[0];
+//     var birthMonth = strBirthdayArr[1];
+//     var birthDay = strBirthdayArr[2];
+//   }
 
-  let d = new Date();
-  var nowYear = JSON.stringify(d.getFullYear());
-  var nowMonth = JSON.stringify(d.getMonth() + 1);
-  var nowDay = JSON.stringify(d.getDate());
+//   let d = new Date();
+//   var nowYear = JSON.stringify(d.getFullYear());
+//   var nowMonth = JSON.stringify(d.getMonth() + 1);
+//   var nowDay = JSON.stringify(d.getDate());
 
-  if (nowYear === birthYear) {
-    returnAge = 0; //同年 则为0岁
-  } else {
-    var ageDiff = nowYear - birthYear; //年之差
-    if (ageDiff > 0) {
-      if (nowMonth === birthMonth) {
-        var dayDiff = nowDay - birthDay; //日之差
-        if (dayDiff < 0) {
-          returnAge = ageDiff - 1;
-        } else {
-          returnAge = ageDiff;
-        }
-      } else {
-        var monthDiff = nowMonth - birthMonth; //月之差
-        if (monthDiff < 0) {
-          returnAge = ageDiff - 1;
-        } else {
-          returnAge = ageDiff;
-        }
-      }
-    } else {
-      returnAge = -1; //返回-1 表示出生日期输入错误 晚于今天
-    }
-  }
+//   if (nowYear === birthYear) {
+//     returnAge = 0; //同年 则为0岁
+//   } else {
+//     var ageDiff = nowYear - birthYear; //年之差
+//     if (ageDiff > 0) {
+//       if (nowMonth === birthMonth) {
+//         var dayDiff = nowDay - birthDay; //日之差
+//         if (dayDiff < 0) {
+//           returnAge = ageDiff - 1;
+//         } else {
+//           returnAge = ageDiff;
+//         }
+//       } else {
+//         var monthDiff = nowMonth - birthMonth; //月之差
+//         if (monthDiff < 0) {
+//           returnAge = ageDiff - 1;
+//         } else {
+//           returnAge = ageDiff;
+//         }
+//       }
+//     } else {
+//       returnAge = -1; //返回-1 表示出生日期输入错误 晚于今天
+//     }
+//   }
 
-  return returnAge; //返回周岁年龄
+//   return returnAge; //返回周岁年龄
+// }
+
+export function getAge(birthday) {
+  //出生时间 毫秒
+  var birthDayTime = new Date(birthday).getTime();
+  //当前时间 毫秒
+  var nowTime = new Date().getTime();
+  //一年毫秒数(365 * 86400000 = 31536000000)
+  return Math.ceil((nowTime - birthDayTime) / 31536000000);
 }
 
 export function getTestTime(time){
