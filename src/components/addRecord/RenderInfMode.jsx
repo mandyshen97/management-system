@@ -4,6 +4,7 @@ import { Input, Form, Select, DatePicker, Button, Steps, Message } from "antd";
 import API from "../../api/api";
 import { treatList, chineseMedicine } from "../../utils/medicalInfo";
 import PicturesWall from "./pictureWall";
+import FileWall from "./FileWall";
 import _ from "lodash";
 
 const { Step } = Steps;
@@ -43,8 +44,10 @@ export default class RenderInfMode extends Component {
     super(props);
     this.state = {
       infCurrentStep: 0, // 近红外当前步骤
+      treatCount: 0, // 治疗次数
       infBeforeInfo: {
         infraBeforeFile: "", // 路径
+        infraBeforeTxt: undefined, // 温度矩阵
         infraBeforeDesc: "", // 描述
         infraBeforeExcp: "", // 异常
         timeBefore: "", // 时间
@@ -59,14 +62,32 @@ export default class RenderInfMode extends Component {
       },
       infAfterInfo: {
         infraAfterFile: "", // 路径
+        infraAfterTxt: undefined, //温度矩阵
         infraAfterDesc: "", // 描述
         infraAfterExcp: "", // 异常
         timeAfter: "", // 时间
         medicationAfter: "", // 用药情况
       },
-      fileInfoBefore: {}, // 治疗前上传的文件信息
-      fileInfoAfter: {}, // 治疗后上传的文件信息
+      beforeFile: {
+        imgInfoBefore: {},
+        txtInfoBefore: {},
+      }, // 治疗前上传的文件信息
+      afterFile: {
+        imgInfoAfter: {},
+        txtInfoAfter: {},
+      }, // 治疗后上传的文件信息
+      // TxtInfoBefore: {}, // 治疗前上传的图片信息
+      // TxtInfoAfter: {}, // 治疗后上传的图片信息
     };
+  }
+
+  componentDidMount() {
+    const { historyRecords } = this.props;
+    let count = _.get(historyRecords, "treatCount", 0) + 1;
+    this.setState({
+      treatCount: count,
+    });
+    this.props.handleCountChange(count)
   }
 
   // 更改近红外当前步骤
@@ -80,10 +101,10 @@ export default class RenderInfMode extends Component {
     let { file } = fileInfo;
     let fileUrl = await getBase64(file.originFileObj);
 
-    // base64 转 file
-    var blob = dataURLtoBlob(fileUrl);
-    var fileMultiple = blobToFile(blob, "图片");
-    console.log("fileMultiple", fileMultiple);
+    // // base64 转 file
+    // var blob = dataURLtoBlob(fileUrl);
+    // var fileMultiple = blobToFile(blob, "图片");
+    // console.log("fileMultiple", fileMultiple);
 
     // 本次治疗前
     if (process === "before") {
@@ -91,9 +112,13 @@ export default class RenderInfMode extends Component {
       // newInfBeforeInfo.infraBeforeFile = fileUrl;
       newInfBeforeInfo.infraBeforeFile = file;
 
+      // 图片信息
+      let newbeforeFile = this.state.beforeFile;
+      newbeforeFile.imgInfoBefore = file;
+
       this.setState({
         infBeforeInfo: newInfBeforeInfo,
-        fileInfoBefore: fileInfo,
+        beforeFile: newbeforeFile,
       });
     }
     // 本次治疗后
@@ -101,9 +126,49 @@ export default class RenderInfMode extends Component {
       let newInfAfterInfo = this.state.infAfterInfo;
       // newInfAfterInfo.infraAfterFile = fileUrl;
       newInfAfterInfo.infraAfterFile = file;
+      // 图片信息
+      let newaferFile = this.state.afterFile;
+      newaferFile.imgInfoAfter = file;
+
       this.setState({
         infAfterInfo: newInfAfterInfo,
-        fileInfoAfter: fileInfo,
+        afterFile: newaferFile,
+      });
+    }
+  };
+
+  // 处理文件变化
+  handleFileChange = async (fileInfo, process) => {
+    console.log("txtfileInfo", fileInfo);
+    let { file } = fileInfo;
+
+    // 本次治疗前
+    if (process === "before") {
+      let newInfBeforeInfo = this.state.infBeforeInfo;
+      // newInfBeforeInfo.infraBeforeFile = fileUrl;
+      newInfBeforeInfo.infraBeforeTxt = file;
+
+      // 文件信息
+      let newbeforeFile = this.state.beforeFile;
+      newbeforeFile.txtInfoBefore = file;
+
+      this.setState({
+        infBeforeInfo: newInfBeforeInfo,
+        beforeFile: newbeforeFile,
+      });
+    }
+    // 本次治疗后
+    if (process === "after") {
+      let newInfAfterInfo = this.state.infAfterInfo;
+      // newInfAfterInfo.infraAfterFile = fileUrl;
+      newInfAfterInfo.infraAfterTxt = file;
+      // 文件信息
+      let newaferFile = this.state.afterFile;
+      newaferFile.txtInfoAfter = file;
+
+      this.setState({
+        infAfterInfo: newInfAfterInfo,
+        afterFile: newaferFile,
       });
     }
   };
@@ -196,14 +261,16 @@ export default class RenderInfMode extends Component {
       }
     });
 
-    this.props.handleInfImage({
-      fileBefore: this.state.fileInfoBefore,
-      fileAfter: this.state.fileInfoAfter,
+    // 把文件信息传给父组件AddRecord组件
+    this.props.handleFile({
+      fileBefore: this.state.beforeFile,
+      fileAfter: this.state.afterFile,
     });
   };
 
   render() {
     const { patientInfo } = this.props;
+    const { treatCount } = this.state;
     const layout = {
       labelCol: { span: 4 },
       wrapperCol: { span: 16 },
@@ -234,7 +301,7 @@ export default class RenderInfMode extends Component {
                   textAlign: "center",
                 }}
               >
-                {`上传 ${patientInfo.id}_${patientInfo.name} 本次治疗前的红外热像图及说明`}
+                {`上传 ${patientInfo.id}_${patientInfo.name} 第 ${treatCount} 次治疗前的红外热像图及说明`}
               </h2>
               <Form
                 {...layout}
@@ -257,7 +324,19 @@ export default class RenderInfMode extends Component {
                       handleImageChange={(fileUrl) =>
                         this.handleImageChange(fileUrl, "before")
                       }
-                      fileInfo={this.state.fileInfoBefore}
+                      fileInfo={this.state.beforeFile}
+                    />
+                  </Form.Item>
+                  <Form.Item
+                    label="温度矩阵"
+                    className="temMatrix"
+                    name="infTemMatrix"
+                  >
+                    <FileWall
+                      handleFileChange={(fileUrl) =>
+                        this.handleFileChange(fileUrl, "before")
+                      }
+                      fileInfo={this.state.beforeFile}
                     />
                   </Form.Item>
                   <Form.Item
@@ -266,25 +345,25 @@ export default class RenderInfMode extends Component {
                     name="infraDesc"
                   >
                     <TextArea
-                      autoSize={{ minRows: 4, maxRows: 10 }}
+                      autoSize={{ minRows: 2, maxRows: 10 }}
                       placeholder="请输入..."
                     />
                   </Form.Item>
                   <Form.Item label="异常" name="infraExcp">
                     <TextArea
-                      autoSize={{ minRows: 4, maxRows: 10 }}
+                      autoSize={{ minRows: 2, maxRows: 10 }}
                       placeholder="请输入..."
                     />
                   </Form.Item>
                   <Form.Item label="用药情况" name="medicine">
                     <TextArea
-                      autoSize={{ minRows: 4, maxRows: 10 }}
+                      autoSize={{ minRows: 2, maxRows: 10 }}
                       placeholder="请输入..."
                     />
                   </Form.Item>
                   <Form.Item label="主诉" name="chief">
                     <TextArea
-                      autoSize={{ minRows: 4, maxRows: 10 }}
+                      autoSize={{ minRows: 2, maxRows: 10 }}
                       placeholder="请输入..."
                     />
                   </Form.Item>
@@ -331,7 +410,7 @@ export default class RenderInfMode extends Component {
                   textAlign: "center",
                 }}
               >
-                {`选择 ${patientInfo.id}_${patientInfo.name} 的本次方案`}
+                {`选择 ${patientInfo.id}_${patientInfo.name} 的第 ${treatCount} 次治疗方案`}
               </h2>
               <Form
                 {...layout}
@@ -384,7 +463,7 @@ export default class RenderInfMode extends Component {
                 <Form.Item label="治疗情况说明" name="treatDetail">
                   <TextArea
                     style={{ height: 32 }}
-                    autoSize={{ minRows: 4, maxRows: 10 }}
+                    autoSize={{ minRows: 2, maxRows: 10 }}
                     placeholder="请输入..."
                   />
                 </Form.Item>
@@ -442,7 +521,7 @@ export default class RenderInfMode extends Component {
                   textAlign: "center",
                 }}
               >
-                {`上传 ${patientInfo.id}_${patientInfo.name} 本次治疗后的红外热像图及说明`}
+                {`上传 ${patientInfo.id}_${patientInfo.name} 第 ${treatCount} 次治疗后的红外热像图及说明`}
               </h2>
               <Form
                 {...layout}
@@ -464,7 +543,19 @@ export default class RenderInfMode extends Component {
                       handleImageChange={(fileUrl) =>
                         this.handleImageChange(fileUrl, "after")
                       }
-                      fileInfo={this.state.fileInfoAfter}
+                      fileInfo={this.state.afterFile}
+                    />
+                  </Form.Item>
+                  <Form.Item
+                    label="温度矩阵"
+                    className="temMatrix"
+                    name="infTemMatrix"
+                  >
+                    <FileWall
+                      handleFileChange={(fileUrl) =>
+                        this.handleFileChange(fileUrl, "after")
+                      }
+                      fileInfo={this.state.beforeFile}
                     />
                   </Form.Item>
                   <Form.Item
@@ -473,19 +564,19 @@ export default class RenderInfMode extends Component {
                     name="infraDesc"
                   >
                     <TextArea
-                      autoSize={{ minRows: 4, maxRows: 10 }}
+                      autoSize={{ minRows: 2, maxRows: 10 }}
                       placeholder="请输入..."
                     />
                   </Form.Item>
                   <Form.Item label="异常" name="infraExcp">
                     <TextArea
-                      autoSize={{ minRows: 4, maxRows: 10 }}
+                      autoSize={{ minRows: 2, maxRows: 10 }}
                       placeholder="请输入..."
                     />
                   </Form.Item>
                   <Form.Item label="用药情况" name="medicine">
                     <TextArea
-                      autoSize={{ minRows: 4, maxRows: 10 }}
+                      autoSize={{ minRows: 2, maxRows: 10 }}
                       placeholder="请输入..."
                     />
                   </Form.Item>

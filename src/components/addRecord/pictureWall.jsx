@@ -46,6 +46,10 @@ class PicturesWall extends React.Component {
 
   handleImageChange = async (fileInfo) => {
     let { file, fileList } = fileInfo;
+    console.log("最开始传的file", file);
+    // let database64 = await getBase64(file.originFileObj);
+    // console.log("最开始的base64", database64);
+
     this.setState({ fileList, file });
     this.props.handleImageChange(fileInfo, process);
   };

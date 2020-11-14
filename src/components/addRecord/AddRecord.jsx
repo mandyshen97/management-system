@@ -3,6 +3,7 @@ import ReactEcharts from "echarts-for-react";
 import RenderInfMode from "./RenderInfMode";
 import RenderCTMode from "./RenderCTMode";
 import RenderMRIMode from "./RenderMRIMode";
+import _ from "lodash";
 import {
   Input,
   Form,
@@ -15,11 +16,18 @@ import {
 } from "antd";
 import "./add-record.less";
 import API from "../../api/api";
-import feiaiImg from "@/assets/images/feiai2.jpg";
-import { identity } from "lodash";
 
 const { TabPane } = Tabs;
 const { Search } = Input;
+
+function getBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
+}
 
 class AddRecord extends Component {
   constructor(props) {
@@ -32,6 +40,17 @@ class AddRecord extends Component {
       patientInfo: {}, // 患者基本信息
       patientId: "",
       historyRecords: [], // 患者历史治疗记录
+      treatCount: 0,
+      analysisFileBefore: {
+        img: "",
+        txt: {},
+      }, // 分析需要上传的内容
+      analysisFileAfter: {
+        img: "",
+        txt: {},
+      }, // 分析需要上传的内容
+      anaResultBefore: { imgUrl: "", classification: "" }, // 治疗前的智能分析结果
+      anaResultAfter: { imgUrl: "", classification: "" }, //治疗后的智能分析结果
       name: "",
       medRecord: {
         patientId: "000001",
@@ -48,9 +67,34 @@ class AddRecord extends Component {
     };
   }
 
-  // 子组件传来的图片信息
-  handleInfImage = (v) => {
-    console.log("v", v);
+  handleCountChange = (count) => {
+    this.setState({
+      treatCount: count,
+    });
+  };
+
+  // todo 子组件传来的 图片、 txt 信息
+  handleFile = async (v) => {
+    console.log("文件文件文件信息", v);
+    const imgInfoBefore = _.get(v, "fileBefore.imgInfoBefore.originFileObj");
+    const txtInfoBefore = _.get(v, "fileBefore.txtInfoBefore.originFileObj");
+    const imgInfoAfter = _.get(v, "fileAfter.imgInfoAfter.originFileObj");
+    const txtInfoAfter = _.get(v, "fileAfter.txtInfoAfter.originFileObj");
+    let new_analysisFileBefore = this.state.analysisFileBefore;
+    new_analysisFileBefore.img = await getBase64(imgInfoBefore);
+    new_analysisFileBefore.txt = txtInfoBefore;
+    let new_analysisFileAfter = this.state.analysisFileAfter;
+    new_analysisFileAfter.img = await getBase64(imgInfoAfter);
+    new_analysisFileAfter.txt = txtInfoAfter;
+    this.setState(
+      {
+        analysisFileBefore: new_analysisFileBefore,
+        analysisFileAfter: new_analysisFileAfter,
+      },
+      () => {
+        console.log("this.state", this.state);
+      }
+    );
   };
 
   // todo 简化   根据生日获取年龄
@@ -149,6 +193,9 @@ class AddRecord extends Component {
     API.getHistoryRecords(param).then((res) => {
       // todo
       console.log("getHistoryRecords 历史治疗记录", res);
+      this.setState({
+        historyRecords: _.get(res, "data"),
+      });
     });
   };
 
@@ -194,6 +241,59 @@ class AddRecord extends Component {
         Message.error("上传失败！");
       }
     });
+  };
+
+  // 分析治疗前
+  handleAnalysisBefore = () => {
+    var formData = new FormData();
+    formData.append("original_img", this.state.analysisFileBefore.img);
+    formData.append("temp_matrix", this.state.analysisFileBefore.txt);
+    formData.append("treatCount", this.state.treatCount);
+    formData.append("patientId", this.state.patientId);
+    formData.append("process", "before");
+
+    fetch("http://10.16.98.192:5000/analysis", {
+      method: "POST",
+      mode: "cors",
+      body: formData,
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log("res分析结果", res);
+        let new_anaResultBefore = this.state.anaResultBefore;
+        new_anaResultBefore.imgUrl = _.get(res, "neck_area");
+        new_anaResultBefore.classification = _.get(res, "classification");
+
+        this.setState({
+          anaResultBefore: new_anaResultBefore,
+        });
+      });
+  };
+
+  // 分析治疗后
+  handleAnalysisAfter = () => {
+    var formData = new FormData();
+    formData.append("original_img", this.state.analysisFileAfter.img);
+    formData.append("temp_matrix", this.state.analysisFileAfter.txt);
+    formData.append("treatCount", this.state.treatCount);
+    formData.append("patientId", this.state.patientId);
+    formData.append("process", "after");
+    fetch("http://10.16.98.192:5000/analysis", {
+      method: "POST",
+      mode: "cors",
+      body: formData,
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log("res分析结果", res);
+        let new_anaResultAfter = this.state.anaResultAfter;
+        new_anaResultAfter.imgUrl = _.get(res, "neck_area");
+        new_anaResultAfter.classification = _.get(res, "classification");
+
+        this.setState({
+          anaResultAfter: new_anaResultAfter,
+        });
+      });
   };
 
   // 渲染历史治疗记录表格
@@ -483,7 +583,7 @@ class AddRecord extends Component {
 
   // 渲染整体的页面
   render() {
-    const { existPatient, patientInfo } = this.state;
+    const { existPatient, patientInfo, historyRecords } = this.state;
     console.log("patientInfo", patientInfo);
     return (
       <div
@@ -529,7 +629,9 @@ class AddRecord extends Component {
                   <TabPane tab="红外热像模式记录" key="1">
                     <RenderInfMode
                       patientInfo={patientInfo}
-                      handleInfImage={this.handleInfImage}
+                      handleFile={this.handleFile}
+                      historyRecords={historyRecords}
+                      handleCountChange={this.handleCountChange}
                     />
                   </TabPane>
                   <TabPane tab="核磁共振模式记录" key="2">
@@ -593,8 +695,8 @@ class AddRecord extends Component {
                         border: "1px solid gray",
                         marginLeft: "33%",
                       }}
-                      src={feiaiImg}
-                      alt=""
+                      src={this.state.analysisFileBefore.img}
+                      alt="治疗前的红外热像图"
                     />
                     <Divider />
                     治疗后的红外热像图：
@@ -607,8 +709,8 @@ class AddRecord extends Component {
                         border: "1px solid gray",
                         marginLeft: "33%",
                       }}
-                      src={feiaiImg}
-                      alt=""
+                      src={this.state.analysisFileAfter.img}
+                      alt="治疗后的红外热像图"
                     />
                   </div>
                   <div
@@ -620,6 +722,42 @@ class AddRecord extends Component {
                       padding: "30px",
                     }}
                   >
+                    <Button type="primary" onClick={this.handleAnalysisBefore}>
+                      分析治疗前
+                    </Button>
+                    <img
+                      style={{
+                        width: "100px",
+                        height: "100px",
+                        display: "block",
+                        border: "1px solid gray",
+                        marginLeft: "33%",
+                      }}
+                      src={this.state.anaResultBefore.imgUrl}
+                      alt="治疗前的分析图"
+                    />
+                    <span>
+                      疾病分类： {this.state.anaResultBefore.classification}
+                    </span>
+                    <br />
+                    <Button type="primary" onClick={this.handleAnalysisAfter}>
+                      分析治疗后
+                    </Button>
+                    <img
+                      style={{
+                        width: "100px",
+                        height: "100px",
+                        display: "block",
+                        border: "1px solid gray",
+                        marginLeft: "33%",
+                      }}
+                      src={this.state.anaResultAfter.imgUrl}
+                      alt="治疗后的分析图"
+                    />
+                    <span>
+                      疾病分类： {this.state.anaResultAfter.classification}
+                    </span>
+                    <br />
                     <Button type="primary">
                       点击进行本次治疗红外热成像图像变化智能分析
                     </Button>
