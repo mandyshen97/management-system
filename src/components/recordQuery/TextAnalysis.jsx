@@ -1,20 +1,5 @@
 import React, { Component } from "react";
-import {
-  Input,
-  Icon,
-  Button,
-  br,
-  Row,
-  Divider,
-  Tooltip,
-  Tag,
-  DatePicker,
-  Message,
-  Drawer,
-  Col,
-  Modal,
-  message,
-} from "antd";
+import { Button, br, Row, Divider, Message, Col, Modal, message } from "antd";
 import "./text-analysis.less";
 import _ from "lodash";
 import API from "../../api/api";
@@ -85,7 +70,7 @@ class TextAnalysis extends Component {
       diagnosticResult: diseaseId,
       similarRecord: simRecordId,
     };
-    message.success('分析结果已更新数据库')
+    message.success("分析结果已更新数据库");
     API.handleAnalyseResult(param)
       .then((response) => {
         let _data = response.data,
@@ -115,12 +100,12 @@ class TextAnalysis extends Component {
 
   //   根据病种id获取病种
   getDisease(status, diseaseId) {
-    if (status == 0) {
+    if (status === 0) {
       return "尚未分析";
     }
     let disease = "诊断异常";
     this.state.diseaseList.forEach((element) => {
-      if (element.id == diseaseId) {
+      if (element.id === diseaseId) {
         disease = element.disease;
       }
     });
@@ -131,8 +116,8 @@ class TextAnalysis extends Component {
     API.getDisease()
       .then((response) => {
         let _data = response.data,
-          _code = response.code,
-          _msg = response.msg;
+          _code = response.code;
+        // _msg = response.msg;
         if (_code === "200") {
           this.setState({
             diseaseList: _data,
@@ -196,7 +181,7 @@ class TextAnalysis extends Component {
             simMedRecordId: _data.simRecordId,
           });
           if (
-            this.state.medRecord.analysisStatus == 1 &&
+            this.state.medRecord.analysisStatus === 1 &&
             this.state.medRecord.simRecordId != null
           ) {
             console.log("我是你爸爸");
@@ -249,7 +234,7 @@ class TextAnalysis extends Component {
           <Col span={3}>
             <strong>性别:</strong>
             <span style={{ marginLeft: 15 }}>
-              {this.state.medRecord.gender == 1 ? "男" : "女"}
+              {this.state.medRecord.gender === 1 ? "男" : "女"}
             </span>
           </Col>
           <Col span={3}>

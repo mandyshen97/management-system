@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { Redirect, Link } from "react-router-dom";
 import { Form, Icon, Input, Button, Message } from "antd";
 import "./login.less";
-// import logo from "../../assets/images/logo.jpg";
 import kangfu from "../../assets/images/kangfu.jpg";
 import memoryUtils from "../../utils/memoryUtils";
 import API from "../../api/api";
@@ -44,7 +43,7 @@ class Login extends Component {
             Message.error("登录失败，用户名或密码错误！");
           } else {
             Message.success("登录成功！");
-            this.props.history.push("/admin");
+            this.props.history.push("/home");
           }
         })
         .catch((err) => {
@@ -254,7 +253,7 @@ class Login extends Component {
                   block
                   htmlType="submit"
                   className="login-form-button"
-                  href="/home" // 正式环境去掉这一句
+                  // href="/home" // 正式环境去掉这一句
                 >
                   登录
                 </Button>

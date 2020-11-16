@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { Form, Icon, Input, Button, Message } from "antd";
 import "../login/login.less";
-import logo from "../../assets/images/logo.jpg";
+import kangfu from "../../assets/images/kangfu.jpg";
 import API from "../../api/api";
 
 class Register extends Component {
@@ -174,7 +174,6 @@ class Register extends Component {
   };
 
   render() {
-    // const { current } = this.state;
     const suffix = (
       <div>
         <canvas
@@ -190,7 +189,7 @@ class Register extends Component {
         <div className="login-wrapper">
           <div className="login-left">
             <div className="login-left-container">
-              <img src={logo} alt="logo" />
+              <img src={kangfu} alt="logo" />
               <h1>脊椎康复辅助诊疗系统</h1>
             </div>
           </div>
@@ -230,6 +229,17 @@ class Register extends Component {
                   }
                   type="password"
                   placeholder="确认密码"
+                />
+              </Form.Item>
+              <Form.Item
+                name="department"
+                rules={[{ required: true, message: "请输入科室!" }]}
+              >
+                <Input
+                  prefix={
+                    <Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />
+                  }
+                  placeholder="科室"
                 />
               </Form.Item>
               <Form.Item

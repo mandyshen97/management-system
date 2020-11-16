@@ -11,15 +11,6 @@ const { Step } = Steps;
 const { TextArea } = Input;
 const { Option } = Select;
 
-function getBase64(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = (error) => reject(error);
-  });
-}
-
 export default class RenderInfMode extends Component {
   constructor(props) {
     super(props);
@@ -199,7 +190,6 @@ export default class RenderInfMode extends Component {
       formData.append(key, param[key]);
     }
 
-    // console.log("formData", formData);
     API.uploadRecord(formData).then((res) => {
       console.log("res", res);
       if (res.code === "200") {
@@ -208,21 +198,6 @@ export default class RenderInfMode extends Component {
         Message.error(res.msg);
       }
     });
-
-    // fetch("http://localhost:8080/record/uploadRecord", {
-    //   method: "POST",
-    //   mode: "cors",
-    //   body: formData,
-    // })
-    //   .then((res) => res.json())
-    //   .then((res) => {
-    //     console.log("上传结果", res);
-    //     if (res.code === "200") {
-    //       Message.success("提交成功！");
-    //     } else {
-    //       Message.error(res.msg);
-    //     }
-    //   });
 
     // 把文件信息传给父组件AddRecord组件
     this.props.handleFile({
