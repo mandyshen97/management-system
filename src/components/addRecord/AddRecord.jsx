@@ -17,6 +17,7 @@ import {
 } from "antd";
 import "./add-record.less";
 import API from "../../api/api";
+import { getDesFromClassification } from "../../utils/diseaseInfo";
 
 const { TabPane } = Tabs;
 const { Search } = Input;
@@ -728,53 +729,80 @@ class AddRecord extends Component {
                   </div>
                   <div
                     style={{
-                      width: "100%",
+                      width: "60%",
                       height: 400,
                       border: "1px solid gray",
                       marginLeft: "20px",
                       padding: "30px",
                     }}
                   >
-                    <Button type="primary" onClick={this.handleAnalysisBefore}>
-                      分析治疗前
-                    </Button>
-                    <img
-                      style={{
-                        width: "100px",
-                        height: "100px",
-                        display: "block",
-                        border: "1px solid gray",
-                        marginLeft: "33%",
-                      }}
-                      src={this.state.anaResultBefore.imgUrl}
-                      alt="治疗前的分析图"
-                    />
-                    <span>
-                      疾病分类： {this.state.anaResultBefore.classification}
-                    </span>
-                    <br />
-                    <Button type="primary" onClick={this.handleAnalysisAfter}>
-                      分析治疗后
-                    </Button>
-                    <img
-                      style={{
-                        width: "100px",
-                        height: "100px",
-                        display: "block",
-                        border: "1px solid gray",
-                        marginLeft: "33%",
-                      }}
-                      src={this.state.anaResultAfter.imgUrl}
-                      alt="治疗后的分析图"
-                    />
-                    <span>
-                      疾病分类： {this.state.anaResultAfter.classification}
-                    </span>
-                    <br />
-                    <Button type="primary">
-                      点击进行本次治疗红外热成像图像变化智能分析
-                    </Button>
-                    <h2 style={{ marginTop: "30px" }}>结论</h2>
+                    <div style={{ display: "flex" }}>
+                      <div className="before" style={{ flexGrow: 1 }}>
+                        <Button
+                          type="primary"
+                          onClick={this.handleAnalysisBefore}
+                        >
+                          点击分析治疗前
+                        </Button>
+                        <img
+                          style={{
+                            width: "100px",
+                            height: "100px",
+                            display: "block",
+                            border: "1px solid gray",
+                            marginTop: "10px",
+                            // marginLeft: "33%",
+                          }}
+                          src={this.state.anaResultBefore.imgUrl}
+                          alt="治疗前的分析图"
+                        />
+                        <span>
+                          疾病分类： {this.state.anaResultBefore.classification}
+                        </span>
+                        <br />
+                        <span>
+                          疾病描述：{" "}
+                          {getDesFromClassification(
+                            this.state.anaResultBefore.classification
+                          )}
+                        </span>
+                      </div>
+                      <div
+                        className="after"
+                        // style={{ flexGrow: 1, marginLeft: 10 }}
+                      >
+                        <Button
+                          type="primary"
+                          onClick={this.handleAnalysisAfter}
+                        >
+                          点击分析治疗后
+                        </Button>
+                        <img
+                          style={{
+                            width: "100px",
+                            height: "100px",
+                            display: "block",
+                            border: "1px solid gray",
+                            // marginLeft: "33%",
+                            marginTop: "10px",
+                          }}
+                          src={this.state.anaResultAfter.imgUrl}
+                          alt="治疗后的分析图"
+                        />
+                        <span>
+                          疾病分类： {this.state.anaResultAfter.classification}
+                        </span>
+                        <br />
+                        <span>
+                          疾病描述：{" "}
+                          {getDesFromClassification(
+                            this.state.anaResultAfter.classification
+                          )}
+                        </span>
+                      </div>
+                    </div>
+                    <Divider />
+                    <h2 style={{ marginTop: "20px" }}>结论:</h2>
                     <p>背部炎症减少，有好转趋势</p>
                   </div>
                 </div>

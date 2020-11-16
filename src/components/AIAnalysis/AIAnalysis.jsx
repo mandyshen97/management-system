@@ -6,7 +6,8 @@ import API from "../../api/api";
 import _ from "lodash";
 import moment from "moment";
 import { getAge } from "../../utils/dateUtils";
-import RenderHistoryTable from './RenderHistoryTable'
+import RenderHistoryTable from "./RenderHistoryTable";
+import { getDesFromClassification } from "../../utils/diseaseInfo";
 // import { image } from "html2canvas/dist/types/css/types/image";
 require("react-dom");
 
@@ -174,18 +175,6 @@ class AIAnalysis extends Component {
 
     const data = [];
 
-    function getDesFromClassification(classification) {
-      const map = {
-        0: "正常",
-        1: "疲劳",
-        2: "炎性改变",
-        3: "颈椎负荷过重",
-        4: "颈肩综合症，颈椎退行性，颈椎病",
-        100: "",
-      };
-      return map[classification];
-    }
-
     (this.state.historyRecords || []).map((item, index) => {
       let record = {};
       record.key = index;
@@ -289,7 +278,7 @@ class AIAnalysis extends Component {
               </span>
             </div>
             {/* {this.renderHistoryTable()} */}
-            <RenderHistoryTable historyRecords={this.state.historyRecords}/>
+            <RenderHistoryTable historyRecords={this.state.historyRecords} />
             <Button type="primary" style={{ marginBottom: 20 }}>
               点击进行智能分析
             </Button>
@@ -299,6 +288,9 @@ class AIAnalysis extends Component {
             <p>
               经过脊椎疾病相关治疗方案，经红外热成像技术的客观分析可见，患者脊椎疾病严重程度有了明显的改善。
             </p>
+            <Button type="primary" style={{ marginBottom: 20 }}>
+              下载报告
+            </Button>
           </>
         )}
       </div>
