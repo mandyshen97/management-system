@@ -1,5 +1,5 @@
-// const BaseUrl = "http://10.13.81.186:8080";
-const BaseUrl = "http://localhost:8080";
+const BaseUrl = "http://10.16.98.192:9090";
+// const BaseUrl = "http://localhost:8080";
 const UrlMap = [
   {
     description: "用户登录", // 用到
@@ -81,9 +81,9 @@ const UrlMap = [
   },
 
   {
-    description: "python后端获取分析结果",
+    description: "python后端获取分析结果", // 调试了
     method: "getAnalyseResult",
-    url: "http://10.13.81.189:5000/analyse",
+    url: "http://10.16.98.192:5000/analysis",
     type: "POST",
   },
   {
@@ -188,6 +188,14 @@ UrlMap.forEach((item) => {
     }
 
     if (item.url === "/record/uploadRecord") {
+      option = {
+        method: "POST",
+        mode: "cors",
+        body: data,
+      };
+    }
+    if (item.url === "http://10.16.98.192:5000/analysis") {
+      url = item.url;
       option = {
         method: "POST",
         mode: "cors",

@@ -10,7 +10,6 @@ import {
   Form,
   Divider,
   Modal,
-  Table,
   Button,
   Message,
   Tabs,
@@ -19,6 +18,7 @@ import {
 import "./add-record.less";
 import API from "../../api/api";
 import { getDesFromClassification } from "../../utils/diseaseInfo";
+import { getAge } from "../../utils/dateUtils";
 
 const { TabPane } = Tabs;
 const { Search } = Input;
@@ -41,7 +41,7 @@ class AddRecord extends Component {
       currentTablePage: 1, // 历史治疗记录表格当前页码
       existPatient: false, // 是否有患者信息
       patientInfo: {}, // 患者基本信息
-      patientId: "",
+      patientId: "", // 患者id
       historyRecords: [], // 患者历史治疗记录
       treatCount: 0, // 治疗次数
       analysisFileBefore: {
@@ -54,25 +54,11 @@ class AddRecord extends Component {
       }, // 分析需要上传的内容
       anaResultBefore: { imgUrl: "", classification: "", loading: false }, // 治疗前的智能分析结果
       anaResultAfter: { imgUrl: "", classification: "", loading: false }, //治疗后的智能分析结果
-      name: "",
-      medRecord: {
-        patientId: "000001",
-        name: "张三",
-        gender: 0,
-        birthday: "1993-02-23",
-        chfCmp: "腰酸背痛腿抽筋",
-        disease: "脊椎疾病——腰椎间盘突出",
-      },
-      simMedRecordId: null,
-      simMedRecord: {},
-      diseaseList: [],
-      helpSwitch: false,
     };
   }
 
-  // todo 子组件传来的 图片、 txt 信息
+  // 子组件传来的 图片、 txt 信息
   handleFile = async (v) => {
-    console.log("文件文件文件信息", v);
     const imgInfoBefore = _.get(v, "fileBefore.imgInfoBefore");
     const txtInfoBefore = _.get(v, "fileBefore.txtInfoBefore");
     const imgInfoAfter = _.get(v, "fileAfter.imgInfoAfter");
@@ -83,31 +69,15 @@ class AddRecord extends Component {
     let new_analysisFileAfter = this.state.analysisFileAfter;
     new_analysisFileAfter.img = await getBase64(imgInfoAfter);
     new_analysisFileAfter.txt = txtInfoAfter;
-    this.setState(
-      {
-        analysisFileBefore: new_analysisFileBefore,
-        analysisFileAfter: new_analysisFileAfter,
-      },
-      () => {
-        console.log("this.state", this.state);
-      }
-    );
+    this.setState({
+      analysisFileBefore: new_analysisFileBefore,
+      analysisFileAfter: new_analysisFileAfter,
+    });
   };
-
-  // todo 简化   根据生日获取年龄
-  getAge(birthday) {
-    //出生时间 毫秒
-    var birthDayTime = new Date(birthday).getTime();
-    //当前时间 毫秒
-    var nowTime = new Date().getTime();
-    //一年毫秒数(365 * 86400000 = 31536000000)
-    return Math.ceil((nowTime - birthDayTime) / 31536000000);
-  }
 
   //   页面渲染前执行函数
   componentDidMount() {
     let id = this.props.match.params.id; // 获取url中带的id
-    console.log("this.props.match.params", this.props.match.params);
     if (id) {
       this.setState({
         patientId: id,
@@ -154,18 +124,22 @@ class AddRecord extends Component {
     let param = {};
     if (typeof v === "object") {
       param = v;
+      this.setState({
+        patientId: _.get(v, "patientId"),
+      });
     } else {
       // 判断搜索框输入的参数是id还是name(包括搜索框输入，url获取id 这两种)
       if (isNaN(v)) {
         param.patientName = v;
       } else {
         param.patientId = v;
+        this.setState({
+          patientId: v,
+        });
       }
     }
     // 获取患者信息
-    console.log("param", param);
     API.getPatient(param).then((res) => {
-      console.log("getPatient", res);
       const { data, code, msg } = res;
       let patientData = data[0];
       if (code === "200" && (data || []).length === 1) {
@@ -198,11 +172,7 @@ class AddRecord extends Component {
         param.patientId = v;
       }
     }
-    // let param = {
-    //   patientId: id,
-    // };
     API.getHistoryRecords(param).then((res) => {
-      console.log("getHistoryRecords 历史治疗记录", res);
       let records = _.get(res, "data");
       records.sort((a, b) => {
         return a.treatCount - b.treatCount;
@@ -217,7 +187,6 @@ class AddRecord extends Component {
   // 上传治疗前的内容
   handleSaveBeforeTreat = () => {
     const values = this.refs.beforeTreatForm.getFieldsValue();
-    // let { infraFile, infraDesc, infraExcp, pulseExcp } = values;
     let param = values;
     param.time = new Date();
     API.saveBeforeTreat(param).then((res) => {
@@ -244,9 +213,7 @@ class AddRecord extends Component {
 
   // 上传本次治疗后的内容
   handleSaveAfterTreat = () => {
-    console.log("treatafter");
     const values = this.refs.afterTreatForm.getFieldsValue();
-    // let { infraDesc, infraExcp, infraFile, pulseExcp } = values;
     console.log(values);
     let param = values;
     API.saveAfterTreat(param).then((res) => {
@@ -260,6 +227,7 @@ class AddRecord extends Component {
 
   // 分析治疗前
   handleAnalysisBefore = () => {
+    console.log("this.state.patientId", this.state.patientId);
     let anaResultBefore = this.state.anaResultBefore;
     anaResultBefore.loading = true;
     this.setState({
@@ -272,19 +240,21 @@ class AddRecord extends Component {
     formData.append("patientId", this.state.patientId);
     formData.append("process", "before");
 
-    fetch("http://10.16.98.192:5000/analysis", {
-      method: "POST",
-      mode: "cors",
-      body: formData,
-    })
-      .then((res) => res.json())
+    API.getAnalyseResult(formData)
       .then((res) => {
-        console.log("res分析结果", res);
         let new_anaResultBefore = this.state.anaResultBefore;
         new_anaResultBefore.imgUrl = _.get(res, "neck_area");
         new_anaResultBefore.classification = _.get(res, "classification");
+        this.setState({
+          anaResultBefore: new_anaResultBefore,
+        });
+      })
+      .catch((err) => {
+        Message.error("分析失败！");
+      })
+      .finally(() => {
+        let new_anaResultBefore = this.state.anaResultBefore;
         new_anaResultBefore.loading = false;
-
         this.setState({
           anaResultBefore: new_anaResultBefore,
         });
@@ -304,243 +274,25 @@ class AddRecord extends Component {
     formData.append("treatCount", this.state.treatCount);
     formData.append("patientId", this.state.patientId);
     formData.append("process", "after");
-    fetch("http://10.16.98.192:5000/analysis", {
-      method: "POST",
-      mode: "cors",
-      body: formData,
-    })
-      .then((res) => res.json())
+    API.getAnalyseResult(formData)
       .then((res) => {
-        console.log("res分析结果", res);
         let new_anaResultAfter = this.state.anaResultAfter;
         new_anaResultAfter.imgUrl = _.get(res, "neck_area");
         new_anaResultAfter.classification = _.get(res, "classification");
+        this.setState({
+          anaResultAfter: new_anaResultAfter,
+        });
+      })
+      .catch((err) => {
+        Message.error("分析失败！");
+      })
+      .finally(() => {
+        let new_anaResultAfter = this.state.anaResultAfter;
         new_anaResultAfter.loading = false;
         this.setState({
           anaResultAfter: new_anaResultAfter,
         });
       });
-  };
-
-  // 渲染历史治疗记录表格
-  renderHistoryTable = () => {
-    const columns = [
-      {
-        title: "治疗次数",
-        dataIndex: "count",
-        key: "count",
-        render: (count) => `第${count}次治疗`,
-      },
-      {
-        title: "就诊时间",
-        dataIndex: "time",
-        key: "time",
-      },
-      {
-        title: "红外热像图",
-        dataIndex: "infImage",
-        key: "infImage",
-      },
-      {
-        title: "红外热像图描述",
-        dataIndex: "infImageDes",
-        key: "infImageDes",
-      },
-      {
-        title: "核磁共振图像",
-        dataIndex: "MRI",
-        key: "MRI",
-      },
-      {
-        title: "核磁共振图像描述",
-        dataIndex: "MRIDes",
-        key: "MRIDes",
-      },
-      {
-        title: "核磁共振图像",
-        dataIndex: "CT",
-        key: "CT",
-      },
-      {
-        title: "核磁共振图像描述",
-        dataIndex: "CTDes",
-        key: "CTDes",
-      },
-    ];
-
-    const data = [
-      {
-        key: 0,
-        count: 1,
-        time: "2020-05-21",
-        infImage: "",
-        infImageDes: "脊椎部位红色较深，炎症",
-        MRI: "",
-        MRIDes: "",
-        CT: "",
-        CTDes: "",
-      },
-      {
-        key: 1,
-        count: 2,
-        time: "2020-05-27",
-        infImage: "",
-        infImageDes: "脊椎部位红色较深，炎症",
-        MRI: "",
-        MRIDes: "",
-        CT: "",
-        CTDes: "",
-      },
-      {
-        key: 2,
-        count: 3,
-        time: "2020-05-27",
-        infImage: "",
-        infImageDes: "脊椎部位红色较深，炎症",
-        MRI: "",
-        MRIDes: "",
-        CT: "",
-        CTDes: "",
-      },
-      {
-        key: 3,
-        count: 4,
-        time: "2020-05-27",
-        infImage: "",
-        infImageDes: "脊椎部位红色较深，炎症",
-        MRI: "",
-        MRIDes: "",
-        CT: "",
-        CTDes: "",
-      },
-      ,
-      {
-        key: 4,
-        count: 5,
-        time: "2020-05-27",
-        infImage: "",
-        infImageDes: "脊椎部位红色较深，炎症",
-        MRI: "",
-        MRIDes: "",
-        CT: "",
-        CTDes: "",
-      },
-      {
-        key: 5,
-        count: 6,
-        time: "2020-05-27",
-        infImage: "",
-        infImageDes: "脊椎部位红色较深，炎症",
-        MRI: "",
-        MRIDes: "",
-        CT: "",
-        CTDes: "",
-      },
-      {
-        key: 6,
-        count: 7,
-        time: "2020-05-27",
-        infImage: "",
-        infImageDes: "脊椎部位红色较深，炎症",
-        MRI: "",
-        MRIDes: "",
-        CT: "",
-        CTDes: "",
-      },
-      {
-        key: 67,
-        count: 8,
-        time: "2020-05-27",
-        infImage: "",
-        infImageDes: "脊椎部位红色较深，炎症",
-        MRI: "",
-        MRIDes: "",
-        CT: "",
-        CTDes: "",
-      },
-      {
-        key: 8,
-        count: 9,
-        time: "2020-05-27",
-        infImage: "",
-        infImageDes: "脊椎部位红色较深，炎症",
-        MRI: "",
-        MRIDes: "",
-        CT: "",
-        CTDes: "",
-      },
-      {
-        key: 9,
-        count: 10,
-        time: "2020-05-27",
-        infImage: "",
-        infImageDes: "脊椎部位红色较深，炎症",
-        MRI: "",
-        MRIDes: "",
-        CT: "",
-        CTDes: "",
-      },
-      {
-        key: 10,
-        count: 11,
-        time: "2020-05-27",
-        infImage: "",
-        infImageDes: "脊椎部位红色较深，炎症",
-        MRI: "",
-        MRIDes: "",
-        CT: "",
-        CTDes: "",
-      },
-      {
-        key: 11,
-        count: 12,
-        time: "2020-05-27",
-        infImage: "",
-        infImageDes: "脊椎部位红色较深，炎症",
-        MRI: "",
-        MRIDes: "",
-        CT: "",
-        CTDes: "",
-      },
-      {
-        key: 12,
-        count: 13,
-        time: "2020-05-27",
-        infImage: "",
-        infImageDes: "脊椎部位红色较深，炎症",
-        MRI: "",
-        MRIDes: "",
-        CT: "",
-        CTDes: "",
-      },
-    ];
-
-    const paginationProps = {
-      showTotal: (total) => {
-        return `共${total}条`;
-      },
-      total: data.length, //数据总数
-      defaultCurrent: 1, //默认当前页
-      current: this.state.currentTablePage, //当前页
-      pageSize: 3, //每页条数
-      onChange: (page, pageSize) => {
-        console.log("page", page, pageSize);
-        //页码改变的回调，参数是改变后的页码及每页条数
-        this.setState({
-          currentTablePage: page,
-        });
-      },
-    };
-
-    return (
-      <Table
-        bordered="true"
-        columns={columns}
-        dataSource={data}
-        scroll={{ x: "max-content", y: 600 }}
-        pagination={paginationProps}
-      />
-    );
   };
 
   // 是否显示历史治疗记录
@@ -610,7 +362,6 @@ class AddRecord extends Component {
   // 渲染整体的页面
   render() {
     const { existPatient, patientInfo, historyRecords } = this.state;
-    console.log("patientInfo", patientInfo);
     return (
       <div
         className="main-content"
@@ -894,9 +645,7 @@ class AddRecord extends Component {
                   <li>
                     <strong>年龄:</strong>
                     <span style={{ marginLeft: 15 }}>
-                      {this.getAge(
-                        _.get(this.state.patientInfo, "birthday", "")
-                      )}
+                      {getAge(_.get(this.state.patientInfo, "birthday", ""))}
                     </span>
                   </li>
                   <li>
@@ -974,7 +723,6 @@ class AddRecord extends Component {
               fontSize: "16px",
             }}
           >
-            {/* {this.renderHistoryTable()} */}
             <RenderHistoryTable historyRecords={this.state.historyRecords} />
           </div>
         </Modal>
