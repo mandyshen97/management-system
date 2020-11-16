@@ -1,15 +1,16 @@
 import React, { Component } from "react";
-import { Form, message, Input, Button, Table, Message, Image } from "antd";
+import {
+  Form,
+  Input,
+  Button,
+  Message,
+  Progress,
+} from "antd";
 import ReactEcharts from "echarts-for-react";
-import { Link } from "react-router-dom";
 import API from "../../api/api";
 import _ from "lodash";
-import moment from "moment";
 import { getAge } from "../../utils/dateUtils";
 import RenderHistoryTable from "./RenderHistoryTable";
-import { getDesFromClassification } from "../../utils/diseaseInfo";
-// import { image } from "html2canvas/dist/types/css/types/image";
-require("react-dom");
 
 class AIAnalysis extends Component {
   constructor(props) {
@@ -18,10 +19,14 @@ class AIAnalysis extends Component {
       patientInfo: {}, // 患者基本信息
       existPatient: false,
       historyRecords: [], // 历史治疗记录
+      anaResultVisible: false,
+      percent: 0, // 进度条进度
+      progressVisible: false, // 是否显示进度条
     };
   }
 
   getOption = () => {
+    let { historyRecords } = this.state;
     const option = {
       title: {
         text: "脊椎疾病严重程度",
@@ -54,9 +59,7 @@ class AIAnalysis extends Component {
           type: "category",
           boundaryGap: false,
           name: "治疗次数",
-          data: this.state.historyRecords.map(
-            (item) => `第${item.treatCount}次`
-          ),
+          data: historyRecords.map((item) => `第${item.treatCount}次`),
           position: "bottom",
         },
       ],
@@ -78,9 +81,7 @@ class AIAnalysis extends Component {
             },
           },
           areaStyle: {},
-          data: this.state.historyRecords.map(
-            (item) => item.classificationBefore
-          ),
+          data: historyRecords.map((item) => item.classificationBefore),
         },
       ],
     };
@@ -124,99 +125,21 @@ class AIAnalysis extends Component {
     this.queryHistory(v);
   };
 
-  // 渲染历史治疗记录表格
-  renderHistoryTable = () => {
-    const columns = [
-      {
-        title: "治疗次数",
-        dataIndex: "count",
-        key: "count",
-        render: (count) => `第${count}次治疗`,
-      },
-      {
-        title: "就诊时间",
-        dataIndex: "time",
-        key: "time",
-      },
-      {
-        title: "红外热像图",
-        dataIndex: "infImage",
-        key: "infImage",
-        render: (infImage) => {
-          return <img src={infImage} alt="" />;
-        },
-      },
-      {
-        title: "红外热像图描述",
-        dataIndex: "infImageDes",
-        key: "infImageDes",
-      },
-      {
-        title: "核磁共振图像",
-        dataIndex: "MRI",
-        key: "MRI",
-      },
-      {
-        title: "核磁共振图像描述",
-        dataIndex: "MRIDes",
-        key: "MRIDes",
-      },
-      {
-        title: "核磁共振图像",
-        dataIndex: "CT",
-        key: "CT",
-      },
-      {
-        title: "核磁共振图像描述",
-        dataIndex: "CTDes",
-        key: "CTDes",
-      },
-    ];
-
-    const data = [];
-
-    (this.state.historyRecords || []).map((item, index) => {
-      let record = {};
-      record.key = index;
-      record.count = item.treatCount;
-      record.time = moment(item.timeBefore).format("YYYY-MM-DD HH:mm");
-      record.infImage = item.infraAfterPath;
-      record.infImageDes = getDesFromClassification(
-        _.get(item, "classificationBefore", 100)
-      );
-      record.MRI = "";
-      record.MRIDes = "";
-      record.CT = "";
-      record.CTDes = "";
-      data.push(record);
+  handleAnalysis = () => {
+    this.setState({
+      progressVisible: true,
     });
-
-    const paginationProps = {
-      showTotal: (total) => {
-        return `共${total}条`;
-      },
-      total: data.length, //数据总数
-      defaultCurrent: 1, //默认当前页
-      current: this.state.currentTablePage, //当前页
-      pageSize: 3, //每页条数
-      onChange: (page, pageSize) => {
-        console.log("page", page, pageSize);
-        //页码改变的回调，参数是改变后的页码及每页条数
+    let timer = setInterval(() => {
+      let percent = this.state.percent + 10;
+      if (percent > 100) {
+        percent = 100;
+        clearImmediate(timer);
         this.setState({
-          currentTablePage: page,
+          anaResultVisible: true,
         });
-      },
-    };
-
-    return (
-      <Table
-        bordered="true"
-        columns={columns}
-        dataSource={data}
-        scroll={{ x: "max-content", y: 600 }}
-        pagination={paginationProps}
-      />
-    );
+      }
+      this.setState({ percent });
+    }, 500);
   };
 
   // 查询表单
@@ -239,10 +162,7 @@ class AIAnalysis extends Component {
     );
   };
   render() {
-    console.log("this.state", this.state);
-
     let { existPatient, patientInfo } = this.state;
-
     return (
       <div className="main-content">
         {this.renderSearch()}
@@ -277,20 +197,36 @@ class AIAnalysis extends Component {
                 <strong>过敏史：</strong>无
               </span>
             </div>
-            {/* {this.renderHistoryTable()} */}
             <RenderHistoryTable historyRecords={this.state.historyRecords} />
-            <Button type="primary" style={{ marginBottom: 20 }}>
+            <Button
+              type="primary"
+              style={{ marginBottom: 20 }}
+              onClick={this.handleAnalysis}
+            >
               点击进行智能分析
             </Button>
-            <h2>智能分析图形结果</h2>
-            <ReactEcharts option={this.getOption()} />
-            <h2>智能分析文本报告</h2>
-            <p>
-              经过脊椎疾病相关治疗方案，经红外热成像技术的客观分析可见，患者脊椎疾病严重程度有了明显的改善。
-            </p>
-            <Button type="primary" style={{ marginBottom: 20 }}>
-              下载报告
-            </Button>
+            {this.state.progressVisible && (
+              <Progress
+                strokeColor={{
+                  "0%": "#108ee9",
+                  "100%": "#87d068",
+                }}
+                percent={this.state.percent}
+              />
+            )}
+            {this.state.anaResultVisible && (
+              <div className="anal">
+                <h2>智能分析图形结果</h2>
+                <ReactEcharts option={this.getOption()} />
+                <h2>智能分析文本报告</h2>
+                <p>
+                  经过脊椎疾病相关治疗方案，经红外热成像技术的客观分析可见，患者脊椎疾病严重程度有了明显的改善。
+                </p>
+                <Button type="primary" style={{ marginBottom: 20 }}>
+                  下载报告
+                </Button>
+              </div>
+            )}
           </>
         )}
       </div>

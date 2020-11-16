@@ -14,6 +14,7 @@ import {
   Button,
   Message,
   Tabs,
+  Spin,
 } from "antd";
 import "./add-record.less";
 import API from "../../api/api";
@@ -51,8 +52,8 @@ class AddRecord extends Component {
         img: "",
         txt: {},
       }, // 分析需要上传的内容
-      anaResultBefore: { imgUrl: "", classification: "" }, // 治疗前的智能分析结果
-      anaResultAfter: { imgUrl: "", classification: "" }, //治疗后的智能分析结果
+      anaResultBefore: { imgUrl: "", classification: "", loading: false }, // 治疗前的智能分析结果
+      anaResultAfter: { imgUrl: "", classification: "", loading: false }, //治疗后的智能分析结果
       name: "",
       medRecord: {
         patientId: "000001",
@@ -259,6 +260,11 @@ class AddRecord extends Component {
 
   // 分析治疗前
   handleAnalysisBefore = () => {
+    let anaResultBefore = this.state.anaResultBefore;
+    anaResultBefore.loading = true;
+    this.setState({
+      anaResultBefore,
+    });
     let formData = new FormData();
     formData.append("original_img", this.state.analysisFileBefore.img);
     formData.append("temp_matrix", this.state.analysisFileBefore.txt);
@@ -277,6 +283,7 @@ class AddRecord extends Component {
         let new_anaResultBefore = this.state.anaResultBefore;
         new_anaResultBefore.imgUrl = _.get(res, "neck_area");
         new_anaResultBefore.classification = _.get(res, "classification");
+        new_anaResultBefore.loading = false;
 
         this.setState({
           anaResultBefore: new_anaResultBefore,
@@ -286,6 +293,11 @@ class AddRecord extends Component {
 
   // 分析治疗后
   handleAnalysisAfter = () => {
+    let anaResultAfter = this.state.anaResultAfter;
+    anaResultAfter.loading = true;
+    this.setState({
+      anaResultAfter,
+    });
     var formData = new FormData();
     formData.append("original_img", this.state.analysisFileAfter.img);
     formData.append("temp_matrix", this.state.analysisFileAfter.txt);
@@ -303,7 +315,7 @@ class AddRecord extends Component {
         let new_anaResultAfter = this.state.anaResultAfter;
         new_anaResultAfter.imgUrl = _.get(res, "neck_area");
         new_anaResultAfter.classification = _.get(res, "classification");
-
+        new_anaResultAfter.loading = false;
         this.setState({
           anaResultAfter: new_anaResultAfter,
         });
@@ -744,28 +756,31 @@ class AddRecord extends Component {
                         >
                           点击分析治疗前
                         </Button>
-                        <img
-                          style={{
-                            width: "100px",
-                            height: "100px",
-                            display: "block",
-                            border: "1px solid gray",
-                            marginTop: "10px",
-                            // marginLeft: "33%",
-                          }}
-                          src={this.state.anaResultBefore.imgUrl}
-                          alt="治疗前的分析图"
-                        />
-                        <span>
-                          疾病分类： {this.state.anaResultBefore.classification}
-                        </span>
-                        <br />
-                        <span>
-                          疾病描述：{" "}
-                          {getDesFromClassification(
-                            this.state.anaResultBefore.classification
-                          )}
-                        </span>
+                        <Spin spinning={this.state.anaResultBefore.loading}>
+                          <img
+                            style={{
+                              width: "100px",
+                              height: "100px",
+                              display: "block",
+                              border: "1px solid gray",
+                              marginTop: "10px",
+                              // marginLeft: "33%",
+                            }}
+                            src={this.state.anaResultBefore.imgUrl}
+                            alt="治疗前的分析图"
+                          />
+                          <span>
+                            疾病分类：{" "}
+                            {this.state.anaResultBefore.classification}
+                          </span>
+                          <br />
+                          <span>
+                            疾病描述：{" "}
+                            {getDesFromClassification(
+                              this.state.anaResultBefore.classification
+                            )}
+                          </span>
+                        </Spin>
                       </div>
                       <div
                         className="after"
@@ -777,28 +792,31 @@ class AddRecord extends Component {
                         >
                           点击分析治疗后
                         </Button>
-                        <img
-                          style={{
-                            width: "100px",
-                            height: "100px",
-                            display: "block",
-                            border: "1px solid gray",
-                            // marginLeft: "33%",
-                            marginTop: "10px",
-                          }}
-                          src={this.state.anaResultAfter.imgUrl}
-                          alt="治疗后的分析图"
-                        />
-                        <span>
-                          疾病分类： {this.state.anaResultAfter.classification}
-                        </span>
-                        <br />
-                        <span>
-                          疾病描述：{" "}
-                          {getDesFromClassification(
-                            this.state.anaResultAfter.classification
-                          )}
-                        </span>
+                        <Spin spinning={this.state.anaResultAfter.loading}>
+                          <img
+                            style={{
+                              width: "100px",
+                              height: "100px",
+                              display: "block",
+                              border: "1px solid gray",
+                              // marginLeft: "33%",
+                              marginTop: "10px",
+                            }}
+                            src={this.state.anaResultAfter.imgUrl}
+                            alt="治疗后的分析图"
+                          />
+                          <span>
+                            疾病分类：{" "}
+                            {this.state.anaResultAfter.classification}
+                          </span>
+                          <br />
+                          <span>
+                            疾病描述：{" "}
+                            {getDesFromClassification(
+                              this.state.anaResultAfter.classification
+                            )}
+                          </span>
+                        </Spin>
                       </div>
                     </div>
                     <Divider />
