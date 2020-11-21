@@ -73,7 +73,7 @@ class Home extends Component {
             fontSize: "24px",
           }}
         >
-          <a
+          {/* <a
             href="/operationGuide/operation-guide.html"
             target="_blank"
             rel="noopener noreferrer"
@@ -84,7 +84,7 @@ class Home extends Component {
             }}
           >
             点击查看操作指南
-          </a>
+          </a> */}
           <Row gutter={16}>
             <Col span={8}>
               <Link to="/admin/newPatient">

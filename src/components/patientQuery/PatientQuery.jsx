@@ -540,7 +540,7 @@ class PatientQuery extends Component {
                 <Button type="primary" onClick={() => this.showHelp()}>
                   用药帮助
                 </Button>
-                <Button
+                {/* <Button
                   type="primary"
                   style={{
                     margin: "0 8px",
@@ -550,7 +550,7 @@ class PatientQuery extends Component {
                   onClick={() => this.showUpdate()}
                 >
                   更新病历
-                </Button>
+                </Button> */}
               </Col>
             </Row>
           </div>

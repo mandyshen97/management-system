@@ -222,9 +222,9 @@ class AIAnalysis extends Component {
                 <p>
                   经过脊椎疾病相关治疗方案，经红外热成像技术的客观分析可见，患者脊椎疾病严重程度有了明显的改善。
                 </p>
-                <Button type="primary" style={{ marginBottom: 20 }}>
+                {/* <Button type="primary" style={{ marginBottom: 20 }}>
                   下载报告
-                </Button>
+                </Button> */}
               </div>
             )}
           </>

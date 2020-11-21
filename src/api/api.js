@@ -2,13 +2,13 @@ const BaseUrl = "http://10.16.98.192:9090";
 // const BaseUrl = "http://localhost:8080";
 const UrlMap = [
   {
-    description: "用户登录", // 用到
+    description: "用户登录", // 用到，成功
     method: "login",
     url: "/user/login",
     type: "POST",
   },
   {
-    description: "用户注册", // 用到
+    description: "用户注册", // 用到，成功
     method: "register",
     url: "/user/register",
     type: "POST",
@@ -81,7 +81,7 @@ const UrlMap = [
   },
 
   {
-    description: "python后端获取分析结果", // 调试了
+    description: "python后端获取分析结果", // 调试了，成功
     method: "getAnalyseResult",
     url: "http://10.16.98.192:5000/analysis",
     type: "POST",
