@@ -36,11 +36,13 @@ class Register extends Component {
       let param = {
         username: values.username,
         password: values.password,
+        department: values.department,
       };
       API.register(param)
         .then((res) => {
-          if (res.code !== "200") {
-            Message.error("注册失败！");
+          const {code, msg } = res;
+          if (code !== "200") {
+            Message.error(msg);
           } else {
             Message.success("注册成功！");
             this.props.history.push("/login");

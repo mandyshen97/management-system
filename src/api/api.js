@@ -159,6 +159,12 @@ const UrlMap = [
     url: "/api/updataAccess",
     type: "POST",
   },
+  {
+    description: "获取医生部门和id", // 用到
+    method: "getUser",
+    url: "/user/getUser",
+    type: "POST",
+  },
 ];
 const API = {};
 UrlMap.forEach((item) => {

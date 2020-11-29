@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Col, Row } from "antd";
+import { Layout, Col, Row, Message } from "antd";
 import { Link } from "react-router-dom";
 import { UserOutlined } from "@ant-design/icons";
 import {
@@ -10,6 +10,7 @@ import {
   AlertOutlined,
   SettingOutlined,
 } from "@ant-design/icons";
+import API from "../../api/api";
 
 import "./home.less";
 
@@ -17,14 +18,36 @@ const { Header, Content } = Layout;
 class Home extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      department: '',
+      doctorId: 0,
+    };
   }
 
   logout = () => {
     this.props.history.replace("/login");
   };
 
+  componentDidMount(){
+   const params = {
+     username: this.props.location.params.username,
+   }
+   API.getUser(params)
+        .then((res) => {
+          const {code, msg, data } = res;
+          if (code !== "200") {
+            Message.error(msg);
+          } else {
+            this.setState({
+              department: data.department,
+              doctorId: data.id,
+            })
+          }
+        })
+  }
+
   render() {
+    const { doctorId, department} = this.state;
     return (
       <Layout>
         <Header
@@ -50,8 +73,8 @@ class Home extends Component {
               <UserOutlined
                 style={{ color: "blue", fontSize: "30px", marginRight: "10px" }}
               />
-              <span>科室：骨科 </span>
-              <span style={{ marginLeft: 10 }}> 医生id: 002342</span>
+              <span>科室：{department} </span>
+            <span style={{ marginLeft: 10 }}> 医生id: {doctorId}</span>
               <span
                 style={{ marginLeft: 10 }}
                 className="logout"

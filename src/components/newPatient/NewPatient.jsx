@@ -112,7 +112,7 @@ function NewPatient(props) {
             },
           ]}
         >
-          <Input />
+          <Input type='number'/>
         </Form.Item>
 
         <Form.Item
@@ -125,7 +125,7 @@ function NewPatient(props) {
             },
           ]}
         >
-          <Input />
+          <Input type='number'/>
         </Form.Item>
 
         <Form.Item
@@ -178,7 +178,7 @@ function NewPatient(props) {
             },
           ]}
         >
-          <Input />
+          <Input type='number'/>
         </Form.Item>
 
         <Form.Item
@@ -191,7 +191,7 @@ function NewPatient(props) {
             },
           ]}
         >
-          <Input />
+          <Input type='number'/>
         </Form.Item>
 
         <Form.Item
@@ -228,7 +228,7 @@ function NewPatient(props) {
             },
           ]}
         >
-          <Input />
+          <Input type='number'/>
         </Form.Item>
 
         <Form.Item

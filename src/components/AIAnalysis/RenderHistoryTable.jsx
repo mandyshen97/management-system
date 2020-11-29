@@ -17,6 +17,7 @@ class RenderHistoryTable extends Component {
         dataIndex: "count",
         key: "count",
         render: (count) => `第${count}次治疗`,
+        width: 110,
       },
       {
         title: "就诊时间",
@@ -28,7 +29,7 @@ class RenderHistoryTable extends Component {
         dataIndex: "infImage",
         key: "infImage",
         render: (infImage) => {
-          return <img src={infImage} alt="" />;
+          return <img src={'http://10.16.98.192:8001/infraFile/after/'+infImage} alt="" width='100px' height='100px'/>;
         },
       },
       {
@@ -76,7 +77,8 @@ class RenderHistoryTable extends Component {
       let record = {};
       record.key = index;
       record.count = item.treatCount;
-      record.time = moment(item.timeBefore).format("YYYY-MM-DD HH:mm");
+      record.time = moment(item.timeBefore).format("YYYY-MM-DD HH:mm:ss");
+      console.log(item.timeBefore);
       record.infImage = item.infraAfterPath;
       record.infImageDes = getDesFromClassification(
         _.get(item, "classificationBefore", 100)

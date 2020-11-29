@@ -5,6 +5,7 @@ import {
   Button,
   Message,
   Progress,
+  message,
 } from "antd";
 import ReactEcharts from "echarts-for-react";
 import API from "../../api/api";
@@ -98,7 +99,9 @@ class AIAnalysis extends Component {
           patientInfo: data[0],
           existPatient: true,
         });
-      } else {
+      } else if( code ==='200' && data.length ===0 ){
+        Message.error('该患者不存在');
+      }else{
         Message.error(msg);
       }
     });
