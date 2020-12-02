@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Layout } from "antd";
-import { Switch, Redirect, Route } from "react-router-dom";
+import { Switch, Redirect, Route, withRouter} from "react-router-dom";
 import menuList from "../../config/menuConfig";
 import LeftNav from "./../../components/left-nav/LeftNav";
 import Header from "../../components/header/Header";
@@ -52,6 +52,7 @@ class Admin extends Component {
   };
 
   render() {
+    console.log(this.props.location)
     return (
       <Layout style={{ minHeight: "100vh", overflow: "hidden" }}>
         <Sider
@@ -88,4 +89,4 @@ class Admin extends Component {
   }
 }
 
-export default Admin;
+export default withRouter(Admin);

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Layout, Col, Row, Message } from "antd";
-import { Link } from "react-router-dom";
+import { Link, withRouter} from "react-router-dom";
 import { UserOutlined } from "@ant-design/icons";
 import {
   UserAddOutlined,
@@ -14,6 +14,22 @@ import API from "../../api/api";
 
 import "./home.less";
 
+export const deleteCookie = (name) => {
+  var exp = new Date();
+  exp.setTime(exp.getTime()-1);
+  var val = getCookie(name);
+  if(val!=null){
+    document.cookie= name + "="+val+";expires="+exp.toGMTString();
+  }
+}
+
+export const getCookie = (name) => {
+  var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+  if(arr=document.cookie.match(reg))
+    return unescape(arr[2]);
+  else
+    return null;
+}
 const { Header, Content } = Layout;
 class Home extends Component {
   constructor(props) {
@@ -25,12 +41,14 @@ class Home extends Component {
   }
 
   logout = () => {
+    deleteCookie("token");
     this.props.history.replace("/login");
   };
 
+
   componentDidMount(){
    const params = {
-     username: this.props.location.params.username,
+     token: getCookie('token'),
    }
    API.getUser(params)
         .then((res) => {
@@ -224,4 +242,4 @@ class Home extends Component {
   }
 }
 
-export default Home;
+export default withRouter(Home);

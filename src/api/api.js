@@ -1,3 +1,5 @@
+import { getCookie } from "../pages/home/Home";
+
 const BaseUrl = "http://10.16.98.192:9090";
 // const BaseUrl = "http://localhost:8080";
 const UrlMap = [
@@ -179,8 +181,9 @@ UrlMap.forEach((item) => {
       mode: "cors",
       headers: {
         "Content-Type": "application/json",
+        'Authorization': getCookie("token") ,
+        "withCredentials": true,
       },
-      credentials: "include",
     };
 
     if (item.type !== "POST") {
@@ -196,7 +199,11 @@ UrlMap.forEach((item) => {
     if (item.url === "/record/uploadRecord") {
       option = {
         method: "POST",
-        mode: "cors",
+        // mode: "cors",
+        headers: {
+          'Authorization': getCookie("token"),
+          "withCredentials": true,
+        },
         body: data,
       };
     }
@@ -204,7 +211,6 @@ UrlMap.forEach((item) => {
       url = item.url;
       option = {
         method: "POST",
-        mode: "cors",
         body: data,
       };
     }

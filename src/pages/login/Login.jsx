@@ -26,7 +26,6 @@ class Login extends Component {
     };
   }
   handleSubmit = (values) => {
-    console.log("values", values);
     if (
       this.state.code.toLowerCase() !== values.verificationCode.toLowerCase()
     ) {
@@ -39,11 +38,15 @@ class Login extends Component {
       };
       API.login(param)
         .then((res) => {
-          if (res.code !== "200") {
+          const { code, msg, data} = res;
+          if (code !== "200") {
             Message.error("登录失败，用户名或密码错误！");
           } else {
             Message.success("登录成功！");
-            this.props.history.push({pathname:"/home",params: {username: param.username}});
+            if(data.token&&data.exp){
+              document.cookie = "token="+ data.token+";expires="+new Date(data.exp).toGMTString();
+            }
+            this.props.history.push('/home');
           }
         })
         .catch((err) => {

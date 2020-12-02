@@ -5,6 +5,7 @@ import Register from "./pages/register/Register";
 import Login from "./pages/login/Login";
 import Home from "./pages/home/Home"
 import Print from "./pages/print/Print";
+import PrivateRoute from './utils/PrivateRoute'
 
 import './App.less';
 
@@ -22,10 +23,10 @@ class App extends Component {
         <Switch>
           <Route path="/login" component={Login}></Route>
           <Route path="/register" component={Register}></Route>
-          <Route path="/admin" component={Admin}></Route>
-          <Route path="/home" component={Home}></Route>
+          <PrivateRoute path="/admin" component={Admin}></PrivateRoute>
+          <PrivateRoute path="/home" component={Home}></PrivateRoute>
           {/* <Route path="/operation-guide" component={OperationGuide}></Route> */}
-          <Route path="/print/:id" component={Print}></Route>
+          <PrivateRoute path="/print/:id" component={Print}></PrivateRoute>
           <Route exact path="/">
             <Redirect to="/login" />
           </Route>
