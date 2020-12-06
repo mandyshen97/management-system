@@ -8,7 +8,11 @@ const PrivateRoute = ({component: Component, ...props}) => {
     return <Route {...props} render={(p) => {
         const token = getCookie("token");
         if (token){ // 如果登录了, 返回正确的路由
-            return <Component />
+            if(props.path==='/login'){
+                return <Redirect to='/home'/>
+            }else{
+                return <Component />
+            }
         } else { // 没有登录就重定向至登录页面
             Message.error("你还未登录，请先登录")
             return <Redirect to='/login'/>

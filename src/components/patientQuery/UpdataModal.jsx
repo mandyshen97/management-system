@@ -45,6 +45,7 @@ function UpdateModal(props) {
   const onFinish = (values) => {
     let param = values;
     param.birthday = moment(values.birthday).format("YYYY-MM-DD");
+    param.id = param.patientId;
 
     // 更新患者信息提交接口
     API.updatePatientInfo(param).then((res) => {

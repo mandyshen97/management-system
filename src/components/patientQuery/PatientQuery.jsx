@@ -19,6 +19,10 @@ import UpdateModal from "./UpdataModal";
 const { Option } = Select;
 const { TextArea } = Input;
 
+Date.prototype.toLocaleString = function() {
+  return this.getFullYear() + "-" + (this.getMonth() + 1) + "-" + this.getDate();
+};
+
 class PatientQuery extends Component {
   constructor(props) {
     super(props);
@@ -328,11 +332,11 @@ class PatientQuery extends Component {
           return this.calculateAge(birthday);
         },
       },
-      {
-        title: "就诊时间",
-        dataIndex: "createAt",
-        width: "8%",
-      },
+      // {
+      //   title: "就诊时间",
+      //   dataIndex: "createAt",
+      //   width: "8%",
+      // },
       {
         title: "病人主诉",
         dataIndex: "chief",
@@ -461,7 +465,7 @@ class PatientQuery extends Component {
               <Col span={12}>
                 <strong>生日:</strong>
                 <span style={{ marginLeft: 72 }}>
-                  {this.state.patientInfo.birthday}
+                  {new Date(this.state.patientInfo.birthday).toLocaleString()}
                 </span>
               </Col>
             </Row>
@@ -492,36 +496,21 @@ class PatientQuery extends Component {
                 </div>
               </Col>
             </Row>
-
             <Row>
-              <Col span={12}>
-                <strong>现病史：</strong>
-                <div className="setformat">
-                  {this.state.patientInfo.hisPreIll}
-                </div>
-              </Col>
-              <Col span={12}>
-                <strong>中医证型：</strong>
-                <div className="setformat">
-                  {this.state.patientInfo.tcmType}{" "}
-                </div>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={12}>
+              {/* <Col span={12}>
                 <strong>症状：</strong>
                 <div className="setformat">
                   {this.state.patientInfo.patientSign}{" "}
                 </div>
-              </Col>
+              </Col> */}
               <Col span={12}>
                 <strong>病种：</strong>
                 <div className="setformat">
-                  {this.getDisease(this.state.patientInfo.disease)}{" "}
+                  {this.state.patientInfo.disease}{" "}
                 </div>
               </Col>
             </Row>
-            <Row>
+            {/* <Row>
               <Col span={12}>
                 <strong>主药：</strong>
                 <div className="setformat">
@@ -534,23 +523,12 @@ class PatientQuery extends Component {
                   {this.state.patientInfo.chineseMedicine}
                 </div>
               </Col>
-            </Row>
+            </Row> */}
             <Row>
               <Col>
                 <Button type="primary" onClick={() => this.showHelp()}>
                   用药帮助
                 </Button>
-                {/* <Button
-                  type="primary"
-                  style={{
-                    margin: "0 8px",
-                    backgroundColor: "green",
-                    borderColor: "green",
-                  }}
-                  onClick={() => this.showUpdate()}
-                >
-                  更新病历
-                </Button> */}
               </Col>
             </Row>
           </div>
