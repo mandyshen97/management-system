@@ -1,4 +1,4 @@
-import  React from 'React';
+import  React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import { Message } from 'antd';
 import { getCookie } from "../pages/home/Home";
