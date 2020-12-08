@@ -54,7 +54,7 @@ const UrlMap = [
   {
     description: "获取医生列表",
     method: "getDoctors",
-    url: "/user/doctors",
+    url: "/doctor/getDoctors",
     type: "POST",
   },
   {

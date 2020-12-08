@@ -37,26 +37,26 @@ class RenderHistoryTable extends Component {
         dataIndex: "infImageDes",
         key: "infImageDes",
       },
-      {
-        title: "核磁共振图像",
-        dataIndex: "MRI",
-        key: "MRI",
-      },
-      {
-        title: "核磁共振图像描述",
-        dataIndex: "MRIDes",
-        key: "MRIDes",
-      },
-      {
-        title: "核磁共振图像",
-        dataIndex: "CT",
-        key: "CT",
-      },
-      {
-        title: "核磁共振图像描述",
-        dataIndex: "CTDes",
-        key: "CTDes",
-      },
+      // {
+      //   title: "核磁共振图像",
+      //   dataIndex: "MRI",
+      //   key: "MRI",
+      // },
+      // {
+      //   title: "核磁共振图像描述",
+      //   dataIndex: "MRIDes",
+      //   key: "MRIDes",
+      // },
+      // {
+      //   title: "核磁共振图像",
+      //   dataIndex: "CT",
+      //   key: "CT",
+      // },
+      // {
+      //   title: "核磁共振图像描述",
+      //   dataIndex: "CTDes",
+      //   key: "CTDes",
+      // },
     ];
 
     const data = [];

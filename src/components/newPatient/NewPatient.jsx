@@ -1,4 +1,4 @@
-import React from "react";
+import React , { useState, useEffect } from "react";
 import { Form, Input, Select, Button, DatePicker, Modal } from "antd";
 import { Link } from "react-router-dom";
 import moment from "moment";
@@ -20,7 +20,25 @@ const formItemLayout = {
 
 function NewPatient(props) {
   const [form] = Form.useForm();
+  const [diseaseList,setDiseaseList] = useState([])
+  const [doctorList,setDoctorList] = useState([])
 
+  useEffect( () => {
+    API.getDisease().then((res) => {
+      if(res.code==='200'){
+        setDiseaseList(res.data);
+      } else {
+        warning(res.msg);
+      }
+    });
+    API.getDoctors().then((res) => {
+      if(res.code==='200'){
+        setDoctorList(res.data);
+      } else {
+        warning(res.msg);
+      }
+    });
+  },[props])
   const success = (msg) => {
     Modal.success({
       title: msg,
@@ -46,7 +64,7 @@ function NewPatient(props) {
       chief: values.chief,
       medicalHistory: values.medical_history,
       opinion: values.opinion,
-      dieseaseId: 1,
+      dieseaseId: values.diseaseId,
     };
 
     // 提交接口 调试成功
@@ -68,7 +86,13 @@ function NewPatient(props) {
     "神经外科",
     "心胸外科",
   ];
+  const diseaseOptions = diseaseList.map((item) => {
+    return <Option key={item.id} value={item.id}>{item.name}</Option>
+  })
 
+  const doctorOptions = doctorList.map((item) => {
+    return <Option key={item.id} value={item.id}>{item.name}</Option>
+  })
   return (
     <div className="main-content">
       <Form
@@ -104,15 +128,15 @@ function NewPatient(props) {
 
         <Form.Item
           name="doctorId"
-          label="主治医生id"
+          label="主治医生"
           rules={[
             {
               required: true,
-              message: "请输入主治医生Id!",
+              message: "请输入主治医生!",
             },
           ]}
         >
-          <Input type='number'/>
+          <Select placeholder="请选择医生">{doctorOptions}</Select>
         </Form.Item>
 
         <Form.Item
@@ -147,6 +171,7 @@ function NewPatient(props) {
             {
               required: true,
               message: "请输入患者出生日期",
+              
             },
           ]}
         >
@@ -170,7 +195,7 @@ function NewPatient(props) {
 
         <Form.Item
           name="height"
-          label="身高"
+          label="身高(cm)"
           rules={[
             {
               required: true,
@@ -183,7 +208,7 @@ function NewPatient(props) {
 
         <Form.Item
           name="weight"
-          label="体重"
+          label="体重(kg)"
           rules={[
             {
               required: true,
@@ -220,15 +245,9 @@ function NewPatient(props) {
         </Form.Item>
         <Form.Item
           name="diseaseId"
-          label="疾病id"
-          rules={[
-            {
-              // required: true,
-              message: "请输入患者疾病id",
-            },
-          ]}
+          label="疾病"
         >
-          <Input type='number'/>
+          <Select placeholder="请选择疾病">{diseaseOptions}</Select>
         </Form.Item>
 
         <Form.Item

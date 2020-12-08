@@ -179,7 +179,7 @@ class Home extends Component {
             </Col>
           </Row>
           <Row gutter={16} style={{ marginTop: 30 }}>
-            {/* <Col span={8}>
+            <Col span={8}>
               <Link to="/admin/recordQuery">
                 <div
                   className="cardSelect"
@@ -194,7 +194,7 @@ class Home extends Component {
                   <span className="text">病历信息查询管理</span>
                 </div>
               </Link>
-            </Col> */}
+            </Col>
             <Col span={8}>
               <Link to="/admin/AIAnalysis">
                 <div

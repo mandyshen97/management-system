@@ -36,6 +36,7 @@ class Register extends Component {
       let param = {
         username: values.username,
         password: values.password,
+        name: values.name,
         department: values.department,
       };
       API.register(param)
@@ -231,6 +232,17 @@ class Register extends Component {
                   }
                   type="password"
                   placeholder="确认密码"
+                />
+              </Form.Item>
+              <Form.Item
+                rules={[{ required: true, message: "请输入真实姓名!" }]}
+                name="name"
+              >
+                <Input
+                  prefix={
+                    <Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />
+                  }
+                  placeholder="真实姓名"
                 />
               </Form.Item>
               <Form.Item
