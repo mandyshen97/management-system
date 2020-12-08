@@ -19,8 +19,10 @@ import UpdateModal from "./UpdataModal";
 const { Option } = Select;
 const { TextArea } = Input;
 
-Date.prototype.toLocaleString = function() {
-  return this.getFullYear() + "-" + (this.getMonth() + 1) + "-" + this.getDate();
+Date.prototype.toLocaleString = function () {
+  return (
+    this.getFullYear() + "-" + (this.getMonth() + 1) + "-" + this.getDate()
+  );
 };
 
 class PatientQuery extends Component {
@@ -296,6 +298,12 @@ class PatientQuery extends Component {
         </Form.Item>
       </Form>
     );
+  };
+
+  handleModalVisible = (isvisible) => {
+    this.setState({
+      updateInfoModalVisible: isvisible,
+    });
   };
 
   // 渲染的页面
@@ -680,6 +688,7 @@ class PatientQuery extends Component {
         </Modal>
         <UpdateModal
           visible={this.state.updateInfoModalVisible}
+          handleModalVisible={this.handleModalVisible}
           modalPatientInfo={this.state.modalPatientInfo}
         />
       </div>

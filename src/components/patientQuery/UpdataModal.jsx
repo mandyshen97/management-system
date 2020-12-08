@@ -61,6 +61,7 @@ function UpdateModal(props) {
 
   const hideModal = () => {
     setVisible(false);
+    props.handleModalVisible(false);
   };
 
   // 医院科室
