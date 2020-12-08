@@ -36,11 +36,11 @@ class LeftNav extends Component {
           path: "/admin/addRecord",
           icon: <FileAddOutlined />,
         },
-        // {
-        //   title: "病历查询",
-        //   path: "/admin/recordQuery",
-        //   icon: <MonitorOutlined />,
-        // },
+        {
+          title: "病历查询",
+          path: "/admin/recordQuery",
+          icon: <MonitorOutlined />,
+        },
         {
           title: "智能分析",
           path: "/admin/AIAnalysis",
