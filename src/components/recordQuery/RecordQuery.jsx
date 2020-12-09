@@ -54,7 +54,7 @@ class RecordQuery extends Component {
         },
         {
           title: "患者姓名",
-          dataIndex: "patientName",
+          dataIndex: "name",
           width: 50,
         },
         {
@@ -75,15 +75,15 @@ class RecordQuery extends Component {
         },
         {
           title: "就诊时间",
-          dataIndex: "createdAt",
+          dataIndex: "createAt",
           width: 50,
-          // render: (h, params) => {
-          //     return h('div', this.formatDate(params.row.createAt));
-          // }
+          render: (createAt) => {
+              return this.formatDate(new Date(createAt));
+          }
         },
         {
           title: "病人主诉",
-          dataIndex: "chfCmp",
+          dataIndex: "chief",
           ellipsis: true,
           width: 150,
           tooltip: true,
@@ -114,31 +114,6 @@ class RecordQuery extends Component {
                   size="small"
                   style={{
                     marginRight: "5px",
-                    backgroundColor: "green",
-                    borderColor: "green",
-                  }}
-                  onClick={() => this.detectionData(record)}
-                >
-                  检测数据
-                </Button>
-                <Link to={`/admin/textAnalysis/${record.id}`} target='_blank'>
-                  <Button
-                    type="primary"
-                    size="small"
-                    style={{
-                      marginRight: "5px",
-                      backgroundColor: "#EAC100",
-                      borderColor: "#EAC100",
-                    }}
-                  >
-                    文本分析
-                  </Button>
-                </Link>
-                <Button
-                  type="primary"
-                  size="small"
-                  style={{
-                    marginRight: "5px",
                     backgroundColor: "red",
                     borderColor: "red",
                   }}
@@ -158,7 +133,12 @@ class RecordQuery extends Component {
       defaultChineseMedicine: [],
     };
   }
-
+  formatDate = (now) => {
+    var year=now.getFullYear();  //取得4位数的年份
+    var month=now.getMonth()+1;  //取得日期中的月份，其中0表示1月，11表示12月
+    var date=now.getDate();      //返回日期月份中的天数（1到31）
+    return year+"-"+month+"-"+date;
+  }
   // 抽屉等组件关闭
   onClose = () => {
     this.setState({
@@ -216,13 +196,21 @@ class RecordQuery extends Component {
   // 查看详情按钮实现
   show(record) {
     let newPatientInfo = {};
-    Object.keys(record).map((item) => {
-      newPatientInfo[item] = record[item] === null ? "" : record[item];
-    });
-    console.log("newPatientInfo:", newPatientInfo);
-    this.setState({
-      drawerSwitch: true,
-      patientInfo: newPatientInfo,
+    const param = {
+      patientId: record.patientId,
+    }
+    console.log(1111111,param);
+    API.getPatient(param).then((res) => {
+      console.log("getPatient", res);
+      const { data, code, msg } = res;
+      if (code === "200") {
+        this.setState({
+          drawerSwitch: true,
+          patientInfo: data[0],
+        });
+      } else {
+        Message.error(msg);
+      }
     });
   }
 
@@ -317,6 +305,7 @@ class RecordQuery extends Component {
           this.setState({
             modalSwitch: false,
           });
+          this.fetchData();
         } else {
           Message.info("病历删除失败，请稍后重试！");
           this.setState({
@@ -481,15 +470,14 @@ class RecordQuery extends Component {
     console.log("查询条件数据", this.refs.queryForm.getFieldsValue());
     let values = this.refs.queryForm.getFieldsValue();
     let param = {
-      recordId: values.recordId,
-      startTime: values.startDate,
-      endTime: values.endDate,
+      id: values.recordId,
+      startDate: values.startDate,
+      endDate: values.endDate,
       diseaseId: values.diseaseId,
-      keyWord: values.word,
       pageNo: this.state.pageNum,
       pageSize: this.state.pageSize,
     };
-
+    console.log(param);
     API.getRecordList(param).then((res) => {
       let _data = res.data;
       let _code = res.code;
@@ -536,7 +524,6 @@ class RecordQuery extends Component {
   componentDidMount() {
     this.fetchData();
     this.fetchDisease();
-    this.fetchMedicine();
   }
   // 查询表单
   renderSearch = () => {
@@ -576,12 +563,6 @@ class RecordQuery extends Component {
             ))}
           </Select>
         </Form.Item>
-        <Form.Item name="word" label="检索字段">
-          <Input
-            style={{ width: 130, marginRight: 5 }}
-            placeholder="请输入关键词"
-          />
-        </Form.Item>
         <Form.Item>
           <Button type="primary" onClick={this.fetchData}>
             查询
@@ -620,7 +601,7 @@ class RecordQuery extends Component {
               <Col span={12}>
                 <strong>患者姓名:</strong>
                 <span style={{ marginLeft: 20 }}>
-                  {this.state.patientInfo.patientName}
+                  {this.state.patientInfo.name}
                 </span>
               </Col>
               <Col span={12}>
@@ -640,7 +621,7 @@ class RecordQuery extends Component {
               <Col span={12}>
                 <strong>生日:</strong>
                 <span style={{ marginLeft: 72 }}>
-                  {this.state.patientInfo.birthday}
+                  {this.formatDate(new Date(this.state.patientInfo.birthday))}
                 </span>
               </Col>
             </Row>
@@ -663,7 +644,7 @@ class RecordQuery extends Component {
               <Col>
                 <strong>主诉：</strong>
                 <div className="setformat">
-                  {this.valueOrDefault(this.state.patientInfo.chfCmp)}
+                  {this.valueOrDefault(this.state.patientInfo.chief)}
                 </div>
               </Col>
             </Row>
@@ -671,31 +652,7 @@ class RecordQuery extends Component {
               <Col>
                 <strong>既往史：</strong>
                 <div className="setformat">
-                  {this.valueOrDefault(this.state.patientInfo.prvMedHis)}{" "}
-                </div>
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <strong>现病史：</strong>
-                <div className="setformat">
-                  {this.valueOrDefault(this.state.patientInfo.hisPreIll)}{" "}
-                </div>
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <strong>中医证型：</strong>
-                <div className="setformat">
-                  {this.valueOrDefault(this.state.patientInfo.tcmType)}{" "}
-                </div>
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <strong>症状：</strong>
-                <div className="setformat">
-                  {this.valueOrDefault(this.state.patientInfo.patientSign)}{" "}
+                  {this.valueOrDefault(this.state.patientInfo.medicalHistory)}{" "}
                 </div>
               </Col>
             </Row>
@@ -707,34 +664,8 @@ class RecordQuery extends Component {
                 </div>
               </Col>
             </Row>
-            <Row>
+            {/* <Row>
               <Col>
-                <strong>主药：</strong>
-                <div className="setformat">
-                  {this.valueOrDefault(
-                    this.state.patientInfo.westernPrescription
-                  )}
-                </div>
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <strong>辅药：</strong>
-                <div className="setformat">
-                  {this.valueOrDefault(
-                    this.state.patientInfo.chinesePrescription
-                  )}
-                </div>
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <Button
-                  type="primary"
-                  onClick={() => this.showHelp(this.state.patientInfo)}
-                >
-                  用药帮助
-                </Button>
                 <Button
                   type="primary"
                   style={{
@@ -747,7 +678,7 @@ class RecordQuery extends Component {
                   更新病历
                 </Button>
               </Col>
-            </Row>
+            </Row> */}
           </div>
         </Drawer>
 
@@ -909,14 +840,6 @@ class RecordQuery extends Component {
           onCancel={this.cancel}
         >
           <p>本次删除操作不可逆 确认删除本条数据？</p>
-        </Modal>
-        <Modal
-          visible={this.state.helpSwitch}
-          title="基于专家用药模型的用药帮助"
-          onOk={this.helpConfirm}
-          onCancel={this.helpConfirm}
-        >
-          <p ref="p">{this.state.medCheck}</p>
         </Modal>
         <Modal
           visible={this.state.updateSwitch}

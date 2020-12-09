@@ -18,7 +18,7 @@ const UrlMap = [
   {
     description: "获取病历列表",
     method: "getRecordList",
-    url: "/record/get",
+    url: "/record/getAllRecords",
     type: "POST",
   },
   {
