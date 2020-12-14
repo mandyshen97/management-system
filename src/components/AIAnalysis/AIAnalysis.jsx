@@ -128,6 +128,20 @@ class AIAnalysis extends Component {
     this.queryHistory(v);
   };
 
+  handleDownload = () => {
+    const { patientInfo } = this.state;
+    window.location.href =
+      "http://10.16.98.192:9090/record/download?id=" + _.get(patientInfo, "id") 
+      + "&description=" + " 经过脊椎疾病相关治疗方案，经红外热成像技术的客观分析可见，患者脊椎疾病严重程度有了明显的改善。";
+    // window.open("http://10.16.98.192:9090/record/download?id=" + _.get(patientInfo, "id") 
+    // + "&description=" + " 经过脊椎疾病相关治疗方案，经红外热成像技术的客观分析可见，患者脊椎疾病严重程度有了明显的改善。") ;
+    // const param = {
+    //   id: _.get(patientInfo, "id"),
+    //   description: "经过脊椎疾病相关治疗方案，经红外热成像技术的客观分析可见，患者脊椎疾病严重程度有了明显的改善。",
+    // }
+    // API.downloadRecord(param).then((res) => {});
+  }
+
   handleAnalysis = () => {
     this.setState({
       progressVisible: true,
@@ -225,7 +239,7 @@ class AIAnalysis extends Component {
                 <p>
                   经过脊椎疾病相关治疗方案，经红外热成像技术的客观分析可见，患者脊椎疾病严重程度有了明显的改善。
                 </p>
-                <Button type="primary" style={{ marginBottom: 20 }}>
+                <Button type="primary" style={{ marginBottom: 20 }} onClick={this.handleDownload}>
                   下载报告
                 </Button>
               </div>
