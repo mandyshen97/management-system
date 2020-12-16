@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useContext } from "react";
 import {
   Form,
   Input,
@@ -12,6 +12,7 @@ import API from "../../api/api";
 import _ from "lodash";
 import { getAge } from "../../utils/dateUtils";
 import RenderHistoryTable from "./RenderHistoryTable";
+import {LoginContext} from "../../pages/login/Login";
 
 class AIAnalysis extends Component {
   constructor(props) {
@@ -24,6 +25,15 @@ class AIAnalysis extends Component {
       percent: 0, // 进度条进度
       progressVisible: false, // 是否显示进度条
     };
+  }
+
+  AccessInfo = () => { 
+    const theme = useContext(LoginContext);
+    return (
+      <Button type="primary" htmlType="submit" disabled={theme.analysisAi==0}>
+      查询
+      </Button>
+    );
   }
 
   getOption = () => {
@@ -128,20 +138,6 @@ class AIAnalysis extends Component {
     this.queryHistory(v);
   };
 
-  handleDownload = () => {
-    const { patientInfo } = this.state;
-    window.location.href =
-      "http://10.16.98.192:9090/record/download?id=" + _.get(patientInfo, "id") 
-      + "&description=" + " 经过脊椎疾病相关治疗方案，经红外热成像技术的客观分析可见，患者脊椎疾病严重程度有了明显的改善。";
-    // window.open("http://10.16.98.192:9090/record/download?id=" + _.get(patientInfo, "id") 
-    // + "&description=" + " 经过脊椎疾病相关治疗方案，经红外热成像技术的客观分析可见，患者脊椎疾病严重程度有了明显的改善。") ;
-    // const param = {
-    //   id: _.get(patientInfo, "id"),
-    //   description: "经过脊椎疾病相关治疗方案，经红外热成像技术的客观分析可见，患者脊椎疾病严重程度有了明显的改善。",
-    // }
-    // API.downloadRecord(param).then((res) => {});
-  }
-
   handleAnalysis = () => {
     this.setState({
       progressVisible: true,
@@ -171,9 +167,10 @@ class AIAnalysis extends Component {
           <Input style={{ width: 100, marginRight: 15 }} placeholder="患者id" />
         </Form.Item>
         <Form.Item>
-          <Button type="primary" htmlType="submit">
+          {/* <Button type="primary" htmlType="submit">
             查询
-          </Button>
+          </Button> */}
+          <this.AccessInfo />
         </Form.Item>
       </Form>
     );
@@ -239,7 +236,7 @@ class AIAnalysis extends Component {
                 <p>
                   经过脊椎疾病相关治疗方案，经红外热成像技术的客观分析可见，患者脊椎疾病严重程度有了明显的改善。
                 </p>
-                <Button type="primary" style={{ marginBottom: 20 }} onClick={this.handleDownload}>
+                <Button type="primary" style={{ marginBottom: 20 }}>
                   下载报告
                 </Button>
               </div>

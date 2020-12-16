@@ -1,10 +1,65 @@
-import React, { Component } from "react";
+import React, { Component,createContext } from "react";
 import { Redirect, Link } from "react-router-dom";
 import { Form, Icon, Input, Button, Message } from "antd";
 import "./login.less";
 import kangfu from "../../assets/images/kangfu.jpg";
 import memoryUtils from "../../utils/memoryUtils";
 import API from "../../api/api";
+import jwt_decode from 'jwt-decode'
+import { getCookie } from "../home/Home";
+
+// const token = getCookie("token");
+// const token_decode = jwt_decode(token);
+// console.log(token_decode);
+
+const userInfo = {
+  department:"",
+  createPatientinfo:0,
+  queryPatientinfo:0,
+  createTreatrecord:0,
+  queryCase:0,
+  analysisAi:0,
+  // createTreatplan:1,
+  controlAccess:0
+}
+
+export const LoginContext = createContext(userInfo);
+
+const token_now = getCookie("token");
+const getUserInfo = (token_now) => {
+  if(token_now!=null){
+    const token_decode = jwt_decode(token_now);
+    const user_id = token_decode.jti;
+    let param = {
+      id: user_id
+    }
+    console.log(param);
+    API.getUserInfo(param)
+        .then((res) => {
+          const { code, msg, data} = res;
+          if (code !== "200") {
+            Message.error("获取用户信息失败！");
+          } else {
+            Message.success("获取用户信息成功");
+            userInfo.department = res.data.department;
+            userInfo.createPatientinfo = res.data.createPatientinfo;
+            userInfo.queryPatientinfo = res.data.queryPatientinfo;
+            userInfo.createTreatrecord = res.data.createTreatrecord;
+            userInfo.queryCase = res.data.queryCase;
+            userInfo.analysisAi = res.data.analysisAi;
+            // userInfo.createTreatplan = res.data.createTreatplan;
+            userInfo.controlAccess = res.data.controlAccess;
+            console.log(userInfo);
+          }
+        })
+        .catch((err) => {
+          Message.error(err + "登录失败！请重试！");
+        });
+    console.log(user_id);
+
+  }
+};
+getUserInfo(token_now);
 
 class Login extends Component {
   // 验证码
@@ -36,6 +91,7 @@ class Login extends Component {
         username: values.username,
         password: values.password,
       };
+      console.log(param);
       API.login(param)
         .then((res) => {
           const { code, msg, data} = res;
@@ -43,6 +99,14 @@ class Login extends Component {
             Message.error("登录失败，用户名或密码错误！");
           } else {
             Message.success("登录成功！");
+            userInfo.department = res.data.department;
+            userInfo.createPatientinfo = res.data.createPatientinfo;
+            userInfo.queryPatientinfo = res.data.queryPatientinfo;
+            userInfo.createTreatrecord = res.data.createTreatrecord;
+            userInfo.queryCase = res.data.queryCase;
+            userInfo.analysisAi = res.data.analysisAi;
+            // userInfo.createTreatplan = res.data.createTreatplan;
+            userInfo.controlAccess = res.data.controlAccess;
             if(data.token&&data.exp){
               document.cookie = "token="+ data.token+";expires="+new Date(data.exp).toGMTString();
             }

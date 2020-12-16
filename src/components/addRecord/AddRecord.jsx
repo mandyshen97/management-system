@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useContext } from "react";
 import ReactEcharts from "echarts-for-react";
 import RenderInfMode from "./RenderInfMode";
 import RenderCTMode from "./RenderCTMode";
@@ -19,6 +19,7 @@ import "./add-record.less";
 import API from "../../api/api";
 import { getDesFromClassification } from "../../utils/diseaseInfo";
 import { getAge } from "../../utils/dateUtils";
+import {LoginContext} from "../../pages/login/Login";
 
 const { TabPane } = Tabs;
 const { Search } = Input;
@@ -57,6 +58,28 @@ class AddRecord extends Component {
     };
   }
 
+  AccessInfo_1 = () => { 
+    const theme = useContext(LoginContext);
+    return (
+      <Button type="primary" htmlType="submit" disabled={theme.createTreatrecord==0}>
+      查询
+      </Button>
+    );
+  }
+  
+  AccessInfo_2 = () => { 
+    const theme = useContext(LoginContext);
+    return (
+      <Search
+        placeholder="查询患者姓名、id"
+        onSearch={this.handleSearch}
+        enterButton
+        style={{ width: 260, margin: "20px 10px" }}
+        disabled={theme.createTreatrecord==0}
+      />
+    );
+  }
+  
   // 子组件传来的 图片、 txt 信息
   handleFile = async (v) => {
     const imgInfoBefore = _.get(v, "fileBefore.imgInfoBefore");
@@ -106,9 +129,10 @@ class AddRecord extends Component {
           />
         </Form.Item>
         <Form.Item>
-          <Button type="primary" htmlType="submit">
+          {/* <Button type="primary" htmlType="submit">
             查询
-          </Button>
+          </Button> */}
+          <this.AccessInfo_1 />
         </Form.Item>
       </Form>
     );
@@ -596,12 +620,13 @@ class AddRecord extends Component {
           className="right"
           style={{ width: "300px", height: "100%", backgroundColor: "#f9f9f9" }}
         >
-          <Search
+          {/* <Search
             placeholder="查询患者姓名、id"
             onSearch={this.handleSearch}
             enterButton
             style={{ width: 260, margin: "20px 10px" }}
-          />
+          /> */}
+          <this.AccessInfo_2 />
 
           {existPatient && (
             <div>

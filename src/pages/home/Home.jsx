@@ -13,6 +13,7 @@ import {
 import API from "../../api/api";
 
 import "./home.less";
+import jwt_decode from "jwt-decode";
 
 export const deleteCookie = (name) => {
   var exp = new Date();
@@ -30,6 +31,8 @@ export const getCookie = (name) => {
   else
     return null;
 }
+
+
 const { Header, Content } = Layout;
 class Home extends Component {
   constructor(props) {

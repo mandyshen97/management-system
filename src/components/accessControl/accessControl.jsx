@@ -1,8 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Table, Form, Checkbox, Row, Col, Button, Message } from "antd";
 import API from "../../api/api";
 import _ from "lodash";
+import {LoginContext} from "../../pages/login/Login";
 
+
+// const AccessInfo = (record) => { 
+//   const theme = useContext(LoginContext);
+//   return (
+//     <Button type="primary" onClick={() => update(record)} disabled={theme.createPatientinfo==0}>
+//             确定
+//     </Button>
+//   );
+// };
+console.log(LoginContext);
+console.log(LoginContext._currentValue.department);
 const initialData = [];
 
 export default function AccessControl() {
@@ -12,17 +24,17 @@ export default function AccessControl() {
   useEffect(() => {
     // todo
     // 发送请求获取权限列表
-    // API.getAccessList().then((res) => {
-    //   if (res.code === "200") {
-    //     setData(res.data);
-    //   }
-    // });
-    fetch("http://mockjs.docway.net/mock/1XRHOKNxZ7h/api/getAccessList")
-      .then((res) => res.json())
-      .then((res) => {
-        const doctorAccessData = _.get(res, "data");
-        setData(doctorAccessData);
-      });
+    API.getAccessList().then((res) => {
+      if (res.code === "200") {
+        setData(res.data);
+      }
+    });
+    // fetch("http://mockjs.docway.net/mock/1XRHOKNxZ7h/api/getAccessList")
+    //   .then((res) => res.json())
+    //   .then((res) => {
+    //     const doctorAccessData = _.get(res, "data");
+    //     setData(doctorAccessData);
+    //   });
   }, []);
 
   // 根据权限的id得到对应的权限名称
@@ -32,8 +44,8 @@ export default function AccessControl() {
     { accessId: 2, accessName: "新增治疗记录" },
     { accessId: 3, accessName: "病历查询" },
     { accessId: 4, accessName: "智能分析" },
-    { accessId: 5, accessName: "新增治疗方案" },
-    { accessId: 6, accessName: "权限控制" },
+    // { accessId: 5, accessName: "新增治疗方案" },
+    { accessId: 5, accessName: "权限控制" },
   ];
 
   const getNames = (accessArray) => {
@@ -53,14 +65,16 @@ export default function AccessControl() {
 
   const update = (record) => {
     console.log(record);
+    
     let param = {
-      doctorName: record.doctorName,
-      doctorId: record.doctorId,
-      department: record.department,
-      accessArray: record.accessArray,
+      doctorName: record.values.doctorName,
+      doctorId: record.values.doctorId,
+      department: record.values.department,
+      accessArray: record.values.accessArray,
     };
+    console.log(param);
     try {
-      API.updataAccess(param).then((res) => {
+      API.updateAccess(param).then((res) => {
         if (res.code === "200") {
           Message.success("更新成功");
         } else {
@@ -71,6 +85,34 @@ export default function AccessControl() {
       Message.error(e + "更新失败，请重试！");
     }
   };
+
+  const AccessInfo = (record) => { 
+    const theme = useContext(LoginContext);
+    return (
+      <Button type="primary" onClick={() => update(record)} disabled={theme.controlAccess==0}>
+              确定
+      </Button>
+    );
+  };
+
+  const dataAfterSelet = (department) => {
+    if (department == "脊椎康复科") {
+      return data;
+    }
+    const result = [];
+    console.log("data:");
+    console.log(data);
+    console.log("department");
+    console.log(department);
+    for (let index = 0; index < data.length; index++) {
+      const element = data[index];
+      if(element.department == department){
+        result[index] = element;
+      }
+    }
+    return result;
+  }
+
   const columns = [
     {
       title: "医生姓名",
@@ -122,9 +164,10 @@ export default function AccessControl() {
       dataIndex: "operation",
       render: (_, record) => {
         return (
-          <Button type="primary" onClick={() => update(record)}>
-            确定
-          </Button>
+          // <Button type="primary" onClick={() => update(record)}>
+          //   确定
+          // </Button>
+          <AccessInfo values={record} />
         );
       },
     },
@@ -144,7 +187,7 @@ export default function AccessControl() {
       <Form form={form} component={false}>
         <Table
           bordered
-          dataSource={data}
+          dataSource={dataAfterSelet(LoginContext._currentValue.department)}
           columns={columns}
           rowClassName="editable-row"
         ></Table>

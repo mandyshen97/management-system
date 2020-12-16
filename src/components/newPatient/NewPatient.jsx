@@ -1,9 +1,28 @@
-import React , { useState, useEffect } from "react";
+import React , { useState, useEffect, useContext } from "react";
 import { Form, Input, Select, Button, DatePicker, Modal } from "antd";
 import { Link } from "react-router-dom";
 import moment from "moment";
 import API from "../../api/api";
 import "./new-patient.less";
+import {LoginContext} from "../../pages/login/Login";
+
+const AccessInfo = () => { 
+  const theme = useContext(LoginContext);
+  return (
+    <Button
+            type="primary"
+            htmlType="submit"
+            style={{
+              width: 150,
+              marginLeft: 400,
+            }}
+            disabled={theme.createPatientinfo==0}
+          >
+            提交
+    </Button>
+  );
+};
+
 // require("react-dom");
 // window.React2 = require("react");
 // console.log(window.React1 === window.React2);
@@ -258,16 +277,7 @@ function NewPatient(props) {
           <TextArea placeholder="请输入病人主诉" />
         </Form.Item>
         <Form.Item>
-          <Button
-            type="primary"
-            htmlType="submit"
-            style={{
-              width: 150,
-              marginLeft: 400,
-            }}
-          >
-            提交
-          </Button>
+          <AccessInfo />
         </Form.Item>
         <Link to="/admin/addRecord">
           <Button

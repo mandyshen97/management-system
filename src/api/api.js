@@ -1,7 +1,7 @@
 import { getCookie } from "../pages/home/Home";
 
-const BaseUrl = "http://10.16.98.192:9090";
-// const BaseUrl = "http://localhost:8080";
+// const BaseUrl = "http://10.16.98.192:9090";
+const BaseUrl = "http://localhost:8081";
 const UrlMap = [
   {
     description: "用户登录", // 用到，成功
@@ -152,13 +152,19 @@ const UrlMap = [
   {
     description: "获取医生权限列表", // 用到
     method: "getAccessList",
-    url: "/api/getAccessList",
+    url: "/user/getAccessList",
     type: "GET",
   },
   {
     description: "修改医生权限后提交", // 用到
-    method: "updataAccess",
-    url: "/api/updataAccess",
+    method: "updateAccess",
+    url: "/user/updateAccess",
+    type: "POST",
+  },
+  {
+    description: "根据user_id获取权限信息", // 用到
+    method: "getUserInfo",
+    url: "/user/getUserInfo",
     type: "POST",
   },
   {
@@ -213,9 +219,6 @@ UrlMap.forEach((item) => {
         method: "POST",
         body: data,
       };
-    }
-    if (item.url === "/record/download"){
-      return fetch(url,option).then((res) => res.json());
     }
     // 通过fetch发送请求，第一个参数是请求地址。
     // json()返回一个被解析为JSON格式的promise对象

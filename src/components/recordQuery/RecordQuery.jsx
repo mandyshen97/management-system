@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useContext } from "react";
 import "./record-query.less";
 import {
   Input,
@@ -16,6 +16,8 @@ import {
 import API from "../../api/api";
 import { Link } from "react-router-dom";
 import ReactEcharts from "echarts-for-react";
+import {LoginContext} from "../../pages/login/Login";
+
 const { Option } = Select;
 const { TextArea } = Input;
 // const baseURL = "http://10.13.81.189:8001/"
@@ -133,6 +135,16 @@ class RecordQuery extends Component {
       defaultChineseMedicine: [],
     };
   }
+
+  AccessInfo = () => { 
+    const theme = useContext(LoginContext);
+    return (
+      <Button type="primary" onClick={this.fetchData} disabled={theme.queryCase==0}>
+              查询
+      </Button>
+    );
+  }
+
   formatDate = (now) => {
     var year=now.getFullYear();  //取得4位数的年份
     var month=now.getMonth()+1;  //取得日期中的月份，其中0表示1月，11表示12月
@@ -564,9 +576,10 @@ class RecordQuery extends Component {
           </Select>
         </Form.Item>
         <Form.Item>
-          <Button type="primary" onClick={this.fetchData}>
+          {/* <Button type="primary" onClick={this.fetchData}>
             查询
-          </Button>
+          </Button> */}
+          <this.AccessInfo />
         </Form.Item>
       </Form>
     );

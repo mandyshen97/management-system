@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useContext } from "react";
 import "./patient-query.less";
 import {
   Input,
@@ -16,6 +16,9 @@ import API from "../../api/api";
 import { Link } from "react-router-dom";
 // import ReactEcharts from "echarts-for-react";
 import UpdateModal from "./UpdataModal";
+import {LoginContext} from "../../pages/login/Login";
+
+
 const { Option } = Select;
 const { TextArea } = Input;
 
@@ -62,6 +65,67 @@ class PatientQuery extends Component {
       ],
     };
   }
+
+  AccessInfo_1 = () => { 
+    const theme = useContext(LoginContext);
+    return (
+      <Button type="primary" htmlType="submit" disabled={theme.queryPatientinfo==0}>
+              查询
+      </Button>
+    );
+  }
+  
+  AccessInfo_2 = (record) => { 
+    const theme = useContext(LoginContext);
+    return (
+      <Button
+        type="primary"
+        // size="small"
+        style={{ marginRight: "5px" }}
+        onClick={() => this.show(record)}
+        disabled={theme.queryPatientinfo==0}
+      >
+        病历详情
+      </Button>
+  
+    );
+  }
+  
+  AccessInfo_3 = () => { 
+    const theme = useContext(LoginContext);
+    return (
+      <Button
+      type="primary"
+      style={{
+        marginRight: "5px",
+        backgroundColor: "green",
+        borderColor: "green",
+      }}
+      disabled={theme.queryPatientinfo==0}
+    >
+      新增病历
+    </Button>
+    );
+  }
+  
+  AccessInfo_4 = (record) => { 
+    const theme = useContext(LoginContext);
+    return (
+      <Button
+      type="primary"
+      style={{
+        marginRight: "5px",
+        backgroundColor: "red",
+        borderColor: "red",
+      }}
+      onClick={() => this.showUpdateInfoModal(record)}
+      disabled={theme.queryPatientinfo==0}
+    >
+      更新患者信息
+    </Button>
+    );
+  }
+
 
   // 抽屉等组件关闭
   onClose = () => {
@@ -287,9 +351,10 @@ class PatientQuery extends Component {
           <Input placeholder="主治医生姓名" style={{ width: 80 }} />
         </Form.Item>
         <Form.Item>
-          <Button type="primary" htmlType="submit">
+          {/* <Button type="primary" htmlType="submit">
             查询
-          </Button>
+          </Button> */}
+          <this.AccessInfo_1 />
         </Form.Item>
         <Form.Item>
           <Button type="primary" onClick={this.handleSearchReset}>
@@ -364,14 +429,15 @@ class PatientQuery extends Component {
         align: "center",
         render: (text, record, index) => {
           return (
-            <Button
-              type="primary"
-              // size="small"
-              style={{ marginRight: "5px" }}
-              onClick={() => this.show(record)}
-            >
-              病历详情
-            </Button>
+            // <Button
+            //   type="primary"
+            //   // size="small"
+            //   style={{ marginRight: "5px" }}
+            //   onClick={() => this.show(record)}
+            // >
+            //   病历详情
+            // </Button>
+            <this.AccessInfo_2 values={record}/>
           );
         },
       },
@@ -384,18 +450,9 @@ class PatientQuery extends Component {
           return (
             <div>
               <Link to={`/admin/addRecord/${record.id}`} target="_blank">
-                <Button
-                  type="primary"
-                  style={{
-                    marginRight: "5px",
-                    backgroundColor: "green",
-                    borderColor: "green",
-                  }}
-                >
-                  新增病历
-                </Button>
+                <this.AccessInfo_3 />
               </Link>
-              <Button
+              {/* <Button
                 type="primary"
                 style={{
                   marginRight: "5px",
@@ -405,7 +462,8 @@ class PatientQuery extends Component {
                 onClick={() => this.showUpdateInfoModal(record)}
               >
                 更新患者信息
-              </Button>
+              </Button> */}
+              <this.AccessInfo_4 values={record}/>
             </div>
           );
         },
