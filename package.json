@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@ant-design/icons": "^4.2.2",
-    "antd": "^4.5.2",
+    "antd": "^4.10.3",
     "babel-plugin-import": "^1.12.2",
     "craco-less": "^1.17.0",
     "customize-cra": "^0.8.0",

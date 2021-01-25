@@ -73,13 +73,18 @@ export default function AccessControl() {
   };
   const columns = [
     {
+      title: "医生id",
+      dataIndex: "doctorId",
+      width: "15%",
+    },
+    {
       title: "医生姓名",
       dataIndex: "doctorName",
       width: "15%",
     },
     {
-      title: "医生id",
-      dataIndex: "doctorId",
+      title: "角色",
+      dataIndex: "role",
       width: "15%",
     },
     {

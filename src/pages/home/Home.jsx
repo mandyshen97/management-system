@@ -73,7 +73,9 @@ class Home extends Component {
             position: "fixed",
             zIndex: 1,
             width: "100%",
-            background: "rgb(57,141,238)",
+            // background: "rgb(57,141,238)",
+            background: "cadetblue",
+
             fontSize: "24px",
           }}
         >

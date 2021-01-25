@@ -13,7 +13,8 @@ import PatientQuery from "../../components/patientQuery/PatientQuery";
 import NewPatient from "../../components/newPatient/NewPatient";
 import AIAnalysis from "../../components/AIAnalysis/AIAnalysis";
 import AccessControl from "../../components/accessControl/accessControl";
-
+import RehabAss from "../../components/rehabAss/RehabAss";
+import Statistics from "../../components/statistics/Statistics";
 import "./admin.less";
 
 const { Sider, Content } = Layout;
@@ -72,12 +73,14 @@ class Admin extends Component {
           <Content>
             <Switch>
               <Redirect from="/admin" exact to="/admin/recordQuery" />
+              <Route path="/admin/statistics" component={Statistics} />
               <Route path="/admin/recordQuery" component={RecordQuery} />
               <Route path="/admin/patientQuery" component={PatientQuery} />
               <Route path="/admin/textAnalysis/:id" component={TextAnalysis} />
               <Route path="/admin/addRecord/:id" component={AddRecord} />
               <Route path="/admin/addRecord" component={AddRecord} />
               <Route path="/admin/AIAnalysis" component={AIAnalysis} />
+              <Route path="/admin/rehabAss" component={RehabAss} />
               <Route path="/admin/accessControl" component={AccessControl} />
               <Route path="/admin/recordUpload" component={RecordUpload} />
               <Route path="/admin/newPatient" component={NewPatient} />

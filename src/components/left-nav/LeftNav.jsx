@@ -22,28 +22,53 @@ class LeftNav extends Component {
       currentPath: "/admin/home",
       menuList: [
         {
-          title: "新建患者个人信息",
-          path: "/admin/newPatient",
+          title: "整体数据统计",
+          path: "/admin/statistics",
           icon: <UserAddOutlined />,
         },
         {
-          title: "患者信息查询管理",
-          path: "/admin/patientQuery",
+          title: "患者信息管理",
+          // path: "/admin/patientQuery",
           icon: <SolutionOutlined />,
+          children: [
+            {
+              title: "新建患者个人信息",
+              path: "/admin/newPatient",
+              // icon: <UserAddOutlined />,
+            },
+            {
+              title: "患者信息查询",
+              path: "/admin/patientQuery",
+              // icon: <SolutionOutlined />,
+            },
+          ],
         },
         {
-          title: "新增治疗记录",
-          path: "/admin/addRecord",
+          title: "病历管理",
+          // path: "/admin/addRecord",
           icon: <FileAddOutlined />,
+          children: [
+            {
+              title: "新增治疗记录",
+              path: "/admin/addRecord",
+              // icon: <FileAddOutlined />,
+            },
+            {
+              title: "病历查询",
+              path: "/admin/recordQuery",
+              // icon: <MonitorOutlined />,
+            },
+          ],
         },
-        {
-          title: "病历查询",
-          path: "/admin/recordQuery",
-          icon: <MonitorOutlined />,
-        },
+
         {
           title: "智能分析",
           path: "/admin/AIAnalysis",
+          icon: <AlertOutlined />,
+        },
+        {
+          title: "康复评估",
+          path: "/admin/rehabAss",
           icon: <AlertOutlined />,
         },
         {
@@ -87,10 +112,14 @@ class LeftNav extends Component {
           <SubMenu
             key={item.path}
             onClick={() => this.handleChangeColor(item.path)}
+            className={
+              this.state.currentPath === item.path ? "blueColor" : null
+            }
             title={
               <span>
-                <Icon type={item.icon} />
-                <span>{item.title}</span>
+                {/* <Icon type={item.icon} /> */}
+                {item.icon}
+                <span style={{ fontSize: "18px" }}>{item.title}</span>
               </span>
             }
           >

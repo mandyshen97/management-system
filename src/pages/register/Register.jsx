@@ -1,6 +1,14 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { Form, Icon, Input, Button, Message } from "antd";
+import {
+  UserOutlined,
+  LockOutlined,
+  ReconciliationOutlined,
+  SafetyCertificateOutlined,
+  DiffOutlined,
+  AuditOutlined,
+} from "@ant-design/icons";
 import "../login/login.less";
 import kangfu from "../../assets/images/kangfu.jpg";
 import API from "../../api/api";
@@ -41,7 +49,7 @@ class Register extends Component {
       };
       API.register(param)
         .then((res) => {
-          const {code, msg } = res;
+          const { code, msg } = res;
           if (code !== "200") {
             Message.error(msg);
           } else {
@@ -183,7 +191,7 @@ class Register extends Component {
           onClick={this.reloadPic}
           ref={this.canvas}
           width="100"
-          height="60"
+          height="30"
         ></canvas>
       </div>
     );
@@ -204,9 +212,7 @@ class Register extends Component {
                 rules={[{ required: true, message: "请输入用户名!" }]}
               >
                 <Input
-                  prefix={
-                    <Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />
-                  }
+                  prefix={<UserOutlined className="site-form-item-icon" />}
                   placeholder="用户名"
                 />
               </Form.Item>
@@ -215,33 +221,31 @@ class Register extends Component {
                 name="password"
               >
                 <Input
-                  prefix={
-                    <Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />
-                  }
+                  prefix={<LockOutlined className="site-form-item-icon" />}
                   type="password"
                   placeholder="密码"
                 />
               </Form.Item>
+
               <Form.Item
                 rules={[{ required: true, message: "请确认密码!" }]}
                 name="confirmPassword"
               >
                 <Input
                   prefix={
-                    <Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />
+                    <SafetyCertificateOutlined className="site-form-item-icon" />
                   }
                   type="password"
                   placeholder="确认密码"
                 />
               </Form.Item>
+
               <Form.Item
                 rules={[{ required: true, message: "请输入真实姓名!" }]}
                 name="name"
               >
                 <Input
-                  prefix={
-                    <Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />
-                  }
+                  prefix={<AuditOutlined className="site-form-item-icon" />}
                   placeholder="真实姓名"
                 />
               </Form.Item>
@@ -250,9 +254,7 @@ class Register extends Component {
                 rules={[{ required: true, message: "请输入科室!" }]}
               >
                 <Input
-                  prefix={
-                    <Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />
-                  }
+                  prefix={<DiffOutlined className="site-form-item-icon" />}
                   placeholder="科室"
                 />
               </Form.Item>
@@ -262,13 +264,11 @@ class Register extends Component {
               >
                 <div>
                   <Input
-                    style={{ float: "left", width: 150, marginRight: 50 }}
-                    prefix={
-                      <Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />
-                    }
-                    placeholder="验证码"
+                  style={{ float: "left", width: 240, marginRight: 20 }}
+                    prefix={<ReconciliationOutlined />}
+                    placeholder="请输入验证码"
                   />
-                  {suffix}
+                  <div style={{ float: "right" }}>{suffix}</div>
                 </div>
               </Form.Item>
               <Form.Item>

@@ -1,6 +1,11 @@
 import React, { Component } from "react";
 import { Redirect, Link } from "react-router-dom";
-import { Form, Icon, Input, Button, Message } from "antd";
+import { Form, Input, Button, Message, Checkbox } from "antd";
+import {
+  UserOutlined,
+  LockOutlined,
+  ReconciliationOutlined,
+} from "@ant-design/icons";
 import "./login.less";
 import kangfu from "../../assets/images/kangfu.jpg";
 import memoryUtils from "../../utils/memoryUtils";
@@ -38,15 +43,19 @@ class Login extends Component {
       };
       API.login(param)
         .then((res) => {
-          const { code, msg, data} = res;
+          const { code, msg, data } = res;
           if (code !== "200") {
             Message.error("登录失败，用户名或密码错误！");
           } else {
             Message.success("登录成功！");
-            if(data.token&&data.exp){
-              document.cookie = "token="+ data.token+";expires="+new Date(data.exp).toGMTString();
+            if (data.token && data.exp) {
+              document.cookie =
+                "token=" +
+                data.token +
+                ";expires=" +
+                new Date(data.exp).toGMTString();
             }
-            this.props.history.push('/home');
+            this.props.history.push("/home");
           }
         })
         .catch((err) => {
@@ -192,7 +201,7 @@ class Login extends Component {
           onClick={this.reloadPic}
           ref={this.canvas}
           width="100"
-          height="60"
+          height="30"
         ></canvas>
       </div>
     );
@@ -217,20 +226,17 @@ class Login extends Component {
                 name="username"
               >
                 <Input
-                  prefix={
-                    <Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />
-                  }
+                  prefix={<UserOutlined className="site-form-item-icon" />}
                   placeholder="用户名"
                 />
               </Form.Item>
+
               <Form.Item
                 rules={[{ required: true, message: "请输入密码!" }]}
                 name="password"
               >
                 <Input
-                  prefix={
-                    <Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />
-                  }
+                  prefix={<LockOutlined className="site-form-item-icon" />}
                   type="password"
                   placeholder="密码"
                 />
@@ -241,14 +247,26 @@ class Login extends Component {
               >
                 <div>
                   <Input
-                    style={{ float: "left", width: 150, marginRight: 50 }}
                     prefix={
-                      <Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />
+                      <ReconciliationOutlined className="site-form-item-icon" />
                     }
-                    placeholder="验证码"
+                    style={{ float: "left", width: 240, marginRight: 20 }}
+                    placeholder="请输入验证码"
                   />
-                  {suffix}
+                  <div style={{ float: "right" }}>{suffix}</div>
                 </div>
+              </Form.Item>
+              <Form.Item>
+                <Form.Item name="remember" valuePropName="checked" noStyle>
+                  <Checkbox style={{ color: "white" }}>记住我</Checkbox>
+                </Form.Item>
+                <a
+                  className="login-form-forgot"
+                  href="#"
+                  style={{ color: "blue" }}
+                >
+                  忘记密码
+                </a>
               </Form.Item>
               <Form.Item>
                 <Button

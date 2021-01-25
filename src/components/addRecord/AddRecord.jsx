@@ -430,7 +430,7 @@ class AddRecord extends Component {
                   </TabPane>
                 </Tabs>
               </div>
-              <div
+              {/* <div
                 className="analysis"
                 style={{
                   marginTop: "10px",
@@ -576,6 +576,7 @@ class AddRecord extends Component {
                   </div>
                 </div>
               </div>
+            */}
             </div>
           )}
           {!existPatient && (

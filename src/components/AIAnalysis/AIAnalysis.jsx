@@ -4,14 +4,106 @@ import {
   Input,
   Button,
   Message,
-  Progress,
-  message,
+  Table,
+  Tag,
 } from "antd";
-import ReactEcharts from "echarts-for-react";
 import API from "../../api/api";
 import _ from "lodash";
-import { getAge } from "../../utils/dateUtils";
-import RenderHistoryTable from "./RenderHistoryTable";
+import AIModal from "./AIModal";
+
+const listData = [
+  {
+    key: 0,
+    patientId: "000004",
+    count: 1,
+    name: "赵鹏",
+    gender: 1,
+    birthday: "1995-06-06",
+    createAt: "2020-02-03",
+    chief: "腰酸背痛",
+    recommendTreat: "针灸治疗",
+    treat: "针灸治疗",
+  },
+  {
+    key: 1,
+    patientId: "000004",
+    count: 2,
+    name: "赵鹏",
+    gender: 1,
+    birthday: "1995-06-06",
+    createAt: "2020-02-03",
+    chief: "腰酸背痛",
+    recommendTreat: "针灸治疗",
+    treat: "针灸治疗",
+  },
+  {
+    key: 2,
+    patientId: "000004",
+    count: 3,
+    name: "赵鹏",
+    gender: 1,
+    birthday: "1995-06-06",
+    createAt: "2020-02-03",
+    chief: "腰酸背痛",
+    recommendTreat: "针灸治疗",
+    treat: "针灸治疗",
+  },{
+    key: 3,
+    patientId: "000004",
+    count: 4,
+    name: "赵鹏",
+    gender: 1,
+    birthday: "1995-06-06",
+    createAt: "2020-02-03",
+    chief: "腰酸背痛",
+    recommendTreat: "针灸治疗",
+    treat: "针灸治疗",
+  },{
+    key: 4,
+    patientId: "000004",
+    count: 5,
+    name: "赵鹏",
+    gender: 1,
+    birthday: "1995-06-06",
+    createAt: "2020-02-03",
+    chief: "腰酸背痛",
+    recommendTreat: "针灸治疗",
+    treat: "针灸治疗",
+  },{
+    key: 5,
+    patientId: "000004",
+    count: 6,
+    name: "赵鹏",
+    gender: 1,
+    birthday: "1995-06-06",
+    createAt: "2020-02-03",
+    chief: "腰酸背痛",
+    recommendTreat: "针灸治疗",
+    treat: "针灸治疗",
+  },{
+    key: 6,
+    patientId: "000004",
+    count: 7,
+    name: "赵鹏",
+    gender: 1,
+    birthday: "1995-06-06",
+    createAt: "2020-02-03",
+    chief: "腰酸背痛",
+    recommendTreat: "针灸治疗",
+    treat: "针灸治疗",
+  },{
+    key: 7,
+    patientId: "000004",
+    count: 8,
+    name: "赵鹏",
+    gender: 1,
+    birthday: "1995-06-06",
+    createAt: "2020-02-03",
+    chief: "腰酸背痛",
+    recommendTreat: "针灸治疗",
+    treat: "针灸治疗",
+  }
+];
 
 class AIAnalysis extends Component {
   constructor(props) {
@@ -23,9 +115,129 @@ class AIAnalysis extends Component {
       anaResultVisible: false,
       percent: 0, // 进度条进度
       progressVisible: false, // 是否显示进度条
+
+      isModalVisible: false,
+      record: {},
+      pageNum: 1,
+      listData: listData,
+      tableColumns: [
+        {
+          title: "患者id",
+          dataIndex: "patientId",
+          align: "center",
+          // width: 50,
+        },
+        {
+          title: "患者姓名",
+          dataIndex: "name",
+          align: "center",
+          // width: 50,
+        },
+        {
+          title: "性别",
+          dataIndex: "gender",
+          align: "center",
+          // width: 40,
+          render: (gender) => {
+            return gender === 1 ? (
+              <Tag color="red">男</Tag>
+            ) : (
+              <Tag color="red">女</Tag>
+            );
+          },
+        },
+        {
+          title: "年龄",
+          align: "center",
+          dataIndex: "birthday",
+          // width: 40,
+          render: (birthday) => {
+            return this.calculateAge(birthday);
+          },
+        },
+        {
+          title: "就诊时间",
+          dataIndex: "createAt",
+          align: "center",
+          // width: 50,
+          render: (createAt) => {
+            return this.formatDate(new Date(createAt));
+          },
+        },
+        {
+          title: "治疗次数",
+          dataIndex: "count",
+          align: "center",
+          // width: 50,
+          render: (count) => {
+            return `第${count}次治疗`;
+          },
+        },
+        {
+          title: "病人主诉",
+          dataIndex: "chief",
+          align: "center",
+          ellipsis: true,
+          // width: 150,
+          tooltip: true,
+        },
+        {
+          title: "智能推荐治疗方案",
+          dataIndex: "recommendTreat",
+          ellipsis: true,
+          align: "center",
+          width: 150,
+          tooltip: true,
+        },
+        {
+          title: "实际治疗方案",
+          dataIndex: "treat",
+          ellipsis: true,
+          align: "center",
+          width: 150,
+          tooltip: true,
+        },
+        // {
+        //   title: "诊断结果",
+        //   dataIndex: "disease",
+        //   width: 50,
+        // },
+        // {
+        //   title: "智能分析结果",
+        //   dataIndex: "AnalysisRes",
+        //   ellipsis: true,
+        //   width: 150,
+        //   tooltip: true,
+        // },
+        {
+          title: "操作",
+          // width: 150,
+          key: "action",
+          align: "center",
+          render: (text, record, index) => {
+            return (
+              <div>
+                <Button
+                  type="primary"
+                  size="small"
+                  style={{ marginRight: "5px" }}
+                  onClick={() =>
+                    this.setState({
+                      isModalVisible: true,
+                      record,
+                    })
+                  }
+                >
+                  智能分析
+                </Button>
+              </div>
+            );
+          },
+        },
+      ],
     };
   }
-
+  /////////
   getOption = () => {
     let { historyRecords } = this.state;
     const option = {
@@ -99,12 +311,26 @@ class AIAnalysis extends Component {
           patientInfo: data[0],
           existPatient: true,
         });
-      } else if( code ==='200' && data.length ===0 ){
-        Message.error('该患者不存在');
-      }else{
+      } else if (code === "200" && data.length === 0) {
+        Message.error("该患者不存在");
+      } else {
         Message.error(msg);
       }
     });
+  };
+
+  // 计算年龄
+  calculateAge(time) {
+    let date = new Date(time);
+    let today = new Date().getTime();
+    return Math.ceil((today - date) / 31536000000);
+  }
+
+  formatDate = (now) => {
+    var year = now.getFullYear(); //取得4位数的年份
+    var month = now.getMonth() + 1; //取得日期中的月份，其中0表示1月，11表示12月
+    var date = now.getDate(); //返回日期月份中的天数（1到31）
+    return year + "-" + month + "-" + date;
   };
 
   // 获取历史治疗记录
@@ -131,16 +357,18 @@ class AIAnalysis extends Component {
   handleDownload = () => {
     const { patientInfo } = this.state;
     window.location.href =
-      "http://10.16.98.192:9090/record/download?id=" + _.get(patientInfo, "id") 
-      + "&description=" + " 经过脊椎疾病相关治疗方案，经红外热成像技术的客观分析可见，患者脊椎疾病严重程度有了明显的改善。";
-    // window.open("http://10.16.98.192:9090/record/download?id=" + _.get(patientInfo, "id") 
+      "http://10.16.98.192:9090/record/download?id=" +
+      _.get(patientInfo, "id") +
+      "&description=" +
+      " 经过脊椎疾病相关治疗方案，经红外热成像技术的客观分析可见，患者脊椎疾病严重程度有了明显的改善。";
+    // window.open("http://10.16.98.192:9090/record/download?id=" + _.get(patientInfo, "id")
     // + "&description=" + " 经过脊椎疾病相关治疗方案，经红外热成像技术的客观分析可见，患者脊椎疾病严重程度有了明显的改善。") ;
     // const param = {
     //   id: _.get(patientInfo, "id"),
     //   description: "经过脊椎疾病相关治疗方案，经红外热成像技术的客观分析可见，患者脊椎疾病严重程度有了明显的改善。",
     // }
     // API.downloadRecord(param).then((res) => {});
-  }
+  };
 
   handleAnalysis = () => {
     this.setState({
@@ -158,7 +386,7 @@ class AIAnalysis extends Component {
       this.setState({ percent });
     }, 500);
   };
-
+  //////
   // 查询表单
   renderSearch = () => {
     return (
@@ -178,73 +406,44 @@ class AIAnalysis extends Component {
       </Form>
     );
   };
+
+  // 分页页数改变触发函数
+  pageChange = (page) => {
+    this.setState(
+      {
+        pageNum: page,
+      },
+      () => {
+        this.fetchData();
+      }
+    );
+  };
+  handleModalVisible = (bool) => {
+    this.setState({
+      isModalVisible: bool,
+    });
+  };
   render() {
-    let { existPatient, patientInfo } = this.state;
     return (
       <div className="main-content">
         {this.renderSearch()}
-        {existPatient && (
-          <>
-            <div style={{ marginBottom: 20 }}>
-              <span style={{ marginRight: "30px" }}>
-                <strong>患者ID：</strong>
-                {_.get(patientInfo, "id")}
-              </span>
-              <span style={{ marginRight: "30px" }}>
-                <strong>患者姓名：</strong>
-                {_.get(patientInfo, "name")}
-              </span>
-              <span style={{ marginRight: "30px" }}>
-                <strong>性别：</strong>
-                {_.get(patientInfo, "gender") === 1 ? "男" : "女"}
-              </span>
-              <span style={{ marginRight: "30px" }}>
-                <strong>身高：</strong>
-                176cm
-              </span>
-              <span style={{ marginRight: "30px" }}>
-                <strong>年龄：</strong>
-                {getAge(_.get(patientInfo, "birthday", ""))}
-              </span>
-              <span style={{ marginRight: "30px" }}>
-                <strong>体重：</strong>
-                {_.get(patientInfo, "weight")}kg
-              </span>
-              <span>
-                <strong>过敏史：</strong>无
-              </span>
-            </div>
-            <RenderHistoryTable historyRecords={this.state.historyRecords} />
-            <Button
-              type="primary"
-              style={{ marginBottom: 20 }}
-              onClick={this.handleAnalysis}
-            >
-              点击进行智能分析
-            </Button>
-            {this.state.progressVisible && (
-              <Progress
-                strokeColor={{
-                  "0%": "#108ee9",
-                  "100%": "#87d068",
-                }}
-                percent={this.state.percent}
-              />
-            )}
-            {this.state.anaResultVisible && (
-              <div className="anal">
-                <h2>智能分析图形结果</h2>
-                <ReactEcharts option={this.getOption()} />
-                <h2>智能分析文本报告</h2>
-                <p>
-                  经过脊椎疾病相关治疗方案，经红外热成像技术的客观分析可见，患者脊椎疾病严重程度有了明显的改善。
-                </p>
-                <Button type="primary" style={{ marginBottom: 20 }} onClick={this.handleDownload}>
-                  下载报告
-                </Button>
-              </div>
-            )}
-          </>
+        <Table
+          bordered
+          pagination={{
+            simple: true,
+            current: this.state.pageNum,
+            total: this.state.totalNum,
+            onChange: this.pageChange,
+          }}
+          columns={this.state.tableColumns}
+          dataSource={this.state.listData}
+        ></Table>
+        {this.state.isModalVisible && (
+          <AIModal
+            isModalVisible={this.state.isModalVisible}
+            handleModalVisible={this.handleModalVisible}
+            record={this.state.record}
+          />
         )}
       </div>
     );

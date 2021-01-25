@@ -24,6 +24,11 @@ const menuList = [
     path: "/admin/AIAnalysis",
     icon: "idcard",
   },
+  {
+    title: "康复评估",
+    path: "/admin/rehabAss",
+    icon: "idcard",
+  },
 ];
 
 export default menuList;
