@@ -11,6 +11,7 @@ import {
   Drawer,
   Col,
   Modal,
+  Tag,
 } from "antd";
 import API from "../../api/api";
 import { Link } from "react-router-dom";
@@ -280,20 +281,23 @@ class PatientQuery extends Component {
         <Form.Item name="name" label="患者姓名：">
           <Input placeholder="患者姓名" style={{ width: 80 }} />
         </Form.Item>
-        <Form.Item name="doctorId" label="主治医生id：">
-          <Input placeholder="主治医生id" style={{ width: 80 }} />
+        {/* <Form.Item name="doctorId" label="主治医生id：">
+          <Input placeholder="主治医生id" style={{ width: 140 }} />
         </Form.Item>
         <Form.Item name="doctorName" label="主治医生姓名：">
-          <Input placeholder="主治医生姓名" style={{ width: 80 }} />
-        </Form.Item>
-        <Form.Item>
+          <Input placeholder="主治医生姓名" style={{ width: 140 }} />
+        </Form.Item> */}
+        <Form.Item style={{ marginLeft: 20 }}>
           <Button type="primary" htmlType="submit">
             查询
           </Button>
         </Form.Item>
         <Form.Item>
+          <Button onClick={this.handleSearchReset}>重置</Button>
+        </Form.Item>
+        <Form.Item>
           <Button type="primary" onClick={this.handleSearchReset}>
-            重置
+            新建患者个人信息
           </Button>
         </Form.Item>
       </Form>
@@ -309,32 +313,41 @@ class PatientQuery extends Component {
   // 渲染的页面
   render() {
     const tableColumns = [
+      // {
+      //   title: "主治医生",
+      //   dataIndex: "doctorName",
+      //   align: "center",
+      //   width: "6%",
+      // },
       {
-        title: "主治医生",
-        dataIndex: "doctorName",
-        width: "6%",
-      },
-      {
-        title: "患者id",
+        title: "患者唯一编号",
         dataIndex: "id",
+        align: "center",
         width: "6%",
       },
       {
         title: "患者姓名",
         dataIndex: "name",
+        align: "center",
         width: "6%",
       },
       {
-        title: "性别",
+        title: "患者性别",
         dataIndex: "gender",
+        align: "center",
         width: "6%",
         render: (gender) => {
-          return gender === 1 ? "男" : "女";
+          return gender === 1 ? (
+            <Tag color="blue">男</Tag>
+          ) : (
+            <Tag color="red">女</Tag>
+          );
         },
       },
       {
-        title: "年龄",
+        title: "患者年龄",
         dataIndex: "birthday",
+        align: "center",
         width: "6%",
         render: (birthday) => {
           return this.calculateAge(birthday);
@@ -348,6 +361,7 @@ class PatientQuery extends Component {
       {
         title: "病人主诉",
         dataIndex: "chief",
+        align: "center",
         // ellipsis: true,
         width: "10%",
         tooltip: true,
@@ -355,13 +369,14 @@ class PatientQuery extends Component {
       {
         title: "诊断结果",
         dataIndex: "disease",
+        align: "center",
         width: "10%",
       },
       {
-        title: "病历详情",
+        title: "患者信息展示",
         dataIndex: "detail",
-        width: "14%",
         align: "center",
+        width: "14%",
         render: (text, record, index) => {
           return (
             <Button
@@ -370,7 +385,7 @@ class PatientQuery extends Component {
               style={{ marginRight: "5px" }}
               onClick={() => this.show(record)}
             >
-              病历详情
+              患者信息展示
             </Button>
           );
         },

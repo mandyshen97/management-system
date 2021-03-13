@@ -8,6 +8,7 @@ import {
   MonitorOutlined,
   AlertOutlined,
   SettingOutlined,
+  LineChartOutlined
 } from "@ant-design/icons";
 // import logo from "../../assets/images/logo.jpg";
 import kangfu from "../../assets/images/kangfu.jpg";
@@ -24,7 +25,7 @@ class LeftNav extends Component {
         {
           title: "整体数据统计",
           path: "/admin/statistics",
-          icon: <UserAddOutlined />,
+          icon: <MonitorOutlined />,
         },
         {
           title: "患者信息管理",
@@ -69,7 +70,7 @@ class LeftNav extends Component {
         {
           title: "康复评估",
           path: "/admin/rehabAss",
-          icon: <AlertOutlined />,
+          icon: <LineChartOutlined />,
         },
         {
           title: "权限控制",
@@ -111,7 +112,6 @@ class LeftNav extends Component {
         return (
           <SubMenu
             key={item.path}
-            onClick={() => this.handleChangeColor(item.path)}
             className={
               this.state.currentPath === item.path ? "blueColor" : null
             }

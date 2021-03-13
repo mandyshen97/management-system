@@ -126,7 +126,7 @@ class Header extends Component {
       <div className="header">
         <span className="page-title">{title}</span>
         <div className="header-right">
-          <span className="currentTime">{currentTime}</span>
+          {/* <span className="currentTime">{currentTime}</span> */}
           {/* <span style={{ marginRight: "10px" }}>
             <span>天气：{weather}</span>
             <img

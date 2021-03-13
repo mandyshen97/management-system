@@ -9,6 +9,7 @@ import {
   MonitorOutlined,
   AlertOutlined,
   SettingOutlined,
+  LineChartOutlined 
 } from "@ant-design/icons";
 import API from "../../api/api";
 
@@ -80,7 +81,7 @@ class Home extends Component {
           }}
         >
           <div style={{ display: "flex" }}>
-            <h1 style={{ color: "#ffffff" }}>脊椎康复辅助系统</h1>
+            <h1 style={{ color: "#ffffff" }}>脊椎康复辅助系统首页</h1>
             <div
               style={{
                 width: 500,
@@ -129,6 +130,22 @@ class Home extends Component {
             点击查看操作指南
           </a> */}
           <Row gutter={16}>
+          <Col span={8}>
+              <Link to="/admin/recordQuery">
+                <div
+                  className="cardSelect"
+                  style={{
+                    backgroundColor: "#722ed1",
+                  }}
+                >
+                  <div>
+                    <MonitorOutlined className="icon" />
+                    整体数据统计分析
+                  </div>
+                  <span className="text">所有数据统计分析，包括患者情况分布，疾病等级分布，智能康复评估采纳率，智能方案推荐采纳率</span>
+                </div>
+              </Link>
+            </Col>
             <Col span={8}>
               <Link to="/admin/newPatient">
                 <div
@@ -138,14 +155,14 @@ class Home extends Component {
                   }}
                 >
                   <div>
-                    <UserAddOutlined className="icon" />
-                    新建患者个人信息
+                    <SolutionOutlined className="icon" />
+                    患者信息管理
                   </div>
-                  <span className="text">点击添加新患者信息</span>
+                  <span className="text">添加新患者信息，患者信息查询</span>
                 </div>
               </Link>
             </Col>
-            <Col span={8}>
+            {/* <Col span={8}>
               <Link to="/admin/patientQuery">
                 <div
                   className="cardSelect"
@@ -160,7 +177,7 @@ class Home extends Component {
                   <span className="text">患者信息查询管理</span>
                 </div>
               </Link>
-            </Col>
+            </Col> */}
             <Col span={8}>
               <Link to="/admin/addRecord">
                 <div
@@ -171,17 +188,17 @@ class Home extends Component {
                 >
                   <div>
                     <FileAddOutlined className="icon" />
-                    新增治疗（病历）记录
+                   电子病历管理
                   </div>
                   <span className="text">
-                    新增诊疗流程，包括治疗前后的记录对比
+                    新增诊疗流程，包括治疗前后的记录对比；病历信息查询管理
                   </span>
                 </div>
               </Link>
             </Col>
           </Row>
           <Row gutter={16} style={{ marginTop: 30 }}>
-            <Col span={8}>
+            {/* <Col span={8}>
               <Link to="/admin/recordQuery">
                 <div
                   className="cardSelect"
@@ -196,7 +213,7 @@ class Home extends Component {
                   <span className="text">病历信息查询管理</span>
                 </div>
               </Link>
-            </Col>
+            </Col> */}
             <Col span={8}>
               <Link to="/admin/AIAnalysis">
                 <div
@@ -209,7 +226,23 @@ class Home extends Component {
                     <AlertOutlined className="icon" />
                     智能分析
                   </div>
-                  <span className="text">人工智能分析治疗结果</span>
+                  <span className="text">人工智能分析治疗效果</span>
+                </div>
+              </Link>
+            </Col>
+            <Col span={8}>
+              <Link to="/admin/patientQuery">
+                <div
+                  className="cardSelect"
+                  style={{
+                    backgroundColor: "#13c2c2",
+                  }}
+                >
+                  <div>
+                    <LineChartOutlined className="icon" />
+                    康复评估
+                  </div>
+                  <span className="text">查看康复评估报告，填写康复评估意见</span>
                 </div>
               </Link>
             </Col>

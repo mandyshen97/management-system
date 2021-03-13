@@ -1,5 +1,10 @@
 const menuList = [
   {
+    title: "整体数据统计",
+    path: "/admin/statistics",
+    icon: "file",
+  },
+  {
     title: "新建患者个人信息",
     path: "/admin/newPatient",
     icon: "file",

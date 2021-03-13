@@ -1,5 +1,5 @@
-import React , { useState, useEffect } from "react";
-import { Form, Input, Select, Button, DatePicker, Modal } from "antd";
+import React, { useState, useEffect } from "react";
+import { Form, Input, Select, Button, DatePicker, Modal, Row, Col } from "antd";
 import { Link } from "react-router-dom";
 import moment from "moment";
 import API from "../../api/api";
@@ -20,25 +20,25 @@ const formItemLayout = {
 
 function NewPatient(props) {
   const [form] = Form.useForm();
-  const [diseaseList,setDiseaseList] = useState([])
-  const [doctorList,setDoctorList] = useState([])
+  const [diseaseList, setDiseaseList] = useState([]);
+  const [doctorList, setDoctorList] = useState([]);
 
-  useEffect( () => {
+  useEffect(() => {
     API.getDisease().then((res) => {
-      if(res.code==='200'){
+      if (res.code === "200") {
         setDiseaseList(res.data);
       } else {
         warning(res.msg);
       }
     });
     API.getDoctors().then((res) => {
-      if(res.code==='200'){
+      if (res.code === "200") {
         setDoctorList(res.data);
       } else {
         warning(res.msg);
       }
     });
-  },[props])
+  }, [props]);
   const success = (msg) => {
     Modal.success({
       title: msg,
@@ -87,200 +87,213 @@ function NewPatient(props) {
     "心胸外科",
   ];
   const diseaseOptions = diseaseList.map((item) => {
-    return <Option key={item.id} value={item.id}>{item.name}</Option>
-  })
+    return (
+      <Option key={item.id} value={item.id}>
+        {item.name}
+      </Option>
+    );
+  });
 
   const doctorOptions = doctorList.map((item) => {
-    return <Option key={item.id} value={item.id}>{item.name}</Option>
-  })
+    return (
+      <Option key={item.id} value={item.id}>
+        {item.name}
+      </Option>
+    );
+  });
   return (
     <div className="main-content">
-      <Form
-        {...formItemLayout}
-        form={form}
-        name="register"
-        onFinish={onFinish}
-        initialValues={{
-          department: "脊柱骨科",
-        }}
-        scrollToFirstError
-      >
-        <Form.Item
-          name="department"
-          label="科室"
-          rules={[
-            {
-              required: true,
-              message: "请选择科室!",
-            },
-          ]}
-        >
-          <Select placeholder="请选择科室">
-            {departmentList.map((item) => {
-              return (
-                <Option key={item} value={item}>
-                  {item}
-                </Option>
-              );
-            })}
-          </Select>
-        </Form.Item>
-
-        <Form.Item
-          name="doctorId"
-          label="主治医生"
-          rules={[
-            {
-              required: true,
-              message: "请输入主治医生!",
-            },
-          ]}
-        >
-          <Select placeholder="请选择医生">{doctorOptions}</Select>
-        </Form.Item>
-
-        <Form.Item
-          name="patientId"
-          label="患者id"
-          rules={[
-            {
-              required: true,
-              message: "请输入患者id",
-            },
-          ]}
-        >
-          <Input type='number'/>
-        </Form.Item>
-
-        <Form.Item
-          name="name"
-          label="患者姓名"
-          rules={[
-            {
-              required: true,
-              message: "请输入患者姓名",
-            },
-          ]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          name="birthday"
-          label="出生日期"
-          rules={[
-            {
-              required: true,
-              message: "请输入患者出生日期",
-              
-            },
-          ]}
-        >
-          <DatePicker style={{ width: "100%" }} />
-        </Form.Item>
-        <Form.Item
-          name="gender"
-          label="患者性别"
-          rules={[
-            {
-              required: true,
-              message: "请选择患者性别",
-            },
-          ]}
-        >
-          <Select>
-            <Option value={1}>男</Option>
-            <Option value={0}>女</Option>
-          </Select>
-        </Form.Item>
-
-        <Form.Item
-          name="height"
-          label="身高(cm)"
-          rules={[
-            {
-              required: true,
-              message: "请输入患者身高",
-            },
-          ]}
-        >
-          <Input type='number'/>
-        </Form.Item>
-
-        <Form.Item
-          name="weight"
-          label="体重(kg)"
-          rules={[
-            {
-              required: true,
-              message: "请输入患者体重",
-            },
-          ]}
-        >
-          <Input type='number'/>
-        </Form.Item>
-
-        <Form.Item
-          name="chief"
-          label="主诉"
-          rules={[
-            {
-              required: true,
-              message: "请输入病人主诉",
-            },
-          ]}
-        >
-          <TextArea placeholder="请输入病人主诉" />
-        </Form.Item>
-
-        <Form.Item
-          name="medical_history"
-          label="既往史"
-          rules={[
-            {
-              message: "请输入病人既往史",
-            },
-          ]}
-        >
-          <TextArea placeholder="请输入病人既往史" />
-        </Form.Item>
-        <Form.Item
-          name="diseaseId"
-          label="疾病"
-        >
-          <Select placeholder="请选择疾病">{diseaseOptions}</Select>
-        </Form.Item>
-
-        <Form.Item
-          name="opinion"
-          label="诊断意见"
-          rules={[{ required: true, message: "请输入诊断意见" }]}
-        >
-          <TextArea placeholder="请输入病人主诉" />
-        </Form.Item>
-        <Form.Item>
-          <Button
-            type="primary"
-            htmlType="submit"
-            style={{
-              width: 150,
-              marginLeft: 400,
+      <Row>
+        <Col span={4}></Col>
+        <Col span={16}>
+          <Form
+            {...formItemLayout}
+            form={form}
+            name="register"
+            onFinish={onFinish}
+            initialValues={{
+              department: "骨科",
             }}
+            scrollToFirstError
           >
-            提交
-          </Button>
-        </Form.Item>
-        <Link to="/admin/addRecord">
-          <Button
-            type="primary"
-            style={{
-              width: 150,
-              marginLeft: 400,
-            }}
-          >
-            去添加病历
-          </Button>
-        </Link>
-      </Form>
+            <Form.Item
+              name="department"
+              label="科室"
+              rules={[
+                {
+                  required: true,
+                  message: "请选择科室!",
+                },
+              ]}
+            >
+              <Select placeholder="请选择科室">
+                {departmentList.map((item) => {
+                  return (
+                    <Option key={item} value={item}>
+                      {item}
+                    </Option>
+                  );
+                })}
+              </Select>
+            </Form.Item>
+
+            <Form.Item
+              name="doctorId"
+              label="主治医生"
+              rules={[
+                {
+                  required: true,
+                  message: "请输入主治医生!",
+                },
+              ]}
+            >
+              <Select placeholder="请选择医生">{doctorOptions}</Select>
+            </Form.Item>
+
+            <Form.Item
+              name="patientId"
+              label="患者id"
+              rules={[
+                {
+                  required: true,
+                  message: "请输入患者id",
+                },
+              ]}
+            >
+              <Input placeholder="请填写患者id" type="number" />
+            </Form.Item>
+
+            <Form.Item
+              name="name"
+              label="患者姓名"
+              rules={[
+                {
+                  required: true,
+                  message: "请输入患者姓名",
+                },
+              ]}
+            >
+              <Input placeholder="请填写患者姓名" />
+            </Form.Item>
+            <Form.Item
+              name="birthday"
+              label="出生日期"
+              rules={[
+                {
+                  required: true,
+                  message: "请输入患者出生日期",
+                },
+              ]}
+            >
+              <DatePicker
+                placeholder="请选择创建日期"
+                style={{ width: "100%" }}
+              />
+            </Form.Item>
+            <Form.Item
+              name="gender"
+              label="患者性别"
+              rules={[
+                {
+                  required: true,
+                  message: "请选择患者性别",
+                },
+              ]}
+            >
+              <Select placeholder="请选择患者性别">
+                <Option value={1}>男</Option>
+                <Option value={0}>女</Option>
+              </Select>
+            </Form.Item>
+
+            <Form.Item
+              name="height"
+              label="身高(cm)"
+              rules={[
+                {
+                  required: true,
+                  message: "请输入患者身高",
+                },
+              ]}
+            >
+              <Input placeholder="请填写患者身高" type="number" />
+            </Form.Item>
+
+            <Form.Item
+              name="weight"
+              label="体重(kg)"
+              rules={[
+                {
+                  required: true,
+                  message: "请输入患者体重",
+                },
+              ]}
+            >
+              <Input placeholder="请填写患者体重" type="number" />
+            </Form.Item>
+
+            <Form.Item
+              name="chief"
+              label="主诉"
+              rules={[
+                {
+                  required: true,
+                  message: "请输入病人主诉",
+                },
+              ]}
+            >
+              <TextArea placeholder="请输入病人主诉" />
+            </Form.Item>
+
+            <Form.Item
+              name="medical_history"
+              label="既往史"
+              rules={[
+                {
+                  message: "请输入病人既往史",
+                },
+              ]}
+            >
+              <TextArea placeholder="请输入病人既往史" />
+            </Form.Item>
+            <Form.Item name="diseaseId" label="疾病">
+              <Select placeholder="请填写疾病">{diseaseOptions}</Select>
+            </Form.Item>
+
+            <Form.Item
+              name="opinion"
+              label="诊断意见"
+              rules={[{ required: true, message: "请输入诊断意见" }]}
+            >
+              <TextArea placeholder="请输入病人主诉" />
+            </Form.Item>
+            <Form.Item>
+              <Button
+                type="primary"
+                htmlType="submit"
+                style={{
+                  width: 150,
+                  marginLeft: 440,
+                }}
+              >
+                提交
+              </Button>
+            </Form.Item>
+            <Link to="/admin/addRecord">
+              <Button
+                type="primary"
+                style={{
+                  width: 150,
+                  marginLeft: 440,
+                }}
+              >
+                去添加病历
+              </Button>
+            </Link>
+          </Form>
+        </Col>
+        <Col span={4}></Col>
+      </Row>
     </div>
   );
 }
