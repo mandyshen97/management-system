@@ -1,6 +1,6 @@
 import { getCookie } from "../pages/home/Home";
 
-const BaseUrl = "http://10.16.98.192:9090";
+const BaseUrl = "http://10.16.98.192:9091";
 // const BaseUrl = "http://localhost:8080";
 const UrlMap = [
   {
