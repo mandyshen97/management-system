@@ -391,7 +391,7 @@ class AddRecord extends Component {
                   fontSize: "16px",
                 }}
               >
-                <div
+                {/* <div
                   style={{
                     paddingTop: "30px",
                     marginBottom: "20px",
@@ -401,7 +401,7 @@ class AddRecord extends Component {
                   }}
                 >
                   选择治疗模式 添加治疗记录
-                </div>
+                </div> */}
                 <Tabs type="card">
                   <TabPane tab="红外热像模式记录" key="1">
                     <RenderInfMode
@@ -411,7 +411,7 @@ class AddRecord extends Component {
                       treatCount={this.state.treatCount}
                     />
                   </TabPane>
-                  <TabPane tab="核磁共振模式记录" key="2">
+                  {/* <TabPane tab="核磁共振模式记录" key="2">
                     <RenderMRIMode />
                   </TabPane>
                   <TabPane tab="CT 图像模式记录" key="3">
@@ -427,7 +427,7 @@ class AddRecord extends Component {
                     <p>
                       经过脊椎疾病相关治疗方案，经近红外热技术的客观分析可见，患者脊椎疾病严重程度有了改善。
                     </p>
-                  </TabPane>
+                  </TabPane> */}
                 </Tabs>
               </div>
               {/* <div

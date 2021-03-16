@@ -103,19 +103,18 @@ function NewPatient(props) {
   });
   return (
     <div className="main-content">
-      <Row>
-        <Col span={4}></Col>
-        <Col span={16}>
-          <Form
-            {...formItemLayout}
-            form={form}
-            name="register"
-            onFinish={onFinish}
-            initialValues={{
-              department: "骨科",
-            }}
-            scrollToFirstError
-          >
+      <Form
+        {...formItemLayout}
+        form={form}
+        name="register"
+        onFinish={onFinish}
+        initialValues={{
+          department: "骨科",
+        }}
+        scrollToFirstError
+      >
+        <Row>
+          <Col span={8}>
             <Form.Item
               name="department"
               label="科室"
@@ -136,7 +135,8 @@ function NewPatient(props) {
                 })}
               </Select>
             </Form.Item>
-
+          </Col>
+          <Col span={8}>
             <Form.Item
               name="doctorId"
               label="主治医生"
@@ -149,7 +149,8 @@ function NewPatient(props) {
             >
               <Select placeholder="请选择医生">{doctorOptions}</Select>
             </Form.Item>
-
+          </Col>
+          <Col span={8}>
             <Form.Item
               name="patientId"
               label="患者id"
@@ -162,7 +163,10 @@ function NewPatient(props) {
             >
               <Input placeholder="请填写患者id" type="number" />
             </Form.Item>
-
+          </Col>
+        </Row>
+        <Row>
+          <Col span={8}>
             <Form.Item
               name="name"
               label="患者姓名"
@@ -175,6 +179,8 @@ function NewPatient(props) {
             >
               <Input placeholder="请填写患者姓名" />
             </Form.Item>
+          </Col>
+          <Col span={8}>
             <Form.Item
               name="birthday"
               label="出生日期"
@@ -190,6 +196,8 @@ function NewPatient(props) {
                 style={{ width: "100%" }}
               />
             </Form.Item>
+          </Col>
+          <Col span={8}>
             <Form.Item
               name="gender"
               label="患者性别"
@@ -205,7 +213,10 @@ function NewPatient(props) {
                 <Option value={0}>女</Option>
               </Select>
             </Form.Item>
-
+          </Col>
+        </Row>
+        <Row>
+          <Col span={8}>
             <Form.Item
               name="height"
               label="身高(cm)"
@@ -218,7 +229,8 @@ function NewPatient(props) {
             >
               <Input placeholder="请填写患者身高" type="number" />
             </Form.Item>
-
+          </Col>
+          <Col span={8}>
             <Form.Item
               name="weight"
               label="体重(kg)"
@@ -231,7 +243,28 @@ function NewPatient(props) {
             >
               <Input placeholder="请填写患者体重" type="number" />
             </Form.Item>
-
+          </Col>
+          <Col span={8}>
+            <Form.Item name="diseaseId" label="疾病">
+              <Select placeholder="请填写疾病">{diseaseOptions}</Select>
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row>
+          <Col span={8}>
+            <Form.Item
+              name="medical_history"
+              label="既往史"
+              rules={[
+                {
+                  message: "请输入病人既往史",
+                },
+              ]}
+            >
+              <TextArea placeholder="请输入病人既往史" />
+            </Form.Item>
+          </Col>
+          <Col span={8}>
             <Form.Item
               name="chief"
               label="主诉"
@@ -244,22 +277,8 @@ function NewPatient(props) {
             >
               <TextArea placeholder="请输入病人主诉" />
             </Form.Item>
-
-            <Form.Item
-              name="medical_history"
-              label="既往史"
-              rules={[
-                {
-                  message: "请输入病人既往史",
-                },
-              ]}
-            >
-              <TextArea placeholder="请输入病人既往史" />
-            </Form.Item>
-            <Form.Item name="diseaseId" label="疾病">
-              <Select placeholder="请填写疾病">{diseaseOptions}</Select>
-            </Form.Item>
-
+          </Col>
+          <Col span={8}>
             <Form.Item
               name="opinion"
               label="诊断意见"
@@ -267,33 +286,39 @@ function NewPatient(props) {
             >
               <TextArea placeholder="请输入病人主诉" />
             </Form.Item>
+          </Col>
+        </Row>
+        <Row>
+          <Col span={8}></Col>
+          <Col span={8}>
             <Form.Item>
               <Button
                 type="primary"
                 htmlType="submit"
                 style={{
                   width: 150,
-                  marginLeft: 440,
+                  marginLeft: 100,
                 }}
               >
                 提交
               </Button>
             </Form.Item>
+
             <Link to="/admin/addRecord">
               <Button
                 type="primary"
                 style={{
                   width: 150,
-                  marginLeft: 440,
+                  marginLeft: 100,
                 }}
               >
                 去添加病历
               </Button>
             </Link>
-          </Form>
-        </Col>
-        <Col span={4}></Col>
-      </Row>
+          </Col>
+          <Col span={8}></Col>
+        </Row>
+      </Form>
     </div>
   );
 }

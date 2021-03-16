@@ -26,6 +26,54 @@ Date.prototype.toLocaleString = function () {
   );
 };
 
+let tableData = [
+  {
+    doctorName: "张诣",
+    id: 200421,
+    name: "刘坤",
+    gender: 1,
+    birthday: "1963-02-04",
+    jDisease: "疲劳",
+    yDisease: "腰肌劳损",
+  },
+  {
+    doctorName: "张诣",
+    id: 130456,
+    name: "黄欣",
+    gender: 0,
+    birthday: "1960-02-04",
+    jDisease: "颈椎负荷过重",
+    yDisease: "疲劳",
+  },
+  {
+    doctorName: "张诣",
+    id: "001367",
+    name: "王群",
+    gender: 0,
+    birthday: "1968-02-04",
+    jDisease: "颈椎负荷过重",
+    yDisease: "肌筋膜炎",
+  },
+  {
+    doctorName: "刘梓",
+    id: "018269",
+    name: "张新",
+    gender: 1,
+    birthday: "1974-02-04",
+    jDisease: "颈椎退行性病变",
+    yDisease: "疲劳",
+  },
+  {
+    doctorName: "刘梓",
+    id: "008629",
+    name: "赵文",
+    gender: 1,
+    birthday: "1982-02-04",
+    jDisease: "疲劳",
+    yDisease: "腰椎退行性病变",
+  },
+];
+
 class PatientQuery extends Component {
   constructor(props) {
     super(props);
@@ -275,29 +323,29 @@ class PatientQuery extends Component {
         onFinish={this.queryPatient}
         ref="patientQueryForm"
       >
-        <Form.Item name="patientId" label="患者id：">
-          <Input placeholder="患者id" style={{ width: 80 }} />
+        <Form.Item name="patientId" label="患者编号：">
+          <Input placeholder="患者编号" style={{ width: 80 }} />
         </Form.Item>
         <Form.Item name="name" label="患者姓名：">
           <Input placeholder="患者姓名" style={{ width: 80 }} />
         </Form.Item>
-        {/* <Form.Item name="doctorId" label="主治医生id：">
-          <Input placeholder="主治医生id" style={{ width: 140 }} />
+        <Form.Item name="doctorId" label="主治医生编号：">
+          <Input placeholder="医生编号" style={{ width: 80 }} />
         </Form.Item>
         <Form.Item name="doctorName" label="主治医生姓名：">
-          <Input placeholder="主治医生姓名" style={{ width: 140 }} />
-        </Form.Item> */}
-        <Form.Item style={{ marginLeft: 20 }}>
+          <Input placeholder="医生姓名" style={{ width: 80 }} />
+        </Form.Item>
+        <Form.Item style={{ marginRight: 2 }}>
           <Button type="primary" htmlType="submit">
             查询
           </Button>
         </Form.Item>
-        <Form.Item>
+        <Form.Item style={{ marginRight: 2 }}>
           <Button onClick={this.handleSearchReset}>重置</Button>
         </Form.Item>
-        <Form.Item>
+        <Form.Item style={{ width: 20 }}>
           <Button type="primary" onClick={this.handleSearchReset}>
-            新建患者个人信息
+            新建患者
           </Button>
         </Form.Item>
       </Form>
@@ -313,42 +361,45 @@ class PatientQuery extends Component {
   // 渲染的页面
   render() {
     const tableColumns = [
-      // {
-      //   title: "主治医生",
-      //   dataIndex: "doctorName",
-      //   align: "center",
-      //   width: "6%",
-      // },
       {
-        title: "患者唯一编号",
+        title: "主治医生",
+        dataIndex: "doctorName",
+        align: "center",
+        width: "8%",
+      },
+      {
+        title: "患者编号",
         dataIndex: "id",
         align: "center",
-        width: "6%",
+        width: "8%",
       },
       {
         title: "患者姓名",
         dataIndex: "name",
         align: "center",
-        width: "6%",
+        width: "8%",
       },
       {
         title: "患者性别",
         dataIndex: "gender",
         align: "center",
-        width: "6%",
+        width: "8%",
+        // render: (gender) => {
+        //   return gender === 1 ? (
+        //     <Tag color="blue">男</Tag>
+        //   ) : (
+        //     <Tag color="red">女</Tag>
+        //   );
+        // },
         render: (gender) => {
-          return gender === 1 ? (
-            <Tag color="blue">男</Tag>
-          ) : (
-            <Tag color="red">女</Tag>
-          );
+          return gender === 1 ? "男" : "女";
         },
       },
       {
         title: "患者年龄",
         dataIndex: "birthday",
         align: "center",
-        width: "6%",
+        width: "8%",
         render: (birthday) => {
           return this.calculateAge(birthday);
         },
@@ -358,41 +409,93 @@ class PatientQuery extends Component {
       //   dataIndex: "createAt",
       //   width: "8%",
       // },
+      // {
+      //   title: "病人主诉",
+      //   dataIndex: "chief",
+      //   align: "center",
+      //   // ellipsis: true,
+      //   width: "10%",
+      //   tooltip: true,
+      // },
       {
-        title: "病人主诉",
-        dataIndex: "chief",
+        title: "颈椎病分类",
+        dataIndex: "jDisease",
         align: "center",
-        // ellipsis: true,
-        width: "10%",
-        tooltip: true,
-      },
-      {
-        title: "诊断结果",
-        dataIndex: "disease",
-        align: "center",
-        width: "10%",
-      },
-      {
-        title: "患者信息展示",
-        dataIndex: "detail",
-        align: "center",
-        width: "14%",
-        render: (text, record, index) => {
-          return (
-            <Button
-              type="primary"
-              // size="small"
-              style={{ marginRight: "5px" }}
-              onClick={() => this.show(record)}
-            >
-              患者信息展示
-            </Button>
-          );
+        width: "8%",
+        render: (jDisease) => {
+          let tagColor;
+          switch (jDisease) {
+            case "正常":
+              tagColor = "#52c41a";
+              break;
+            case "疲劳":
+              tagColor = "#13c2c2";
+              break;
+            case "颈肌劳损或炎性改变":
+              tagColor = "#1890ff";
+              break;
+            case "颈椎负荷过重":
+              tagColor = "#722ed1";
+              break;
+            case "颈椎退行性病变":
+              tagColor = "#eb2f96";
+              break;
+            default:
+              tagColor = "#faad14";
+          }
+          return <Tag color={tagColor}>{jDisease}</Tag>;
         },
       },
       {
+        title: "腰椎病分类",
+        dataIndex: "yDisease",
+        align: "center",
+        width: "8%",
+        render: (yDisease) => {
+          let tagColor;
+          switch (yDisease) {
+            case "正常":
+              tagColor = "#52c41a";
+              break;
+            case "疲劳":
+              tagColor = "#13c2c2";
+              break;
+            case "肌筋膜炎":
+              tagColor = "#1890ff";
+              break;
+            case "腰肌劳损":
+              tagColor = "#722ed1";
+              break;
+            case "腰椎退行性病变":
+              tagColor = "#eb2f96";
+              break;
+            default:
+              tagColor = "#faad14";
+          }
+          return <Tag color={tagColor}>{yDisease}</Tag>;
+        },
+      },
+      // {
+      //   title: "患者信息展示",
+      //   dataIndex: "detail",
+      //   align: "center",
+      //   width: "14%",
+      //   render: (text, record, index) => {
+      //     return (
+      //       <Button
+      //         type="primary"
+      //         // size="small"
+      //         style={{ marginRight: "5px" }}
+      //         onClick={() => this.show(record)}
+      //       >
+      //         患者信息展示
+      //       </Button>
+      //     );
+      //   },
+      // },
+      {
         title: "操作",
-        width: "28%",
+        width: "22%",
         key: "action",
         align: "center",
         render: (text, record, index) => {
@@ -400,22 +503,22 @@ class PatientQuery extends Component {
             <div>
               <Link to={`/admin/addRecord/${record.id}`} target="_blank">
                 <Button
-                  type="primary"
+                  // type="primary"
                   style={{
                     marginRight: "5px",
-                    backgroundColor: "green",
-                    borderColor: "green",
+                    // backgroundColor: "green",
+                    // borderColor: "green",
                   }}
                 >
                   新增病历
                 </Button>
               </Link>
               <Button
-                type="primary"
+                // type="primary"
                 style={{
                   marginRight: "5px",
-                  backgroundColor: "red",
-                  borderColor: "red",
+                  // backgroundColor: "red",
+                  // borderColor: "red",
                 }}
                 onClick={() => this.showUpdateInfoModal(record)}
               >
@@ -428,20 +531,34 @@ class PatientQuery extends Component {
     ];
 
     const paginationProps = {
+      // showTotal: (total) => {
+      //   return `共${total}条`;
+      // },
+      // total: this.state.listData.length, //数据总数
+      // defaultCurrent: 1, //默认当前页
+      // current: this.state.currentTablePage, //当前页
+      // pageSize: 8, //每页条数
+      // onChange: (page, pageSize) => {
+      //   console.log("page", page, pageSize);
+      //   //页码改变的回调，参数是改变后的页码及每页条数
+      //   this.setState({
+      //     currentTablePage: page,
+      //   });
+      // },
       showTotal: (total) => {
         return `共${total}条`;
       },
-      total: this.state.listData.length, //数据总数
+      total: 204, //数据总数
       defaultCurrent: 1, //默认当前页
-      current: this.state.currentTablePage, //当前页
-      pageSize: 8, //每页条数
-      onChange: (page, pageSize) => {
-        console.log("page", page, pageSize);
-        //页码改变的回调，参数是改变后的页码及每页条数
-        this.setState({
-          currentTablePage: page,
-        });
-      },
+      current: 1, //当前页
+      pageSize: 5, //每页条数
+      // onChange: (page, pageSize) => {
+      //   console.log("page", page, pageSize);
+      //   //页码改变的回调，参数是改变后的页码及每页条数
+      //   this.setState({
+      //     currentTablePage: page,
+      //   });
+      // },
     };
 
     return (
@@ -451,7 +568,7 @@ class PatientQuery extends Component {
           bordered
           pagination={paginationProps}
           columns={tableColumns}
-          dataSource={this.state.listData}
+          dataSource={tableData}
           scroll={{ x: "max-content" }} // 表格横向滚动，防止溢出
           loading={this.state.tableDataLoading}
         ></Table>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Form, Input, Select, Button, DatePicker, Modal,Row, Col} from "antd";
+import { Form, Input, Select, Button, DatePicker, Modal, Row, Col } from "antd";
 import moment from "moment";
 import API from "../../api/api";
 
@@ -10,22 +10,20 @@ function UpdateModal(props) {
   const prePatientInfo = props.modalPatientInfo;
   const [form] = Form.useForm();
   const [visible, setVisible] = useState(false);
-  const [diseaseList,setDiseaseList] = useState([])
-  const [doctorList,setDoctorList] = useState([])
-  
-
+  const [diseaseList, setDiseaseList] = useState([]);
+  const [doctorList, setDoctorList] = useState([]);
 
   useEffect(() => {
     setVisible(props.visible);
     API.getDisease().then((res) => {
-      if(res.code==='200'){
+      if (res.code === "200") {
         setDiseaseList(res.data);
       } else {
         warning(res.msg);
       }
     });
     API.getDoctors().then((res) => {
-      if(res.code==='200'){
+      if (res.code === "200") {
         setDoctorList(res.data);
       } else {
         warning(res.msg);
@@ -71,16 +69,20 @@ function UpdateModal(props) {
   // 医院科室
   const departmentList = [
     "脊柱骨科",
-    "骨外科",
+    "骨科",
     "普通外科",
     "神经外科",
     "心胸外科",
   ];
 
   const diseaseOptions = diseaseList.map((item) => {
-    return <Option key={item.id} value={item.id}>{item.name}</Option>
-  })
-  const filterDisease = diseaseList.filter((item) =>{
+    return (
+      <Option key={item.id} value={item.id}>
+        {item.name}
+      </Option>
+    );
+  });
+  const filterDisease = diseaseList.filter((item) => {
     return item.name === prePatientInfo.disease;
   });
   const initialValues = {
@@ -99,14 +101,18 @@ function UpdateModal(props) {
   };
 
   const doctorOptions = doctorList.map((item) => {
-    return <Option key={item.id} value={item.id}>{item.name}</Option>
-  })
+    return (
+      <Option key={item.id} value={item.id}>
+        {item.name}
+      </Option>
+    );
+  });
 
   return (
     <Modal
       title={`更新患者信息——${prePatientInfo.id}——${prePatientInfo.name}`}
       visible={visible}
-      width={1000}
+      width="80%"
       onCancel={() => hideModal()}
       footer={null}
     >
@@ -116,9 +122,11 @@ function UpdateModal(props) {
         onFinish={onFinish}
         scrollToFirstError
         initialValues={initialValues}
+        labelCol={{ span: 8 }}
+        // wrapperCol={{ span: 14 }}
       >
         <Row>
-          <Col span={6}>
+          <Col span={8}>
             <Form.Item
               name="department"
               label="科室"
@@ -140,24 +148,24 @@ function UpdateModal(props) {
               </Select>
             </Form.Item>
           </Col>
-          <Col span={6}>
+          <Col span={8}>
             <Form.Item
               name="doctorId"
-              label="主治医生id"
+              label="主治医生"
               rules={[
                 {
                   required: true,
-                  message: "请输入主治医生id",
+                  message: "请输入主治医生",
                 },
               ]}
             >
               <Select placeholder="请选择医生">{doctorOptions}</Select>
             </Form.Item>
           </Col>
-          <Col span={6}>
+          <Col span={8}>
             <Form.Item
               name="patientId"
-              label="患者id"
+              label="患者编号"
               rules={[
                 {
                   required: true,
@@ -170,7 +178,7 @@ function UpdateModal(props) {
           </Col>
         </Row>
         <Row>
-          <Col span={6}>
+          <Col span={8}>
             <Form.Item
               name="name"
               label="姓名"
@@ -184,7 +192,7 @@ function UpdateModal(props) {
               <Input />
             </Form.Item>
           </Col>
-          <Col span={6}>
+          <Col span={8}>
             <Form.Item
               name="birthday"
               label="出生日期"
@@ -198,7 +206,7 @@ function UpdateModal(props) {
               <DatePicker style={{ width: "100%" }} />
             </Form.Item>
           </Col>
-          <Col span={6}>
+          <Col span={8}>
             <Form.Item
               name="gender"
               label="患者性别"
@@ -217,7 +225,7 @@ function UpdateModal(props) {
           </Col>
         </Row>
         <Row>
-          <Col span={6}>
+          <Col span={8}>
             <Form.Item
               name="height"
               label="身高"
@@ -228,10 +236,10 @@ function UpdateModal(props) {
                 },
               ]}
             >
-              <Input />
+              <Input suffix="cm"/>
             </Form.Item>
           </Col>
-          <Col span={6}>
+          <Col span={8}>
             <Form.Item
               name="weight"
               label="体重"
@@ -242,61 +250,78 @@ function UpdateModal(props) {
                 },
               ]}
             >
-              <Input />
+              <Input suffix="kg"/>
             </Form.Item>
           </Col>
-          <Col span={6} style={{marginLeft:'20px'}}>
-            <Form.Item
-              name="diseaseId"
-              label="  疾病"
-            >
+          <Col span={8}>
+            <Form.Item name="diseaseId" label="  疾病">
               <Select placeholder="请选择疾病">{diseaseOptions}</Select>
             </Form.Item>
           </Col>
         </Row>
-        <Form.Item
-          name="chief"
-          label="主诉"
-          rules={[
-            {
-              required: true,
-              message: "请输入病人主诉",
-            },
-          ]}
-        >
-          <TextArea placeholder="请输入病人主诉" />
-        </Form.Item>
-        <Form.Item
-          name="medical_history"
-          label="既往史"
-          rules={[
-            {
-              message: "请输入病人既往史",
-            },
-          ]}
-        >
-          <TextArea placeholder="请输入病人既往史" />
-        </Form.Item>
-
-        <Form.Item
-          name="opinion"
-          label="诊断意见"
-          rules={[{ required: true, message: "请输入诊断意见" }]}
-        >
-          <TextArea placeholder="请输入病人主诉" />
-        </Form.Item>
-        <Form.Item>
-          <Button
-            type="primary"
-            htmlType="submit"
-            style={{
-              width: 150,
-              marginLeft: 400,
-            }}
-          >
-            确定更新患者信息
-          </Button>
-        </Form.Item>
+        <Row>
+          <Col span={24}>
+            <Form.Item
+              name="chief"
+              label="主诉"
+              labelCol={{ span: 3 }}
+              rules={[
+                {
+                  required: true,
+                  message: "请输入病人主诉",
+                },
+              ]}
+            >
+              <TextArea placeholder="请输入病人主诉" />
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row>
+          <Col span={24}>
+            <Form.Item
+              name="medical_history"
+              label="既往史"
+              labelCol={{ span: 3 }}
+              rules={[
+                {
+                  message: "请输入病人既往史",
+                },
+              ]}
+            >
+              <TextArea placeholder="请输入病人既往史" />
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row>
+          <Col span={24}>
+            <Form.Item
+              name="opinion"
+              label="诊断意见"
+              labelCol={{ span: 3 }}
+              rules={[{ required: true, message: "请输入诊断意见" }]}
+            >
+              <TextArea placeholder="请输入病人主诉" />
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row>
+          <Col span={8}></Col>
+          <Col span={8}>
+            <Form.Item>
+              <Button
+                type="primary"
+                htmlType="submit"
+                style={{
+                  width: 150,
+                  // marginLeft: 400,
+                }}
+              >
+                确定更新患者信息
+              </Button>
+            </Form.Item>
+          </Col>
+          <Col span={8}></Col>
+        </Row>
       </Form>
     </Modal>
   );

@@ -1,6 +1,16 @@
 import React, { Component } from "react";
 import moment from "moment";
-import { Input, Form, Select, DatePicker, Button, Steps, Message } from "antd";
+import {
+  Input,
+  Form,
+  Select,
+  DatePicker,
+  Button,
+  Steps,
+  Message,
+  Radio,
+  Tag,
+} from "antd";
 import API from "../../api/api";
 import { treatList, chineseMedicine } from "../../utils/medicalInfo";
 import PicturesWall from "./pictureWall";
@@ -267,7 +277,7 @@ export default class RenderInfMode extends Component {
                       fileInfo={this.state.beforeFile}
                     />
                   </Form.Item>
-                  <Form.Item
+                  {/* <Form.Item
                     label="温度矩阵"
                     className="temMatrix"
                     name="infTemMatrix"
@@ -278,8 +288,8 @@ export default class RenderInfMode extends Component {
                       }
                       fileInfo={this.state.beforeFile}
                     />
-                  </Form.Item>
-                  <Form.Item
+                  </Form.Item> */}
+                  {/* <Form.Item
                     label="描述"
                     style={{ marginLeft: 0 }}
                     name="infraDesc"
@@ -288,8 +298,8 @@ export default class RenderInfMode extends Component {
                       autoSize={{ minRows: 2, maxRows: 10 }}
                       placeholder="请输入..."
                     />
-                  </Form.Item>
-                  <Form.Item label="异常" name="infraExcp">
+                  </Form.Item> */}
+                  {/* <Form.Item label="异常" name="infraExcp">
                     <TextArea
                       autoSize={{ minRows: 2, maxRows: 10 }}
                       placeholder="请输入..."
@@ -300,8 +310,20 @@ export default class RenderInfMode extends Component {
                       autoSize={{ minRows: 2, maxRows: 10 }}
                       placeholder="请输入..."
                     />
-                  </Form.Item>
+                  </Form.Item> */}
                   <Form.Item label="主诉" name="chief">
+                    <TextArea
+                      autoSize={{ minRows: 2, maxRows: 10 }}
+                      placeholder="请输入..."
+                    />
+                  </Form.Item>
+                  <Form.Item label="既往史" name="history">
+                    <TextArea
+                      autoSize={{ minRows: 2, maxRows: 10 }}
+                      placeholder="请输入..."
+                    />
+                  </Form.Item>
+                  <Form.Item label="现病史" name="now">
                     <TextArea
                       autoSize={{ minRows: 2, maxRows: 10 }}
                       placeholder="请输入..."
@@ -356,7 +378,6 @@ export default class RenderInfMode extends Component {
                 )}  的第 ${treatCount} 次治疗方案`}
               </h2>
               <Form
-                {...layout}
                 className="treat"
                 onFinish={this.handleTreat}
                 initialValues={{
@@ -367,24 +388,31 @@ export default class RenderInfMode extends Component {
                     : "",
                   treatDetail: this.state.infMiddleInfo.treatDetail,
                 }}
+                labelCol={{ span: 8 }}
+                wrapperCol={{ span: 16 }}
               >
-                <Form.Item label="选择治疗方案" name="treat">
-                  <Select
-                    mode="multiple"
-                    showArrow="true"
-                    placeholder="请选择治疗方案"
-                    onChange={this.handleTreatChange}
-                  >
-                    {treatList.map((item, index) => {
-                      return (
-                        <Option value={item} key={item}>
-                          {item}
-                        </Option>
-                      );
-                    })}
-                  </Select>
+                <Form.Item label="智能推荐治疗方案" name="tuijian">
+                  <Tag color="green">干扰电治疗</Tag>
                 </Form.Item>
-                <Form.Item label="选择药物配方" name="chineseMedicine">
+                <Form.Item label="是否采纳智能推荐治疗方案" name="treat">
+                  <Radio.Group onChange={console.log("")} value={1}>
+                    <Radio value={1}>是</Radio>
+                    <Radio value={2}>否</Radio>
+                  </Radio.Group>
+                </Form.Item>
+                <Form.Item
+                  label="修正治疗方案"
+                  name="newtreat"
+                  labelCol={{ span: 8 }}
+                  wrapperCol={{ span: 8 }}
+                >
+                  <Input
+                    width={300}
+                    placeholder="修正治疗方案"
+                    disabled
+                  ></Input>
+                </Form.Item>
+                {/* <Form.Item label="选择药物配方" name="chineseMedicine">
                   <Select
                     mode="multiple"
                     showArrow="true"
@@ -399,17 +427,17 @@ export default class RenderInfMode extends Component {
                       );
                     })}
                   </Select>
-                </Form.Item>
-                <Form.Item label="就诊时间" name="date">
+                </Form.Item> */}
+                <Form.Item label="治疗时间" name="date">
                   <DatePicker placeholder="选择时间"></DatePicker>
                 </Form.Item>
-                <Form.Item label="治疗情况说明" name="treatDetail">
+                {/* <Form.Item label="治疗情况说明" name="treatDetail">
                   <TextArea
                     style={{ height: 32 }}
                     autoSize={{ minRows: 2, maxRows: 10 }}
                     placeholder="请输入..."
                   />
-                </Form.Item>
+                </Form.Item> */}
                 <div
                   style={{
                     width: "300px",
@@ -467,7 +495,7 @@ export default class RenderInfMode extends Component {
                 {`上传 ${_.get(patientInfo, "id")}_${_.get(
                   patientInfo,
                   "name"
-                )}  第 ${treatCount} 次治疗后的红外热像图及说明`}
+                )}  第 ${treatCount} 次治疗后的红外热像图`}
               </h2>
               <Form
                 {...layout}
@@ -492,7 +520,7 @@ export default class RenderInfMode extends Component {
                       fileInfo={this.state.afterFile}
                     />
                   </Form.Item>
-                  <Form.Item
+                  {/* <Form.Item
                     label="温度矩阵"
                     className="temMatrix"
                     name="infTemMatrix"
@@ -503,8 +531,8 @@ export default class RenderInfMode extends Component {
                       }
                       fileInfo={this.state.beforeFile}
                     />
-                  </Form.Item>
-                  <Form.Item
+                  </Form.Item> */}
+                  {/* <Form.Item
                     label="描述"
                     style={{ marginLeft: 0 }}
                     name="infraDesc"
@@ -525,7 +553,7 @@ export default class RenderInfMode extends Component {
                       autoSize={{ minRows: 2, maxRows: 10 }}
                       placeholder="请输入..."
                     />
-                  </Form.Item>
+                  </Form.Item> */}
 
                   <div
                     style={{
