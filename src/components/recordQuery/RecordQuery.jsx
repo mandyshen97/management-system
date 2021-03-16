@@ -12,6 +12,7 @@ import {
   Drawer,
   Col,
   Modal,
+  Tag,
 } from "antd";
 import API from "../../api/api";
 import { Link } from "react-router-dom";
@@ -20,6 +21,58 @@ const { Option } = Select;
 const { TextArea } = Input;
 // const baseURL = "http://10.13.81.189:8001/"
 const baseURL = "";
+const mockData = [
+  {
+    id: 110023,
+    name: "张小玹",
+    gender: 0,
+    birthday: "1967-06-04",
+    createAt: "2020-11-14",
+    chief: "颈项部疼痛、活动受限8小时",
+    jDisease: "颈肌劳损或炎性改变",
+    yDisease: "疲劳",
+  },
+  {
+    id: 200421,
+    name: "刘坤",
+    gender: 1,
+    birthday: "1962-06-04",
+    createAt: "2020-11-25",
+    chief: "颈部僵直，腰痛一年，伴双下肢麻痛半月",
+    jDisease: "疲劳",
+    yDisease: "腰肌劳损",
+  },
+  {
+    id: "008629",
+    name: "张新",
+    gender: 1,
+    birthday: "1973-06-04",
+    createAt: "2020-11-05",
+    chief: "颈部疼痛2年，加重5天",
+    jDisease: "颈椎退行性病变",
+    yDisease: "正常",
+  },
+  {
+    id: "001367",
+    name: "王群",
+    gender: 0,
+    birthday: "1967-06-04",
+    createAt: "2020-11-23",
+    chief: "腰部酸痛伴左大腿放射痛1年，加重7天",
+    jDisease: "颈椎负荷过重",
+    yDisease: "肌筋膜炎",
+  },
+  {
+    id: "008629",
+    name: "赵文",
+    gender: 1,
+    birthday: "1981-06-04",
+    createAt: "2020-11-27",
+    chief: "腰痛伴双下肢抽痛、麻木2个月 ",
+    jDisease: "疲劳",
+    yDisease: "腰椎退行性病变",
+  },
+];
 class RecordQuery extends Component {
   constructor(props) {
     super(props);
@@ -48,27 +101,35 @@ class RecordQuery extends Component {
       diseaseList: [],
       tableColumns: [
         {
-          title: "病历id",
+          title: "病历编号",
           dataIndex: "id",
-          width: 50,
+          width: "10%",
+          align: "center",
         },
         {
           title: "患者姓名",
           dataIndex: "name",
-          width: 50,
+          width: "10%",
+          align: "center",
         },
         {
-          title: "性别",
+          title: "患者性别",
           dataIndex: "gender",
-          width: 30,
+          width: "10%",
+          align: "center",
           render: (gender) => {
-            return gender === 1 ? "男" : "女";
+            return gender === 1 ? (
+              <Tag color="blue">男</Tag>
+            ) : (
+              <Tag color="red">女</Tag>
+            );
           },
         },
         {
-          title: "年龄",
+          title: "患者年龄",
           dataIndex: "birthday",
-          width: 40,
+          width: "10%",
+          align: "center",
           render: (birthday) => {
             return this.calculateAge(birthday);
           },
@@ -76,33 +137,88 @@ class RecordQuery extends Component {
         {
           title: "就诊时间",
           dataIndex: "createAt",
-          width: 50,
+          width: "12%",
+          align: "center",
           render: (createAt) => {
-              return this.formatDate(new Date(createAt));
-          }
+            return this.formatDate(new Date(createAt));
+          },
         },
         {
           title: "病人主诉",
           dataIndex: "chief",
-          ellipsis: true,
-          width: 150,
+          // ellipsis: true,
+          width: "15%",
+          align: "center",
           tooltip: true,
         },
         {
-          title: "诊断结果",
-          dataIndex: "disease",
-          width: 50,
+          title: "颈椎诊断结果",
+          dataIndex: "jDisease",
+          width: "15%",
+          align: "center",
+          render: (jDisease) => {
+            let tagColor;
+            switch (jDisease) {
+              case "正常":
+                tagColor = "#52c41a";
+                break;
+              case "疲劳":
+                tagColor = "#13c2c2";
+                break;
+              case "颈肌劳损或炎性改变":
+                tagColor = "#1890ff";
+                break;
+              case "颈椎负荷过重":
+                tagColor = "#722ed1";
+                break;
+              case "颈椎退行性病变":
+                tagColor = "#eb2f96";
+                break;
+              default:
+                tagColor = "#faad14";
+            }
+            return <Tag color={tagColor}>{jDisease}</Tag>;
+          },
+        },
+        {
+          title: "腰椎诊断结果",
+          dataIndex: "yDisease",
+          width: "15%",
+          align: "center",
+          render: (yDisease) => {
+            let tagColor;
+            switch (yDisease) {
+              case "正常":
+                tagColor = "#52c41a";
+                break;
+              case "疲劳":
+                tagColor = "#13c2c2";
+                break;
+              case "肌筋膜炎":
+                tagColor = "#1890ff";
+                break;
+              case "腰肌劳损":
+                tagColor = "#722ed1";
+                break;
+              case "腰椎退行性病变":
+                tagColor = "#eb2f96";
+                break;
+              default:
+                tagColor = "#faad14";
+            }
+            return <Tag color={tagColor}>{yDisease}</Tag>;
+          },
         },
         {
           title: "操作",
-          width: 150,
+          width: "14%",
           key: "action",
           align: "center",
           render: (text, record, index) => {
             return (
               <div>
                 <Button
-                  type="primary"
+                  // type="primary"
                   size="small"
                   style={{ marginRight: "5px" }}
                   onClick={() => this.show(record)}
@@ -110,12 +226,13 @@ class RecordQuery extends Component {
                   病历详情
                 </Button>
                 <Button
-                  type="primary"
+                  // type="primary"
                   size="small"
                   style={{
                     marginRight: "5px",
-                    backgroundColor: "red",
-                    borderColor: "red",
+                    marginTop: "5px",
+                    // backgroundColor: "red",
+                    // borderColor: "red",
                   }}
                   onClick={() => this.remove(index)}
                 >
@@ -134,11 +251,11 @@ class RecordQuery extends Component {
     };
   }
   formatDate = (now) => {
-    var year=now.getFullYear();  //取得4位数的年份
-    var month=now.getMonth()+1;  //取得日期中的月份，其中0表示1月，11表示12月
-    var date=now.getDate();      //返回日期月份中的天数（1到31）
-    return year+"-"+month+"-"+date;
-  }
+    var year = now.getFullYear(); //取得4位数的年份
+    var month = now.getMonth() + 1; //取得日期中的月份，其中0表示1月，11表示12月
+    var date = now.getDate(); //返回日期月份中的天数（1到31）
+    return year + "-" + month + "-" + date;
+  };
   // 抽屉等组件关闭
   onClose = () => {
     this.setState({
@@ -198,8 +315,8 @@ class RecordQuery extends Component {
     let newPatientInfo = {};
     const param = {
       patientId: record.patientId,
-    }
-    console.log(1111111,param);
+    };
+    console.log(1111111, param);
     API.getPatient(param).then((res) => {
       console.log("getPatient", res);
       const { data, code, msg } = res;
@@ -336,7 +453,7 @@ class RecordQuery extends Component {
   // 获取病种id对应的病种
   getDisease(diseaseId) {
     let disease = "未诊断";
-    (this.state.diseaseList||[]).forEach((element) => {
+    (this.state.diseaseList || []).forEach((element) => {
       if (element.id === diseaseId) {
         disease = element.name;
       }
@@ -529,8 +646,11 @@ class RecordQuery extends Component {
   renderSearch = () => {
     return (
       <Form layout="inline" ref="queryForm">
-        <Form.Item name="recordId" label="病历id">
-          <Input style={{ width: 100, marginRight: 15 }} placeholder="病历id" />
+        <Form.Item name="recordId" label="病历编号">
+          <Input
+            style={{ width: 100, marginRight: 15 }}
+            placeholder="病历编号"
+          />
         </Form.Item>
         <Form.Item name="startDate" label="起始时间">
           <DatePicker
@@ -556,7 +676,7 @@ class RecordQuery extends Component {
                 .indexOf(input.toLowerCase()) >= 0
             }
           >
-            {(this.state.diseaseList||[]).map((item, index) => (
+            {(this.state.diseaseList || []).map((item, index) => (
               <Option value={item.id} key={index}>
                 {item.name}
               </Option>
@@ -578,15 +698,20 @@ class RecordQuery extends Component {
       <div className="main-content">
         {this.renderSearch()}
         <Table
+          style={{ marginTop: 20 }}
           bordered
           pagination={{
-            simple: true,
-            current: this.state.pageNum,
-            total: this.state.totalNum,
-            onChange: this.pageChange,
+            showTotal: (total) => {
+              return `共${total}条`;
+            },
+            total: 347, //数据总数
+            defaultCurrent: 1, //默认当前页
+            current: 1, //当前页
+            pageSize: 5, //每页条数
           }}
           columns={this.state.tableColumns}
-          dataSource={this.state.listData}
+          // dataSource={this.state.listData}
+          dataSource={mockData}
         ></Table>
         <Drawer
           title="患者病历"
@@ -912,7 +1037,7 @@ class RecordQuery extends Component {
                 }
                 initialValue={this.state.patientInfo.disease}
               >
-                {(this.state.diseaseList||[]).map((item, index) => (
+                {(this.state.diseaseList || []).map((item, index) => (
                   <Option value={item.name} key={index}>
                     {item.name}
                   </Option>
