@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import "./rehab-ass.less";
 import { Table } from "antd";
 import _ from "lodash";
 import moment from "moment";
@@ -17,17 +18,50 @@ class RenderHistoryTable extends Component {
         dataIndex: "count",
         key: "count",
         render: (count) => `第${count}次治疗`,
-        width: 110,
+        width: "14%",
+        align: "center",
       },
       {
         title: "治疗时间",
         dataIndex: "time",
         key: "time",
+        width: "14%",
+        align: "center",
       },
       {
         title: "治疗方案",
         dataIndex: "treat",
         key: "treat",
+        width: "14%",
+        align: "center",
+      },
+      {
+        title: "颈椎康复评估效果数字等级",
+        dataIndex: "j_disease",
+        key: "j_disease",
+        width: "14%",
+        align: "center",
+      },
+      {
+        title: "颈椎VAS评分",
+        dataIndex: "j_VAS",
+        key: "j_VAS",
+        width: "14%",
+        align: "center",
+      },
+      {
+        title: "腰椎康复评估效果数字等级",
+        dataIndex: "y_disease",
+        key: "y_disease",
+        width: "14%",
+        align: "center",
+      },
+      {
+        title: "腰椎VAS评分",
+        dataIndex: "y_VAS",
+        key: "y_VAS",
+        width: "14%",
+        align: "center",
       },
       // {
       //   title: "红外热像图",
@@ -106,13 +140,72 @@ class RenderHistoryTable extends Component {
       pageSize: 3, //每页条数
     };
 
+    const mockData = [
+      {
+        count: 1,
+        time: "2020-12-03",
+        treat: "针灸治疗",
+        j_disease: "4",
+        j_VAS: "8",
+        y_disease: "5",
+        y_VAS: "9",
+      },
+      {
+        count: 2,
+        time: "2020-12-10",
+        treat: "超短波理疗",
+        j_disease: "3",
+        j_VAS: "6",
+        y_disease: "4",
+        y_VAS: "8",
+      },
+      {
+        count: 3,
+        time: "2020-12-17",
+        treat: "干扰电治疗",
+        j_disease: "2",
+        j_VAS: "4",
+        y_disease: "3",
+        y_VAS: "6",
+      },
+      {
+        count: 4,
+        time: "2020-12-24",
+        treat: "针灸治疗",
+        j_disease: "3",
+        j_VAS: "4",
+        y_disease: "3",
+        y_VAS: "5",
+      },
+      {
+        count: 5,
+        time: "2020-12-31",
+        treat: "低频理疗",
+        j_disease: "2",
+        j_VAS: "3",
+        y_disease: "2",
+        y_VAS: "3",
+      },
+      {
+        count: 6,
+        time: "2020-01-07",
+        treat: "熏蒸疗法",
+        j_disease: "1",
+        j_VAS: "2",
+        y_disease: "1",
+        y_VAS: "1",
+      },
+    ];
+
     return (
       <Table
         bordered="true"
         columns={columns}
-        dataSource={data}
+        // dataSource={data}
+        dataSource={mockData}
         scroll={{ x: "max-content", y: 600 }}
         pagination={paginationProps}
+        size="middle"
       />
     );
   };
