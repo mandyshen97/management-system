@@ -12,8 +12,13 @@ import {
 } from "antd";
 import "./AI-modal.less";
 import PieDiv from "./PieDiv";
-import _001_before from "../../assets/images/001_before.jpg";
-import _001_before_kuangxuan from "../../assets/images/001_before_kuangxuan.jpg";
+import j_y_before from "../../assets/images/j_y_before.png";
+import j_before_kuang from "../../assets/images/j_before_kuang.png";
+import y_before_kuang from "../../assets/images/y_before_kuang.png";
+import j_y_after from "../../assets/images/j_y_after.png";
+import j_after_kuang from "../../assets/images/j_after_kuang.png";
+import y_after_kuang from "../../assets/images/y_after_kuang.png";
+
 const { TabPane } = Tabs;
 
 class AIModal extends Component {
@@ -48,30 +53,30 @@ class AIModal extends Component {
     this.jingzhuiData_after = [
       { value: 0.02, name: "正常" },
       { value: 0.02, name: "疲劳" },
-      { value: 0.03, name: "劳损或炎性改变" },
+      { value: 0.03, name: "颈肌劳损或炎性改变" },
       { value: 0.09, name: "颈椎负荷过重" },
-      { value: 0.84, name: "颈椎病或颈肩综合征或颈椎退行性改变" },
+      { value: 0.84, name: "颈椎退行性病变" },
     ];
     this.jingzhuiData_before = [
       { value: 0.02, name: "正常" },
       { value: 0.02, name: "疲劳" },
-      { value: 0.03, name: "劳损或炎性改变" },
+      { value: 0.03, name: "颈肌劳损或炎性改变" },
       { value: 0.03, name: "颈椎负荷过重" },
-      { value: 0.9, name: "颈椎病或颈肩综合征或颈椎退行性改变" },
+      { value: 0.9, name: "颈椎退行性病变" },
     ];
     this.yaozhuiData_before = [
       { value: 0.0, name: "正常" },
-      { value: 0.02, name: "肌肉紧张/疲劳" },
+      { value: 0.02, name: "疲劳" },
       { value: 0.03, name: "肌筋膜炎" },
       { value: 0.09, name: "腰肌劳损" },
-      { value: 0.86, name: "腰椎退行性改变、腰椎间盘突出症" },
+      { value: 0.86, name: "腰椎退行性病变" },
     ];
     this.yaozhuiData_after = [
       { value: 0.02, name: "正常" },
-      { value: 0.02, name: "肌肉紧张/疲劳" },
+      { value: 0.02, name: "疲劳" },
       { value: 0.03, name: "肌筋膜炎" },
       { value: 0.15, name: "腰肌劳损" },
-      { value: 0.78, name: "腰椎退行性改变、腰椎间盘突出症" },
+      { value: 0.78, name: "腰椎退行性病变" },
     ];
   }
 
@@ -104,15 +109,15 @@ class AIModal extends Component {
                 title="治疗前上传的红外热像图"
                 style={{ textAlign: "center" }}
               >
-                <Image src={_001_before} width={128} height={162} />
-                <Image src={_001_before_kuangxuan} width={128} height={162} />
+                <Image src={j_y_before} width={128} height={162} />
+                <Image src={j_before_kuang} width={128} height={162} />
               </Card>
               <Card
                 title="治疗后上传的红外热像图"
                 style={{ textAlign: "center" }}
               >
-                <Image src={_001_before} width={128} height={162} />
-                <Image src={_001_before_kuangxuan} width={128} height={162} />
+                <Image src={j_y_after} width={128} height={162} />
+                <Image src={j_after_kuang} width={128} height={162} />
               </Card>
             </Col>
             <Col span={20}>
@@ -123,11 +128,11 @@ class AIModal extends Component {
                       data={this.jingzhuiData_before}
                       name={"人体颈部红外热像人工智能分析"}
                       color={[
-                        "#5470c6",
-                        "#91cc75",
-                        "#fac858",
-                        "#ee6666",
-                        "#73c0de",
+                        "#52c41a",
+                        "#1890ff",
+                        "#ad6800",
+                        "#fa541c",
+                        "#722ed1",
                       ]}
                     />
                   </Col>
@@ -151,11 +156,11 @@ class AIModal extends Component {
                       data={this.jingzhuiData_after}
                       name={"人体颈部红外热像人工智能分析"}
                       color={[
-                        "#5470c6",
-                        "#91cc75",
-                        "#fac858",
-                        "#ee6666",
-                        "#73c0de",
+                        "#52c41a",
+                        "#1890ff",
+                        "#ad6800",
+                        "#fa541c",
+                        "#722ed1",
                       ]}
                     />
                   </Col>
@@ -175,8 +180,8 @@ class AIModal extends Component {
               </Card>
               <Card>
                 <h3 style={{ fontWeight: "bold" }}>前后对比说明：</h3>
-                <p>
-                  治疗前“颈椎病或颈肩综合征或颈椎退行性改变”的概率为0.90，治疗后“颈椎病或颈肩综合征或颈椎退行性改变”的概率为0.84，可见本次治疗使得颈椎部位患病情况有所好转。
+                <p style={{ fontSize: 18 }}>
+                  治疗前“颈椎退行性病变”的概率为0.90，治疗后“颈椎退行性病变”的概率为0.84，可见本次治疗使得颈椎部位患病情况有所好转。
                 </p>
               </Card>
             </Col>
@@ -185,13 +190,19 @@ class AIModal extends Component {
         <TabPane tab="治疗前后分析——腰椎" key="2">
           <Row>
             <Col span={4}>
-              <Card title="治疗前上传的红外热像图" style={{ textAlign: "center" }}>
-                <Image src={_001_before} width={128} height={162} />
-                <Image src={_001_before_kuangxuan} width={128} height={162} />
+              <Card
+                title="治疗前上传的红外热像图"
+                style={{ textAlign: "center" }}
+              >
+                <Image src={j_y_before} width={128} height={162} />
+                <Image src={y_before_kuang} width={128} height={162} />
               </Card>
-              <Card title="治疗后上传的红外热像图" style={{ textAlign: "center" }}>
-                <Image src={_001_before} width={128} height={162} />
-                <Image src={_001_before_kuangxuan} width={128} height={162} />
+              <Card
+                title="治疗后上传的红外热像图"
+                style={{ textAlign: "center" }}
+              >
+                <Image src={j_y_after} width={128} height={162} />
+                <Image src={y_after_kuang} width={128} height={162} />
               </Card>
             </Col>
             <Col span={20}>
@@ -202,17 +213,11 @@ class AIModal extends Component {
                       data={this.yaozhuiData_before}
                       name={"人体腰部红外热像人工智能分析"}
                       color={[
-                        "#c23531",
-                        "#2f4554",
-                        "#61a0a8",
-                        "#d48265",
-                        "#ca8622",
-                        "#91c7ae",
-                        "#749f83",
-                        "#bda29a",
-                        "#6e7074",
-                        "#546570",
-                        "#c4ccd3",
+                        "#52c41a",
+                        "#1890ff",
+                        "#13c2c2",
+                        "#d46b08",
+                        "#fa541c",
                       ]}
                     />
                   </Col>
@@ -236,17 +241,11 @@ class AIModal extends Component {
                       data={this.yaozhuiData_after}
                       name={"人体腰部红外热像人工智能分析"}
                       color={[
-                        "#c23531",
-                        "#2f4554",
-                        "#61a0a8",
-                        "#d48265",
-                        "#ca8622",
-                        "#91c7ae",
-                        "#749f83",
-                        "#bda29a",
-                        "#6e7074",
-                        "#546570",
-                        "#c4ccd3",
+                        "#52c41a",
+                        "#1890ff",
+                        "#13c2c2",
+                        "#d46b08",
+                        "#fa541c",
                       ]}
                     />
                   </Col>
@@ -266,9 +265,9 @@ class AIModal extends Component {
               </Card>
               <Card>
                 <h3 style={{ fontWeight: "bold" }}>前后对比说明：</h3>
-                <p>
-                  治疗前“腰椎退行性改变、腰椎间盘突出症”的概率为0.86，
-                  治疗后“腰椎退行性改变、腰椎间盘突出症”的概率为0.78，
+                <p style={{ fontSize: 18 }}>
+                  治疗前“腰椎退行性病变”的概率为0.86，
+                  治疗后“腰椎退行性病变”的概率为0.78，
                   可见本次治疗使得腰椎部位患病情况有所好转。
                 </p>
               </Card>
@@ -291,7 +290,7 @@ class AIModal extends Component {
           onOk={this.handleOk}
           onCancel={this.handleCancel}
           width="80%"
-          style={{ paddingTop: 5 }}
+          style={{ paddingTop: 5, marginBottom: 0 }}
         >
           {this.renderTabs()}
 

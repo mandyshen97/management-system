@@ -1,12 +1,5 @@
 import React, { Component } from "react";
-import {
-  Form,
-  Input,
-  Button,
-  Message,
-  Table,
-  Tag,
-} from "antd";
+import { Form, Input, Button, Message, Table, Tag } from "antd";
 import API from "../../api/api";
 import _ from "lodash";
 import AIModal from "./AIModal";
@@ -14,94 +7,69 @@ import AIModal from "./AIModal";
 const listData = [
   {
     key: 0,
-    patientId: "000004",
+    patientId: "102479",
     count: 1,
     name: "赵鹏",
     gender: 1,
-    birthday: "1995-06-06",
-    createAt: "2020-02-03",
-    chief: "腰酸背痛",
+    birthday: "1969-06-06",
+    createAt: "2020-12-03",
     recommendTreat: "针灸治疗",
     treat: "针灸治疗",
   },
   {
     key: 1,
-    patientId: "000004",
+    patientId: "102479",
     count: 2,
     name: "赵鹏",
     gender: 1,
-    birthday: "1995-06-06",
-    createAt: "2020-02-03",
-    chief: "腰酸背痛",
+    birthday: "1969-06-06",
+    createAt: "2020-12-10",
+    recommendTreat: "超短波理疗",
+    treat: "超短波理疗",
+  },
+  {
+    key: 2,
+    patientId: "102479",
+    count: 3,
+    name: "赵鹏",
+    gender: 1,
+    birthday: "1969-06-06",
+    createAt: "2020-12-17",
+    recommendTreat: "干扰电治疗",
+    treat: "干扰电治疗",
+  },
+  {
+    key: 3,
+    patientId: "102479",
+    count: 4,
+    name: "赵鹏",
+    gender: 1,
+    birthday: "1969-06-06",
+    createAt: "2020-12-24",
     recommendTreat: "针灸治疗",
     treat: "针灸治疗",
   },
   {
-    key: 2,
-    patientId: "000004",
-    count: 3,
-    name: "赵鹏",
-    gender: 1,
-    birthday: "1995-06-06",
-    createAt: "2020-02-03",
-    chief: "腰酸背痛",
-    recommendTreat: "针灸治疗",
-    treat: "针灸治疗",
-  },{
-    key: 3,
-    patientId: "000004",
-    count: 4,
-    name: "赵鹏",
-    gender: 1,
-    birthday: "1995-06-06",
-    createAt: "2020-02-03",
-    chief: "腰酸背痛",
-    recommendTreat: "针灸治疗",
-    treat: "针灸治疗",
-  },{
     key: 4,
-    patientId: "000004",
+    patientId: "102479",
     count: 5,
     name: "赵鹏",
     gender: 1,
-    birthday: "1995-06-06",
-    createAt: "2020-02-03",
-    chief: "腰酸背痛",
-    recommendTreat: "针灸治疗",
-    treat: "针灸治疗",
-  },{
+    birthday: "1969-06-06",
+    createAt: "2020-12-31",
+    recommendTreat: "低频理疗",
+    treat: "低频理疗",
+  },
+  {
     key: 5,
-    patientId: "000004",
+    patientId: "102479",
     count: 6,
     name: "赵鹏",
     gender: 1,
-    birthday: "1995-06-06",
-    createAt: "2020-02-03",
-    chief: "腰酸背痛",
-    recommendTreat: "针灸治疗",
-    treat: "针灸治疗",
-  },{
-    key: 6,
-    patientId: "000004",
-    count: 7,
-    name: "赵鹏",
-    gender: 1,
-    birthday: "1995-06-06",
-    createAt: "2020-02-03",
-    chief: "腰酸背痛",
-    recommendTreat: "针灸治疗",
-    treat: "针灸治疗",
-  },{
-    key: 7,
-    patientId: "000004",
-    count: 8,
-    name: "赵鹏",
-    gender: 1,
-    birthday: "1995-06-06",
-    createAt: "2020-02-03",
-    chief: "腰酸背痛",
-    recommendTreat: "针灸治疗",
-    treat: "针灸治疗",
+    birthday: "1969-06-06",
+    createAt: "2021-01-07",
+    recommendTreat: "熏蒸疗法",
+    treat: "熏蒸疗法",
   }
 ];
 
@@ -122,7 +90,7 @@ class AIAnalysis extends Component {
       listData: listData,
       tableColumns: [
         {
-          title: "患者id",
+          title: "患者编号",
           dataIndex: "patientId",
           align: "center",
           // width: 50,
@@ -132,12 +100,14 @@ class AIAnalysis extends Component {
           dataIndex: "name",
           align: "center",
           // width: 50,
+          
         },
         {
           title: "性别",
           dataIndex: "gender",
           align: "center",
           // width: 40,
+          width: "8%",
           render: (gender) => {
             return gender === 1 ? (
               <Tag color="red">男</Tag>
@@ -150,7 +120,7 @@ class AIAnalysis extends Component {
           title: "年龄",
           align: "center",
           dataIndex: "birthday",
-          // width: 40,
+          width: "8%",
           render: (birthday) => {
             return this.calculateAge(birthday);
           },
@@ -173,14 +143,14 @@ class AIAnalysis extends Component {
             return `第${count}次治疗`;
           },
         },
-        {
-          title: "病人主诉",
-          dataIndex: "chief",
-          align: "center",
-          ellipsis: true,
-          // width: 150,
-          tooltip: true,
-        },
+        // {
+        //   title: "病人主诉",
+        //   dataIndex: "chief",
+        //   align: "center",
+        //   ellipsis: true,
+        //   // width: 150,
+        //   tooltip: true,
+        // },
         {
           title: "智能推荐治疗方案",
           dataIndex: "recommendTreat",
@@ -188,6 +158,9 @@ class AIAnalysis extends Component {
           align: "center",
           width: 150,
           tooltip: true,
+          render: (recommendTreat) => {
+            return <Tag color="green">{recommendTreat}</Tag>;
+          },
         },
         {
           title: "实际治疗方案",
@@ -395,8 +368,14 @@ class AIAnalysis extends Component {
         style={{ marginBottom: 30 }}
         onFinish={this.handleQueryInfo}
       >
-        <Form.Item name="patientId" label="患者id：">
+        <Form.Item name="patientId" label="患者编号：">
           <Input style={{ width: 100, marginRight: 15 }} placeholder="患者id" />
+        </Form.Item>
+        <Form.Item name="patientName" label="患者姓名：">
+          <Input
+            style={{ width: 100, marginRight: 15 }}
+            placeholder="患者姓名"
+          />
         </Form.Item>
         <Form.Item>
           <Button type="primary" htmlType="submit">

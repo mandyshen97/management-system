@@ -220,7 +220,7 @@ class RehabAss extends Component {
               style={{ marginBottom: 20 }}
               onClick={this.handleAnalysis}
             >
-              点击进行智能分析
+              智能康复评估分析
             </Button>
             {this.state.progressVisible && (
               <Progress

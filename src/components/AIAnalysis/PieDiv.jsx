@@ -1,4 +1,5 @@
 import React from "react";
+import "./AI-modal.less";
 
 import echarts from "echarts/lib/echarts";
 
@@ -9,6 +10,7 @@ import "echarts/lib/component/tooltip";
 import "echarts/lib/component/title";
 
 import "echarts/lib/component/legend";
+
 
 class PieDiv extends React.Component {
   // /**
@@ -53,6 +55,11 @@ class PieDiv extends React.Component {
       legend: {
         orient: "vertical",
         left: "left",
+        textStyle: {
+          fontSize: 16,
+          fontWeight: "bold",
+          color: "black",
+        },
       },
       grid: {
         left: 50,

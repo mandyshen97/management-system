@@ -20,23 +20,28 @@ class RenderHistoryTable extends Component {
         width: 110,
       },
       {
-        title: "就诊时间",
+        title: "治疗时间",
         dataIndex: "time",
         key: "time",
       },
       {
-        title: "红外热像图",
-        dataIndex: "infImage",
-        key: "infImage",
-        render: (infImage) => {
-          return <img src={'http://10.16.98.192:8001/infraFile/after/'+infImage} alt="" width='100px' height='100px'/>;
-        },
+        title: "治疗方案",
+        dataIndex: "treat",
+        key: "treat",
       },
-      {
-        title: "红外热像图描述",
-        dataIndex: "infImageDes",
-        key: "infImageDes",
-      },
+      // {
+      //   title: "红外热像图",
+      //   dataIndex: "infImage",
+      //   key: "infImage",
+      //   render: (infImage) => {
+      //     return <img src={'http://10.16.98.192:8001/infraFile/after/'+infImage} alt="" width='100px' height='100px'/>;
+      //   },
+      // },
+      // {
+      //   title: "红外热像图描述",
+      //   dataIndex: "infImageDes",
+      //   key: "infImageDes",
+      // },
       // {
       //   title: "核磁共振图像",
       //   dataIndex: "MRI",
@@ -77,7 +82,8 @@ class RenderHistoryTable extends Component {
       let record = {};
       record.key = index;
       record.count = item.treatCount;
-      record.time = moment(item.timeBefore).format("YYYY-MM-DD HH:mm:ss");
+      record.time = moment(item.timeMiddle).format("YYYY-MM-DD");
+      record.treat = item.treat;
       console.log(item.timeBefore);
       record.infImage = item.infraAfterPath;
       record.infImageDes = getDesFromClassification(
@@ -112,6 +118,7 @@ class RenderHistoryTable extends Component {
   };
 
   render() {
+    console.log("historyRecords", this.props.historyRecords);
     return <>{this.renderHistoryTable()}</>;
   }
 }
