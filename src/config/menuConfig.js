@@ -34,6 +34,11 @@ const menuList = [
     path: "/admin/rehabAss",
     icon: "idcard",
   },
+  {
+    title: "权限控制",
+    path: "/admin/accessControl",
+    icon: "idcard",
+  },
 ];
 
 export default menuList;

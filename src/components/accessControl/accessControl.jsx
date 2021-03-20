@@ -73,29 +73,29 @@ export default function AccessControl() {
   };
   const columns = [
     {
-      title: "医生id",
+      title: "医生编号",
       dataIndex: "doctorId",
-      width: "15%",
+      width: "12%",
     },
     {
       title: "医生姓名",
       dataIndex: "doctorName",
-      width: "15%",
+      width: "12%",
     },
     {
       title: "角色",
       dataIndex: "role",
-      width: "15%",
+      width: "12%",
     },
     {
       title: "所属科室",
       dataIndex: "department",
-      width: "15%",
+      width: "12%",
     },
     {
       title: "权限",
       dataIndex: "access",
-      width: "60%",
+      width: "40%",
       editable: true,
       render: (_, record) => {
         console.log("record", record);
@@ -125,6 +125,7 @@ export default function AccessControl() {
     {
       title: "操作",
       dataIndex: "operation",
+      width:"12%",
       render: (_, record) => {
         return (
           <Button type="primary" onClick={() => update(record)}>
@@ -137,7 +138,7 @@ export default function AccessControl() {
 
   return (
     <div className="main-content">
-      <h1
+      {/* <h1
         style={{
           fontWeight: "bold",
           fontSize: "30px",
@@ -145,7 +146,7 @@ export default function AccessControl() {
         }}
       >
         权限控制
-      </h1>
+      </h1> */}
       <Form form={form} component={false}>
         <Table
           bordered
