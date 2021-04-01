@@ -277,6 +277,14 @@ export default class RenderInfMode extends Component {
                       fileInfo={this.state.beforeFile}
                     />
                   </Form.Item>
+                  <Form.Item
+                    label="VAS评分"
+                    name="vas"
+                  >
+                    <Input
+                      placeholder="请输入患者VAS评分"
+                    />
+                  </Form.Item>
                   {/* <Form.Item
                     label="温度矩阵"
                     className="temMatrix"
@@ -518,6 +526,14 @@ export default class RenderInfMode extends Component {
                         this.handleImageChange(fileUrl, "after")
                       }
                       fileInfo={this.state.afterFile}
+                    />
+                  </Form.Item>
+                  <Form.Item
+                    label="VAS评分"
+                    name="vas"
+                  >
+                    <Input
+                      placeholder="请输入患者VAS评分"
                     />
                   </Form.Item>
                   {/* <Form.Item
