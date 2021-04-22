@@ -161,7 +161,7 @@ function NewPatient(props) {
                 },
               ]}
             >
-              <Input placeholder="请填写患者id" type="number" />
+              <Input placeholder="请填写患者编号" type="number" />
             </Form.Item>
           </Col>
         </Row>
@@ -192,7 +192,7 @@ function NewPatient(props) {
               ]}
             >
               <DatePicker
-                placeholder="请选择创建日期"
+                placeholder="请输入患者出生日期"
                 style={{ width: "100%" }}
               />
             </Form.Item>
@@ -251,23 +251,12 @@ function NewPatient(props) {
           </Col>
         </Row>
         <Row>
-          <Col span={8}>
-            <Form.Item
-              name="medical_history"
-              label="既往史"
-              rules={[
-                {
-                  message: "请输入病人既往史",
-                },
-              ]}
-            >
-              <TextArea placeholder="请输入病人既往史" />
-            </Form.Item>
-          </Col>
-          <Col span={8}>
+          <Col span={24}>
             <Form.Item
               name="chief"
               label="主诉"
+              labelCol={{ span: 2, offeset: 12 }}
+              wrapperCol={{ span: 22 }}
               rules={[
                 {
                   required: true,
@@ -275,16 +264,60 @@ function NewPatient(props) {
                 },
               ]}
             >
-              <TextArea placeholder="请输入病人主诉" />
+              <TextArea placeholder="请输入病人主诉" style={{ width: "88%" }} />
             </Form.Item>
           </Col>
-          <Col span={8}>
+        </Row>
+        <Row>
+          <Col span={24}>
+            <Form.Item
+              name="medical_history"
+              label="既往史"
+              labelCol={{ span: 2, offeset: 12 }}
+              wrapperCol={{ span: 22 }}
+              rules={[
+                {
+                  message: "请输入病人既往史",
+                },
+              ]}
+            >
+              <TextArea
+                placeholder="请输入病人既往史"
+                style={{ width: "88%" }}
+              />
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row>
+          <Col span={24}>
+            <Form.Item
+              name="medical_history"
+              label="现病史"
+              labelCol={{ span: 2, offeset: 12 }}
+              wrapperCol={{ span: 22 }}
+              rules={[
+                {
+                  message: "请输入病人现病史",
+                },
+              ]}
+            >
+              <TextArea
+                placeholder="请输入病人现病史"
+                style={{ width: "88%" }}
+              />
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row>
+          <Col span={24}>
             <Form.Item
               name="opinion"
               label="诊断意见"
+              labelCol={{ span: 2, offeset: 12 }}
+              wrapperCol={{ span: 22 }}
               rules={[{ required: true, message: "请输入诊断意见" }]}
             >
-              <TextArea placeholder="请输入病人主诉" />
+              <TextArea placeholder="请输入诊断意见" style={{ width: "88%" }} />
             </Form.Item>
           </Col>
         </Row>
