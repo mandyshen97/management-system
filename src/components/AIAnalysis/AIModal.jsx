@@ -137,9 +137,13 @@ class AIModal extends Component {
                     />
                   </Col>
                   <Col span={8}>
-                    <p>医生填写诊断意见</p>
+                    <p style={{ fontSize: 20, fontWeight: "bold" }}>
+                      医生填写诊断意见
+                    </p>
                     <Input placeholder="颈部见片状热区扩大，提示有退行性变化可能" />
-                    <p style={{ marginTop: 20 }}>人工智能分析结果是否正确</p>
+                    <p style={{ marginTop: 20, fontWeight: "bold" }}>
+                      人工智能分析结果是否正确
+                    </p>
                     <Radio.Group
                       onChange={this.onChange}
                       value={this.state.jingzhuiBeforeValue}
@@ -165,9 +169,13 @@ class AIModal extends Component {
                     />
                   </Col>
                   <Col span={8}>
-                    <p>医生填写诊断意见</p>
+                    <p style={{ fontSize: 20, fontWeight: "bold" }}>
+                      医生填写诊断意见
+                    </p>
                     <Input placeholder="颈部见片状热区扩大，提示有退行性变化可能" />
-                    <p style={{ marginTop: 20 }}>人工智能分析结果是否正确</p>
+                    <p style={{ marginTop: 20, fontWeight: "bold" }}>
+                      人工智能分析结果是否正确
+                    </p>
                     <Radio.Group
                       onChange={this.onChange}
                       value={this.state.yaozhuiBeforeValue}
@@ -222,9 +230,13 @@ class AIModal extends Component {
                     />
                   </Col>
                   <Col span={8}>
-                    <p>医生填写诊断意见</p>
+                    <p style={{ fontSize: 20, fontWeight: "bold" }}>
+                      医生填写诊断意见
+                    </p>
                     <Input placeholder="腰部见片状热区扩大，提示有退行性变化可能" />
-                    <p style={{ marginTop: 20 }}>人工智能分析结果是否正确</p>
+                    <p style={{ marginTop: 20, fontWeight: "bold" }}>
+                      人工智能分析结果是否正确
+                    </p>
                     <Radio.Group
                       onChange={this.onChange}
                       value={this.state.jingzhuiAfterValue}
@@ -250,9 +262,13 @@ class AIModal extends Component {
                     />
                   </Col>
                   <Col span={8}>
-                    <p>医生填写诊断意见</p>
+                    <p style={{ fontSize: 20, fontWeight: "bold" }}>
+                      医生填写诊断意见
+                    </p>
                     <Input placeholder="腰部见片状热区扩大，提示有退行性变化可能" />
-                    <p style={{ marginTop: 20 }}>人工智能分析结果是否正确</p>
+                    <p style={{ marginTop: 20, fontWeight: "bold" }}>
+                      人工智能分析结果是否正确
+                    </p>
                     <Radio.Group
                       onChange={this.onChange}
                       value={this.state.yaozhuiAfterValue}

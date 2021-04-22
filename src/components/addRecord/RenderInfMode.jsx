@@ -278,6 +278,18 @@ export default class RenderInfMode extends Component {
                     />
                   </Form.Item>
                   <Form.Item
+                    label="温度矩阵"
+                    className="temMatrix"
+                    name="infTemMatrix"
+                  >
+                    <FileWall
+                      handleFileChange={(fileUrl) =>
+                        this.handleFileChange(fileUrl, "after")
+                      }
+                      fileInfo={this.state.beforeFile}
+                    />
+                  </Form.Item>
+                  <Form.Item
                     label="VAS评分"
                     name="vas"
                   >
@@ -526,6 +538,18 @@ export default class RenderInfMode extends Component {
                         this.handleImageChange(fileUrl, "after")
                       }
                       fileInfo={this.state.afterFile}
+                    />
+                  </Form.Item>
+                  <Form.Item
+                    label="温度矩阵"
+                    className="temMatrix"
+                    name="infTemMatrix"
+                  >
+                    <FileWall
+                      handleFileChange={(fileUrl) =>
+                        this.handleFileChange(fileUrl, "after")
+                      }
+                      fileInfo={this.state.beforeFile}
                     />
                   </Form.Item>
                   <Form.Item

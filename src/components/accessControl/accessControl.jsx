@@ -85,17 +85,17 @@ export default function AccessControl() {
     {
       title: "角色",
       dataIndex: "role",
-      width: "12%",
+      width: "10%",
     },
     {
       title: "所属科室",
       dataIndex: "department",
-      width: "12%",
+      width: "10%",
     },
     {
       title: "权限",
       dataIndex: "access",
-      width: "40%",
+      width: "50%",
       editable: true,
       render: (_, record) => {
         console.log("record", record);
@@ -125,7 +125,7 @@ export default function AccessControl() {
     {
       title: "操作",
       dataIndex: "operation",
-      width:"12%",
+      width:"8%",
       render: (_, record) => {
         return (
           <Button type="primary" onClick={() => update(record)}>

@@ -153,11 +153,11 @@ function NewPatient(props) {
           <Col span={8}>
             <Form.Item
               name="patientId"
-              label="患者id"
+              label="患者编号"
               rules={[
                 {
                   required: true,
-                  message: "请输入患者id",
+                  message: "请输入患者编号",
                 },
               ]}
             >
