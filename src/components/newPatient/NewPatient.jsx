@@ -245,7 +245,11 @@ function NewPatient(props) {
             </Form.Item>
           </Col>
           <Col span={8}>
-            <Form.Item name="diseaseId" label="疾病">
+            <Form.Item
+              name="diseaseId"
+              label="疾病"
+              rules={[{ required: true }]}
+            >
               <Select placeholder="请填写疾病">{diseaseOptions}</Select>
             </Form.Item>
           </Col>
@@ -277,6 +281,7 @@ function NewPatient(props) {
               wrapperCol={{ span: 22 }}
               rules={[
                 {
+                  required: true,
                   message: "请输入病人既往史",
                 },
               ]}
@@ -297,6 +302,7 @@ function NewPatient(props) {
               wrapperCol={{ span: 22 }}
               rules={[
                 {
+                  required: true,
                   message: "请输入病人现病史",
                 },
               ]}
